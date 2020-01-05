@@ -1,0 +1,30 @@
+[
+    {
+        "question_id": 1,
+        "question": "What is your mother's maiden name?"
+    },
+    {
+        "question_id": 2,
+        "question": "What is the city of your birth?"
+    },
+    {
+        "question_id": 3,
+        "question": "what is the name of your high school?"
+    },
+    {
+        "question_id": 4,
+        "question": "What is your birth month?"
+    },
+    {
+        "question_id": 5,
+        "question": "What as the street you lived as a child?"
+    },
+    {
+        "question_id": 6,
+        "question": "What as the street you lived as a child?"
+    },
+    {
+        "question_id": 7,
+        "question": "What as the street you lived as a child?"
+    }
+]

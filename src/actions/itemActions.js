@@ -89,10 +89,10 @@ export const createItem = (data) => {
                 ...rest, mainImageUrl, otherImageUrl1, otherImageUrl2, otherImageUrl3,
                 otherImageUrl4
             }, {
-                    headers: {
-                        'x-access-token': localStorage.getItem('x-access-token')
-                    }
-                })
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
             dispatch({ type: SUCCESS_ALERT, payload: 'Item created successfully' })
             dispatch({ type: CLEAR_ITEM_FORM_INPUTS, payload: '' })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -162,7 +162,7 @@ export const fetchFeaturedItems = () => {
             dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 20) })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -305,10 +305,10 @@ export const validateFormData = (state) => {
                 ...rest, mainImageUrl, otherImageUrl1, otherImageUrl2, otherImageUrl3,
                 otherImageUrl4
             }, {
-                    headers: {
-                        'x-access-token': localStorage.getItem('x-access-token')
-                    }
-                })
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
             dispatch({ type: SUCCESS_ALERT, payload: 'Item created successfully' })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {

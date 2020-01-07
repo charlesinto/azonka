@@ -14,7 +14,7 @@ class Header extends Component {
         showSearchBar: false,
         currentUser: null
     }
-    componentDidMount(){
+    componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
         this.setState({
             currentUser: user
@@ -26,12 +26,12 @@ class Header extends Component {
         })
     }
     handleSideMenuClick = link => {
-        switch(link){
+        switch (link) {
             case 'logout':
                 this.props.logout()
                 break;
             default:
-                return ;
+                return;
         }
     }
     _showSearchBar = () => {
@@ -40,11 +40,11 @@ class Header extends Component {
         })
     }
     render() {
-        const {currentUser} = this.state
+        const { currentUser } = this.state
         return (
             <div>
-                <div className={`page-wrapper ${this.state.mobileMenu ? 'mmenu-active' : ''}`} style={{position:'fixed',zIndex:'1000', width:'100%'}}>
-                    <header className="header" style={{marginLeft: 0, marginRight: 0, width:'100%', maxWidth:'100%'}}>
+                <div className={`page-wrapper ${this.state.mobileMenu ? 'mmenu-active' : ''}`} style={{ position: 'fixed', zIndex: '1000', width: '100%' }}>
+                    <header className="header" style={{ marginLeft: 0, marginRight: 0, width: '100%', maxWidth: '100%' }}>
                         <div className="header-top">
                             <div className="container-fluid">
                                 <div className="header-left header-dropdowns">
@@ -67,7 +67,7 @@ class Header extends Component {
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="dropdown compare-dropdown" style={{border:'none',zIndex:'900', backgroundColor:'transparent', position:'relative'}}>
+                                    <div className="dropdown compare-dropdown" style={{ border: 'none', zIndex: '900', backgroundColor: 'transparent', position: 'relative' }}>
                                         <a href="#" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                             <i className="icon-retweet"></i> Compare (2)
                                         </a>
@@ -94,10 +94,10 @@ class Header extends Component {
                                     </div>
                                 </div>
                                 <div className="header-right">
-                                    <p className="welcome-msg" style={{color:'#bce1f4', fontSize:'1.1rem'}}>{
+                                    <p className="welcome-msg" style={{ color: '#bce1f4', fontSize: '1.1rem' }}>{
                                         currentUser ?
-                                        `${currentUser.firstName} ${currentUser.lastName}`
-                                        : `Welcome to Azonka` 
+                                            `${currentUser.firstName} ${currentUser.lastName}`
+                                            : `Welcome to Azonka`
 
                                     }</p>
 
@@ -109,31 +109,31 @@ class Header extends Component {
                                                 <li><Link to="#">MY WISHLIST </Link></li>
                                                 <li><Link to="#">Contact</Link></li>
                                                 {
-                                                    currentUser  ? 
-                                                    <li onClick={() => this.handleSideMenuClick('logout')}><Link to="#" className="login-link">Log Out</Link></li>
-                                                    : <li><Link to="/users/login" className="login-link">Log In</Link></li>
+                                                    currentUser ?
+                                                        <li onClick={() => this.handleSideMenuClick('logout')}><Link to="#" className="login-link">Log Out</Link></li>
+                                                        : <li><Link to="/users/login" className="login-link">Log In</Link></li>
                                                 }
                                                 {/* <li><a href="#" className="login-link">LOG IN</a></li> */}
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div className="header-middle">
                             <div className="container">
                                 <div className="header-left" >
-                                    <Link to="/" style={{display:'block'}} className="logo">
-                                        <img src={azonkaLogo} alt="Porto Logo"/>
+                                    <Link to="/" style={{ display: 'block' }} className="logo">
+                                        <img src={azonkaLogo} alt="Porto Logo" />
                                     </Link>
                                 </div>
                                 <div className="header-center">
                                     <div className="header-search">
                                         <a href="#" className="search-toggle"
-                                         onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
+                                            onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
-                                            <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show': ''}`}>
+                                            <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
                                                 <input type="search" className="form-control" name="q" id="q" placeholder="Search..." required="" />
                                                 <div className="select-custom">
                                                     <select id="cat" name="cat">
@@ -169,12 +169,14 @@ class Header extends Component {
                                         <span>Call us now</span>
                                         <a href="tel:#"><strong>+123 5678 890</strong></a>
                                     </div>
-                                    
-                                    <div className="dropdown cart-dropdown" style={{background:'transparent', border:'none',position:'relative',
-                                         width:'fit-content'}}>
-                                        <a href="#" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+
+                                    <div className="dropdown cart-dropdown" style={{
+                                        background: 'transparent', border: 'none', position: 'relative',
+                                        width: 'fit-content'
+                                    }}>
+                                        <Link to="/users/cart" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                             <span className="cart-count">2</span>
-                                        </a>
+                                        </Link>
 
                                         <div className="dropdown-menu">
                                             <div className="dropdownmenu-wrapper">
@@ -326,7 +328,7 @@ class Header extends Component {
                                     </li>
                                     {
                                         this.props.currentUser && this.props.currentUser.pinSet ? null
-                                        : <li><Link to="/users/securityquestions">Set up wallet <span className="tip tip-hot"> Hot!</span></Link></li>
+                                            : <li><Link to="/users/securityquestions">Set up wallet <span className="tip tip-hot"> Hot!</span></Link></li>
                                     }
                                     <li className=""><Link to="/users/banks">My Bank</Link></li>
                                     <li className=""><Link to="/users/azonkaPay">Azonka Pay</Link></li>
@@ -336,11 +338,11 @@ class Header extends Component {
                                     <li><Link to="#">Special Offer!<span className="tip tip-hot">Hot!</span></Link></li>
                                     {
                                         currentUser ?
-                                        <li className="" onClick={() => {this.handleSideMenuClick('logout')}}><Link to="#">Log Out</Link></li>
+                                            <li className="" onClick={() => { this.handleSideMenuClick('logout') }}><Link to="#">Log Out</Link></li>
 
-                                        :
+                                            :
 
-                                        <li className=""><Link to="#">Log In</Link></li>
+                                            <li className=""><Link to="#">Log In</Link></li>
                                     }
                                 </ul>
                             </nav>
@@ -360,7 +362,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-    const {home: {currentUser}} = state;
+    const { home: { currentUser } } = state;
     return {
         currentUser
     }

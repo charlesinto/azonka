@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route,  } from "react-router-dom";
+import { BrowserRouter as Router, Route, } from "react-router-dom";
 import { AnimatedSwitch } from 'react-router-transition';
 import Home from "./components/Home";
 import VerifyEmail from "./components/Auth/VerifyEmail";
@@ -27,11 +27,11 @@ import WishList from "./components/WishList";
 import AgentSignUp from "./components/AgentSignUp";
 import SellerSignUp from "./components/SellerSignUp";
 import AzonkaPay from "./components/AzonkaPay";
-import AddressBook  from "./components/AddressBook";
+import AddressBook from "./components/AddressBook";
 import ChangePassword from "./components/Auth/changePassword";
 import Store from "./components/Store";
 import ResetPassword from './components/Auth/ResetPassword';
-import  Layout from "./components/HOC/Layout";
+import Layout from "./components/HOC/Layout";
 import ConfirmAccount from "./components/Auth/confirmAccount";
 import StoreDetail from "./components/StoreDetail";
 import ScrollTop from './common/ScrollTop';
@@ -40,9 +40,11 @@ import * as actions from "./actions";
 
 
 import LoginSignup from "./components/Auth/LoginSignup";
+import ShopItems from './components/Cart/ShopItems';
+// import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
-    componentDidMount(){
+    componentDidMount() {
         this.props.fetchUser()
     }
     render() {
@@ -55,20 +57,21 @@ class Root extends Component {
                                 atEnter={{ opacity: 1 }}
                                 atLeave={{ opacity: 1 }}
                                 atActive={{ opacity: 1 }}
-                                
+
                             >
-                                
+
                                 <Route exact path="/" component={Home} />
+                                <Route exact path="/shop" component={ShopItems} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register" component={Register} />
-                                <AuthRoute redirectIfAuth noAuthRequired  exact path="/users/verify" component={ConfirmAccount} />
+                                <AuthRoute redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />
-                                <AuthRoute  exact path="/users/securityquestions" component={SecurityQuestion} />
+                                <AuthRoute exact path="/users/securityquestions" component={SecurityQuestion} />
                                 <AuthRoute exact path="/users/profile" component={Profile} />
                                 <AuthRoute exact path="/users/profile/account" component={AccountSetting} />
                                 <AuthRoute noAuthRequired exact path="/users/purchases" component={Purchases} />
                                 <AuthRoute noAuthRequired exact path="/users/cart" component={Cart} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
-                                <AuthRoute  exact path="/users/buycredit" component={BuyCredit} />
+                                <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
                                 <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />
                                 <AuthRoute redirectIfUser exact path="/users/withdrawal" component={WithDrawal} />
@@ -76,20 +79,20 @@ class Root extends Component {
                                 <AuthRoute redirectIfUser exact path="/users/store" component={StoreDetail} />
                                 <AuthRoute redirectIfUser exact path="/users/items/manage" component={ManageItems} />
                                 <AuthRoute redirectIfUser exact path="/users/referrals" component={Referral} />
-                                <AuthRoute  exact path="/users/banks" component={Bank} />
+                                <AuthRoute exact path="/users/banks" component={Bank} />
                                 <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} />
                                 <AuthRoute exact path="/users/addressBook" component={AddressBook} />
                                 <AuthRoute exact path="/users/agent/signup" component={AgentSignUp} />
                                 <AuthRoute exact path="/users/seller/signup" component={SellerSignUp} />
-                                <AuthRoute noAuthRequired  path="/users/wishlist" component={WishList} />
+                                <AuthRoute noAuthRequired path="/users/wishlist" component={WishList} />
                                 <AuthRoute exact path="/users/reset-password" component={ChangePassword} />
                                 <AuthRoute redirectIfUser exact path="/users/create/shop" component={Store} />
-                                <AuthRoute redirectIfAuth noAuthRequired exact = "/password/new" component={ResetPassword} />
-                                
+                                <AuthRoute redirectIfAuth noAuthRequired exact="/password/new" component={ResetPassword} />
+
                                 <NotFoundRoute redirectIfUser path="*" component={Home} />
-                                
+
                             </AnimatedSwitch>
-                            </Layout>
+                        </Layout>
                     </ScrollTop>
                 </Router>
             </div>

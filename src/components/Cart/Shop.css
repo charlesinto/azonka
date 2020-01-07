@@ -1,0 +1,14 @@
+
+
+
+.banner.banner-cat {
+    background-image: url('./images/banners/banner-top.jpg');
+    display: flex;
+    align-items: center;
+    height: 220px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #ccc;
+    margin-bottom: 0;
+}

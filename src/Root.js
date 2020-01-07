@@ -41,6 +41,7 @@ import * as actions from "./actions";
 
 import LoginSignup from "./components/Auth/LoginSignup";
 import ShopItems from './components/Cart/ShopItems';
+import ShopItemDetails from './components/Cart/ShopItemDetails';
 // import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
@@ -62,6 +63,7 @@ class Root extends Component {
 
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/shop" component={ShopItems} />
+                                <Route exact path="/shop-details/:id" component={ShopItemDetails} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register" component={Register} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />
@@ -69,7 +71,7 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/profile" component={Profile} />
                                 <AuthRoute exact path="/users/profile/account" component={AccountSetting} />
                                 <AuthRoute noAuthRequired exact path="/users/purchases" component={Purchases} />
-                                <AuthRoute noAuthRequired exact path="/users/cart" component={Cart} />
+                                <AuthRoute noAuthRequired exact path="/users/cart/:id" component={Cart} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />

@@ -7,6 +7,7 @@ import azonkaLogo from "../../images/logo_header.png";
 import product1 from "../../css/images/products/cart/product-1.jpg";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import { CartDropdown } from '../Cart/CartDropdown';
 
 class Header extends Component {
     state = {
@@ -16,8 +17,9 @@ class Header extends Component {
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
+        let localData = JSON.parse(localStorage.getItem("cart"));
         this.setState({
-            currentUser: user
+            currentUser: user, localData
         })
     }
     _toggleMenu = () => {
@@ -25,6 +27,7 @@ class Header extends Component {
             mobileMenu: !this.state.mobileMenu
         })
     }
+
     handleSideMenuClick = link => {
         switch (link) {
             case 'logout':
@@ -169,72 +172,7 @@ class Header extends Component {
                                         <span>Call us now</span>
                                         <a href="tel:#"><strong>+123 5678 890</strong></a>
                                     </div>
-
-                                    <div className="dropdown cart-dropdown" style={{
-                                        background: 'transparent', border: 'none', position: 'relative',
-                                        width: 'fit-content'
-                                    }}>
-                                        <Link to="/users/cart" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                                            <span className="cart-count">2</span>
-                                        </Link>
-
-                                        <div className="dropdown-menu">
-                                            <div className="dropdownmenu-wrapper">
-                                                <div className="dropdown-cart-products">
-                                                    <div className="product">
-                                                        <div className="product-details">
-                                                            <h4 className="product-title">
-                                                                <a href="product.html">Woman Ring</a>
-                                                            </h4>
-
-                                                            <span className="cart-product-info">
-                                                                <span className="cart-product-qty">1</span>
-                                                                x &#8358; 99.00
-                                                </span>
-                                                        </div>
-
-                                                        <figure className="product-image-container">
-                                                            <a href="product.html" className="product-image">
-                                                                <img src={product1} alt="product" />
-                                                            </a>
-                                                            <a href="#" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></a>
-                                                        </figure>
-                                                    </div>
-
-                                                    <div className="product">
-                                                        <div className="product-details">
-                                                            <h4 className="product-title">
-                                                                <a href="product.html">Woman Necklace</a>
-                                                            </h4>
-
-                                                            <span className="cart-product-info">
-                                                                <span className="cart-product-qty">1</span>
-                                                                x &#8358; 35.00
-                                                </span>
-                                                        </div>
-
-                                                        <figure className="product-image-container">
-                                                            <a href="product.html" className="product-image">
-                                                                <img src={product1} alt="product" />
-                                                            </a>
-                                                            <a href="#" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></a>
-                                                        </figure>
-                                                    </div>
-                                                </div>
-
-                                                <div className="dropdown-cart-total">
-                                                    <span>Total</span>
-
-                                                    <span className="cart-total-price">&#8358;134.00</span>
-                                                </div>
-
-                                                <div className="dropdown-cart-action">
-                                                    <a href="cart.html" className="btn">View Cart</a>
-                                                    <a href="checkout-shipping.html" className="btn">Checkout</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <CartDropdown localData={this.state && this.state.localData} />
                                 </div>
                             </div>
                         </div>

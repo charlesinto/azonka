@@ -12,3 +12,6 @@
     background-color: #ccc;
     margin-bottom: 0;
 }
+.add-cart{
+    cursor: pointer;
+}

@@ -11,9 +11,10 @@ import { Link } from 'react-router-dom'
 
 
 class ShopItems extends Component {
-    state = { localData: [], sortState: "" }
+    state = { localData: [], sortState: "", cartData: [] }
     componentDidMount() {
-        let localData = JSON.parse(localStorage.getItem("shop"))
+        let localData = JSON.parse(localStorage.getItem("shop"));
+
         this.setState({ localData })
         console.log("shop state", localData)
     }
@@ -51,6 +52,32 @@ class ShopItems extends Component {
     }
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
+    }
+    handleAddCart = (e) => {
+        let id = e.target.id;
+        let cartData = JSON.parse(localStorage.getItem("cart"));
+        this.setState({ cartData })
+        let { localData } = this.state
+        let obj = localData.filter(data => id == data.id)[0]
+
+        //check if item is in cart
+
+        if (cartData) { //item exists
+            // console.log("data", cartData)
+            let isAdded = cartData.find(data => data.id == id); //check if clicked item exist in cart
+            if (isAdded) {
+                return alert("Item has already been added")
+            } else {
+                localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+            }
+
+        } else {
+            //if cart is empty
+            localStorage.setItem("cart", JSON.stringify([obj]))
+        }
+
+
+
     }
     render() {
         const { localData } = this.state;
@@ -151,10 +178,9 @@ class ShopItems extends Component {
                                                                         <span>Add to Wishlist</span>
                                                                     </Link>
 
-                                                                    <Link to="product.html" className="paction add-cart" title="Add to Cart">
-                                                                        <span>Add to Cart</span>
-                                                                    </Link>
-
+                                                                    <span className="paction add-cart" onClick={this.handleAddCart}>
+                                                                        <span id={id}>Add to Cart</span>
+                                                                    </span>
                                                                     <Link to="#" className="paction add-compare" title="Add to Compare">
                                                                         <span>Add to Compare</span>
                                                                     </Link>

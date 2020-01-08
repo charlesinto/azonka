@@ -15,3 +15,10 @@
 .add-cart{
     cursor: pointer;
 }
+
+
+.product-image img{
+    height: 30vh !important;
+}
+
+    

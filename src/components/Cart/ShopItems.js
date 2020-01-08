@@ -144,14 +144,14 @@ class ShopItems extends Component {
                                         localData ? (
                                             localData.map(data => {
                                                 // console.log("shop state", data)
-                                                let { id, name, finalPrice, createdAt } = data
+                                                let { id, name, finalPrice, createdAt, mainImageUrl } = data
                                                 return (
 
                                                     <div className="col-6 col-md-4 col-xl-3" key={id}>
                                                         <div className="product">
                                                             <figure className="product-image-container">
                                                                 <span id={id} className="product-image" onClick={this.handleItemDetails}>
-                                                                    <img src={productImg1} alt="product" />
+                                                                    <img src={mainImageUrl} alt="product" />
                                                                 </span>
                                                                 <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
                                                             </figure>

@@ -16,8 +16,8 @@ export class CartDropdown extends Component {
     }
 
     calSum = () => {
-        let { data } = this.state;
-        let sum = data ? data.reduce((a, b) => {
+        let { cartData } = this.state;
+        let sum = cartData ? cartData.reduce((a, b) => {
             return a + b.finalPrice
         }, 0) : 0
         return sum
@@ -67,26 +67,16 @@ export class CartDropdown extends Component {
                                                         </h4>
 
                                                         <span className="cart-product-info">
-                                                            <span className="cart-product-qty">1</span>
-                                                            x &#8358; {sellingPrice}
+                                                            {/* <span className="cart-product-qty">1</span>
+                                                            x &#8358;  */}
+                                                            {sellingPrice}
                                                         </span>
                                                     </div>
                                                     <figure className="product-image-container">
                                                         <Link to="product.html" className="product-image">
                                                             <img src={mainImageUrl} alt="product" />
                                                         </Link>
-                                                        <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={
-                                                            // (e) => {
-                                                            //     e.target.id;
-                                                            //     let newItems = data.filter(data => data.id != id);
-                                                            //     // console.log(newItems)
-                                                            //     localStorage.setItem("cart", JSON.stringify(newItems));
-                                                            //     let newCartData = JSON.parse(localStorage.getItem("cart"))
-                                                            //     return console.log("new cart", newCartData)
-                                                            // }
-                                                            this.removeFromCart
-
-                                                        }></i></span>
+                                                        <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart}></i></span>
                                                     </figure>
                                                 </div>
                                             )

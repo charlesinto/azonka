@@ -21,12 +21,14 @@ class Header extends Component {
         this.setState({
             currentUser: user, localData
         })
+
     }
     _toggleMenu = () => {
         this.setState({
             mobileMenu: !this.state.mobileMenu
         })
     }
+
 
     handleSideMenuClick = link => {
         switch (link) {
@@ -172,7 +174,7 @@ class Header extends Component {
                                         <span>Call us now</span>
                                         <a href="tel:#"><strong>+123 5678 890</strong></a>
                                     </div>
-                                    <CartDropdown localData={this.state && this.state.localData} />
+                                    <CartDropdown localData={this.state && this.state.localData} fakeData={this.state && this.state.fakeData} />
                                 </div>
                             </div>
                         </div>

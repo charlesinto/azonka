@@ -1,92 +1,116 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from "react-router-dom";
 
-export const CartDropdown = ({ localData }) => {
-    console.log("props", localData)
-    const [data, setData] = useState([])
-    const [itemSum, setItemSum] = useState(0)
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-    let loadCartData = () => {
-        setData(localData)
-        console.log("props data", data)
+export class CartDropdown extends Component {
+    state = { data: [], sum: 0 }
+
+    componentDidMount() {
+        let data = JSON.parse(localStorage.getItem("cart"));
+        this.setState({ data })
     }
-    let calSum = () => {
+
+    calSum = () => {
+        let { data } = this.state;
         let sum = data ? data.reduce((a, b) => {
             return a + b.finalPrice
         }, 0) : 0
-        setItemSum(sum)
+        return sum
+    }
+    removeFromCart = async (e) => {
+        let { data } = this.state;
+        // alert(e.target.id)
+        let id = e.target.id;
+        let newItems = data.filter(data => data.id != id);
+        // console.log(newItems)
+        localStorage.setItem("cart", JSON.stringify(newItems));
+        let newCartData = JSON.parse(localStorage.getItem("cart"))
+        // console.log("new cart", newCartData)
+    }
+    setData = () => {
+        let data = JSON.parse(localStorage.getItem("cart"));
+        this.setState({ data })
+        console.log("sewa love", this.state)
     }
 
-    useEffect(() => {
-        loadCartData()
-        calSum()
-    }, [data, itemSum])
-    return (
-        <>
-            <div className="dropdown cart-dropdown" style={{
-                background: 'transparent', border: 'none', position: 'relative',
-                width: 'fit-content'
-            }}>
-                <Link to="/users/cart" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                    <span className="cart-count">2</span>
-                </Link>
+    render() {
+        let { data } = this.state
+        return (
+            <>
+                <div className="dropdown cart-dropdown" style={{
+                    background: 'transparent', border: 'none', position: 'relative',
+                    width: 'fit-content'
+                }}>
+                    <Link to="/users/cart" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                        <span className="cart-count">{data ? data.length : 0}</span>
+                    </Link>
 
-                <div className="dropdown-menu">
-                    <div className="dropdownmenu-wrapper">
-                        <div className="dropdown-cart-products">
+                    <div className="dropdown-menu">
+                        <div className="dropdownmenu-wrapper">
+                            <div className="dropdown-cart-products">
 
-                            {/* CART ITEMS START */}
+                                {/* CART ITEMS START */}
 
-                            {
-                                data ? (
-                                    data.map(_data => {
-                                        console.log(_data)
-                                        let { id, name, sellingPrice, mainImageUrl } = _data
-                                        return (
-                                            <div className="product" key={id}>
-                                                <div className="product-details">
-                                                    <h4 className="product-title">
-                                                        <Link to="product.html">{name}</Link>
-                                                    </h4>
+                                {
+                                    data ? (
+                                        data.map(_data => {
+                                            console.log(_data)
+                                            let { id, name, sellingPrice, mainImageUrl } = _data
+                                            return (
+                                                <div className="product" key={id}>
+                                                    <div className="product-details">
+                                                        <h4 className="product-title">
+                                                            <Link to="product.html">{name}</Link>
+                                                        </h4>
 
-                                                    <span className="cart-product-info">
-                                                        <span className="cart-product-qty">1</span>
-                                                        x &#8358; {sellingPrice}
-                                                    </span>
+                                                        <span className="cart-product-info">
+                                                            <span className="cart-product-qty">1</span>
+                                                            x &#8358; {sellingPrice}
+                                                        </span>
+                                                    </div>
+                                                    <figure className="product-image-container">
+                                                        <Link to="product.html" className="product-image">
+                                                            <img src={mainImageUrl} alt="product" />
+                                                        </Link>
+                                                        <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart} onClick={this.removeFromCart}></i></span>
+                                                    </figure>
                                                 </div>
-                                                <figure className="product-image-container">
-                                                    <Link to="product.html" className="product-image">
-                                                        <img src={mainImageUrl} alt="product" />
-                                                    </Link>
-                                                    <Link to="#" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></Link>
-                                                </figure>
-                                            </div>
+                                            )
+                                        })
+                                    ) : (
+                                            <h5 className="text-dark">No data yet</h5>
                                         )
-                                    })
-                                ) : (
-                                        <div>No data yet</div>
-                                    )
-                            }
+                                }
 
 
 
-                            {/* CART ITEMS END */}
+                                {/* CART ITEMS END */}
 
-                        </div>
+                            </div>
 
-                        <div className="dropdown-cart-total">
-                            <span>Total</span>
+                            <div className="dropdown-cart-total">
+                                <span>Total</span>
 
-                            <span className="cart-total-price">&#8358; {itemSum}</span>
-                        </div>
+                                <span className="cart-total-price">&#8358;
+                                {
+                                        // data ? data.reduce((a, b) => {
+                                        //     return a + b.finalPrice
+                                        // }, 0) : 0
+                                        this.calSum()
+                                    }
+                                </span>
+                            </div>
 
-                        <div className="dropdown-cart-action">
-                            <Link to="/shop" className="btn">View Cart</Link>
-                            <Link to="/shop" className="btn">Checkout</Link>
+                            <div className="dropdown-cart-action">
+                                <Link to="/shop" className="btn">View Cart</Link>
+                                <Link to="/shop" className="btn">Checkout</Link>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
-    )
+            </>
+        )
+    }
 }
+
+// export default CartDropdown

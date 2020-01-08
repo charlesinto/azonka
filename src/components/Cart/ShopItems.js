@@ -11,49 +11,43 @@ import { Link } from 'react-router-dom'
 
 
 class ShopItems extends Component {
-    state = { localData: [], sortState: "", cartData: [] }
+    state = { localData: [], sortState: "", cartData: [], cartLength: 0 }
     componentDidMount() {
         let localData = JSON.parse(localStorage.getItem("shop"));
 
         this.setState({ localData })
-        console.log("shop state", localData)
+        // console.log("shop state", localData)
+    }
+    setData = () => {
+        let cartData = JSON.parse(localStorage.getItem("cart"));
+        this.setState({ cartData })
+        console.log("setted", this.state.cartData)
     }
     handleSort = (e) => {
-        this.setState({ sortState: e.target.value })
-        console.log("shop state", this.state.sortState)
-        let selectValue = this.state.sortState;
+        let { localData } = this.state
+        let selectValue = document.querySelector(".sortDrp").value;
 
-        //  console.log("selectvalue", selectValue)
-        if (this.state.sortState === "old") {
-            return this.sortOldToNew()
-        } else if (this.state.sortState === "new") {
-            return this.sortNewToOld()
-        } else if (this.state.sortState === "high") {
-            return this.sortHighToLow()
-        } else if (this.state.sortState === "low") {
-            return this.sortLowToHigh()
+        if (selectValue === "old") {
+            let sorted = localData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            this.setState({ localData: sorted })
+        } else if (selectValue === "new") {
+            let sorted = localData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            this.setState({ localData: sorted })
+        } else if (selectValue === "high") {
+            let sorted = localData.sort((a, b) => (b.finalPrice) - (a.finalPrice))
+            this.setState({ localData: sorted })
+        } else if (selectValue === "low") {
+            let sorted = localData.sort((a, b) => (a.finalPrice) - (b.finalPrice))
+            this.setState({ localData: sorted })
         } else {
             return null;
         }
 
-
-    }
-    sortNewToOld = () => {
-        console.log("new")
-    }
-    sortOldToNew = () => {
-        console.log("old")
-    }
-    sortHighToLow = () => {
-        console.log("high")
-    }
-    sortLowToHigh = () => {
-        console.log("low")
     }
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
     }
-    handleAddCart = (e) => {
+    handleAddCart = async (e) => {
         let id = e.target.id;
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
@@ -64,26 +58,31 @@ class ShopItems extends Component {
 
         if (cartData) { //item exists
             // console.log("data", cartData)
-            let isAdded = cartData.find(data => data.id == id); //check if clicked item exist in cart
+            let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
             if (isAdded) {
                 return alert("Item has already been added")
             } else {
                 localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                this.setCartData()
             }
 
         } else {
             //if cart is empty
             localStorage.setItem("cart", JSON.stringify([obj]))
+            this.setCartData()
         }
 
-
-
+    }
+    setCartData = async () => {
+        let _cartData = await JSON.parse(localStorage.getItem("cart"));
+        this.setState({ cartData: _cartData, cartLength: _cartData.length })
+        return console.log("sewa", this.state, _cartData)
     }
     render() {
         const { localData } = this.state;
         return (
             <div>
-                <Header />
+                <Header setCartData={this.setCartData} />
                 <main className="main">
                     <ShopItemHeader />
                     <div className="container">
@@ -93,7 +92,7 @@ class ShopItems extends Component {
                                     <div className="toolbox-left">
                                         <div className="toolbox-item toolbox-sort">
                                             <div className="select-custom">
-                                                <select name="orderby" className="form-control" onChange={this.handleSort}>
+                                                <select name="orderby" className="form-control sortDrp" onChange={this.handleSort}>
                                                     <option value="menu_order" selected="selected">Default sorting</option>
                                                     <option value="old">Sort by Date(Old)</option>
                                                     <option value="new" onChange={this.sortNewToOld}>Sort by Date(New)</option>
@@ -145,7 +144,7 @@ class ShopItems extends Component {
                                     {
                                         localData ? (
                                             localData.map(data => {
-                                                console.log("shop state", data)
+                                                // console.log("shop state", data)
                                                 let { id, name, finalPrice, createdAt } = data
                                                 return (
 
@@ -167,7 +166,7 @@ class ShopItems extends Component {
                                                                     <Link to="product.html">{name}</Link>
                                                                 </h2>
                                                                 <div className="price-box">
-                                                                    <span className="product-price">${finalPrice}</span>
+                                                                    <span className="product-price"> ₦{finalPrice}</span>
                                                                     <h2 className="product-title">
                                                                         <Link to="product.html">{new Date(createdAt).toLocaleString()}</Link>
                                                                     </h2>

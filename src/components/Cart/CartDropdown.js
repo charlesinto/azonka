@@ -3,11 +3,16 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 export class CartDropdown extends Component {
-    state = { data: [], sum: 0 }
+    state = { data: [], sum: 0, cartData: [], cartLength: 0 }
 
     componentDidMount() {
         let data = JSON.parse(localStorage.getItem("cart"));
         this.setState({ data })
+    }
+    componentWillReceiveProps = props => {
+        if (props.setCartData !== this.props.setCartData) {
+            this.setState({ cartData: props.setCartData, cartLength: props.setCartData.length });
+        }
     }
 
     calSum = () => {
@@ -18,23 +23,21 @@ export class CartDropdown extends Component {
         return sum
     }
     removeFromCart = async (e) => {
-        let { data } = this.state;
+        let { cartData } = this.state;
         // alert(e.target.id)
         let id = e.target.id;
-        let newItems = data.filter(data => data.id != id);
+        let newItems = cartData.filter(data => data.id != id);
         // console.log(newItems)
         localStorage.setItem("cart", JSON.stringify(newItems));
         let newCartData = JSON.parse(localStorage.getItem("cart"))
-        // console.log("new cart", newCartData)
-    }
-    setData = () => {
-        let data = JSON.parse(localStorage.getItem("cart"));
-        this.setState({ data })
-        console.log("sewa love", this.state)
+        return this.setState({ cartData: newCartData })
     }
 
+
     render() {
-        let { data } = this.state
+
+        let { cartData } = this.state
+        console.log("zlatan dropdown render", this.state)
         return (
             <>
                 <div className="dropdown cart-dropdown" style={{
@@ -42,7 +45,7 @@ export class CartDropdown extends Component {
                     width: 'fit-content'
                 }}>
                     <Link to="/users/cart" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                        <span className="cart-count">{data ? data.length : 0}</span>
+                        <span className="cart-count">{cartData ? cartData.length : 0}</span>
                     </Link>
 
                     <div className="dropdown-menu">
@@ -52,8 +55,8 @@ export class CartDropdown extends Component {
                                 {/* CART ITEMS START */}
 
                                 {
-                                    data ? (
-                                        data.map(_data => {
+                                    cartData ? (
+                                        cartData.map(_data => {
                                             console.log(_data)
                                             let { id, name, sellingPrice, mainImageUrl } = _data
                                             return (
@@ -72,7 +75,18 @@ export class CartDropdown extends Component {
                                                         <Link to="product.html" className="product-image">
                                                             <img src={mainImageUrl} alt="product" />
                                                         </Link>
-                                                        <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart} onClick={this.removeFromCart}></i></span>
+                                                        <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={
+                                                            // (e) => {
+                                                            //     e.target.id;
+                                                            //     let newItems = data.filter(data => data.id != id);
+                                                            //     // console.log(newItems)
+                                                            //     localStorage.setItem("cart", JSON.stringify(newItems));
+                                                            //     let newCartData = JSON.parse(localStorage.getItem("cart"))
+                                                            //     return console.log("new cart", newCartData)
+                                                            // }
+                                                            this.removeFromCart
+
+                                                        }></i></span>
                                                     </figure>
                                                 </div>
                                             )

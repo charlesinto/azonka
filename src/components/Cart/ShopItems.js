@@ -14,16 +14,15 @@ class ShopItems extends Component {
     state = { localData: [], sortState: "", cartData: [], cartLength: 0 }
     componentDidMount() {
         let localData = JSON.parse(localStorage.getItem("shop"));
-
         this.setState({ localData })
-        // console.log("shop state", localData)
+        this.handleSetCartData()
     }
-    setData = () => {
+    handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
         console.log("setted", this.state.cartData)
     }
-    handleSort = (e) => {
+    handleSort = () => {
         let { localData } = this.state
         let selectValue = document.querySelector(".sortDrp").value;
 
@@ -63,26 +62,26 @@ class ShopItems extends Component {
                 return alert("Item has already been added")
             } else {
                 localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
-                this.setCartData()
+                this.handleSetData()
             }
 
         } else {
             //if cart is empty
             localStorage.setItem("cart", JSON.stringify([obj]))
-            this.setCartData()
+            this.handleSetData()
         }
 
     }
-    setCartData = async () => {
-        let _cartData = await JSON.parse(localStorage.getItem("cart"));
-        this.setState({ cartData: _cartData, cartLength: _cartData.length })
-        return console.log("sewa", this.state, _cartData)
+    handleSetData = () => {
+        let cartData = JSON.parse(localStorage.getItem("cart"))
+        return this.setState({ cartData })
     }
     render() {
-        const { localData } = this.state;
+        const { localData, cartData } = this.state;
+        console.log("zlatan before", cartData);
         return (
             <div>
-                <Header setCartData={this.setCartData} />
+                <Header setCartData={cartData} />
                 <main className="main">
                     <ShopItemHeader />
                     <div className="container">
@@ -124,14 +123,14 @@ class ShopItems extends Component {
                                     </div>
                                     {/* <!-- End .toolbox-item --> */}
 
-                                    <div className="layout-modes">
+                                    {/* <div className="layout-modes">
                                         <Link to="category.html" className="layout-btn btn-grid active" title="Grid">
                                             <i className="icon-mode-grid"></i>
                                         </Link>
                                         <Link to="category-list.html" className="layout-btn btn-list" title="List">
                                             <i className="icon-mode-list"></i>
                                         </Link>
-                                    </div>
+                                    </div> */}
                                     {/* <!-- End .layout-modes --> */}
                                 </nav>
 

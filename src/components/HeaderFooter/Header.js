@@ -45,7 +45,9 @@ class Header extends Component {
         })
     }
     render() {
-        const { currentUser } = this.state
+        const { currentUser } = this.state;
+        let { setCartData } = this.props;
+
         return (
             <div>
                 <div className={`page-wrapper ${this.state.mobileMenu ? 'mmenu-active' : ''}`} style={{ position: 'fixed', zIndex: '1000', width: '100%' }}>
@@ -174,7 +176,7 @@ class Header extends Component {
                                         <span>Call us now</span>
                                         <a href="tel:#"><strong>+123 5678 890</strong></a>
                                     </div>
-                                    <CartDropdown localData={this.state && this.state.localData} fakeData={this.state && this.state.fakeData} />
+                                    <CartDropdown localData={this.state && this.state.localData} setCartData={setCartData} />
                                 </div>
                             </div>
                         </div>

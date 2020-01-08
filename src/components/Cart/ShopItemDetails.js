@@ -19,7 +19,7 @@ export default class ShopItemDetails extends Component {
         this.setState({ detailsData })
     }
     render() {
-
+        console.log("zlatan drp", this.state, this.props)
         let data = this.state.detailsData
         console.log("shows", data.name)
         return (
@@ -123,7 +123,7 @@ export default class ShopItemDetails extends Component {
                                                 </div>
                                                 {/* <!-- End .product-desc --> */}
 
-                                                <div className="product-filters-container">
+                                                {/* <div className="product-filters-container">
                                                     <div className="product-single-filter">
                                                         <label>Colors:</label>
                                                         <ul className="config-swatch-list">
@@ -145,8 +145,7 @@ export default class ShopItemDetails extends Component {
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    {/* <!-- End .product-single-filter --> */}
-                                                </div>
+                                                </div> */}
                                                 {/* <!-- End .product-filters-container --> */}
 
                                                 <div className="product-action product-all-icons">

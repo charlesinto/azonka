@@ -150,7 +150,7 @@ class ShopItems extends Component {
                                                     <div className="col-6 col-md-4 col-xl-3" key={id}>
                                                         <div className="product">
                                                             <figure className="product-image-container">
-                                                                <span id={id} className="product-image" onClick={this.handleItemDetails}>
+                                                                <span id={id} className="product-image shop-product-image" onClick={this.handleItemDetails}>
                                                                     <img src={mainImageUrl} alt="product" />
                                                                 </span>
                                                                 <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>

@@ -17,8 +17,13 @@
 }
 
 
-.product-image img{
+.shop-product-image img{
     height: 30vh !important;
 }
+.drp-shop-product-image{
+    height: 12vh;
+}
+
+
 
     

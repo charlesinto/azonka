@@ -73,7 +73,7 @@ export class CartDropdown extends Component {
                                                         </span>
                                                     </div>
                                                     <figure className="product-image-container">
-                                                        <Link to="product.html" className="product-image">
+                                                        <Link to="product.html" className="product-image drp-product-image ">
                                                             <img src={mainImageUrl} alt="product" />
                                                         </Link>
                                                         <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart}></i></span>

@@ -2,7 +2,7 @@ import {
     ERROR_FETCHING_ITEMS, ITEMS_FETCHED_SUCCESSFULLY,
     STOP_LOADING, SUCCESS_ALERT, ITEM_CHANGE_ACTION,
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM,
-    PRODUCTS_FETCED_SUCCESSFULLY,
+    PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
 } from "./types";
@@ -160,6 +160,26 @@ export const fetchFeaturedItems = () => {
             const { data: { products } } = response;
             console.log("got here", products)
             dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const fetchSearchCategory = () => {
+
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/api/v1/category/get-categories/${0}/${20}`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const { data: { categories } } = response;
+            // console.log("bolanle", categories)
+            dispatch({ type: CATEGORY_FETCHED_SUCCESSFULLY, payload: categories })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })

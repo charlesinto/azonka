@@ -21,6 +21,7 @@ class Header extends Component {
         this.setState({
             currentUser: user, localData
         })
+        this.loadSearchCategory()
 
     }
     _toggleMenu = () => {
@@ -44,10 +45,16 @@ class Header extends Component {
             showSearchBar: !this.state.showSearchBar
         })
     }
+    loadSearchCategory = async () => {
+        await this.props.fetchSearchCategory()
+        this.setState({ category: this.props.categories })
+        console.log("bola", this.state)
+    }
+
     render() {
         const { currentUser } = this.state;
         let { setCartData } = this.props;
-
+        let { category } = this.state;
         return (
             <div>
                 <div className={`page-wrapper ${this.state.mobileMenu ? 'mmenu-active' : ''}`} style={{ position: 'fixed', zIndex: '1000', width: '100%' }}>
@@ -144,23 +151,18 @@ class Header extends Component {
                                                 <input type="search" className="form-control" name="q" id="q" placeholder="Search..." required="" />
                                                 <div className="select-custom">
                                                     <select id="cat" name="cat">
-                                                        <option value="">All Categories</option>
-                                                        <option value="4">Fashion</option>
-                                                        <option value="12">- Women</option>
-                                                        <option value="13">- Men</option>
-                                                        <option value="66">- Jewellery</option>
-                                                        <option value="67">- Kids Fashion</option>
-                                                        <option value="5">Electronics</option>
-                                                        <option value="21">- Smart TVs</option>
-                                                        <option value="22">- Cameras</option>
-                                                        <option value="63">- Games</option>
-                                                        <option value="7">Home &amp; Garden</option>
-                                                        <option value="11">Motors</option>
-                                                        <option value="31">- Cars and Trucks</option>
-                                                        <option value="32">- Motorcycles &amp; Powersports</option>
-                                                        <option value="33">- Parts &amp; Accessories</option>
-                                                        <option value="34">- Boats</option>
-                                                        <option value="57">- Auto Tools &amp; Supplies</option>
+                                                        {
+                                                            category ? (
+                                                                category.map(_data => {
+                                                                    let { id, name, owner } = _data;
+                                                                    return (
+                                                                        <option value={name} key={id} data-id={id} data-owner={owner}>- {name}</option>
+                                                                    )
+                                                                })
+                                                            ) : (
+                                                                    <option value="">- Loading...</option>
+                                                                )
+                                                        }
                                                     </select>
                                                 </div>
                                                 <button className="btn" type="submit"><i className="icon-magnifier"></i></button>
@@ -304,9 +306,10 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
+    const { categories } = state.inventory
     const { home: { currentUser } } = state;
     return {
-        currentUser
+        currentUser, categories
     }
 }
 

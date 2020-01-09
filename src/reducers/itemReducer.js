@@ -1,6 +1,6 @@
 import {
     ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING,
-    PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM,
+    PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM, CATEGORY_FETCHED_SUCCESSFULLY,
     ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
 } from "../actions/types";
@@ -51,6 +51,8 @@ export default (state = INTIAL_STATE, actions) => {
             return { ...state, resetForm: true }
         case PRODUCTS_FETCED_SUCCESSFULLY:
             return { ...state, products: actions.payload }
+        case CATEGORY_FETCHED_SUCCESSFULLY:
+            return { ...state, categories: actions.payload }
         case EDIT_ITEM:
 
             return { ...state, product: { ...actions.payload } }

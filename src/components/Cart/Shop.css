@@ -24,6 +24,11 @@
     height: 12vh;
 }
 
+.dropdown-cart-products{
+    height: 48vh;
+    overflow-y: scroll;
+}
+
 
 
     

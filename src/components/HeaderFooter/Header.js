@@ -48,7 +48,6 @@ class Header extends Component {
     loadSearchCategory = async () => {
         await this.props.fetchSearchCategory()
         this.setState({ category: this.props.categories })
-        console.log("bola", this.state)
     }
 
     render() {

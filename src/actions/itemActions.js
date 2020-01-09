@@ -178,7 +178,6 @@ export const fetchSearchCategory = () => {
                 }
             })
             const { data: { categories } } = response;
-            // console.log("bolanle", categories)
             dispatch({ type: CATEGORY_FETCHED_SUCCESSFULLY, payload: categories })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {

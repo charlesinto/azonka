@@ -8,7 +8,13 @@ class FeatureProductItem extends Component {
     componentDidMount() {
         // console.log("joro", this.props)
     }
-
+handleAddToCart = async (e) => {
+    let productId = e.target.id;
+    let quanity = "1";
+    let obj = {productId, quanity}
+    console.log(obj)
+   await this.props.addToCart(obj)
+}
     render() {
         console.log("joro", this.props)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
@@ -39,9 +45,9 @@ class FeatureProductItem extends Component {
                             <span>Add to Wishlist</span>
                         </a>
 
-                        <a href="product.html" class="paction add-cart" title="Add to Cart">
-                            <span>Add to Cart</span>
-                        </a>
+                        <span class="paction add-cart" title="Add to Cart">
+                            <span id={id} onClick={this.handleAddToCart}> Add to Cart</span>
+                        </span>
 
                         <a href="#" class="paction add-compare" title="Add to Compare">
                             <span>Add to Compare</span>

@@ -22,6 +22,7 @@ class Header extends Component {
             currentUser: user, localData
         })
         this.loadSearchCategory()
+        this.loadCart()
 
     }
     _toggleMenu = () => {
@@ -48,6 +49,12 @@ class Header extends Component {
     loadSearchCategory = async () => {
         await this.props.fetchSearchCategory()
         this.setState({ category: this.props.categories })
+    }
+
+    loadCart = async () => {
+        await this.props.fetchCart()
+        
+        // this.setState({ category: this.props.categories })
     }
 
     render() {
@@ -305,6 +312,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
+    console.log("rema", state)
     const { categories } = state.inventory
     const { home: { currentUser } } = state;
     return {

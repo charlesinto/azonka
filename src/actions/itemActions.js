@@ -1,8 +1,8 @@
 import {
     ERROR_FETCHING_ITEMS, ITEMS_FETCHED_SUCCESSFULLY,
     STOP_LOADING, SUCCESS_ALERT, ITEM_CHANGE_ACTION,
-    DISPLAY_ERROR, EDIT_ITEM, INIT_FORM,
-    PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY,
+    DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
+    PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
 } from "./types";
@@ -183,6 +183,56 @@ export const fetchSearchCategory = () => {
         } catch (error) {
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const fetchCart = () => {
+
+    return async (dispatch) => {     
+        try {
+            const response = await axios.get(`/api/v1/user/cart/get`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            
+            const {  products, quantity } = response.data.cart;
+            console.log("remas",products,quantity)
+            dispatch({ type: CATEGORY_FETCHED_SUCCESSFULLY, payload: products })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const addToCart = (details) => {
+     
+    return async (dispatch) => {
+        try{
+            console.log("zlat", details)
+            const response = await axios.post('/api/v1/user/cart/add', 
+                                {productId:details.productId, quantity:details.quanity}, {
+                                    headers:{
+                                'x-access-token': localStorage.getItem('x-access-token')
+                            }})
+                             console.log("zlatres", response)
+            if(response.data.success){
+                const accounts = 'await getUserAccount()'
+                dispatch({type: STOP_LOADING, payload: ''})
+                dispatch({type: SUCCESS_ALERT, payload:"Item added to cart successfully"})
+                dispatch({type: ADD_CART_SUCCESSFULLY, payload: response})
+                
+            }
+        }catch(error){
+            console.log(error.response)
+            if(error.response.data.message)
+            console.log(error)
+                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            
+            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
         }
     }
 }

@@ -6,6 +6,7 @@ import * as actions from "../../actions";
 import Spinner from "../../assets/spinner.svg";
 import SweetAlert from "react-bootstrap-sweetalert";
 import warningIcon from '../../images/warning.png'
+import Header from '../HeaderFooter/Header';
 
 class Layout extends Component {
     logout = () => {
@@ -37,7 +38,7 @@ class Layout extends Component {
         console.log(this.props.redirectToProfile)
         return (
             <ToastProvider>
-
+                <Header />
                 {this.props.children}
 
                 {

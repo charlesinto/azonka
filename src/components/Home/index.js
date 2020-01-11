@@ -19,6 +19,7 @@ import Trending from '../../common/Trending';
 import slide1 from "../../css/images/products/product-8-white.jpg";//product-2-white
 import slide2 from "../../css/images/products/home-featured-3.jpg";
 import HomeSlide from '../../common/HomeSlide';
+import FlashSales from '../../common/FlashSales';
 
 class Home extends Component {
     state = { showPopUp: true }
@@ -182,42 +183,8 @@ class Home extends Component {
                                                 this.state.products.map(res => {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
-                                                        <div className="product col-md-4" key={id}>
-                                                            <figure className="product-image-container">
-                                                                <a href="product.html" className="product-image">
-                                                                    <img src={mainImageUrl} alt="product" className="image-view" />
-                                                                </a>
-                                                                <a href="ajax\product-quick-view.html" className="btn-quickview">Quick View</a>
-                                                            </figure>
-                                                            <div className="product-details">
-                                                                <div className="ratings-container">
-                                                                    <div className="product-ratings">
-                                                                        <span className="ratings" style={{ width: "80%" }}></span>
-                                                                    </div>
-                                                                </div>
 
-                                                                <h2 className="product-title">
-                                                                    <a href="product.html">{name} </a>
-                                                                </h2>
-                                                                <div className="price-box">
-                                                                    <span className="product-price">&#8358; {sellingPrice}</span>
-                                                                </div>
-
-                                                                <div className="product-action">
-                                                                    <a href="#" className="paction add-wishlist" title="Add to Wishlist">
-                                                                        <span>Add to Wishlist</span>
-                                                                    </a>
-
-                                                                    <span id={id} onClick={(e) => this.handleAddToCart(e, id)} className="paction add-cart" title="Add to Cart">
-                                                                        <span>Add to Cart</span>
-                                                                    </span>
-
-                                                                    <a href="#" className="paction add-compare" title="Add to Compare">
-                                                                        <span>Add to Compare</span>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} />
 
                                                     )
                                                 })

@@ -9,12 +9,15 @@ export class CartDropdown extends Component {
 
     componentDidMount() {
         this.loadCart()
+        console.log("fires", this.props)
+        this.tempReload()
     }
-    componentWillReceiveProps = props => {
-        if (props.setCartData !== this.props.setCartData) {
-            this.setState({ cartData: props.setCartData, cartLength: props.setCartData.length });
-        }
-    }
+    // componentWillReceiveProps = props => {
+    //     console.log("wunmi", props)
+    //     if (props.setCartData !== this.props.setCartData) {
+    //         this.setState({ cartData: props && props.setCartData, cartLength: props.setCartData ? props.setCartData.length : 0 });
+    //     }
+    // }
     calSum = () => {
         let { cartData } = this.state;
         let sum = cartData ? cartData.reduce((a, b) => {
@@ -36,15 +39,21 @@ export class CartDropdown extends Component {
     loadCart = async () => {
         let token = localStorage.getItem("x-access-token");
         if (token) {
-            await this.props.fetchCart()
+            // await this.props.fetchCart()
             this.setState({ cartData: this.props.cartItems })
             console.log("rema", this.state, this.props.setCartData)
         } else {
-            let cartData = await JSON.parse(localStorage.getItem("cart"));
+            let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
         }
     }
 
+    tempReload = () => {
+        setInterval(() => {
+            let cartData = JSON.parse(localStorage.getItem("cart"));
+            this.setState({ cartData })
+        }, 1000);
+    }
 
     render() {
 
@@ -130,10 +139,11 @@ export class CartDropdown extends Component {
 }
 
 const mapStateToProps = state => {
-    const { cartItems } = state.inventory;
-    return {
-        cartItems
-    }
+    console.log("firexat", state)
+    // const { cartItems } = state.inventory;
+    // return {
+    //     cartItems
+    // }
 }
 
 export default connect(mapStateToProps, actions)(CartDropdown);

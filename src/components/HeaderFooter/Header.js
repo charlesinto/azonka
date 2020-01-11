@@ -18,12 +18,12 @@ class Header extends Component {
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
-        let localData = JSON.parse(localStorage.getItem("cart"));
+        let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({
-            currentUser: user, localData
+            currentUser: user, cartData
         })
         this.loadSearchCategory()
-
+        this.loadCart()
 
     }
     _toggleMenu = () => {
@@ -52,13 +52,25 @@ class Header extends Component {
         this.setState({ category: this.props.categories })
     }
 
-
-
+    loadCart = async () => {
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchCart()
+            this.setState({ cartData: this.props.cartItems.products })
+        } else {
+            await this.props.fetchLocalCart()
+            let { cartData } = this.props;
+            console.log("cart data", this.props)
+            this.setState({ cartData })
+        }
+    }
 
 
     render() {
         const { currentUser } = this.state;
-        let { setCartData } = this.props;
+        const { cartData } = this.state;
+
+        // let { setCartData } = this.props;
         let { category } = this.state;
         return (
             <div>
@@ -183,7 +195,7 @@ class Header extends Component {
                                         <span>Call us now</span>
                                         <a href="tel:#"><strong>+123 5678 890</strong></a>
                                     </div>
-                                    <CartDropdown localData={this.state && this.state.localData} setCartData={setCartData} />
+                                    <CartDropdown setCartData={cartData} />
                                 </div>
                             </div>
                         </div>
@@ -311,10 +323,12 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-    const { categories, cartItems } = state.inventory
+    // console.log("fire", state)
+    const { categories, cartItems, cartData } = state.inventory
+
     const { home: { currentUser } } = state;
     return {
-        currentUser, categories, cartItems
+        currentUser, categories, cartItems, cartData
     }
 }
 

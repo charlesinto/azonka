@@ -43,14 +43,15 @@ class Home extends Component {
         await this.props.fetchFeaturedItems()
         this.setState({ products: this.props.products })
     }
-    handleAddToCart = async (e, id) => {
+    handleAddToCart = async (id) => {
         let productId = id;
         let quanity = "1";
-        let obj = {productId, quanity}
+        let obj = { productId, quanity }
         console.log(obj)
-       await this.props.addToCart(obj)
+        let token = (localStorage.getItem("x-access-token"));
+        await this.props.addToCart(obj)
     }
-    
+
     renderPopup() {
         return (
             <Zoom right>

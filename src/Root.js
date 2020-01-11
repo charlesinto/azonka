@@ -42,6 +42,7 @@ import * as actions from "./actions";
 import LoginSignup from "./components/Auth/LoginSignup";
 import ShopItems from './components/Cart/ShopItems';
 import ShopItemDetails from './components/Cart/ShopItemDetails';
+import Header from './components/HeaderFooter/Header';
 // import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
@@ -53,6 +54,7 @@ class Root extends Component {
             <div>
                 <Router>
                     <ScrollTop>
+                        <Header />
                         <Layout>
                             <AnimatedSwitch
                                 atEnter={{ opacity: 1 }}

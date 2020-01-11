@@ -9,6 +9,9 @@ import { ShopItemHeader } from './ShopItemHeader'
 import { ShopItemPaginate } from './ShopItemPaginate'
 import { Link } from 'react-router-dom'
 
+import { connect } from "react-redux";
+import * as actions from "../../actions";
+
 
 class ShopItems extends Component {
     state = { localData: [], sortState: "", cartData: [], cartLength: 0 }
@@ -48,40 +51,45 @@ class ShopItems extends Component {
     }
     handleAddCart = async (e) => {
         let id = e.target.id;
-        let cartData = JSON.parse(localStorage.getItem("cart"));
-        this.setState({ cartData })
-        let { localData } = this.state
-        let obj = localData.filter(data => id == data.id)[0]
-
-        //check if item is in cart
-
-        if (cartData) { //item exists
-            // console.log("data", cartData)
-            let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
-            if (isAdded) {
-                return alert("Item has already been added")
-            } else {
-                localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
-                this.handleSetData()
+        // return console.log(id)
+        let token = (localStorage.getItem("x-access-token"));
+        if (token) {
+            let postObj = { productId: id, quanity: "1" };
+            await this.props.addToCart(postObj)
+            console.log("fire after", this.props)
+            let { success, cart } = this.props.cartResponse;
+            if (success) {
+                this.setState({ cartData: cart.products })
             }
-
         } else {
-            //if cart is empty
-            localStorage.setItem("cart", JSON.stringify([obj]))
-            this.handleSetData()
+            let cartData = JSON.parse(localStorage.getItem("cart"));
+            this.setState({ cartData })
+            let { localData } = this.state
+            let obj = localData.filter(data => id == data.id)[0]
+
+            //check if item is in cart
+            //cartdata, id, obj
+            await this.props.addLocalCart(id, cartData, obj)
+            console.log("fire", this.props)
         }
 
+
+
+
+
     }
-    handleSetData = () => {
-        let cartData = JSON.parse(localStorage.getItem("cart"))
-        return this.setState({ cartData })
+    handleSetData = async () => {
+        await this.props.fetchLocalCart()
+        let { cartData } = this.props;
+        console.log("firedata", cartData)
+        this.setState({ cartData })
     }
     render() {
         const { localData, cartData } = this.state;
         console.log("zlatan before", cartData);
         return (
             <div>
-                <Header setCartData={cartData} />
+                {/* <Header setCartData={cartData} /> */}
                 <main className="main">
                     <ShopItemHeader />
                     <div className="container">
@@ -176,8 +184,8 @@ class ShopItems extends Component {
                                                                         <span>Add to Wishlist</span>
                                                                     </Link>
 
-                                                                    <span className="paction add-cart" onClick={this.handleAddCart}>
-                                                                        <span id={id}>Add to Cart</span>
+                                                                    <span className="paction add-cart" style={{ fontSize: "13px" }} id={id} onClick={this.handleAddCart}>
+                                                                        Add to Cart
                                                                     </span>
                                                                     <Link to="#" className="paction add-compare" title="Add to Compare">
                                                                         <span>Add to Compare</span>
@@ -222,4 +230,16 @@ class ShopItems extends Component {
 }
 
 
-export default ShopItems
+const mapStateToProps = state => {
+
+    const { cartItems, cartData, } = state.inventory;
+    let cartResponse = cartItems.data
+    console.log("fire", state)
+    return {
+        cartItems, cartResponse, cartData,
+        actions
+    }
+}
+
+
+export default connect(mapStateToProps, actions)(ShopItems);

@@ -3,6 +3,7 @@ import {
     STOP_LOADING, SUCCESS_ALERT, ITEM_CHANGE_ACTION,
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
+    LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
 } from "./types";
@@ -189,15 +190,15 @@ export const fetchSearchCategory = () => {
 
 export const fetchCart = () => {
 
-    return async (dispatch) => {     
+    return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/user/cart/get`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
-            
-            const {  cart } = response.data;
+
+            const { cart } = response.data;
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
@@ -207,31 +208,78 @@ export const fetchCart = () => {
     }
 }
 
-export const addToCart = (details) => {
-     
+export const fetchLocalCart = () => {
     return async (dispatch) => {
-        try{
-            console.log("zlat", details)
-            const response = await axios.post('/api/v1/user/cart/add', 
-                                {productId:details.productId, quantity:details.quanity}, {
-                                    headers:{
-                                'x-access-token': localStorage.getItem('x-access-token')
-                            }})
-                             console.log("zlatres", response)
-            if(response.data.success){
-                const accounts = 'await getUserAccount()'
-                dispatch({type: STOP_LOADING, payload: ''})
-                dispatch({type: SUCCESS_ALERT, payload:"Item added to cart successfully"})
-                dispatch({type: ADD_CART_SUCCESSFULLY, payload: response})
-                
+        try {
+            const cartData = await JSON.parse(localStorage.getItem("cart"));
+
+            dispatch({ type: LOCAL_CART_FETCHED_SUCCESSFULLY, payload: cartData })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
+            // dispatch({ type: DISPLAY_ERROR, payload: erro })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const addLocalCart = (id, cartData, obj) => {
+    return async (dispatch) => {
+        try {
+
+            if (cartData) { //item exists
+                // return console.log("data", cartData)
+                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                if (isAdded) {
+                    return alert("Item has already been added")
+                } else {
+                    localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                    let data = JSON.parse(localStorage.getItem("cart"))
+                    dispatch({ type: ADD_LOCAL_CART_SUCCESSFULLY, payload: data })
+                    dispatch({ type: STOP_LOADING, payload: '' })
+                }
+
+            } else {
+                //if cart is empty
+                localStorage.setItem("cart", JSON.stringify([obj]))
+                dispatch({ type: ADD_LOCAL_CART_SUCCESSFULLY, payload: cartData })
+                dispatch({ type: STOP_LOADING, payload: '' })
             }
-        }catch(error){
+
+        } catch (error) {
+            // dispatch({ type: DISPLAY_ERROR, payload: erro })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+
+
+export const addToCart = (details) => {
+
+    return async (dispatch) => {
+        try {
+            console.log("zlat", details)
+            const response = await axios.post('/api/v1/user/cart/add',
+                { productId: details.productId, quantity: details.quanity }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            console.log("zlatres", response)
+            if (response.data.success) {
+                const accounts = 'await getUserAccount()'
+                dispatch({ type: STOP_LOADING, payload: '' })
+                dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
+                dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
+
+            }
+        } catch (error) {
             console.log(error.response)
-            if(error.response.data.message)
-            console.log(error)
-                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
-            
-            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+            if (error.response.data.message)
+                console.log(error)
+            return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+
+            return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
         }
     }
 }

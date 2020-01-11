@@ -14,11 +14,11 @@ import * as actions from "../../actions";
 
 
 class ShopItems extends Component {
-    state = { localData: [], sortState: "", cartData: [], cartLength: 0 }
+    state = { products: [], sortState: "", cartData: [], cartLength: 0 }
     componentDidMount() {
-        let localData = JSON.parse(localStorage.getItem("shop"));
-        this.setState({ localData })
-        this.handleSetCartData()
+        // let localData = JSON.parse(localStorage.getItem("shop"));
+        // this.setState({ produc })
+        this.loadShopData()
     }
     handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -61,7 +61,7 @@ class ShopItems extends Component {
             if (success) {
                 this.setState({ cartData: cart.products })
             } else {
-                alert("An error occured")
+                alert("An error occurred")
             }
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -99,8 +99,12 @@ class ShopItems extends Component {
         console.log("firedata", cartData)
         this.setState({ cartData })
     }
+    loadShopData = async () => {
+        await this.props.fetchFeaturedItems()
+        this.setState({ products: this.props.products })
+    }
     render() {
-        const { localData, cartData } = this.state;
+        const { products, cartData } = this.state;
         console.log("zlatan before", cartData);
         return (
             <div>
@@ -164,9 +168,9 @@ class ShopItems extends Component {
                                     {/* Shop box */}
 
                                     {
-                                        localData ? (
-                                            localData.map(data => {
-                                                // console.log("shop state", data)
+                                        products ? (
+                                            products.map(data => {
+                                                console.log("shop state", data)
                                                 let { id, name, finalPrice, createdAt, mainImageUrl } = data
                                                 return (
 
@@ -247,11 +251,11 @@ class ShopItems extends Component {
 
 const mapStateToProps = state => {
 
-    const { cartItems, cartData, } = state.inventory;
+    const { cartItems, cartData, products } = state.inventory;
     let cartResponse = cartItems.data
     console.log("fire", state)
     return {
-        cartItems, cartResponse, cartData
+        cartItems, cartResponse, cartData, products
     }
 }
 

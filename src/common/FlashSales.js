@@ -26,7 +26,7 @@ class FlashSales extends Component {
             let postObj = { productId: id, quanity: "1" };
 
             await this.props.addToCart(postObj)
-            console.log("flash props", this.props)
+            // console.log("flash props", this.props)
             let { data } = this.props.cartItems;
             if (data.success) {
                 this.setState({ cartData: data.cart.products })

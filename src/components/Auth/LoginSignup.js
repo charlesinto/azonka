@@ -65,6 +65,8 @@ class LoginSignup extends Component {
                     callingCode: newValue.props.children[1]
                 })
             break;
+            default:
+                return;
         }
     }
     componentDidMount(){
@@ -467,11 +469,11 @@ class LoginSignup extends Component {
                                         <select name='countryCode' value={this.state.register.countryCode} onChange={(e) => this.handleInputChange(e, 'register')} className="" id="register-country5">
                                             <option value="">Select country</option>
                                             {
-                                                this.state.countryData.map(data => {
+                                                this.state.countryData.map((data, i) => {
                                                     if(data.callingCodes[0].trim() === ''){
                                                         return ;
                                                     }
-                                                    return <option value={data.callingCodes[0]}>{data.name}</option>
+                                                    return <option key={i}  value={data.callingCodes[0]}>{data.name}</option>
                                                 })
                                             }
                                         </select>

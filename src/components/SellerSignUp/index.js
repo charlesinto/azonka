@@ -140,7 +140,7 @@ class SellerSignUp extends Component {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <div className="form-group required-field">
-                                                <label htmlFor="acc-name">Company Name</label>
+                                                <label htmlFor="acc-name">Business Name</label>
                                                 <input type="text" value={this.state.companyName} onChange={this.handleInputChange} placeholder="company name" className="form-control" id="acc-name" name="companyName" required="" />
                                             </div>
                                         </div>

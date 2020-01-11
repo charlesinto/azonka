@@ -34,7 +34,7 @@ class Layout extends Component {
         this.props.closeSnackBar()
     }
     render() {
-        console.log(this.props.redirectToProfile)
+        console.log(this.props.redirectToProfile, this.props.redirectToHome)
         return (
             <ToastProvider>
 
@@ -51,6 +51,9 @@ class Layout extends Component {
                 }
                 {
                     this.props.redirectToLogin ? <Redirect to="/users/login" /> : null
+                }
+                {
+                    this.props.redirectToHome ? <Redirect to="/" /> : null
                 }
                 {this.renderLoadingSpinner()}
                 {
@@ -84,7 +87,7 @@ class Layout extends Component {
 }
 
 const mapStateToProps = state => {
-    const { reg: { unAuthorized, loading, redirectToProfile, redirectToLogin, redirectToVerify },
+    const { reg: { unAuthorized, loading, redirectToProfile,redirectToHome, redirectToLogin, redirectToVerify },
         home: { error, errorMessage, success, successMessage } } = state;
     return {
         unAuthorized,
@@ -92,6 +95,7 @@ const mapStateToProps = state => {
         loading,
         redirectToProfile,
         redirectToLogin,
+        redirectToHome,
         errorMessage,
         error,
         success,

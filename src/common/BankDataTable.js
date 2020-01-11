@@ -91,9 +91,7 @@ class BankDataTable extends Component {
         $el.DataTable().draw()
     }
     shouldComponentUpdate(nextProps) {
-        if (nextProps.data.length !== this.props.data.length) {
-            this.reloadTableData(nextProps.data, $(this.el));
-        }
+        this.reloadTableData(nextProps.data, $(this.el));
         return false;
     }
     render(){

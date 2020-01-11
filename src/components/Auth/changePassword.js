@@ -14,8 +14,8 @@ class changePassword extends Component {
         if (this.state.currentPassword.trim() === '') {
             return this.props.renderError('Please provide current password')
         }
-        if (this.state.newPassword.trim() === '') {
-            return this.props.renderError('Please provide new password')
+        if (this.state.newPassword.trim() === '' || this.state.newPassword.trim().length < 6) {
+            return this.props.renderError('Please provide new password and minimum of 6 character is required')
         }
         if (this.state.newPassword.trim() !== this.state.confirmPassword.trim()) {
             return this.props.renderError('New Password and Confirm Password do not match')
@@ -45,13 +45,13 @@ class changePassword extends Component {
                         <div className="col-sm-11">
                             <div className="row">
 
-
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                        <label htmlFor="acc-mname required-field">New Password</label>
-                                        <input type="password" value={this.state.newPassword} onChange={this.handleInputChange} className="form-control" id="acc-mname" name="newPassword" />
+                                <div className="col-md-6">
+                                    <div className="form-group required-field">
+                                        <label htmlFor="acc-name">Current Password</label>
+                                        <input type="password" value={this.state.currentPassword} onChange={this.handleInputChange} className="form-control" id="acc-name" name="currentPassword" required="" />
                                     </div>
                                 </div>
+                                
 
 
                             </div>
@@ -61,9 +61,10 @@ class changePassword extends Component {
                         <div className="col-sm-11">
                             <div className="row">
                                 <div className="col-md-6">
-                                    <div className="form-group required-field">
-                                        <label htmlFor="acc-name">Current Password</label>
-                                        <input type="password" value={this.state.currentPassword} onChange={this.handleInputChange} className="form-control" id="acc-name" name="currentPassword" required="" />
+                                    
+                                    <div className="form-group">
+                                        <label htmlFor="acc-mname required-field">New Password</label>
+                                        <input type="password" value={this.state.newPassword} onChange={this.handleInputChange} className="form-control" id="acc-mname" name="newPassword" />
                                     </div>
                                 </div>
                                 <div className="col-md-6">

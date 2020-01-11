@@ -7,9 +7,9 @@ const AuthRoute = ({component: Component, noAuthRequired,redirectIfUser, redirec
         if(redirectIfUser && user.type === 'user'){
             return <Redirect {...rest} to="/"/>
         }
-        if(redirectIfAuth){
-            return <Redirect {...rest} to="/users/profile"/>
-        }
+        // if(redirectIfAuth){
+        //     return <Redirect {...rest} to="/users/profile"/>
+        // }
         return <Route {...rest} component={Component} />
     }
     return noAuthRequired ? <Route {...rest} component={Component} /> : 

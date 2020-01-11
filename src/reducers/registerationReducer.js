@@ -4,7 +4,7 @@ ERROR_RESENDING_PASSCODE, SUCCESS_RESENDING_PASSCODE, GET_SEC_QUESTIONS,
  LOGOUT_USER, CLOSE_SNACKBAR, EMAIL_FORGOT_PASSWORD_SENT, GET_SAVED_ACCOUNTS,STOP_IMAGE_LOADING,
  LOGIN_UNSUCCESSFUL, LOGIN_SUCCESS, PASSWORD_REST_SUCCESSFUL, USER_ROLE_UPDATED_SUCCESSFUL,
  UNAUTHORIZED_USER, EMAIL_VERIFICATION_SUCCESFFUL, UNSUCCESSFUL_VERIFICATION,RESET_VERIFY_FORM,
-  DISPLAY_ERROR, STOP_LOADING, FILE_UPLOADED_FALIED, FILE_UPLOADED_SUCCESSFULL, RESET_VERIFICATION_FORM } from "../actions/types";
+  DISPLAY_ERROR, STOP_LOADING, FILE_UPLOADED_FALIED, FILE_UPLOADED_SUCCESSFULL, RESET_VERIFICATION_FORM, RESET_VERIFICATION_FORM_STATE } from "../actions/types";
 const INITIAL_STATE = {loading: false,verified:null, error: null,errorMessage: null,
      user: null, questions:{}, successMessage: null, showSuccessBar: null, 
     redirectToProfile: false,unAuthorized: false, redirectToVerify: false,verification:'none', redirectToHome: false, redirectToLogin: false}
@@ -57,10 +57,10 @@ export default (state=INITIAL_STATE, actions) => {
         case GET_SAVED_ACCOUNTS:
             return {...state, showSuccessBar: true, successMessage:'Account added successfully'}
         case LOGIN_SUCCESS:
-            return {...state,loading: false, unAuthorized: false, redirectToProfile: true, redirectToVerify: false}
+            return {...state,loading: false, unAuthorized: false,redirectToHome: true, redirectToProfile: false, redirectToVerify: false}
         case LOGIN_UNSUCCESSFUL:
             return {...state,unAuthorized: false,loading: false, error: null,
-                 redirectToProfile: false, redirectToVerify: true, redirectToLogin: false}
+                 redirectToProfile: false,redirectToHome:false, redirectToVerify: true, redirectToLogin: false}
         case PASSWORD_REST_SUCCESSFUL:
             return {...state, redirectToLogin: true}
         case USER_ROLE_UPDATED_SUCCESSFUL:
@@ -69,6 +69,8 @@ export default (state=INITIAL_STATE, actions) => {
             return {...state,loading: false,unAuthorized:false,redirectToVerify:false,error:null,verification:'true', redirectToProfile: false}
         case UNSUCCESSFUL_VERIFICATION:
             return {...state, loading: false,error:true,verification:'false', errorMessage: actions.payload}
+        case RESET_VERIFICATION_FORM_STATE: 
+                return {...state, verification:'none'}
         default: 
             return {...state}
     }

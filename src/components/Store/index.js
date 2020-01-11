@@ -126,14 +126,14 @@ class Store extends Component {
     render() {
         return (
                 <StoreDashboard>
-                <h2>Create Store</h2>
+                <h2>Manage Stores</h2>
                 <div className="add-bank">
-                    <h4 className="popup-title verify-email" style={{
+                    {/* <h4 className="popup-title verify-email" style={{
                             fontWeight: 'normal',
                             fontFamily: 'Roboto, sans-serif',
                             marginLeft: 20
                         }}>Add Store</h4>
-                    <hr className="line-separator" />
+                    <hr className="line-separator" /> */}
                     <form>
                             <div className="container">
                                 <div className="row">

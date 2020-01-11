@@ -27,6 +27,7 @@ class confirmAccount extends Component {
             password: ''
         }
     }
+    
     verifyEmail = () => {
         const query = queryString.parse(this.props.location.search)
         if(query['passcode']){
@@ -61,7 +62,12 @@ class confirmAccount extends Component {
         }
         
     }
-    
+    componentWillUnmount(){
+        this.setState({
+            showForm: false
+        })
+        this.props.resetVerificationState()
+    }
     handleChange = e => {
         const {target: {name, value}} = e
         

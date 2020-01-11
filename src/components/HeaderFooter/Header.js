@@ -13,7 +13,8 @@ class Header extends Component {
     state = {
         mobileMenu: false,
         showSearchBar: false,
-        currentUser: null
+        currentUser: null,
+        cartData: []
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
@@ -22,7 +23,7 @@ class Header extends Component {
             currentUser: user, localData
         })
         this.loadSearchCategory()
-        this.loadCart()
+
 
     }
     _toggleMenu = () => {
@@ -51,11 +52,9 @@ class Header extends Component {
         this.setState({ category: this.props.categories })
     }
 
-    loadCart = async () => {
-        await this.props.fetchCart()
-        
-        // this.setState({ category: this.props.categories })
-    }
+
+
+
 
     render() {
         const { currentUser } = this.state;
@@ -312,11 +311,10 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log("rema", state)
-    const { categories } = state.inventory
+    const { categories, cartItems } = state.inventory
     const { home: { currentUser } } = state;
     return {
-        currentUser, categories
+        currentUser, categories, cartItems
     }
 }
 

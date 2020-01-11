@@ -197,9 +197,8 @@ export const fetchCart = () => {
                 }
             })
             
-            const {  products, quantity } = response.data.cart;
-            console.log("remas",products,quantity)
-            dispatch({ type: CATEGORY_FETCHED_SUCCESSFULLY, payload: products })
+            const {  cart } = response.data;
+            dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })

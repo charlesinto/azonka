@@ -1,20 +1,20 @@
 
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from "react-redux";
+import * as actions from "../../actions";
 
 export class CartDropdown extends Component {
     state = { data: [], sum: 0, cartData: [], cartLength: 0 }
 
     componentDidMount() {
-        let data = JSON.parse(localStorage.getItem("cart"));
-        this.setState({ data })
+        this.loadCart()
     }
     componentWillReceiveProps = props => {
         if (props.setCartData !== this.props.setCartData) {
             this.setState({ cartData: props.setCartData, cartLength: props.setCartData.length });
         }
     }
-
     calSum = () => {
         let { cartData } = this.state;
         let sum = cartData ? cartData.reduce((a, b) => {
@@ -31,6 +31,18 @@ export class CartDropdown extends Component {
         localStorage.setItem("cart", JSON.stringify(newItems));
         let newCartData = JSON.parse(localStorage.getItem("cart"))
         return this.setState({ cartData: newCartData })
+    }
+
+    loadCart = async () => {
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchCart()
+            this.setState({ cartData: this.props.cartItems })
+            console.log("rema", this.state, this.props.setCartData)
+        } else {
+            let cartData = await JSON.parse(localStorage.getItem("cart"));
+            this.setState({ cartData })
+        }
     }
 
 
@@ -117,4 +129,11 @@ export class CartDropdown extends Component {
     }
 }
 
-// export default CartDropdown
+const mapStateToProps = state => {
+    const { cartItems } = state.inventory;
+    return {
+        cartItems
+    }
+}
+
+export default connect(mapStateToProps, actions)(CartDropdown);

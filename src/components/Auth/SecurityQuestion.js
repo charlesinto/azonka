@@ -81,7 +81,7 @@ class SecurityQuestion extends Component {
            return  this.props.renderError('Please provide pincode')
         }
         if(this.state.pincode.length !== 4){
-            return this.props.renderError('Minimum of 4 characters required for Pincode')
+            return this.props.renderError('Maximum and minimum legth of 4 characters required for Pincode')
         }
         //call the api
         this.props.initiateRegistration()
@@ -137,7 +137,7 @@ class SecurityQuestion extends Component {
                                 <div className="col-md-12">
                                     <div className="form-group required-field">
                                         <label htmlFor="acc-name">Enter Pincode</label>
-                                        <input value={this.state.pincode} type="number"  name="pincode" onChange={this.handleInputChange}  className="form-control" required="" />
+                                        <input maxLength="4" value={this.state.pincode} type="number"  name="pincode" onChange={this.handleInputChange}  className="form-control" required="" />
                                     </div>
                                 </div>
                                         

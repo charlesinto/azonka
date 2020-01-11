@@ -112,7 +112,7 @@ class Register extends Component {
         if(!(phoneNumber.trim() !== '' && Validator.isNumeric(phoneNumber))){
             isValid = false
             inValidElments.push('phoneNumber')
-            validationMessage['phoneNumber'] = 'Phone number must be a number'
+            validationMessage['phoneNumber'] = 'Phone number required'
         }
         if(!(firstName.trim())){
             isValid = false
@@ -351,43 +351,53 @@ class Register extends Component {
                                     
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="form-group col-md-6 col-sm-12">
-                                    <div className="form-group" style={{marginTop:'2.6rem'}}>
-                                        <label htmlFor="phoneNumber" className="rl-label required">Phone Number</label>
-                                         <input type="text" id="phoneNumber" className={`form-control ${this.state.inValidElments.includes('phoneNumber') ? 'invalid' : '' }`} value={this.state.phoneNumber} name="phoneNumber" onChange={this.handleInputChange}  placeholder="Enter your phone number..."/>
-                                    </div>
-                                    {
-                                        this.state.inValidElments.includes('phoneNumber') ?
-                                        (
-                                            <div className="error-message required">
-                                                {this.state.validationMessage['phoneNumber']}
-                                            </div>
-                                        ): null 
-                                    }
-                                </div>
-                                
-                                <div className="form-group col-md-6 col-sm-12" style={{marginTop:'2.6rem'}}>
-                                    <label htmlFor="country" className="rl-label required">Select Country</label>
-                                    {/* <select name="country" className={`${this.state.inValidElments.includes('country') ? 'invalid' : '' }`} value={this.state.country} onChange={this.handleInputChange}>
-                                        <option value="">Select country</option>
-                                        <option value="Nigeria">Nigeria</option>
-                                    </select> */}
+                            <div className="row" style={{marginBottom: '1rem'}}>
+                                <div className="form-group col-md-12 col-sm-12">
+                                    <div className="form-block-phonenumber">
                                     <ReactFlagsSelect
                                      searchable={true} searchPlaceholder={'Plese select country'} 
                                         className="react-flag"
                                         onSelect={this._countryCodeChange}
                                      />
-                                    
+                                     <div style={{flex: 1}}>
+                                         <div className="row">
+                                            <div className="col-12">
+                                                <div className="form-group" style={{marginTop:'2.6rem'}}>
+                                                    <label htmlFor="phoneNumber" className="rl-label required">Phone Number</label>
+                                                    <input type="text" id="phoneNumber" style={{maxWidth:'100%'}} className={`form-control ${this.state.inValidElments.includes('phoneNumber') ? 'invalid' : '' }`} value={this.state.phoneNumber} name="phoneNumber" onChange={this.handleInputChange}  placeholder="Enter your phone number..."/>
+                                                </div>
+                                            </div>
+                                         </div>
+                                        
+                                    </div>
+                                    </div>
                                 </div>
-                                {
+                                <ul>
+                                    <li>
+                                    {
+                                        this.state.inValidElments.includes('phoneNumber') ?
+                                        (
+                                            <div className="error-message required" style={{marginBottom: 16}}>
+                                                {this.state.validationMessage['phoneNumber']}
+                                            </div>
+                                        ): null 
+                                    }
+                                    </li>
+                                    <li>
+                                    {
                                         this.state.inValidElments.includes('country') ?
                                         (
-                                            <div className="error-message required">
+                                            <div className="error-message required" >
                                                 {this.state.validationMessage['country']}
                                             </div>
                                         ): null 
                                     }
+                                    </li>
+                                </ul>
+                                    
+
+                                    
+                                
                             </div>
                             <div className="row">
                                 

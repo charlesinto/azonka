@@ -26,7 +26,7 @@ class Dashboard extends Component {
                 <div className="router-container">
                     <main className="main">
                         <nav aria-label="breadcrumb" className="breadcrumb-nav">
-                            <div className="container-fluid">
+                            <div className="container-fluid list-breadcrumbs">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item" aria-current="page">Dashboard</li>
@@ -83,7 +83,10 @@ class Dashboard extends Component {
                                             {
                                                 userData && userData.type !== 'user' ?
                                                     (
-                                                        <li><Link to="/users/store">Store</Link></li>
+                                                        <li>
+                                                            <Link to="/users/store">Store <span class="tip tip-hot" style={{background:'#e81279'}}>
+                                                                NEW!</span></Link>
+                                                        </li>
                                                     ) : null
                                             }
 

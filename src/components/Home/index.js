@@ -43,6 +43,13 @@ class Home extends Component {
         await this.props.fetchFeaturedItems()
         this.setState({ products: this.props.products })
     }
+    handleAddToCart = async (e, id) => {
+        let productId = id;
+        let quanity = "1";
+        let obj = {productId, quanity}
+        console.log(obj)
+       await this.props.addToCart(obj)
+    }
     
     renderPopup() {
         return (
@@ -164,7 +171,7 @@ class Home extends Component {
 
                                     <h2 class="carousel-title">Flash sales</h2>
                                     {/* <h1 className="text-center font-weight-light">Flash sales</h1> */}
-                                    <div className="row border" style={{ margin: "15vh 0px" }}>
+                                    <div className="row border" style={{ margin: "4vh 0px" }}>
 
                                         <br />
                                         {
@@ -172,37 +179,37 @@ class Home extends Component {
                                                 this.state.products.map(res => {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
-                                                        <div class="product col-md-4" key={id}>
-                                                            <figure class="product-image-container">
-                                                                <a href="product.html" class="product-image">
+                                                        <div className="product col-md-4" key={id}>
+                                                            <figure className="product-image-container">
+                                                                <a href="product.html" className="product-image">
                                                                     <img src={mainImageUrl} alt="product" className="image-view" />
                                                                 </a>
-                                                                <a href="ajax\product-quick-view.html" class="btn-quickview">Quick View</a>
+                                                                <a href="ajax\product-quick-view.html" className="btn-quickview">Quick View</a>
                                                             </figure>
-                                                            <div class="product-details">
-                                                                <div class="ratings-container">
-                                                                    <div class="product-ratings">
-                                                                        <span class="ratings" style={{ width: "80%" }}></span>
+                                                            <div className="product-details">
+                                                                <div className="ratings-container">
+                                                                    <div className="product-ratings">
+                                                                        <span className="ratings" style={{ width: "80%" }}></span>
                                                                     </div>
                                                                 </div>
 
-                                                                <h2 class="product-title">
+                                                                <h2 className="product-title">
                                                                     <a href="product.html">{name} </a>
                                                                 </h2>
-                                                                <div class="price-box">
-                                                                    <span class="product-price">&#8358; {sellingPrice}</span>
+                                                                <div className="price-box">
+                                                                    <span className="product-price">&#8358; {sellingPrice}</span>
                                                                 </div>
 
-                                                                <div class="product-action">
-                                                                    <a href="#" class="paction add-wishlist" title="Add to Wishlist">
+                                                                <div className="product-action">
+                                                                    <a href="#" className="paction add-wishlist" title="Add to Wishlist">
                                                                         <span>Add to Wishlist</span>
                                                                     </a>
 
-                                                                    <a href="product.html" class="paction add-cart" title="Add to Cart">
+                                                                    <span id={id} onClick={(e) => this.handleAddToCart(e, id)} className="paction add-cart" title="Add to Cart">
                                                                         <span>Add to Cart</span>
-                                                                    </a>
+                                                                    </span>
 
-                                                                    <a href="#" class="paction add-compare" title="Add to Compare">
+                                                                    <a href="#" className="paction add-compare" title="Add to Compare">
                                                                         <span>Add to Compare</span>
                                                                     </a>
                                                                 </div>

@@ -122,7 +122,7 @@ const handleItemChangeAction = (state, e) => {
     }
     if (name === 'category') {
         const subcatgeories = state.subCategories
-            .filter(category => parseInt(category.parentCategory) === parseInt(value))
+            .filter(category => parseInt(category.parentCategory.id) === parseInt(value))
         return { ...state, filteredSubCategory: subcatgeories, [name]: value }
     }
     return { ...state, [name]: value, inValidElments: [...newInvalidElements] }

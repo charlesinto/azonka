@@ -151,9 +151,8 @@ class Home extends Component {
                                             {
                                                 this.state.products ? (
                                                     this.state.products.map(res => {
-                                                        console.log("yam", res)
                                                         let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
-                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} />
+                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
                                                     })
                                                 ) : null
                                             }
@@ -184,7 +183,7 @@ class Home extends Component {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
-                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} />
+                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
 
                                                     )
                                                 })

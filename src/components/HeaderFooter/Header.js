@@ -7,7 +7,7 @@ import azonkaLogo from "../../images/logo_header.png";
 import product1 from "../../css/images/products/cart/product-1.jpg";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import { CartDropdown } from '../Cart/CartDropdown';
+import CartDropdown from '../Cart/CartDropdown';
 
 class Header extends Component {
     state = {
@@ -57,12 +57,12 @@ class Header extends Component {
         if (token) {
             await this.props.fetchCart()
 
-            console.log("firess", this.props.cartItems)
+            // console.log("firess", this.props.cartItems)
             this.setState({ cartData: this.props.cartItems })
         } else {
             await this.props.fetchLocalCart()
             let { cartData } = this.props;
-            console.log("cart data", this.props)
+            // console.log("cart data", this.props)
             this.setState({ cartData })
         }
     }
@@ -71,7 +71,7 @@ class Header extends Component {
     render() {
         const { currentUser } = this.state;
         const { cartData } = this.state;
-        console.log("ayes", this.state.cartData)
+        // console.log("ayes", this.state.cartData)
         // let { setCartData } = this.props;
         let { category } = this.state;
         return (
@@ -197,7 +197,7 @@ class Header extends Component {
                                         <span>Call us now</span>
                                         <a href="tel:#"><strong>+123 5678 890</strong></a>
                                     </div>
-                                    <CartDropdown setCartData={cartData} />
+                                    <CartDropdown />
                                 </div>
                             </div>
                         </div>
@@ -327,7 +327,7 @@ class Header extends Component {
 const mapStateToProps = state => {
 
     let { categories, cartItems, cartData } = state.inventory
-    cartItems = cartItems.products;
+
     const { home: { currentUser } } = state;
     return {
         currentUser, categories, cartItems, cartData

@@ -4,18 +4,17 @@ import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
-export class CartDropdown extends Component {
+class CartDropdown extends Component {
     state = { data: [], sum: 0, cartData: [], cartLength: 0 }
 
     componentDidMount() {
         this.loadCart()
-        console.log("fires", this.props)
-        // this.tempReload()
+        console.log("fires and", this.props)
     }
     componentWillReceiveProps = props => {
-        console.log("wunmi", props)
-        if (props.setCartData !== this.props.setCartData) {
-            this.setState({ cartData: props && props.setCartData, cartLength: props.setCartData ? props.setCartData.length : 0 });
+        console.log("new props", props)
+        if (props.cartData !== this.props.cartData) {
+            this.setState({ cartData: props && props.cartData, cartLength: props.cartData ? props.cartData.length : 0 });
         }
     }
     calSum = () => {
@@ -27,39 +26,33 @@ export class CartDropdown extends Component {
     }
     removeFromCart = async (e) => {
         let { cartData } = this.state;
-        // alert(e.target.id)
         let id = e.target.id;
         let newItems = cartData.filter(data => data.id != id);
-        // console.log(newItems)
         localStorage.setItem("cart", JSON.stringify(newItems));
         let newCartData = JSON.parse(localStorage.getItem("cart"))
         return this.setState({ cartData: newCartData })
     }
 
     loadCart = async () => {
+
+        // setInterval(async () => {
         let token = localStorage.getItem("x-access-token");
         if (token) {
-            console.log("aye", this.props)
-            // await this.props.fetchCart()
-            this.setState({ cartData: this.props.cartItems })
-            console.log("rema", this.state, this.props.setCartData)
+            await this.props.fetchCart();
+            this.setState({ cartData: this.props.cartItems.products })
         } else {
-            let cartData = JSON.parse(localStorage.getItem("cart"));
-            this.setState({ cartData })
+            console.log()
+            await this.props.fetchLocalCart()
+            console.log("load drp", this.props.cartData)
+            this.setState({ cartData: this.props.cartData })
         }
-    }
+        // }, 1000);
 
-    tempReload = () => {
-        setInterval(() => {
-            let cartData = JSON.parse(localStorage.getItem("cart"));
-            this.setState({ cartData })
-        }, 1000);
     }
 
     render() {
 
-        let { cartData } = this.state
-        console.log("zlatan dropdown render", this.state)
+        let { cartData } = this.state;
         return (
             <>
                 <div className="dropdown cart-dropdown" style={{
@@ -140,10 +133,11 @@ export class CartDropdown extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log("firexat", state)
-    const { cartItems } = state.inventory;
+
+    let { categories, cartItems, cartData } = state.inventory
+    console.log("cart in drp", cartData)
     return {
-        cartItems
+        categories, cartItems, cartData
     }
 }
 

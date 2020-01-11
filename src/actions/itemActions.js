@@ -213,7 +213,7 @@ export const fetchLocalCart = () => {
     return async (dispatch) => {
         try {
             const cartData = await JSON.parse(localStorage.getItem("cart"));
-
+            console.log("// action", cartData)
             dispatch({ type: LOCAL_CART_FETCHED_SUCCESSFULLY, payload: cartData })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
@@ -226,16 +226,17 @@ export const fetchLocalCart = () => {
 export const addLocalCart = (id, cartData, obj) => {
     return async (dispatch) => {
         try {
-
+            // return console.log("here", id, cartData, obj)
             if (cartData) { //item exists
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
                     return alert("Item has already been added")
                 } else {
+                    // return console.log(cartData, obj)
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     let data = JSON.parse(localStorage.getItem("cart"))
-                    dispatch({ type: ADD_LOCAL_CART_SUCCESSFULLY, payload: data })
+                    dispatch({ type: ADD_LOCAL_CART_SUCCESSFULLY, payload: data, message: "loca cart added" })
                     dispatch({ type: STOP_LOADING, payload: '' })
                 }
 
@@ -266,10 +267,11 @@ export const addToCart = (details) => {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
-            console.log("zlatres", response)
+
+
             if (response.data.success) {
-                const accounts = 'await getUserAccount()'
-                dispatch({ type: STOP_LOADING, payload: '' })
+                // const accounts = 'await getUserAccount()'
+                dispatch({ type: STOP_LOADING, payload: "" })
                 dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
                 dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
 

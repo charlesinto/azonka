@@ -60,6 +60,8 @@ class ShopItems extends Component {
             let { success, cart } = this.props.cartResponse;
             if (success) {
                 this.setState({ cartData: cart.products })
+            } else {
+                alert("An error occured")
             }
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -68,9 +70,22 @@ class ShopItems extends Component {
             let obj = localData.filter(data => id == data.id)[0]
 
             //check if item is in cart
-            //cartdata, id, obj
-            await this.props.addLocalCart(id, cartData, obj)
-            console.log("fire", this.props)
+
+            if (cartData) { //item exists
+                // return console.log("data", cartData)
+                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                if (isAdded) {
+                    return alert("Item has already been added")
+                } else {
+                    localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                    this.handleSetData()
+                }
+
+            } else {
+                //if cart is empty
+                localStorage.setItem("cart", JSON.stringify([obj]))
+                this.handleSetData()
+            }
         }
 
 
@@ -236,8 +251,7 @@ const mapStateToProps = state => {
     let cartResponse = cartItems.data
     console.log("fire", state)
     return {
-        cartItems, cartResponse, cartData,
-        actions
+        cartItems, cartResponse, cartData
     }
 }
 

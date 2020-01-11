@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
+import {Link} from 'react-router-dom'
 import homeProduct from "../css/images/products/home-featured-1.jpg";
 
 class FeatureProductItem extends Component {
@@ -8,11 +9,11 @@ class FeatureProductItem extends Component {
     componentDidMount() {
         // console.log("joro", this.props)
     }
-handleAddToCart = async (e) => {
-    let productId = e.target.id;
+handleAddToCart = async (e, id) => {
+    let productId = id;
     let quanity = "1";
     let obj = {productId, quanity}
-    console.log(obj)
+    console.log('here o',obj)
    await this.props.addToCart(obj)
 }
     render() {
@@ -41,17 +42,17 @@ handleAddToCart = async (e) => {
                     </div>
 
                     <div class="product-action">
-                        <a href="#" class="paction add-wishlist" title="Add to Wishlist">
+                        <Link to="#" class="paction add-wishlist" title="Add to Wishlist">
                             <span>Add to Wishlist</span>
-                        </a>
+                        </Link>
 
-                        <span class="paction add-cart" title="Add to Cart">
-                            <span id={id} onClick={this.handleAddToCart}> Add to Cart</span>
+                        <span id={id} onClick={(e) => this.handleAddToCart(e, id)} class="paction add-cart" title="Add to Cart">
+                            <span  > Add to Cart</span>
                         </span>
 
-                        <a href="#" class="paction add-compare" title="Add to Compare">
+                        <Link href="#" class="paction add-compare" title="Add to Compare">
                             <span>Add to Compare</span>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

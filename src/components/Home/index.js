@@ -42,8 +42,8 @@ class Home extends Component {
     loadFeaturedItems = async () => {
         await this.props.fetchFeaturedItems()
         this.setState({ products: this.props.products })
-        console.log("mom", this.state)
     }
+    
     renderPopup() {
         return (
             <Zoom right>

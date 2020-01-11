@@ -1,7 +1,7 @@
 import {
-    ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING,
-    PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM,
-    ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA,
+    ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING,CART_FETCHED_SUCCESSFULLY,
+    PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM, CATEGORY_FETCHED_SUCCESSFULLY,
+    ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA, ADD_CART_SUCCESSFULLY,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
 } from "../actions/types";
 
@@ -9,6 +9,7 @@ const INTIAL_STATE = {
     stores: [],
     subCategories: [],
     categories: [],
+    cartItems: [],
     resetForm: false,
     products: [],
     product: null,
@@ -40,6 +41,7 @@ const INTIAL_STATE = {
     deliveryLocation: '',
     filteredSubCategory: []
 
+
 }
 
 export default (state = INTIAL_STATE, actions) => {
@@ -51,6 +53,12 @@ export default (state = INTIAL_STATE, actions) => {
             return { ...state, resetForm: true }
         case PRODUCTS_FETCED_SUCCESSFULLY:
             return { ...state, products: actions.payload }
+        case CATEGORY_FETCHED_SUCCESSFULLY:
+            return { ...state, categories: actions.payload }
+            case ADD_CART_SUCCESSFULLY:
+                return {...state, cartItems: actions.payload, }
+                case CART_FETCHED_SUCCESSFULLY:
+                    return {...state, cartItems: actions.payload, }
         case EDIT_ITEM:
 
             return { ...state, product: { ...actions.payload } }

@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# /src/config          commented for test purpose
-
+/src/config          
+#commented for test purpose
 # production
 /build
 

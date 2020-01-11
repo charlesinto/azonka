@@ -24,6 +24,7 @@ class FeatureProductItem extends Component {
         let token = (localStorage.getItem("x-access-token"));
         // return console.log(token)
         if (token) {
+            // return console.log(token)
             let postObj = { productId: id, quanity: "1" };
 
             await this.props.addToCart(postObj)

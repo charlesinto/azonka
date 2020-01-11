@@ -7,24 +7,34 @@ import homeProduct from "../css/images/products/home-featured-1.jpg";
 class FlashSales extends Component {
     state = { products: [] }
     componentDidMount() {
-        console.log("joro", this.props)
+        console.log("adigun", this.props)
         this.setState({ products: this.props.featArray })
     }
+    componentWillReceiveProps = props => {
+        console.log("new props feat", props)
+        if (props.cartItems !== this.props.cartItems) {
+            this.setState({ cartItems: props && props.cartItems, cartLength: props.cartItems ? props.cartItems.length : 0 });
+        }
+    }
+
     handleAddCart = async (e) => {
         let id = e.target.id;
         // return console.log(id)
         let token = (localStorage.getItem("x-access-token"));
+        // return console.log(token)
         if (token) {
             let postObj = { productId: id, quanity: "1" };
-            return console.log(this.props)
+
             await this.props.addToCart(postObj)
-            console.log("fire after", this.props)
-            let { success, cart } = this.props.cartResponse;
-            if (success) {
-                this.setState({ cartData: cart.products })
+            console.log("flash props", this.props)
+            let { data } = this.props.cartItems;
+            if (data.success) {
+                this.setState({ cartData: data.cart.products })
+                this.handleSetOnlineData()
             } else {
                 alert("An error occured")
             }
+
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
@@ -40,22 +50,29 @@ class FlashSales extends Component {
                     return alert("Item has already been added")
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
-                    this.handleSetData()
+                    this.handleSetLocalData()
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
-                this.handleSetData()
+                this.handleSetLocalData()
             }
         }
 
     }
-    handleSetData = async () => {
+    handleSetLocalData = async () => {
         await this.props.fetchLocalCart()
         let { cartData } = this.props;
-        console.log("firedata", cartData)
         this.setState({ cartData })
+    }
+    handleSetOnlineData = async () => {
+        console.log("online props", this.props)
+        await this.props.fetchCart()
+        console.log("king,", this.props)
+        let { products } = this.props.cartItems
+        // console.log("firedata", cartData)
+        this.setState({ cartData: products })
     }
     render() {
         console.log("joro", this.props)
@@ -101,12 +118,14 @@ class FlashSales extends Component {
     }
 }
 const mapStateToProps = state => {
-    // console.log("adigun", state)
     let { products, cartItems } = state.inventory
-    cartItems = cartItems.products;
+    // cartItems = cartItems.products;
+    console.log("adigun", state)
     return {
-        products
+        products, cartItems
     }
+
 }
+
 export default connect(mapStateToProps, actions)(FlashSales);
 

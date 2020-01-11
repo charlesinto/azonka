@@ -52,6 +52,8 @@ class Home extends Component {
         await this.props.addToCart(obj)
     }
 
+
+
     renderPopup() {
         return (
             <Zoom right>

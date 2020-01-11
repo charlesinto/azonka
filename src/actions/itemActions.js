@@ -199,6 +199,7 @@ export const fetchCart = () => {
             })
 
             const { cart } = response.data;
+            console.log("bolu", cart.products)
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {

@@ -10,14 +10,14 @@ export class CartDropdown extends Component {
     componentDidMount() {
         this.loadCart()
         console.log("fires", this.props)
-        this.tempReload()
+        // this.tempReload()
     }
-    // componentWillReceiveProps = props => {
-    //     console.log("wunmi", props)
-    //     if (props.setCartData !== this.props.setCartData) {
-    //         this.setState({ cartData: props && props.setCartData, cartLength: props.setCartData ? props.setCartData.length : 0 });
-    //     }
-    // }
+    componentWillReceiveProps = props => {
+        console.log("wunmi", props)
+        if (props.setCartData !== this.props.setCartData) {
+            this.setState({ cartData: props && props.setCartData, cartLength: props.setCartData ? props.setCartData.length : 0 });
+        }
+    }
     calSum = () => {
         let { cartData } = this.state;
         let sum = cartData ? cartData.reduce((a, b) => {
@@ -39,6 +39,7 @@ export class CartDropdown extends Component {
     loadCart = async () => {
         let token = localStorage.getItem("x-access-token");
         if (token) {
+            console.log("aye", this.props)
             // await this.props.fetchCart()
             this.setState({ cartData: this.props.cartItems })
             console.log("rema", this.state, this.props.setCartData)
@@ -140,10 +141,10 @@ export class CartDropdown extends Component {
 
 const mapStateToProps = state => {
     console.log("firexat", state)
-    // const { cartItems } = state.inventory;
-    // return {
-    //     cartItems
-    // }
+    const { cartItems } = state.inventory;
+    return {
+        cartItems
+    }
 }
 
 export default connect(mapStateToProps, actions)(CartDropdown);

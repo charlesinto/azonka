@@ -56,7 +56,9 @@ class Header extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCart()
-            this.setState({ cartData: this.props.cartItems.products })
+
+            console.log("firess", this.props.cartItems)
+            this.setState({ cartData: this.props.cartItems })
         } else {
             await this.props.fetchLocalCart()
             let { cartData } = this.props;
@@ -69,7 +71,7 @@ class Header extends Component {
     render() {
         const { currentUser } = this.state;
         const { cartData } = this.state;
-
+        console.log("ayes", this.state.cartData)
         // let { setCartData } = this.props;
         let { category } = this.state;
         return (
@@ -323,9 +325,9 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-    // console.log("fire", state)
-    const { categories, cartItems, cartData } = state.inventory
 
+    let { categories, cartItems, cartData } = state.inventory
+    cartItems = cartItems.products;
     const { home: { currentUser } } = state;
     return {
         currentUser, categories, cartItems, cartData

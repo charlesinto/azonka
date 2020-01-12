@@ -73,7 +73,7 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/profile" component={Profile} />
                                 <AuthRoute exact path="/users/profile/account" component={AccountSetting} />
                                 <AuthRoute noAuthRequired exact path="/users/purchases" component={Purchases} />
-                                <AuthRoute noAuthRequired exact path="/users/cart/:id" component={Cart} />
+                                <AuthRoute noAuthRequired exact path="/users/cart" component={Cart} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />

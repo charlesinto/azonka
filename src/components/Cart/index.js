@@ -11,8 +11,12 @@ import Header from '../HeaderFooter/Header';
 import Footer from '../HeaderFooter/Footer';
 
 class Cart extends Component {
-    componentDidMount() {
+    state = { data: [], sum: 0, cartData: [], cartLength: 0 }
+    async componentDidMount() {
         this.props.switchActiveLink('Cart')
+        await this.loadCart()
+        this.calSum()
+
     }
     renderAuthDashboard = () => (
         <div className="router-container">
@@ -94,10 +98,56 @@ class Cart extends Component {
         )
     }
 
+
+
+    componentWillReceiveProps = props => {
+        console.log("new props", props)
+        if (props.cartData !== this.props.cartData) {
+            this.setState({ cartData: props && props.cartData, cartLength: props.cartData ? props.cartData.length : 0 });
+        }
+    }
+    calSum = () => {
+        let { cartData } = this.state;
+        let sum = cartData ? cartData.reduce((a, b) => {
+            return a + b.finalPrice
+        }, 0) : 0
+        this.setState({ sum })
+        return sum
+    }
+    removeFromCart = async (e) => {
+        let { cartData } = this.state;
+        let id = e.target.id;
+        let newItems = cartData.filter(data => data.id != id);
+        localStorage.setItem("cart", JSON.stringify(newItems));
+        let newCartData = JSON.parse(localStorage.getItem("cart"))
+        return this.setState({ cartData: newCartData })
+    }
+
+    loadCart = async () => {
+
+        // setInterval(async () => {
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchCart();
+            // console.log("aza", this.props)
+            let { products, quantity } = this.props.cartItems;
+            this.setState({ cartData: this.props.cartItems.products })
+            // console.log("aza", this.state.cartData)
+        } else {
+            console.log()
+            await this.props.fetchLocalCart()
+            console.log("load drp", this.props.cartData)
+            this.setState({ cartData: this.props.cartData })
+        }
+
+    }
+
     render() {
+        // let { cartData } = this.state;
+        // console.log("azass", this.state)
         return (
             <div>
-                <Header />
+                {/* <Header /> */}
                 <div className="router-container">
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
                         <div className="container">
@@ -121,8 +171,14 @@ class Cart extends Component {
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {
+                                                this.state.cartData ? this.state.cartData.map(data => {
+                                                    return (
+                                                        <ProductRow calSum={this.calSum} {...data} />
+                                                    )
+                                                }) : (<div>No data available</div>)
+                                            }
 
-                                            <ProductRow />
                                             <ProductRowActions />
                                         </tbody>
 
@@ -215,7 +271,7 @@ class Cart extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>Subtotal</td>
-                                                <td>$17.90</td>
+                                                <td>{this.state.sum}</td>
                                             </tr>
 
                                             <tr>
@@ -226,7 +282,7 @@ class Cart extends Component {
                                         <tfoot>
                                             <tr>
                                                 <td>Order Total</td>
-                                                <td>$17.90</td>
+                                                <td>{this.state.sum}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -247,6 +303,15 @@ class Cart extends Component {
     }
 }
 
+const mapStateToProps = state => {
+
+    let { categories, cartItems, cartData } = state.inventory
+    console.log("cart in drp", cartData)
+    return {
+        categories, cartItems, cartData
+    }
+}
 
 
-export default connect(null, actions)(Cart)
+
+export default connect(mapStateToProps, actions)(Cart)

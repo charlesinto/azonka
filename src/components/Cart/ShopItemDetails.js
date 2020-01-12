@@ -2,20 +2,36 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../HeaderFooter/Header'
 
-export default class ShopItemDetails extends Component {
-    state = { id: "", localData: [], detailsData: {} }
+
+import { connect } from "react-redux";
+import * as actions from "../../actions";
+
+class ShopItemDetails extends Component {
+    state = { id: "", products: [], detailsData: {} }
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
-        let localData = await JSON.parse(localStorage.getItem("shop"))
-        this.setState({ localData, id })
-        await this.getDetails()
+        this.setState({ id })
+        this.loadShopData()
+        this.getDetails()
+
     }
     getDetails = () => {
-        let { localData, id } = this.state;
-        console.log("show", id, localData)
-        let detailsData = localData.filter(data => id == data.id)[0]
-        console.log("show", detailsData)
+        let { products, id } = this.state;
+        return console.log("showst", this.state)
+        let detailsData = products.filter(data => id == data.id)[0]
+
+        this.setState({ detailsData })
+    }
+    loadShopData = async () => {
+        await this.props.fetchFeaturedItems()
+        this.setState({ products: this.props.products })
+        console.log("show", this.state)
+
+        let { products, id } = this.state;
+
+        let detailsData = products.filter(data => id == data.id)[0]
+        console.log("showst", detailsData)
         this.setState({ detailsData })
     }
     render() {
@@ -836,3 +852,16 @@ export default class ShopItemDetails extends Component {
         )
     }
 }
+
+
+const mapStateToProps = state => {
+
+    const { cartItems, cartData, products } = state.inventory;
+    let cartResponse = cartItems.data
+    // console.log("fire", state)
+    return {
+        cartItems, cartResponse, cartData, products
+    }
+}
+
+export default connect(mapStateToProps, actions)(ShopItemDetails); 

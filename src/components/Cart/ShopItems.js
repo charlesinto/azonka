@@ -16,7 +16,7 @@ import * as actions from "../../actions";
 class ShopItems extends Component {
     state = { products: [], sortState: "", cartData: [], cartLength: 0 }
     componentDidMount() {
-        // let localData = JSON.parse(localStorage.getItem("shop"));
+        // let products = JSON.parse(localStorage.getItem("shop"));
         // this.setState({ produc })
         this.loadShopData()
     }
@@ -26,21 +26,21 @@ class ShopItems extends Component {
         console.log("setted", this.state.cartData)
     }
     handleSort = () => {
-        let { localData } = this.state
+        let { products } = this.state
         let selectValue = document.querySelector(".sortDrp").value;
 
         if (selectValue === "old") {
-            let sorted = localData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-            this.setState({ localData: sorted })
+            let sorted = products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            this.setState({ products: sorted })
         } else if (selectValue === "new") {
-            let sorted = localData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            this.setState({ localData: sorted })
+            let sorted = products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            this.setState({ products: sorted })
         } else if (selectValue === "high") {
-            let sorted = localData.sort((a, b) => (b.finalPrice) - (a.finalPrice))
-            this.setState({ localData: sorted })
+            let sorted = products.sort((a, b) => (b.finalPrice) - (a.finalPrice))
+            this.setState({ products: sorted })
         } else if (selectValue === "low") {
-            let sorted = localData.sort((a, b) => (a.finalPrice) - (b.finalPrice))
-            this.setState({ localData: sorted })
+            let sorted = products.sort((a, b) => (a.finalPrice) - (b.finalPrice))
+            this.setState({ products: sorted })
         } else {
             return null;
         }
@@ -66,8 +66,8 @@ class ShopItems extends Component {
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
-            let { localData } = this.state
-            let obj = localData.filter(data => id == data.id)[0]
+            let { products } = this.state
+            let obj = products.filter(data => id == data.id)[0]
 
             //check if item is in cart
 

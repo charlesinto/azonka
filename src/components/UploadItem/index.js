@@ -680,7 +680,7 @@ class index extends Component {
                                                     ) :
                                                     (
                                                         <div style={{ textAlign: 'center' }}>
-                                                            <button onClick={this.hanldeFormUpdate} className="btn btn-warning">Update Item</button>
+                                                            <button onClick={this.hanldeFormUpdate} className="btn btn-success">Update Item</button>
                                                         </div>
                                                     )
                                             }

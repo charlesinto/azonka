@@ -98,8 +98,6 @@ class Cart extends Component {
         )
     }
 
-
-
     componentWillReceiveProps = props => {
         console.log("new props", props)
         if (props.cartData !== this.props.cartData) {
@@ -107,12 +105,12 @@ class Cart extends Component {
         }
     }
     calSum = () => {
-        let { cartData } = this.state;
-        let sum = cartData ? cartData.reduce((a, b) => {
+        const { cartData } = this.state;
+        let amountOrdered = cartData ? cartData.reduce((a, b) => {
             return a + b.finalPrice
         }, 0) : 0
-        this.setState({ sum })
-        return sum
+        this.setState({ sum: amountOrdered })
+        return amountOrdered
     }
     removeFromCart = async (e) => {
         let { cartData } = this.state;
@@ -142,11 +140,36 @@ class Cart extends Component {
 
     }
 
+    calSums = (sum, productId) => {
+        const { cartData } = this.state;
+        cartData.forEach(element => {
+            
+            if(element.id === productId){
+                element.amountOrdered = sum;
+            }else{
+                element.amountOrdered = element.finalPrice;
+            }
+        })
+        let amountOrdered = cartData ? cartData.reduce((a, b) => {
+            return a + b.amountOrdered
+        }, 0) : 0
+        this.setState({ sum: amountOrdered })
+    }
+
+    handleItemDelete = id => {
+        const { cartData} = this.state;
+        const index = cartData.findIndex(element => element.id === id)
+        if(index !== -1){
+            cartData.splice(index, 1)
+        }
+        return this.setState({
+            cartData: [...cartData]
+        })
+    }
+
     render() {
-        // let { cartData } = this.state;
-        // console.log("azass", this.state)
         return (
-            <div>
+            <div >
                 {/* <Header /> */}
                 <div className="router-container">
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
@@ -174,19 +197,24 @@ class Cart extends Component {
                                             {
                                                 this.state.cartData ? this.state.cartData.map(data => {
                                                     return (
-                                                        <ProductRow calSum={this.calSum} {...data} />
+                                                        <ProductRow 
+                                                            calSums={(sum, productId) =>
+                                                                 this.calSums(sum, productId)} 
+                                                            calSum={this.calSum} 
+                                                            handleItemDelete={this.handleItemDelete}
+                                                            {...data}
+                                                            
+                                                            />
                                                     )
                                                 }) : (<div>No data available</div>)
                                             }
-
-                                            <ProductRowActions />
                                         </tbody>
 
                                         <tfoot>
                                             <tr>
-                                                <td colspan="4" className="clearfix">
+                                                <td colSpan="4" className="clearfix">
                                                     <div className="float-left">
-                                                        <a href="category.html" className="btn btn-outline-secondary">Continue Shopping</a>
+                                                        <Link to="/" className="btn btn-outline-secondary">Continue Shopping</Link>
                                                     </div>
 
                                                     <div className="float-right">
@@ -253,7 +281,7 @@ class Cart extends Component {
                                                 <label>Flat Way</label>
                                                 <div className="custom-control custom-checkbox">
                                                     <input type="checkbox" className="custom-control-input" id="flat-rate" />
-                                                    <label className="custom-control-label" for="flat-rate">Fixed $5.00</label>
+                                                    <label className="custom-control-label" htmlFor="flat-rate">Fixed $5.00</label>
                                                 </div>
                                             </div>
 
@@ -261,7 +289,7 @@ class Cart extends Component {
                                                 <label>Best Rate</label>
                                                 <div className="custom-control custom-checkbox">
                                                     <input type="checkbox" className="custom-control-input" id="best-rate" />
-                                                    <label className="custom-control-label" for="best-rate">Table Rate $15.00</label>
+                                                    <label className="custom-control-label" htmlFor="best-rate">Table Rate $15.00</label>
                                                 </div>
                                             </div>
                                         </form>
@@ -271,18 +299,18 @@ class Cart extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>Subtotal</td>
-                                                <td>{this.state.sum}</td>
+                                                <td>&#8358; {this.state.sum}</td>
                                             </tr>
 
                                             <tr>
                                                 <td>Tax</td>
-                                                <td>$0.00</td>
+                                                <td>&#8358; 0.00</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td>Order Total</td>
-                                                <td>{this.state.sum}</td>
+                                                <td>&#8358; {this.state.sum}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

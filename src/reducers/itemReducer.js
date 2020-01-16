@@ -99,7 +99,7 @@ const editStoreItem = (state, product) => {
     const finalPriceWithComma = numberWithCommas(product.finalPrice)
     const filteredSubCategory = state.subCategories.filter(cat => cat.parentCategory.id === product.category)
     return {
-        ...state, ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
+        ...state,action:'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
         filteredSubCategory: filteredSubCategory
     }
 }

@@ -5,7 +5,7 @@ import {
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,
-    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
+    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -465,4 +465,8 @@ export const previewItem = (product = null) => {
 
 export const handleSellerPrefence = preference => {
     return { type: HANDLE_PREFERNCE_CHANGE, payload: preference }
+}
+
+export const calculateSumProducts = (sum, productId) => {
+    return {type: CALCULATE_PRODUCT_SUM, payload: {sum, productId}}
 }

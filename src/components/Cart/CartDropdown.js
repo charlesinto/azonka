@@ -121,8 +121,8 @@ class CartDropdown extends Component {
                             </div>
 
                             <div className="dropdown-cart-action">
-                                <Link to="/shop" className="btn">View Cart</Link>
-                                <Link to="/shop" className="btn">Checkout</Link>
+                                <Link to="/users/cart" className="btn">View Cart</Link>
+                                <Link to="/users/cart" className="btn">Checkout</Link>
                             </div>
                         </div>
                     </div>

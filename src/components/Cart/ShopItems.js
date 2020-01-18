@@ -108,7 +108,6 @@ class ShopItems extends Component {
         console.log("zlatan before", cartData);
         return (
             <div>
-                {/* <Header setCartData={cartData} /> */}
                 <main className="main">
                     <ShopItemHeader />
                     <div className="container">

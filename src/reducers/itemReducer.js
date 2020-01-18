@@ -1,7 +1,8 @@
 import {
     ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING, CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM, CATEGORY_FETCHED_SUCCESSFULLY, LOCAL_CART_FETCHED_SUCCESSFULLY,
-    ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA, ADD_CART_SUCCESSFULLY,
+    ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA, ADD_CART_SUCCESSFULLY, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
+    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
 } from "../actions/types";
 
@@ -13,6 +14,8 @@ const INTIAL_STATE = {
     cartData: [],
     resetForm: false,
     products: [],
+    localProducts: [],
+    itemModalData: [],
     product: null,
     files: null,
     previewImage: null,
@@ -64,6 +67,15 @@ export default (state = INTIAL_STATE, actions) => {
             return { ...state, cartData: actions.payload, }
         case ADD_LOCAL_CART_SUCCESSFULLY:
             return { ...state, cartData: actions.payload, }
+
+        case LOCAL_SHOP_FETCHED_SUCCESSFULLY:
+            return { ...state, localProducts: actions.payload, }
+        case ADD_LOCAL_SHOP_SUCCESSFULLY:
+            return { ...state, PRODUCTS: actions.payload, }
+
+        case ITEM_MODAL:
+            return { ...state, itemModalData: actions.payload }
+
         case EDIT_ITEM:
 
             return { ...state, product: { ...actions.payload } }
@@ -99,7 +111,7 @@ const editStoreItem = (state, product) => {
     const finalPriceWithComma = numberWithCommas(product.finalPrice)
     const filteredSubCategory = state.subCategories.filter(cat => cat.parentCategory.id === product.category)
     return {
-        ...state,action:'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
+        ...state, action: 'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
         filteredSubCategory: filteredSubCategory
     }
 }

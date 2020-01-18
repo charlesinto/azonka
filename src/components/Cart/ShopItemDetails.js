@@ -31,7 +31,6 @@ class ShopItemDetails extends Component {
         let { products, id } = this.state;
 
         let detailsData = products.filter(data => id == data.id)[0]
-        console.log("showst", detailsData)
         this.setState({ detailsData })
     }
     render() {
@@ -41,6 +40,7 @@ class ShopItemDetails extends Component {
         return (
             <>
                 <Header />
+
                 <main className="main">
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
                         <div className="container">
@@ -847,6 +847,8 @@ class ShopItemDetails extends Component {
                         {/* <!-- End .container --> */}
                     </div>
                     {/* <!-- End .featured-section --> */}
+
+
                 </main>
             </>
         )

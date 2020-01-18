@@ -3,9 +3,10 @@ import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import homeProduct from "../css/images/products/home-featured-1.jpg";
+import ItemModal from '../components/Cart/ItemModal';
 
 class FlashSales extends Component {
-    state = { products: [] }
+    state = { products: [], itemDetails: {} }
     componentDidMount() {
         console.log("adigun", this.props)
         this.setState({ products: this.props.featArray })
@@ -67,23 +68,33 @@ class FlashSales extends Component {
         this.setState({ cartData })
     }
     handleSetOnlineData = async () => {
-        console.log("online props", this.props)
         await this.props.fetchCart()
-        console.log("king,", this.props)
         let { products } = this.props.cartItems
         // console.log("firedata", cartData)
         this.setState({ cartData: products })
+    }
+    handleDetailModal = async (e) => {
+        console.log(e.target.id)
+        let id = e.target.id;
+        let { products } = this.state;
+        let itemDetails = products.filter(data => data.id == e.target.id);
+        // console.log(itemDetails, products, id)
+        // console.log("inside flash", this.props)
+        await this.props.itemDetailModalAction(itemDetails)
+        // console.log("inside flash 2", this.props)
+        this.setState({ itemDetails })
     }
     render() {
         console.log("joro", this.props)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
         return (
+
             <div className="product col-md-4" key={id}>
                 <figure className="product-image-container">
                     <a href="product.html" className="product-image">
                         <img src={mainImageUrl} alt="product" className="image-view" />
                     </a>
-                    <a href="ajax\product-quick-view.html" className="btn-quickview">Quick View</a>
+                    <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>
                 <div className="product-details">
                     <div className="ratings-container">
@@ -113,14 +124,19 @@ class FlashSales extends Component {
                         </a>
                     </div>
                 </div>
+                <ItemModal />
+
+                Temporary modal position
+
+
             </div>
+
         );
     }
 }
 const mapStateToProps = state => {
+
     let { products, cartItems } = state.inventory
-    // cartItems = cartItems.products;
-    console.log("adigun", state)
     return {
         products, cartItems
     }

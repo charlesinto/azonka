@@ -88,7 +88,7 @@ class FeatureProductItem extends Component {
                     <a href="product.html" class="product-image">
                         <img src={mainImageUrl} alt="product" className="image-view" />
                     </a>
-                    <a href="ajax\product-quick-view.html" class="btn-quickview">Quick View</a>
+                    <span class="btn-quickview" data-toggle="modal" data-target="#exampleModal">Quick View</span>
                 </figure>
                 <div class="product-details">
                     <div class="ratings-container">

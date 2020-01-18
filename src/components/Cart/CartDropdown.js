@@ -9,10 +9,8 @@ class CartDropdown extends Component {
 
     componentDidMount() {
         this.loadCart()
-        console.log("fires and", this.props)
     }
     componentWillReceiveProps = props => {
-        console.log("new props", props)
         if (props.cartData !== this.props.cartData) {
             this.setState({ cartData: props && props.cartData, cartLength: props.cartData ? props.cartData.length : 0 });
         }
@@ -43,11 +41,28 @@ class CartDropdown extends Component {
         } else {
             console.log()
             await this.props.fetchLocalCart()
-            console.log("load drp", this.props.cartData)
             this.setState({ cartData: this.props.cartData })
         }
-        // }, 1000);
 
+    }
+
+    // formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
+    //     try {
+    //         decimalCount = Math.abs(decimalCount);
+    //         decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+    //         const negativeSign = amount < 0 ? "-" : "";
+
+    //         let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+    //         let j = (i.length > 3) ? i.length % 3 : 0;
+
+    //         return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // };
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
     render() {
@@ -84,7 +99,7 @@ class CartDropdown extends Component {
                                                         <span className="cart-product-info">
                                                             {/* <span className="cart-product-qty">1</span>
                                                             x &#8358;  */}
-                                                            {sellingPrice}
+                                                            {this.formatMoney(sellingPrice)}
                                                         </span>
                                                     </div>
                                                     <figure className="product-image-container">
@@ -115,7 +130,8 @@ class CartDropdown extends Component {
                                         // data ? data.reduce((a, b) => {
                                         //     return a + b.finalPrice
                                         // }, 0) : 0
-                                        this.calSum()
+                                        this.formatMoney(this.calSum())
+
                                     }
                                 </span>
                             </div>

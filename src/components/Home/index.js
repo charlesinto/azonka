@@ -20,6 +20,7 @@ import slide1 from "../../css/images/products/product-8-white.jpg";//product-2-w
 import slide2 from "../../css/images/products/home-featured-3.jpg";
 import HomeSlide from '../../common/HomeSlide';
 import FlashSales from '../../common/FlashSales';
+import ItemModal from '../Cart/ItemModal';
 
 class Home extends Component {
     state = { showPopUp: true }
@@ -33,6 +34,7 @@ class Home extends Component {
         this.props.initiateRegistration()
         this.props.getProductCategorySubcategory()
         this.loadFeaturedItems()
+
         //remove popup after 5secs
         setTimeout(() => {
             this.setState({
@@ -41,8 +43,15 @@ class Home extends Component {
         }, 5000)
     }
     loadFeaturedItems = async () => {
-        await this.props.fetchFeaturedItems()
-        this.setState({ products: this.props.products })
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchFeaturedItems()
+            this.setState({ products: this.props.products })
+        } else {
+            await this.props.fetchLocalShop()
+            this.setState({ products: this.props.localProducts })
+
+        }
     }
     handleAddToCart = async (id) => {
         let productId = id;
@@ -51,7 +60,9 @@ class Home extends Component {
         let token = (localStorage.getItem("x-access-token"));
         await this.props.addToCart(obj)
     }
-
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
 
 
     renderPopup() {
@@ -80,31 +91,31 @@ class Home extends Component {
             <div>
                 <Header />
                 <div style={{ minHeight: '100vh', paddingTop: '11.3rem' }}>
-                    <main class="main">
-                        <div class="info-boxes-container">
-                            <div class="container">
-                                <div class="info-box">
-                                    <i class="icon-shipping"></i>
+                    <main className="main">
+                        <div className="info-boxes-container">
+                            <div className="container">
+                                <div className="info-box">
+                                    <i className="icon-shipping"></i>
 
-                                    <div class="info-box-content">
+                                    <div className="info-box-content">
                                         <h4>FREE SHIPPING &amp; RETURN</h4>
                                         <p>Free shipping on all orders over $99.</p>
                                     </div>
                                 </div>
 
-                                <div class="info-box">
-                                    <i class="icon-us-dollar"></i>
+                                <div className="info-box">
+                                    <i className="icon-us-dollar"></i>
 
-                                    <div class="info-box-content">
+                                    <div className="info-box-content">
                                         <h4>MONEY BACK GUARANTEE</h4>
                                         <p>100% money back guarantee</p>
                                     </div>
                                 </div>
 
-                                <div class="info-box">
-                                    <i class="icon-support"></i>
+                                <div className="info-box">
+                                    <i className="icon-support"></i>
 
-                                    <div class="info-box-content">
+                                    <div className="info-box-content">
                                         <h4>ONLINE SUPPORT 24/7</h4>
                                         <p>Lorem ipsum dolor sit amet.</p>
                                     </div>
@@ -112,10 +123,10 @@ class Home extends Component {
                             </div>
                         </div>
 
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-9">
-                                    <div class="home-slider">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-9">
+                                    <div className="home-slider">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
                                         <Slider
                                             {...{ ...settings, slidesToShow: 1, arrows: false }}
                                         >
@@ -131,19 +142,19 @@ class Home extends Component {
 
                                     </div>
 
-                                    <div class="row">
+                                    <div className="row">
                                         <Trending />
                                         <Trending />
                                         <Trending />
                                     </div>
 
-                                    <div class="mb-3"></div>
+                                    <div className="mb-3"></div>
 
-                                    <h2 class="carousel-title">Featured Products</h2>
+                                    <h2 className="carousel-title">Featured Products</h2>
 
 
 
-                                    <div class="home-featured-products">
+                                    <div className="home-featured-products">
                                         <Slider
                                             {...settings}
                                         >
@@ -151,7 +162,7 @@ class Home extends Component {
                                                 this.state.products ? (
                                                     this.state.products.map(res => {
                                                         let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
-                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
                                                     })
                                                 ) : null
                                             }
@@ -168,10 +179,12 @@ class Home extends Component {
 
                                     </div>
 
-                                    <div class="mb-6"></div>
 
 
-                                    <h2 class="carousel-title">Flash sales</h2>
+                                    <div className="mb-6"></div>
+
+
+                                    <h2 className="carousel-title">Flash sales</h2>
                                     {/* <h1 className="text-center font-weight-light">Flash sales</h1> */}
                                     <div className="row border" style={{ margin: "4vh 0px" }}>
 
@@ -182,7 +195,7 @@ class Home extends Component {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
-                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
 
                                                     )
                                                 })
@@ -199,10 +212,10 @@ class Home extends Component {
 
 
 
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-4">
-                                            <div class="product-column">
-                                                <h3 class="title">New</h3>
+                                    <div className="row">
+                                        <div className="col-sm-12 col-md-4">
+                                            <div className="product-column">
+                                                <h3 className="title">New</h3>
 
                                                 <HotProduct />
                                                 <HotProduct />
@@ -210,9 +223,9 @@ class Home extends Component {
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-12 col-md-4">
-                                            <div class="product-column">
-                                                <h3 class="title">Hot</h3>
+                                        <div className="col-sm-12 col-md-4">
+                                            <div className="product-column">
+                                                <h3 className="title">Hot</h3>
 
                                                 <HotProduct />
 
@@ -222,9 +235,9 @@ class Home extends Component {
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-12 col-md-4 ">
-                                            <div class="product-column">
-                                                <h3 class="title">Sale</h3>
+                                        <div className="col-sm-12 col-md-4 ">
+                                            <div className="product-column">
+                                                <h3 className="title">Sale</h3>
 
                                                 <HotProduct />
 
@@ -234,67 +247,67 @@ class Home extends Component {
                                         </div>
                                     </div>
 
-                                    <div class="mb-3"></div>
+                                    <div className="mb-3"></div>
 
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="feature-box feature-box-simple text-center">
-                                                <i class="icon-star"></i>
+                                    <div className="row">
+                                        <div className="col-sm-6 col-md-4">
+                                            <div className="feature-box feature-box-simple text-center">
+                                                <i className="icon-star"></i>
 
-                                                <div class="feature-box-content">
+                                                <div className="feature-box-content">
                                                     <h3>Dedicated Service</h3>
                                                     <p>Consult our specialists for help with an order, customization, or design advice</p>
-                                                    <a href="#" class="btn btn-outline-dark">Get in touch</a>
+                                                    <a href="#" className="btn btn-outline-dark">Get in touch</a>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="feature-box feature-box-simple text-center">
-                                                <i class="icon-reply"></i>
+                                        <div className="col-sm-6 col-md-4">
+                                            <div className="feature-box feature-box-simple text-center">
+                                                <i className="icon-reply"></i>
 
-                                                <div class="feature-box-content">
+                                                <div className="feature-box-content">
                                                     <h3>Free Returns</h3>
                                                     <p>We stand behind our goods and services and want you to be satisfied with them.</p>
-                                                    <a href="#" class="btn btn-outline-dark">Return Policy</a>
+                                                    <a href="#" className="btn btn-outline-dark">Return Policy</a>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-6 col-md-4">
-                                            <div class="feature-box feature-box-simple text-center">
-                                                <i class="icon-paper-plane"></i>
+                                        <div className="col-sm-6 col-md-4">
+                                            <div className="feature-box feature-box-simple text-center">
+                                                <i className="icon-paper-plane"></i>
 
-                                                <div class="feature-box-content">
+                                                <div className="feature-box-content">
                                                     <h3>International Shipping</h3>
                                                     <p>Currently over 50 countries qualify for express international shipping.</p>
-                                                    <a href="#" class="btn btn-outline-dark">Lear More</a>
+                                                    <a href="#" className="btn btn-outline-dark">Lear More</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <aside class="sidebar-home col-lg-3 order-lg-first">
-                                    <div class="side-menu-container">
+                                <aside className="sidebar-home col-lg-3 order-lg-first">
+                                    <div className="side-menu-container">
                                         <h2>CATEGORIES</h2>
 
-                                        <nav class="side-nav">
-                                            <ul class="menu menu-vertical sf-arrows">
-                                                <li class="active"><a href="index.html"><i class="icon-home"></i>Home</a></li>
+                                        <nav className="side-nav">
+                                            <ul className="menu menu-vertical sf-arrows">
+                                                <li className="active"><a href="index.html"><i className="icon-home"></i>Home</a></li>
                                                 <li>
-                                                    <a href="category.html" class="sf-with-ul"><i class="icon-briefcase"></i>
+                                                    <a href="category.html" className="sf-with-ul"><i className="icon-briefcase"></i>
                                                         Categories</a>
-                                                    <div class="megamenu megamenu-fixed-width">
-                                                        <div class="row">
-                                                            <div class="col-lg-8">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="menu-title">
-                                                                            <a href="#">Variations 1<span class="tip tip-new">New!</span></a>
+                                                    <div className="megamenu megamenu-fixed-width">
+                                                        <div className="row">
+                                                            <div className="col-lg-8">
+                                                                <div className="row">
+                                                                    <div className="col-lg-6">
+                                                                        <div className="menu-title">
+                                                                            <a href="#">Variations 1<span className="tip tip-new">New!</span></a>
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="category.html">Fullwidth Banner<span class="tip tip-hot">Hot!</span></a></li>
+                                                                            <li><a href="category.html">Fullwidth Banner<span className="tip tip-hot">Hot!</span></a></li>
                                                                             <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a></li>
                                                                             <li><a href="category-banner-boxed-image.html">Boxed Image Banner</a></li>
                                                                             <li><a href="category.html">Left Sidebar</a></li>
@@ -304,15 +317,15 @@ class Home extends Component {
                                                                             <li><a href="category-horizontal-filter2.html">Horizontal Filter2</a></li>
                                                                         </ul>
                                                                     </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="menu-title">
+                                                                    <div className="col-lg-6">
+                                                                        <div className="menu-title">
                                                                             <a href="#">Variations 2</a>
                                                                         </div>
                                                                         <ul>
                                                                             <li><a href="#">Product List Item Types</a></li>
                                                                             <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a></li>
                                                                             <li><a href="category.html">3 Columns Products</a></li>
-                                                                            <li><a href="category-4col.html">4 Columns Products <span class="tip tip-new">New</span></a></li>
+                                                                            <li><a href="category-4col.html">4 Columns Products <span className="tip tip-new">New</span></a></li>
                                                                             <li><a href="category-5col.html">5 Columns Products</a></li>
                                                                             <li><a href="category-6col.html">6 Columns Products</a></li>
                                                                             <li><a href="category-7col.html">7 Columns Products</a></li>
@@ -321,8 +334,8 @@ class Home extends Component {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-lg-4">
-                                                                <div class="banner">
+                                                            <div className="col-lg-4">
+                                                                <div className="banner">
                                                                     <a href="#">
                                                                         <img src="assets\images\menu-banner-2.jpg" alt="Menu banner" />
                                                                     </a>
@@ -331,26 +344,26 @@ class Home extends Component {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li class="megamenu-container">
-                                                    <a href="product.html" class="sf-with-ul"><i class="icon-video"></i>Products</a>
-                                                    <div class="megamenu">
-                                                        <div class="row">
-                                                            <div class="col-lg-8">
-                                                                <div class="row">
-                                                                    <div class="col-lg-4">
-                                                                        <div class="menu-title">
+                                                <li className="megamenu-container">
+                                                    <a href="product.html" className="sf-with-ul"><i className="icon-video"></i>Products</a>
+                                                    <div className="megamenu">
+                                                        <div className="row">
+                                                            <div className="col-lg-8">
+                                                                <div className="row">
+                                                                    <div className="col-lg-4">
+                                                                        <div className="menu-title">
                                                                             <a href="#">Variations</a>
                                                                         </div>
                                                                         <ul>
                                                                             <li><a href="product.html">Horizontal Thumbnails</a></li>
-                                                                            <li><a href="product-full-width.html">Vertical Thumbnails<span class="tip tip-hot">Hot!</span></a></li>
+                                                                            <li><a href="product-full-width.html">Vertical Thumbnails<span className="tip tip-hot">Hot!</span></a></li>
                                                                             <li><a href="product.html">Inner Zoom</a></li>
                                                                             <li><a href="product-addcart-sticky.html">Addtocart Sticky</a></li>
                                                                             <li><a href="product-sidebar-left.html">Accordion Tabs</a></li>
                                                                         </ul>
                                                                     </div>
-                                                                    <div class="col-lg-4">
-                                                                        <div class="menu-title">
+                                                                    <div className="col-lg-4">
+                                                                        <div className="menu-title">
                                                                             <a href="#">Variations</a>
                                                                         </div>
                                                                         <ul>
@@ -359,8 +372,8 @@ class Home extends Component {
                                                                             <li><a href="product-sidebar-left.html">With Left Sidebar</a></li>
                                                                         </ul>
                                                                     </div>
-                                                                    <div class="col-lg-4">
-                                                                        <div class="menu-title">
+                                                                    <div className="col-lg-4">
+                                                                        <div className="menu-title">
                                                                             <a href="#">Product Layout Types</a>
                                                                         </div>
                                                                         <ul>
@@ -368,16 +381,16 @@ class Home extends Component {
                                                                             <li><a href="product-extended-layout.html">Extended Layout</a></li>
                                                                             <li><a href="product-full-width.html">Full Width Layout</a></li>
                                                                             <li><a href="product-grid-layout.html">Grid Images Layout</a></li>
-                                                                            <li><a href="product-sticky-both.html">Sticky Both Side Info<span class="tip tip-hot">Hot!</span></a></li>
+                                                                            <li><a href="product-sticky-both.html">Sticky Both Side Info<span className="tip tip-hot">Hot!</span></a></li>
                                                                             <li><a href="product-sticky-info.html">Sticky Right Side Info</a></li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-lg-4">
-                                                                <div class="banner">
+                                                            <div className="col-lg-4">
+                                                                <div className="banner">
                                                                     <a href="#">
-                                                                        <img src="assets\images\menu-banner.jpg" alt="Menu banner" class="product-promo" />
+                                                                        <img src="assets\images\menu-banner.jpg" alt="Menu banner" className="product-promo" />
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -385,7 +398,7 @@ class Home extends Component {
                                                     </div>
                                                 </li>
                                                 <li>
-                                                    <a href="#" class="sf-with-ul"><i class="icon-docs-inv"></i>Pages</a>
+                                                    <a href="#" className="sf-with-ul"><i className="icon-docs-inv"></i>Pages</a>
 
                                                     <ul>
                                                         <li><a href="cart.html">Shopping Cart</a></li>
@@ -410,23 +423,23 @@ class Home extends Component {
                                                             </ul>
                                                         </li>
                                                         <li><a href="contact.html">Contact Us</a></li>
-                                                        <li><a href="#" class="login-link">Login</a></li>
+                                                        <li><a href="#" className="login-link">Login</a></li>
                                                         <li><a href="forgot-password.html">Forgot Password</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="#" class="sf-with-ul"><i class="icon-sliders"></i>Features</a>
+                                                <li><a href="#" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
                                                     <ul>
                                                         <li><a href="#">Header Types</a></li>
                                                         <li><a href="#">Footer Types</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="#"><i class="icon-cat-gift"></i>Special Offer!</a></li>
-                                                <li><a href="#"><i class="icon-star-empty"></i>Buy Porto!</a></li>
+                                                <li><a href="#"><i className="icon-cat-gift"></i>Special Offer!</a></li>
+                                                <li><a href="#"><i className="icon-star-empty"></i>Buy Porto!</a></li>
                                             </ul>
                                         </nav>
                                     </div>
-                                    <div class="widget widget-banners">
-                                        <div class="widget-banners-slider">
+                                    <div className="widget widget-banners">
+                                        <div className="widget-banners-slider">
                                             <Slider
                                                 {...{ settings, slidesToShow: 1 }}
                                             >
@@ -439,20 +452,20 @@ class Home extends Component {
                                         </div>
                                     </div>
 
-                                    <div class="widget widget-newsletters">
-                                        <h3 class="widget-title">Newsletter</h3>
+                                    <div className="widget widget-newsletters">
+                                        <h3 className="widget-title">Newsletter</h3>
                                         <p>Get all the latest information on Events, Sales and Offers. </p>
                                         <form action="#">
-                                            <div class="form-group">
-                                                <input type="email" class="form-control" id="wemail" />
-                                                <label for="wemail"><i class="icon-envolope"></i>Email Address</label>
+                                            <div className="form-group">
+                                                <input type="email" className="form-control" id="wemail" />
+                                                <label for="wemail"><i className="icon-envolope"></i>Email Address</label>
                                             </div>
-                                            <input type="submit" class="btn btn-block" value="Subscribe Now" />
+                                            <input type="submit" className="btn btn-block" value="Subscribe Now" />
                                         </form>
                                     </div>
 
-                                    {/* <div class="widget widget-testimonials">
-                                        <div class="widget-testimonials-slider">
+                                    {/* <div className="widget widget-testimonials">
+                                        <div className="widget-testimonials-slider">
                                             <Slider
                                                 {...{...settings, slidesToShow: 1, arrows:false}}
                                             >
@@ -468,23 +481,23 @@ class Home extends Component {
                                         </div>
                                     </div> */}
 
-                                    <div class="widget">
-                                        <div class="widget-posts-slider owl-carousel owl-theme">
-                                            <div class="post">
-                                                <span class="post-date">01- Jun -2018</span>
-                                                <h4 class="post-title"><a href="#">Fashion News</a></h4>
+                                    <div className="widget">
+                                        <div className="widget-posts-slider owl-carousel owl-theme">
+                                            <div className="post">
+                                                <span className="post-date">01- Jun -2018</span>
+                                                <h4 className="post-title"><a href="#">Fashion News</a></h4>
                                                 <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat mi. </p>
                                             </div>
 
-                                            <div class="post">
-                                                <span class="post-date">22- May -2018</span>
-                                                <h4 class="post-title"><a href="#">Shopping News</a></h4>
+                                            <div className="post">
+                                                <span className="post-date">22- May -2018</span>
+                                                <h4 className="post-title"><a href="#">Shopping News</a></h4>
                                                 <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non plasasyi. </p>
                                             </div>
 
-                                            <div class="post">
-                                                <span class="post-date">13- May -2018</span>
-                                                <h4 class="post-title"><a href="#">Fashion News</a></h4>
+                                            <div className="post">
+                                                <span className="post-date">13- May -2018</span>
+                                                <h4 className="post-title"><a href="#">Fashion News</a></h4>
                                                 <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat. </p>
                                             </div>
                                         </div>
@@ -493,10 +506,11 @@ class Home extends Component {
                             </div>
                         </div>
 
-                        <div class="mb-4"></div>
+                        <div className="mb-4"></div>
 
                     </main>
                 </div>
+
 
                 <Footer />
             </div>
@@ -505,10 +519,11 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-    const { products } = state.inventory
+
+    const { products, localProducts } = state.inventory;
     const { home: { categories, subCategories } } = state;
     return {
-        categories, subCategories, products
+        categories, subCategories, products, localProducts
     }
 }
 

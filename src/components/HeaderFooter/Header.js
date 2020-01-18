@@ -189,6 +189,7 @@ class Header extends Component {
                                         </form>
                                     </div>
                                 </div>
+
                                 <div className="header-right">
                                     <button onClick={() => this._toggleMenu()} className="mobile-menu-toggler" type="button">
                                         <i className="icon-menu"></i>

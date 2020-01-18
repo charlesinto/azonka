@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class ShopItemDetails extends Component {
-    state = { id: "", products: [], detailsData: {} }
+    state = { id: "", products: [], detailsData: {}, arr: [] }
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
@@ -18,29 +18,43 @@ class ShopItemDetails extends Component {
     }
     getDetails = () => {
         let { products, id } = this.state;
-        return console.log("showst", this.state)
+        console.log("showst", this.state)
         let detailsData = products.filter(data => id == data.id)[0]
 
         this.setState({ detailsData })
     }
     loadShopData = async () => {
-        await this.props.fetchFeaturedItems()
-        this.setState({ products: this.props.products })
-        console.log("show", this.state)
 
-        let { products, id } = this.state;
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchFeaturedItems()
+            this.setState({ products: this.props.products })
+            console.log("show", this.state)
 
-        let detailsData = products.filter(data => id == data.id)[0]
-        console.log("showst", detailsData)
-        this.setState({ detailsData })
+            let { products, id } = this.state;
+
+            let detailsData = products.filter(data => id == data.id)[0]
+            this.setState({ detailsData })
+        } else {
+            let localShopData = await JSON.parse(localStorage.getItem("shop"))
+            let { id } = this.state;
+
+
+            let detailsData = localShopData.filter(data => id == data.id)[0]
+            console.log("shows", detailsData)
+            this.setState({ detailsData, arr: localShopData.filter(data => id == data.id) })
+        }
+
+
+
     }
     render() {
-        console.log("zlatan drp", this.state, this.props)
-        let data = this.state.detailsData
-        console.log("shows", data.name)
+        let { detailsData } = this.state;
+        console.log("showwws", detailsData)
         return (
             <>
                 <Header />
+
                 <main className="main">
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
                         <div className="container">
@@ -63,34 +77,12 @@ class ShopItemDetails extends Component {
                                     <div className="row" style={{ marginTop: "25vh" }}>
                                         <div className="col-lg-7 col-md-6 product-single-gallery">
                                             <div className="product-slider-container product-item">
-                                                <div className="product-single-carousel owl-carousel owl-theme">
-                                                    <div className="product-item">
-                                                        <img className="product-single-image"
-                                                            src="assets\images\products\zoom\product-1.jpg"
-                                                            data-zoom-image="assets/images/products/zoom/product-1-big.jpg" />
-                                                    </div>
-                                                    <div className="product-item">
-                                                        <img className="product-single-image"
-                                                            src="assets\images\products\zoom\product-2.jpg"
-                                                            data-zoom-image="assets/images/products/zoom/product-2-big.jpg" />
-                                                    </div>
-                                                    <div className="product-item">
-                                                        <img className="product-single-image"
-                                                            src="assets\images\products\zoom\product-3.jpg"
-                                                            data-zoom-image="assets/images/products/zoom/product-3-big.jpg" />
-                                                    </div>
-                                                    <div className="product-item">
-                                                        <img className="product-single-image"
-                                                            src="assets\images\products\zoom\product-4.jpg"
-                                                            data-zoom-image="assets/images/products/zoom/product-4-big.jpg" />
-                                                    </div>
-                                                </div>
-                                                {/* <!-- End .product-single-carousel --> */}
+                                                <img src={detailsData && detailsData.mainImageUrl} alt=".." />
                                                 <span className="prod-full-screen">
                                                     <i className="icon-plus"></i>
                                                 </span>
                                             </div>
-                                            <div className="prod-thumbnail row owl-dots" id='carousel-custom-dots'>
+                                            {/* <div className="prod-thumbnail row owl-dots" id='carousel-custom-dots'>
                                                 <div className="col-3 owl-dot">
                                                     <img src="assets\images\products\zoom\product-1.jpg" />
                                                 </div>
@@ -103,7 +95,7 @@ class ShopItemDetails extends Component {
                                                 <div className="col-3 owl-dot">
                                                     <img src="assets\images\products\zoom\product-4.jpg" />
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                         {/* <!-- End .col-lg-7 --> */}
 
@@ -114,7 +106,7 @@ class ShopItemDetails extends Component {
 
                                         <div className="col-lg-5 col-md-6">
                                             <div className="product-single-details">
-                                                <h1 className="product-title">{data && data.name} ({data && data.category})</h1>
+                                                <h1 className="product-title">{detailsData && detailsData.name} ({detailsData && detailsData.model})</h1>
 
                                                 <div className="ratings-container">
                                                     <div className="product-ratings">
@@ -128,8 +120,8 @@ class ShopItemDetails extends Component {
                                                 {/* <!-- End .product-container --> */}
 
                                                 <div className="price-box">
-                                                    <span className="old-price">${data && data.sellingPrice}</span>
-                                                    <span className="product-price">${data && data.finalPrice}</span>
+                                                    <span className="old-price">${detailsData && detailsData.sellingPrice}</span>
+                                                    <span className="product-price">${detailsData && detailsData.finalPrice}</span>
                                                 </div>
                                                 {/* <!-- End .price-box --> */}
 
@@ -847,6 +839,8 @@ class ShopItemDetails extends Component {
                         {/* <!-- End .container --> */}
                     </div>
                     {/* <!-- End .featured-section --> */}
+
+
                 </main>
             </>
         )

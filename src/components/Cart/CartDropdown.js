@@ -41,11 +41,11 @@ class CartDropdown extends Component {
             this.setState({ cartData: this.props.cartItems.products })
         } else {
             await this.props.fetchLocalCart()
-            console.log("load drp", this.props.cartData)
             this.setState({ cartData: this.props.cartData })
         }
-        // }, 1000);
-
+    }
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
     render() {
@@ -70,6 +70,7 @@ class CartDropdown extends Component {
                                 {
                                     cartData ? (
                                         cartData.map(_data => {
+                                            // console.log(_data)
                                             let { id, name, sellingPrice, mainImageUrl } = _data
                                             return (
                                                 <div className="product" key={id}>
@@ -81,7 +82,7 @@ class CartDropdown extends Component {
                                                         <span className="cart-product-info">
                                                             {/* <span className="cart-product-qty">1</span>
                                                             x &#8358;  */}
-                                                            {sellingPrice}
+                                                            ₦{this.formatMoney(sellingPrice)}
                                                         </span>
                                                     </div>
                                                     <figure className="product-image-container">
@@ -112,7 +113,8 @@ class CartDropdown extends Component {
                                         // data ? data.reduce((a, b) => {
                                         //     return a + b.finalPrice
                                         // }, 0) : 0
-                                        this.calSum()
+                                        this.formatMoney(this.calSum())
+
                                     }
                                 </span>
                             </div>
@@ -131,7 +133,7 @@ class CartDropdown extends Component {
 
 const mapStateToProps = state => {
 
-    let { categories, cartItems, cartData } = state.inventory
+    let { categories, cartItems, cartData } = state.inventory;
     return {
         categories, cartItems, cartData
     }

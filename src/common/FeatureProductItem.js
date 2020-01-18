@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
-import homeProduct from "../css/images/products/home-featured-1.jpg";
-import { fetchItems } from './../actions';
+import { Link, withRouter } from 'react-router-dom'
 
 class FeatureProductItem extends Component {
     state = { products: [], cartItems: {} }
@@ -70,23 +68,32 @@ class FeatureProductItem extends Component {
         this.setState({ cartData }, () => this.props.successAlert('Item added to cart successfully'))
     }
     handleSetOnlineData = async () => {
-        console.log("online props", this.props)
         await this.props.fetchCart()
-        console.log("king,", this.props)
         let { products } = this.props.cartItems
         // console.log("firedata", cartData)
         this.setState({ cartData: products })
+    }
+    handleDetailModal = async (e) => {
+        let id = e.target.id;
+        let { products } = this.state;
+        let itemDetails = products.filter(data => data.id == e.target.id);
+        await this.props.itemDetailModalAction(itemDetails)
+        this.setState({ itemDetails })
+    }
+    handleItemDetails = (e) => {
+        this.props.history.push(`/shop-details/${e.target.id}`)
     }
     render() {
         // console.log("joro", this.props)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
         return (
             <div class="product" key={id}>
+                {/* <ItemModal /> */}
                 <figure class="product-image-container">
-                    <a href="product.html" class="product-image">
+                    <span className="product-image" id={id} onClick={this.handleItemDetails}>
                         <img src={mainImageUrl} alt="product" className="image-view" />
-                    </a>
-                    <a href="ajax\product-quick-view.html" class="btn-quickview">Quick View</a>
+                    </span>
+                    <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>
                 <div class="product-details">
                     <div class="ratings-container">
@@ -116,16 +123,16 @@ class FeatureProductItem extends Component {
                         </Link>
                     </div>
                 </div>
+
             </div>
         );
     }
 }
 const mapStateToProps = state => {
 
-    let { products, cartItems } = state.inventory
-    // cartItems = cartItems.products;
+    let { products, cartItems } = state.inventory;
     return {
         products, cartItems
     }
 }
-export default connect(mapStateToProps, actions)(FeatureProductItem);
+export default withRouter(connect(mapStateToProps, actions)(FeatureProductItem));

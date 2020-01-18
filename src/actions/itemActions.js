@@ -4,8 +4,10 @@ import {
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
-    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,
-    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM
+    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,FILES_SELECTED,
+    EXPIRED_LOGIN_SESSION,LOGOUT_USER,ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,
+    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT,
+     HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -65,14 +67,14 @@ export const createItem = (data) => {
     return async (dispatch) => {
         try {
             let response = null
-            const mainImageResponse = await fileUpload(data.files[data.mainImageIndex], 'storeItems')
+            const mainImageResponse = await fileUpload(data.files[data.mainImageIndex].file, 'storeItems')
             const mainImageUrl = mainImageResponse.Location;
             let otherImages = []
             for (let i = 0; i < data.files.length; i++) {
                 if (i === data.mainImageIndex) {
                     continue
                 }
-                response = await fileUpload(data.files[i], 'storeItems')
+                response = await fileUpload(data.files[i].file, 'storeItems')
                 otherImages.push(response.Location)
             }
             console.log('main response', mainImageUrl)
@@ -199,11 +201,17 @@ export const fetchCart = () => {
             })
 
             const { cart } = response.data;
-            console.log("bolu", cart.products)
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            console.log('er', error.response)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -231,11 +239,12 @@ export const addLocalCart = (id, cartData, obj) => {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return alert("Item has already been added")
+                    return dispatch({type: SUCCESS_ALERT, payload: 'Item already added to cart'})
                 } else {
                     // return console.log(cartData, obj)
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     let data = JSON.parse(localStorage.getItem("cart"))
+                    dispatch({type: SUCCESS_ALERT, payload: 'Item added to cart successfully'})
                     dispatch({ type: ADD_LOCAL_CART_SUCCESSFULLY, payload: data, message: "loca cart added" })
                     dispatch({ type: STOP_LOADING, payload: '' })
                 }
@@ -469,4 +478,98 @@ export const handleSellerPrefence = preference => {
 
 export const calculateSumProducts = (sum, productId) => {
     return {type: CALCULATE_PRODUCT_SUM, payload: {sum, productId}}
+}
+
+export const successAlert = (message = '') => {
+    if(message.trim() !== ''){
+        return {type: SUCCESS_ALERT, payload: message}
+    }
+}
+
+export const addSubImages = (index , image) => {
+    return {type: ADD_SUB_IMAGES, payload: {image, index}}
+}
+
+export const updateItem = (id, data) => {
+    return async (dispatch) => {
+        if(id){
+            try{
+                console.log('data', data)
+                let imageUploaded = null;
+                const otherImages = []
+                let mainImageResponse = null
+                console.log('files', data.files)
+                for (let i = 0; i < data.files.length; i++) {
+                    if(data.files[i].type === 'main'){
+                         mainImageResponse = await fileUpload(data.files[i].file, 'storeItems');
+                    }else{
+                        imageUploaded = await fileUpload(data.files[i].file, 'storeItems')
+                        otherImages.push(imageUploaded.Location)
+                    }
+                    
+                }
+                const mainImageUrl =  mainImageResponse ? mainImageResponse.Location : null;
+                let otherImageUrl1 = data.subImage1.trim() !== '' ? 
+                                data.subImage1 : otherImages.length > 0 ? otherImages[0] : ''
+                let otherImageUrl2 =data.subImage2.trim() !== '' ? 
+                                data.subImage2 :  otherImages.length > 1 ? otherImages[1] : ''
+                let otherImageUrl3 = data.subImage3.trim() !== '' ? 
+                                data.subImage3 :  otherImages.length > 2 ? otherImages[2] : ''
+                let otherImageUrl4 = data.subImage4.trim() !== '' ? 
+                                data.subImage4 :  otherImages.length > 3 ? otherImages[3] : ''
+                const item = {
+                    name: data.name,
+                    brandName: data.brandName,
+                    description: data.description,
+                    model: data.model,
+                    year: "2020",
+                    mainImageUrl: !mainImageUrl ? data.previewImage : mainImageUrl,
+                    otherImageUrl1,
+                    otherImageUrl2,
+                    otherImageUrl3,
+                    otherImageUrl4,
+                    category:''+ data.category,
+                    subCategory:''+ data.subCategory,
+                    store:''+ data.store,
+                    sellingPrice:''+ data.sellingPrice,
+                    costPrice: ''+ data.finalPrice,
+                    discounts: data.discounts,
+                    finalPrice:''+ data.finalPrice,
+                    deliveryType: data.deliveryType,
+                    deliveryLocation: data.deliveryLocation,
+                    width: data.width,
+                    height: data.height,
+                    length: data.length,
+                    unit: data.unit,
+                    weight: data.weight,
+                    weightUnit: data.weightUnit
+                }
+                console.log('item', item)
+                 await axios.put(`/api/v1/seller/product/update/${id}`, {
+                    ...item
+                }, {
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                })
+                dispatch({type: STOP_LOADING, payload: ''})
+                dispatch({type: SUCCESS_ALERT, payload: 'Item updated successfully'})
+                dispatch({type: CLEAR_PRODUCT_FORM, payload: ''})
+            } catch(error){
+                console.log('er', error)
+                if(error.response.status === 498){
+                    dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function(){
+                        dispatch({type: LOGOUT_USER, payload: ''})
+                    }, 1500)
+                }
+                dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+                dispatch({ type: STOP_LOADING, payload: '' })
+            }
+        }
+    }
+}
+
+export const updateFilesSelected = files => {
+    return {type: FILES_SELECTED, payload: files}
 }

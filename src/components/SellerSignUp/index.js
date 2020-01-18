@@ -141,14 +141,14 @@ class SellerSignUp extends Component {
                                         <div className="col-md-6">
                                             <div className="form-group required-field">
                                                 <label htmlFor="acc-name">Business Name</label>
-                                                <input type="text" value={this.state.companyName} onChange={this.handleInputChange} placeholder="company name" className="form-control" id="acc-name" name="companyName" required="" />
+                                                <input type="text" value={this.state.companyName} onChange={this.handleInputChange} placeholder="Business Name" className="form-control" id="acc-name" name="companyName" required="" />
                                             </div>
                                         </div>
 
                                         <div className="col-md-6">
                                             <div className="form-group required-field">
                                                 <label htmlFor="acc-mname">Head Office Address</label>
-                                                <input type="text" value={this.state.headOfficeAddress} onChange={this.handleInputChange} placeholder="head office address" className="form-control" id="acc-mname" name="headOfficeAddress" />
+                                                <input type="text" value={this.state.headOfficeAddress} onChange={this.handleInputChange} placeholder="Head Office Address" className="form-control" id="acc-mname" name="headOfficeAddress" />
                                             </div>
                                         </div>
 
@@ -162,13 +162,13 @@ class SellerSignUp extends Component {
                                         <div className="col-md-6">
                                             <div className="form-group required-field">
                                                 <label htmlFor="acc-lastname">Contact Number</label>
-                                                <input type="text" value={this.state.contactLine} onChange={this.handleInputChange} placeholder="contact line" className="form-control" id="acc-lastname3" name="contactLine" required="" />
+                                                <input type="text" value={this.state.contactLine} onChange={this.handleInputChange} placeholder="Contact Line" className="form-control" id="acc-lastname3" name="contactLine" required="" />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
-                                                <label htmlFor="acc-lastname">Referred By</label>
-                                                <input type="text" value={this.state.referredBy} onChange={this.handleInputChange} placeholder="referral" className="form-control" id="acc-lastname4" name="referredBy" required="" />
+                                                <label htmlFor="acc-lastname">Agent Code (optional)</label>
+                                                <input type="text" value={this.state.referredBy} onChange={this.handleInputChange} placeholder="Agent Code" className="form-control" id="acc-lastname4" name="referredBy" required="" />
                                             </div>
                                         </div>
                                     </div>

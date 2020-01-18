@@ -2,7 +2,8 @@ import {
     ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING, CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM, CATEGORY_FETCHED_SUCCESSFULLY, LOCAL_CART_FETCHED_SUCCESSFULLY,
     ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA, ADD_CART_SUCCESSFULLY,
-    SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE
+    ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,
+    SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, FILES_SELECTED
 } from "../actions/types";
 
 const INTIAL_STATE = {
@@ -18,6 +19,11 @@ const INTIAL_STATE = {
     previewImage: null,
     subImages: [],
     model: '',
+    productId: null,
+    subImage1: '',
+    subImage2: '',
+    subImage3: '',
+    subImage4: '',
     inValidElments: [],
     formIsValid: false,
     validationMessage: [],
@@ -86,21 +92,45 @@ export default (state = INTIAL_STATE, actions) => {
             return { ...state, [actions.payload.target.name]: actions.payload.target.value }
         case INVALID_ITEM_FORM_DATA:
             return { ...state, inValidElments: actions.payload.inValidElments, validationMessage: actions.payload.validationMessage }
+        case ADD_SUB_IMAGES:
+            return renderSubImage(state, actions.payload)
+        case CLEAR_PRODUCT_FORM:
+            return {...state,...INTIAL_STATE}
+        case FILES_SELECTED:
+            return {...state, files: actions.payload}
         default:
             return { ...state }
     }
 }
-const editStoreItem = (state, product) => {
 
+const renderSubImage = (state, payload) => {
+    switch(payload.index){
+        case 1:
+            return {...state, subImage1: payload.image}
+        case 2:
+            return {...state, subImage2: payload.image}
+        case 3:
+            return {...state, subImage3: payload.image}
+        case 4:
+            return {...state, subImage4: payload.image}
+        default:
+            return {...state}
+    }
+}
+
+const editStoreItem = (state, product) => {
+    console.log(product)
     const previewImage = product.mainImageUrl;
     const { otherImageUrl1, otherImageUrl2, otherImageUrl3, otherImageUrl4 } = product
     const subImages = [otherImageUrl1, otherImageUrl2, otherImageUrl3, otherImageUrl4]
     const sellingPriceWithComma = numberWithCommas(product.sellingPrice)
     const finalPriceWithComma = numberWithCommas(product.finalPrice)
+    // console.log('sub categories',state.subCategories,  product.category)
     const filteredSubCategory = state.subCategories.filter(cat => cat.parentCategory.id === product.category)
     return {
         ...state,action:'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
-        filteredSubCategory: filteredSubCategory
+        filteredSubCategory: filteredSubCategory, subImage1: otherImageUrl1, subImage2: otherImageUrl2,
+        subImage3: otherImageUrl3, subImage4: otherImageUrl4, productId: product.id
     }
 }
 
@@ -137,6 +167,8 @@ const validateData = state => {
 
 
 }
+
+
 
 
 const numberWithCommas = (number = '') => {

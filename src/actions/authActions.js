@@ -3,7 +3,7 @@ import {
     SUCCESS_RESENDING_PASSCODE, EMAIL_VERIFICATION_SUCCESFFUL,
     ERROR_RESENDING_PASSCODE, GET_SEC_QUESTIONS, LOGOUT_USER, EMAIL_FORGOT_PASSWORD_SENT,LOGIN_SUCCESS,
     LOGIN_UNSUCCESSFUL, PASSWORD_REST_SUCCESSFUL, STOP_LOADING,FILE_UPLOADED_FALIED, FILE_UPLOADED_SUCCESSFULL,
-    USER_ROLE_UPDATED_SUCCESSFUL,RESET_VERIFY_FORM,
+    USER_ROLE_UPDATED_SUCCESSFUL,RESET_VERIFY_FORM,REDIRECT_SELLER_TO_STORE,
     UNSUCCESSFUL_VERIFICATION,SUCCESS_ALERT,RESET_VERIFICATION_FORM_STATE, UNAUTHORIZED_USER, DISPLAY_ERROR, FETCH_USER,RESET_VERIFICATION_FORM
  } from "./types";
 import axios from "axios";
@@ -242,7 +242,12 @@ export const updateUserType = (userData, type) => {
             dispatch( {type: FETCH_USER, payload: {userData: user, likes, cart}})
             if(type === 'user'){
                     dispatch({type: SUCCESS_ALERT, payload: 'Wallet setup successfully'})
-            }else{
+            }
+            else if(user.type === 'seller'){
+                dispatch({type: SUCCESS_ALERT, payload: 'Account upgraded Successfully'})
+                dispatch({type: REDIRECT_SELLER_TO_STORE, payload: ''})
+            }
+            else{
                 dispatch({type: SUCCESS_ALERT, payload: 'Account upgraded Successfully'})
             }
             dispatch({type: USER_ROLE_UPDATED_SUCCESSFUL, payload: ''})

@@ -68,6 +68,18 @@ class SecurityQuestion extends Component {
         }
         return null
     }
+    handlePinCodeInputChange = e => {
+        // console.log(e.key)
+        const KEYS_ALLOWED = ['1', '2','3','4','5','6','7','8','9','0',]
+        const CONTROLS = ['Backspace', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+        if(KEYS_ALLOWED.includes(e.key) || CONTROLS.includes(e.key)){
+            if(e.target.value.trim().length === 4 && !CONTROLS.includes(e.key) ){
+                return e.preventDefault()
+            }
+            return e;
+        }
+        return e.preventDefault()
+    }
     onSubmit = event => {
         event.preventDefault();
         if(this.state.question.trim() === ''){
@@ -137,7 +149,7 @@ class SecurityQuestion extends Component {
                                 <div className="col-md-12">
                                     <div className="form-group required-field">
                                         <label htmlFor="acc-name">Enter Pincode</label>
-                                        <input maxLength="4" value={this.state.pincode} type="number"  name="pincode" onChange={this.handleInputChange}  className="form-control" required="" />
+                                        <input onKeyDown={this.handlePinCodeInputChange} maxLength="4" value={this.state.pincode} type="number"  name="pincode" onChange={this.handleInputChange}  className="form-control" required="" />
                                     </div>
                                 </div>
                                         

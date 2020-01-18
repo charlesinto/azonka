@@ -19,7 +19,7 @@ class Store extends Component {
         id: null
     }
     componentDidMount(){
-        this.props.setActiveLink('Create Shop')
+        this.props.setActiveLink('Manage Store')
         this.props.initiateRegistration()
         this.props.getStores()
     }
@@ -92,7 +92,7 @@ class Store extends Component {
         if(!isValid){
             this.props.renderError('Action cannot be performed,one or more fields required', { appearance: 'error' })
         
-            this.setState({
+            return this.setState({
                 inValidElments, validationMessage
             })
             
@@ -126,7 +126,7 @@ class Store extends Component {
     render() {
         return (
                 <StoreDashboard>
-                <h2>Manage Stores</h2>
+                <h2>Manage Store</h2>
                 <div className="add-bank">
                     {/* <h4 className="popup-title verify-email" style={{
                             fontWeight: 'normal',

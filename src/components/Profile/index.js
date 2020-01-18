@@ -69,7 +69,7 @@ class index extends Component {
 
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label htmlFor="acc-mname">Lirst Name</label>
+                                        <label htmlFor="acc-mname">Last Name</label>
                                         <input type="text" value={this.state.lastName} onChange={this.handleOnChange} className="form-control" id="acc-mname" name="lastName" />
                                     </div>
                                 </div>

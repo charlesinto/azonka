@@ -56,6 +56,9 @@ class Layout extends Component {
                 {
                     this.props.redirectToHome ? <Redirect to="/" /> : null
                 }
+                {
+                    this.props.redirectToStore ? <Redirect to="/users/store" /> : null
+                }
                 {this.renderLoadingSpinner()}
                 {
                     this.props.error ? <SweetAlert
@@ -88,7 +91,7 @@ class Layout extends Component {
 }
 
 const mapStateToProps = state => {
-    const { reg: { unAuthorized, loading, redirectToProfile,redirectToHome, redirectToLogin, redirectToVerify },
+    const { reg: { unAuthorized, loading, redirectToProfile,redirectToHome,redirectToStore, redirectToLogin, redirectToVerify },
         home: { error, errorMessage, success, successMessage } } = state;
     return {
         unAuthorized,
@@ -100,7 +103,8 @@ const mapStateToProps = state => {
         errorMessage,
         error,
         success,
-        successMessage
+        successMessage,
+        redirectToStore
     }
 }
 

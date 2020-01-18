@@ -8,11 +8,9 @@ import { fetchItems } from './../actions';
 class FeatureProductItem extends Component {
     state = { products: [], cartItems: {} }
     componentDidMount() {
-        console.log("adigun", this.props)
         this.setState({ products: this.props.featArray })
     }
     componentWillReceiveProps = props => {
-        console.log("new props feat", props)
         if (props.cartItems !== this.props.cartItems) {
             this.setState({ cartItems: props && props.cartItems, cartLength: props.cartItems ? props.cartItems.length : 0 });
         }
@@ -52,7 +50,7 @@ class FeatureProductItem extends Component {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return alert("Item has already been added")
+                    return this.props.successAlert("Item has already been added")
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
@@ -69,7 +67,7 @@ class FeatureProductItem extends Component {
     handleSetLocalData = async () => {
         await this.props.fetchLocalCart()
         let { cartData } = this.props;
-        this.setState({ cartData })
+        this.setState({ cartData }, () => this.props.successAlert('Item added to cart successfully'))
     }
     handleSetOnlineData = async () => {
         console.log("online props", this.props)
@@ -126,7 +124,6 @@ const mapStateToProps = state => {
 
     let { products, cartItems } = state.inventory
     // cartItems = cartItems.products;
-    console.log("adigun", state)
     return {
         products, cartItems
     }

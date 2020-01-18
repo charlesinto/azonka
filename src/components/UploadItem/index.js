@@ -8,7 +8,7 @@ class index extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            files: null,
+            files: [],
             previewImage: null,
             subImages: [],
             model: '',
@@ -35,7 +35,15 @@ class index extends Component {
             deliveryLocation: '',
             filteredSubCategory: []
         }
-        this.uploadFileButton = React.createRef()
+        this.uploadFileButton = React.createRef();
+        this.subImage1 = React.createRef();
+        this.subImage2 = React.createRef();
+        this.subImage3 = React.createRef();
+        this.subImage4 = React.createRef();
+        this.subImageUploadBtn1 = React.createRef()
+        this.subImageUploadBtn2 = React.createRef()
+        this.subImageUploadBtn3 = React.createRef()
+        this.subImageUploadBtn4 = React.createRef()
     }
     componentDidMount() {
         this.props.initiateRegistration();
@@ -54,6 +62,28 @@ class index extends Component {
     }
     hanldeFormUpdate = e => {
         e.preventDefault()
+        const { isValid, inValidElments, validationMessage } = this.validateFormData(this.props)
+        console.log(isValid, inValidElments, validationMessage)
+        if (!isValid) {
+            console.log(this.props.inValidElments, validationMessage, isValid)
+            return this.props.inValidFormData(inValidElments, validationMessage)
+        }
+        if (this.props.previewImage.trim() === '') {
+            return this.props.renderError('Please select image to upload')
+        }
+        let discounts = false
+        if (parseInt(this.state.finalPrice) < parseInt(this.state.sellingPrice)) {
+            discounts = true
+        }
+        if (this.props.deliveryType.trim() === '') {
+            return this.props.renderError('Please select delivery type')
+        }
+        if (this.props.deliveryLocation.trim() === '') {
+            return this.props.renderError('Please select delivery location')
+        }
+        console.log({...this.props, discounts })
+        this.props.initiateRegistration()
+        this.props.updateItem(this.props.productId, { ...this.props, discounts })
     }
     validatePrice = e => {
         const { target: { name, value } } = e;
@@ -134,8 +164,10 @@ class index extends Component {
         // this.props.handleItemChangeAction(preference)
     }
     validateFormData = (formdata) => {
+        
         const { name, brandName, sellingPrice, finalPrice, deliveryLocation,
             deliveryType, category, subCategory, model, description } = formdata;
+            console.log('category', category)
         let isValid = true;
         const inValidElments = []
         const validationMessage = {}
@@ -150,22 +182,25 @@ class index extends Component {
             inValidElments.push('brandName')
             validationMessage['brandName'] = 'Please provide brand name'
         }
-        if (!(category.trim() !== '')) {
-            isValid = false
-            inValidElments.push('category')
-            validationMessage['category'] = 'Please select item category'
-        }
-        if ((subCategory.trim() === '')) {
-            isValid = false
-            inValidElments.push('subCategory')
-            validationMessage['subCategory'] = 'Please select sub category'
-        }
-        if ((finalPrice.trim() === '')) {
+            if ((typeof category === 'string' && category.trim() === '')) {
+                isValid = false
+                inValidElments.push('category')
+                validationMessage['category'] = 'Please select item category'
+            }
+            if ((typeof subCategory === 'string' && subCategory.trim() === '')) {
+                isValid = false
+                inValidElments.push('subCategory')
+                validationMessage['subCategory'] = 'Please select sub category'
+            }
+        
+        
+        
+        if ((typeof finalPrice === 'string' && finalPrice.trim() === '')) {
             isValid = false
             inValidElments.push('finalPrice')
             validationMessage['finalPrice'] = 'Please provide final price'
         }
-        if ((sellingPrice.trim() === '')) {
+        if ((typeof sellingPrice === 'string' && sellingPrice.trim() === '')) {
             isValid = false
             inValidElments.push('sellingPrice')
             validationMessage['sellingPrice'] = 'Please provide selling price'
@@ -268,13 +303,23 @@ class index extends Component {
         }
         let subImages = [];
         // read the file as blob
+        
+        const currentFiles = this.state.files;
+        const index = currentFiles.findIndex(element => element.type === 'main')
+        if(index !== -1){
+            currentFiles.splice(index, 1)
+        }
+        currentFiles.push({elementNumber: 6, file: e.target.files, type: 'main'})
+
         subImages = await this.readImages(files)
         this.props.stopImageLoading()
         this.setState({
-            files,
+            files: [...currentFiles],
             previewImage: subImages[0],
-            subImages
+            subImages,
+            mainImageIndex: currentFiles.findIndex(element => element.type === 'main')
         })
+        this.props.updateFilesSelected(currentFiles)
         this.props.setItemImage(subImages[0])
     }
 
@@ -304,27 +349,99 @@ class index extends Component {
         const { isValid, inValidElments, validationMessage } = this.validateFormData(this.props)
         console.log(isValid, inValidElments, validationMessage)
         if (!isValid) {
+            console.log(this.props.inValidElments, validationMessage, isValid)
             return this.props.inValidFormData(inValidElments, validationMessage)
         }
-        if (!this.state.files) {
+        if (this.state.files.length === 0) {
             return this.props.renderError('Please select image to upload')
         }
-        let discount = false
+        let discounts = false
         if (parseInt(this.state.finalPrice) < parseInt(this.state.sellingPrice)) {
-            discount = true
+            discounts = true
         }
-        if (this.state.deliveryType.trim() === '') {
+        if (this.props.deliveryType.trim() === '') {
             return this.props.renderError('Please select delivery type')
         }
-        if (this.state.deliveryLocation.trim() === '') {
+        if (this.props.deliveryLocation.trim() === '') {
             return this.props.renderError('Please select delivery location')
         }
         this.props.initiateRegistration()
-        this.props.createItem({ ...this.state, discount })
+        this.props.createItem({ ...this.state, discounts })
 
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    handleOnClickSubImage = (e, elementNumber) => {
+        e.preventDefault()
+        switch(elementNumber){
+            case 1:
+                this.subImageUploadBtn1.current.click()
+            break;
+            case 2:
+                this.subImageUploadBtn2.current.click()
+            break;
+            case 3:
+                this.subImageUploadBtn3.current.click()
+            break;
+            case 4:
+                this.subImageUploadBtn4.current.click()
+            break;
+            default:
+                return ;
+        }
+    }
+    subImageSelect = async (e, elementNumber) => {
+        e.preventDefault()
+        let index = -1;
+        const selectedFile = e.target.files;
+        const images = await this.readImages(e.target.files)
+        const files = this.state.files;
+        console.log(elementNumber)
+        switch(elementNumber){
+            case 1:
+                this.subImage1.current.src = images[0]
+                this.props.addSubImages(elementNumber, images[0])
+                 index = files.findIndex(element => element.elementNumber === elementNumber)
+                if(index !== -1 ){
+                    files.splice(index, 1)
+                }
+                files.push({elementNumber,file: selectedFile, type: 'sub'})
+                this.props.updateFilesSelected(files)
+            break;
+            case 2:
+                this.subImage2.current.src = images[0]
+                this.props.addSubImages(elementNumber, images[0])
+                 index = files.findIndex(element => element.elementNumber === elementNumber)
+                if(index !== -1 ){
+                    files.splice(index, 1)
+                }
+                files.push({elementNumber,file: selectedFile, type: 'sub'})
+                this.props.updateFilesSelected(files)
+            break;
+            case 3:
+                this.subImage3.current.src = images[0]
+                this.props.addSubImages(elementNumber, images[0])
+                 index = files.findIndex(element => element.elementNumber === elementNumber)
+                if(index !== -1 ){
+                    files.splice(index, 1)
+                }
+                files.push({elementNumber,file: selectedFile, type: 'sub'})
+                this.props.updateFilesSelected(files)
+            break;
+            case 4:
+                this.subImage4.current.src = images[0]
+                this.props.addSubImages(elementNumber, images[0])
+                 index = files.findIndex(element => element.elementNumber === elementNumber)
+                if(index !== -1 ){
+                    files.splice(index, 1)
+                }
+                files.push({elementNumber,file: selectedFile, type: 'sub'})
+                this.props.updateFilesSelected(files)
+            break;
+            default:
+            return;
+        }
     }
     render() {
 
@@ -344,14 +461,82 @@ class index extends Component {
                                         marginTop: 20, marginBottom: 40,
                                         display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center'
                                     }}>
-                                        <input accept="image/*" multiple onChange={this.handleFileSelect} type="file" ref={this.uploadFileButton} className="real-file btn btn-warning" hidden="hidden" />
+                                        <input accept="image/*" onChange={this.handleFileSelect} type="file" ref={this.uploadFileButton} className="real-file btn btn-warning" hidden="hidden" />
                                         {
-                                            this.state.action === 'save' ?
+                                            !this.props.previewImage ?
                                                 (
-                                                    <button onClick={this.uploadButton} type="button" className="button mid secondary">Select Photo(s)</button>
+                                                    <button onClick={this.uploadButton} type="button" style={{fontSize: '0.78em'}} className="btn btn-primary">Upload Main Photo</button>
                                                 ) :
-                                                <button onClick={this.uploadButton} type="button" className="button mid secondary">Change Photo</button>
+                                                <div className="container" >
+                                                    <div className="row">
+                                                            <div className="col-md-12 col-sm-12">
+                                                                <button onClick={this.uploadButton} style={{marginBottom: 10, fontSize: '0.78em'}} type="button" className="btn btn-sm btn-block btn-outline-success">Change Photo</button>
+                                                    
+                                                            </div>
+                                                            <div className="col-md-12 col-sm-12">
+                                                                <button type="button" className="btn btn-sm btn-block btn-danger">Remove</button>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                
                                         }
+                                    </div>
+                                    <div className="input-container">
+                                        <div className="rl-label" style={{fontWeight:'bold', fontSize:'1.85rem',
+                                                    padding: '10px 0'}}>
+                                            Additional Images 
+                                        </div>
+                                        
+                                    </div>
+                                    <div className="s">
+                                        <div className="row">
+                                            <div className="col-md-12 col-sm-12 additional-images ">
+                                                <span>
+                                                <input accept="image/*" onChange={(e) => this.subImageSelect(e, 1)} type="file" ref={this.subImageUploadBtn1} className="real-file btn btn-warning" hidden="hidden" />
+                                                    <img style={{width: '80px', height:'auto'}} ref={this.subImage1} className="col-md-12 col-sm-12 " src={this.props.subImage1.trim() !== '' ? this.props.subImage1 : 
+                                                                                                            "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
+                                                    />
+                                                </span>
+                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,1)}  type="button" className="btn btn-sm btn-outline-primary">Image 1</button>
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-12 col-sm-12 additional-images">
+                                                <span>
+                                                <input accept="image/*" onChange={(e) => this.subImageSelect(e, 2)} type="file" ref={this.subImageUploadBtn2} className="real-file btn btn-warning" hidden="hidden" />
+                                                    <img style={{width: '80px', height:'auto'}} ref={this.subImage2} className="col-md-12 col-sm-12 " src={this.props.subImage2.trim() !== '' ? this.props.subImage2 : 
+                                                                                                            "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
+                                                    />
+                                                </span>
+                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,2)} type="button" className="btn btn-sm btn-outline-primary">Image 2</button>
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-12 col-sm-12 additional-images">
+                                                <span>
+                                                <input accept="image/*" onChange={(e) => this.subImageSelect(e, 3)} type="file" ref={this.subImageUploadBtn3} className="real-file btn btn-warning" hidden="hidden" />
+                                                    <img style={{width: '80px', height:'auto'}} ref={this.subImage3} className="col-md-12 col-sm-12 " src={this.props.subImage3.trim() !== '' ? this.props.subImage3 : 
+                                                                                                            "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
+                                                    />
+                                                </span>
+                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,3)} type="button" className="btn btn-sm btn-outline-primary">Image 3</button>
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-12 col-sm-12 additional-images">
+                                                <span>
+                                                <input accept="image/*" onChange={(e) => this.subImageSelect(e, 4)} type="file" ref={this.subImageUploadBtn4} className="real-file btn btn-warning" hidden="hidden" />
+                                                    <img style={{width: '80px', height:'auto'}} ref={this.subImage4} className="col-md-12 col-sm-12 " src={this.props.subImage4.trim() !== '' ? this.props.subImage4 : 
+                                                                                                            "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
+                                                    />
+                                                </span>
+                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn btn-sm btn-outline-primary">Image 4</button>
+                                            </div>
+                                            
+                                        </div>
                                     </div>
                                 </div>
 
@@ -442,7 +627,7 @@ class index extends Component {
 
                                             <div className="col-md-6 col-sm-12 add-margin-sm-device">
                                                 <div className="form-group">
-                                                    <label htmlFor="finalPrice" className="rl-label">Final Price</label>
+                                                    <label htmlFor="finalPrice" className="rl-label">Discounted Price</label>
                                                     <input type="text" id="finalPrice" onBlur={this.validatePrice}
                                                         className={`form-control ${this.props.inValidElments.includes('finalPrice') ? 'invalid' : ''}`}
                                                         value={this.props.finalPriceWithComma} onChange={this.handleInputChange}
@@ -723,6 +908,11 @@ const mapStateToProps = state => {
         height,
         length,
         unit,
+        productId,
+        subImage2,
+        subImage1,
+        subImage3,
+        subImage4,
         deliveryType,
         deliveryLocation,
         filteredSubCategory
@@ -736,6 +926,11 @@ const mapStateToProps = state => {
         previewImage,
         subImages,
         model,
+        subImage1,
+        subImage2,
+        subImage3,
+        productId,
+        subImage4,
         inValidElments,
         validationMessage,
         name,

@@ -7,11 +7,9 @@ import homeProduct from "../css/images/products/home-featured-1.jpg";
 class FlashSales extends Component {
     state = { products: [] }
     componentDidMount() {
-        console.log("adigun", this.props)
         this.setState({ products: this.props.featArray })
     }
     componentWillReceiveProps = props => {
-        console.log("new props feat", props)
         if (props.cartItems !== this.props.cartItems) {
             this.setState({ cartItems: props && props.cartItems, cartLength: props.cartItems ? props.cartItems.length : 0 });
         }
@@ -39,7 +37,7 @@ class FlashSales extends Component {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
             let { products } = this.state
-            let obj = products.filter(data => id == data.id)[0]
+            let obj = products.filter(data => id === data.id)[0]
 
             //check if item is in cart
 
@@ -47,7 +45,7 @@ class FlashSales extends Component {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return alert("Item has already been added")
+                    return this.props.successAlert('Item has already been added')
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
@@ -64,18 +62,15 @@ class FlashSales extends Component {
     handleSetLocalData = async () => {
         await this.props.fetchLocalCart()
         let { cartData } = this.props;
-        this.setState({ cartData })
+        this.setState({ cartData }, () => this.props.successAlert('Item added to cart successfully'))
     }
     handleSetOnlineData = async () => {
-        console.log("online props", this.props)
         await this.props.fetchCart()
-        console.log("king,", this.props)
         let { products } = this.props.cartItems
         // console.log("firedata", cartData)
         this.setState({ cartData: products })
     }
     render() {
-        console.log("joro", this.props)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
         return (
             <div className="product col-md-4" key={id}>
@@ -120,7 +115,6 @@ class FlashSales extends Component {
 const mapStateToProps = state => {
     let { products, cartItems } = state.inventory
     // cartItems = cartItems.products;
-    console.log("adigun", state)
     return {
         products, cartItems
     }

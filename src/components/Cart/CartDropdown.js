@@ -9,10 +9,8 @@ class CartDropdown extends Component {
 
     componentDidMount() {
         this.loadCart()
-        console.log("fires and", this.props)
     }
     componentWillReceiveProps = props => {
-        console.log("new props", props)
         if (props.cartData !== this.props.cartData) {
             this.setState({ cartData: props && props.cartData, cartLength: props.cartData ? props.cartData.length : 0 });
         }
@@ -38,10 +36,10 @@ class CartDropdown extends Component {
         // setInterval(async () => {
         let token = localStorage.getItem("x-access-token");
         if (token) {
+           // alert()
             await this.props.fetchCart();
             this.setState({ cartData: this.props.cartItems.products })
         } else {
-            console.log()
             await this.props.fetchLocalCart()
             console.log("load drp", this.props.cartData)
             this.setState({ cartData: this.props.cartData })
@@ -72,7 +70,6 @@ class CartDropdown extends Component {
                                 {
                                     cartData ? (
                                         cartData.map(_data => {
-                                            console.log(_data)
                                             let { id, name, sellingPrice, mainImageUrl } = _data
                                             return (
                                                 <div className="product" key={id}>
@@ -135,7 +132,6 @@ class CartDropdown extends Component {
 const mapStateToProps = state => {
 
     let { categories, cartItems, cartData } = state.inventory
-    console.log("cart in drp", cartData)
     return {
         categories, cartItems, cartData
     }

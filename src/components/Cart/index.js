@@ -166,6 +166,9 @@ class Cart extends Component {
             cartData: [...cartData]
         })
     }
+    numberWithCommas = (number = '') => {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
     render() {
         return (
@@ -299,7 +302,7 @@ class Cart extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>Subtotal</td>
-                                                <td>&#8358; {this.state.sum}</td>
+                                                <td>&#8358; {this.numberWithCommas(this.state.sum)}</td>
                                             </tr>
 
                                             <tr>
@@ -310,7 +313,7 @@ class Cart extends Component {
                                         <tfoot>
                                             <tr>
                                                 <td>Order Total</td>
-                                                <td>&#8358; {this.state.sum}</td>
+                                                <td>&#8358;  {this.numberWithCommas(this.state.sum)}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -334,7 +337,6 @@ class Cart extends Component {
 const mapStateToProps = state => {
 
     let { categories, cartItems, cartData } = state.inventory
-    console.log("cart in drp", cartData)
     return {
         categories, cartItems, cartData
     }

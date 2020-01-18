@@ -351,26 +351,35 @@ class Register extends Component {
                                     
                                 </div>
                             </div>
+                            <div classsName="row" style={{paddingTop: '2rem'}}>
+                                
+                                <label htmlFor="phoneNumber" className="rl-label required">Phone Number</label>
+                            </div>
                             <div className="row" style={{marginBottom: '1rem'}}>
-                                <div className="form-group col-md-12 col-sm-12">
-                                    <div className="form-block-phonenumber">
-                                    <ReactFlagsSelect
-                                     searchable={true} searchPlaceholder={'Plese select country'} 
-                                        className="react-flag"
-                                        onSelect={this._countryCodeChange}
-                                     />
-                                     <div style={{flex: 1}}>
-                                         <div className="row">
+                                    
+                                    <div className="col-md-6 col-sm-12">
+                                        <ReactFlagsSelect
+                                        searchable={true} searchPlaceholder={'Plese select country'} 
+                                            className="react-flag"
+                                            onSelect={this._countryCodeChange}
+                                        />
+                                    </div>
+                                    <div className="col-md-6 col-sm-12">
+                                        <div className="form-block-phonenumber">
+                                        
+                                        <div style={{flex: 1}}>
+                                            <div className="row">
                                             <div className="col-12">
-                                                <div className="form-group" style={{marginTop:'2.6rem'}}>
-                                                    <label htmlFor="phoneNumber" className="rl-label required">Phone Number</label>
+                                                <div className="form-group" >
+                                                    
                                                     <input type="text" id="phoneNumber" style={{maxWidth:'100%'}} className={`form-control ${this.state.inValidElments.includes('phoneNumber') ? 'invalid' : '' }`} value={this.state.phoneNumber} name="phoneNumber" onChange={this.handleInputChange}  placeholder="Enter your phone number..."/>
                                                 </div>
                                             </div>
-                                         </div>
+                                            </div>
                                         
                                     </div>
                                     </div>
+                                    
                                 </div>
                                 <ul>
                                     <li>

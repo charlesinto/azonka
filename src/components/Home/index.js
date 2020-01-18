@@ -48,7 +48,6 @@ class Home extends Component {
         let productId = id;
         let quanity = "1";
         let obj = { productId, quanity }
-        console.log(obj)
         let token = (localStorage.getItem("x-access-token"));
         await this.props.addToCart(obj)
     }

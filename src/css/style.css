@@ -12207,3 +12207,59 @@ input[type=number] {
     height:401px !important;
     width:401px !important;
 }
+
+.flag-select img{
+    width: 3em;
+    height: 3em;
+    margin-right: 1.3em;
+}
+
+.flag-select .flag-option .country-label{
+    font-size: 1.6em;
+    line-height: 2em;
+}
+.country-label{
+    font-size: 1.6em;
+    line-height: 4.3em;
+    font-family: "Titillium web", sans-serif;
+}
+.flag-select .country-flag{
+    display: flex;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 0 8px 0 !important;
+}
+
+.flag-select .flag-option.has-label{
+    /* display: flex; */
+}
+
+.flag-select .flag-option.has-label{
+    width: 100%
+}
+
+.react-flag{
+    width: 100% !important;
+    margin-top: 0;
+}
+
+.flag-select .arrow-down{
+    line-height: 3em;
+    font-size: 1.3em;
+}
+
+.selected--flag--option {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flag-options {
+    width: 100% !important;
+}
+
+.additional-images{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}

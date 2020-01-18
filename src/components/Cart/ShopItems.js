@@ -249,10 +249,8 @@ class ShopItems extends Component {
 
 
 const mapStateToProps = state => {
-
     const { cartItems, cartData, products } = state.inventory;
     let cartResponse = cartItems.data
-    console.log("fire", state)
     return {
         cartItems, cartResponse, cartData, products
     }

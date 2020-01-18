@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
-import homeProduct from "../css/images/products/home-featured-1.jpg";
-import { fetchItems } from './../actions';
-import ItemModal from '../components/Cart/ItemModal';
+import { Link, withRouter } from 'react-router-dom'
 
 class FeatureProductItem extends Component {
     state = { products: [], cartItems: {} }
@@ -83,6 +80,9 @@ class FeatureProductItem extends Component {
         await this.props.itemDetailModalAction(itemDetails)
         this.setState({ itemDetails })
     }
+    handleItemDetails = (e) => {
+        this.props.history.push(`/shop-details/${e.target.id}`)
+    }
     render() {
         // console.log("joro", this.props)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
@@ -90,9 +90,9 @@ class FeatureProductItem extends Component {
             <div class="product" key={id}>
                 {/* <ItemModal /> */}
                 <figure class="product-image-container">
-                    <a href="product.html" class="product-image">
+                    <span className="product-image" id={id} onClick={this.handleItemDetails}>
                         <img src={mainImageUrl} alt="product" className="image-view" />
-                    </a>
+                    </span>
                     <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>
                 <div class="product-details">
@@ -135,4 +135,4 @@ const mapStateToProps = state => {
         products, cartItems
     }
 }
-export default connect(mapStateToProps, actions)(FeatureProductItem);
+export default withRouter(connect(mapStateToProps, actions)(FeatureProductItem));

@@ -132,6 +132,8 @@ export const _itemClick = id => {
 }
 
 export const fetchItems = () => {
+
+
     return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/seller/product/get-products/${0}/${100}`)
@@ -156,7 +158,6 @@ export const fetchFeaturedItems = () => {
             const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)
 
             const { data: { products } } = response;
-            console.log("got here", products)
             localStorage.setItem("shop", JSON.stringify(products))
             dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -187,7 +188,6 @@ export const fetchSearchCategory = () => {
 }
 
 export const fetchCart = () => {
-
     return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/user/cart/get`, {

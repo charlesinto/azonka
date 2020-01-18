@@ -3,7 +3,7 @@ import * as actions from './../../actions';
 import { connect } from 'react-redux';
 
 class ItemModal extends Component {
-    state = { modalData: {} }
+    state = { modalData: {}, cartData: "" }
     componentDidMount() {
 
     }
@@ -11,6 +11,11 @@ class ItemModal extends Component {
         if (props.itemModalData !== this.props.itemModalData) {
             this.setState({ modalData: props && props.itemModalData[0] });
         }
+    }
+    handleSetLocalData = async () => {
+        await this.props.fetchLocalCart()
+        let { cartData } = this.props;
+        this.setState({ cartData })
     }
     handleAddCart = async (e) => {
         let id = e.target.id;
@@ -25,6 +30,7 @@ class ItemModal extends Component {
             let { data } = this.props.cartItems;
             if (data.success) {
                 this.setState({ cartData: data.cart.products })
+
                 this.handleSetOnlineData()
             } else {
                 alert("An error occured")

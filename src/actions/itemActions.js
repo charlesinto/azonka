@@ -154,14 +154,10 @@ export const fetchFeaturedItems = () => {
     return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)
-            console.log("deexy", response)
-            // {
-            // headers: {
-            //     'x-access-token': localStorage.getItem('x-access-token')
-            // }
-            // })
+
             const { data: { products } } = response;
             console.log("got here", products)
+            localStorage.setItem("shop", JSON.stringify(products))
             dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {

@@ -39,28 +39,10 @@ class CartDropdown extends Component {
             await this.props.fetchCart();
             this.setState({ cartData: this.props.cartItems.products })
         } else {
-            console.log()
             await this.props.fetchLocalCart()
             this.setState({ cartData: this.props.cartData })
         }
-
     }
-
-    // formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
-    //     try {
-    //         decimalCount = Math.abs(decimalCount);
-    //         decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
-    //         const negativeSign = amount < 0 ? "-" : "";
-
-    //         let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-    //         let j = (i.length > 3) ? i.length % 3 : 0;
-
-    //         return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // };
     formatMoney(amount) {
         return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
@@ -87,7 +69,7 @@ class CartDropdown extends Component {
                                 {
                                     cartData ? (
                                         cartData.map(_data => {
-                                            console.log(_data)
+                                            // console.log(_data)
                                             let { id, name, sellingPrice, mainImageUrl } = _data
                                             return (
                                                 <div className="product" key={id}>
@@ -99,7 +81,7 @@ class CartDropdown extends Component {
                                                         <span className="cart-product-info">
                                                             {/* <span className="cart-product-qty">1</span>
                                                             x &#8358;  */}
-                                                            {this.formatMoney(sellingPrice)}
+                                                            ₦{this.formatMoney(sellingPrice)}
                                                         </span>
                                                     </div>
                                                     <figure className="product-image-container">
@@ -150,8 +132,7 @@ class CartDropdown extends Component {
 
 const mapStateToProps = state => {
 
-    let { categories, cartItems, cartData } = state.inventory
-    console.log("cart in drp", cartData)
+    let { categories, cartItems, cartData } = state.inventory;
     return {
         categories, cartItems, cartData
     }

@@ -6,18 +6,62 @@ class ItemModal extends Component {
     state = { modalData: {} }
     componentDidMount() {
 
-        console.log("inside item", this.props)
     }
     componentWillReceiveProps = props => {
-        console.log("new props feat", props)
         if (props.itemModalData !== this.props.itemModalData) {
             this.setState({ modalData: props && props.itemModalData[0] });
         }
     }
+    handleAddCart = async (e) => {
+        let id = e.target.id;
+        // return console.log(id)
+        let token = (localStorage.getItem("x-access-token"));
+        // return console.log(token)
+        if (token) {
+            let postObj = { productId: id, quanity: "1" };
+
+            await this.props.addToCart(postObj)
+            // console.log("flash props", this.props)
+            let { data } = this.props.cartItems;
+            if (data.success) {
+                this.setState({ cartData: data.cart.products })
+                this.handleSetOnlineData()
+            } else {
+                alert("An error occured")
+            }
+
+        } else {
+            let cartData = JSON.parse(localStorage.getItem("cart"));
+            let localShop = JSON.parse(localStorage.getItem("shop"));
+            this.setState({ cartData })
+            let obj = localShop.filter(data => id == data.id)[0]
+
+            //check if item is in cart
+
+            if (cartData) { //item exists
+                // return console.log("data", cartData)
+                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                if (isAdded) {
+                    return alert("Item has already been added")
+                } else {
+                    localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                    this.handleSetLocalData()
+                }
+
+            } else {
+                //if cart is empty
+                localStorage.setItem("cart", JSON.stringify([obj]))
+                this.handleSetLocalData()
+            }
+        }
+
+    }
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
     render() {
 
-        let { id, name, description, mainImageUrl, sellingPrice, finalPrice } = this.state.modalData
-        console.log("inside stater", this.state.modalData)
+        let { id, name, model, mainImageUrl, sellingPrice, finalPrice } = this.state.modalData
         return (
             <>
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -49,7 +93,7 @@ class ItemModal extends Component {
 
                                     <div class="col-lg-6 col-md-6">
                                         <div class="product-single-details">
-                                            <h1 class="product-title">{name}</h1>
+                                            <h1 class="product-title">{name} ({model})</h1>
 
                                             <div class="ratings-container">
                                                 <div class="product-ratings">
@@ -62,8 +106,8 @@ class ItemModal extends Component {
                                             {/* <!-- End .product-container --> */}
 
                                             <div class="price-box">
-                                                <span class="old-price">${finalPrice}</span>
-                                                <span class="product-price">${sellingPrice}</span>
+                                                <span class="old-price">₦{this.formatMoney(finalPrice ? finalPrice : 0)}</span>
+                                                <span class="product-price">₦{this.formatMoney(sellingPrice ? sellingPrice : 0)}</span>
                                             </div>
                                             {/* <!-- End .price-box --> */}
 
@@ -101,9 +145,9 @@ class ItemModal extends Component {
                                                 </div> */}
                                                 {/* <!-- End .product-single-qty --> */}
 
-                                                <a href="cart.html" class="paction add-cart" title="Add to Cart">
-                                                    <span>Add to Cart</span>
-                                                </a>
+                                                <span class="paction add-cart" id={id} onClick={this.handleAddCart}>
+                                                    Add to Cart
+                                                </span>
                                                 <a href="#" class="paction add-wishlist" title="Add to Wishlist">
                                                     <span>Add to Wishlist</span>
                                                 </a>
@@ -114,7 +158,7 @@ class ItemModal extends Component {
                                             {/* <!-- End .product-action --> */}
 
                                             <div class="product-single-share">
-                                                <label>Share:</label>
+                                                {/* <label>Share:</label> */}
                                                 {/* <!-- www.addthis.com share plugin--> */}
                                                 <div class="addthis_inline_share_toolbox"></div>
                                             </div>
@@ -132,7 +176,7 @@ class ItemModal extends Component {
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                {/* <button type="button" class="btn btn-primary">Save changes</button> */}
                             </div>
                         </div>
                     </div>

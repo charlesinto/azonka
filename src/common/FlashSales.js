@@ -2,22 +2,18 @@ import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
-import homeProduct from "../css/images/products/home-featured-1.jpg";
 import ItemModal from '../components/Cart/ItemModal';
 
 class FlashSales extends Component {
     state = { products: [], itemDetails: {} }
     componentDidMount() {
-        console.log("adigun", this.props)
         this.setState({ products: this.props.featArray })
     }
     componentWillReceiveProps = props => {
-        console.log("new props feat", props)
         if (props.cartItems !== this.props.cartItems) {
             this.setState({ cartItems: props && props.cartItems, cartLength: props.cartItems ? props.cartItems.length : 0 });
         }
     }
-
     handleAddCart = async (e) => {
         let id = e.target.id;
         // return console.log(id)
@@ -74,18 +70,13 @@ class FlashSales extends Component {
         this.setState({ cartData: products })
     }
     handleDetailModal = async (e) => {
-        console.log(e.target.id)
         let id = e.target.id;
         let { products } = this.state;
         let itemDetails = products.filter(data => data.id == e.target.id);
-        // console.log(itemDetails, products, id)
-        // console.log("inside flash", this.props)
         await this.props.itemDetailModalAction(itemDetails)
-        // console.log("inside flash 2", this.props)
         this.setState({ itemDetails })
     }
     render() {
-        console.log("joro", this.props)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
         return (
 
@@ -125,10 +116,6 @@ class FlashSales extends Component {
                     </div>
                 </div>
                 <ItemModal />
-
-                Temporary modal position
-
-
             </div>
 
         );

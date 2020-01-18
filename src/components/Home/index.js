@@ -41,7 +41,6 @@ class Home extends Component {
                 showPopUp: false
             })
         }, 5000)
-        console.log("wunmi props", this.props)
     }
     loadFeaturedItems = async () => {
         let token = localStorage.getItem("x-access-token");
@@ -62,7 +61,9 @@ class Home extends Component {
         let token = (localStorage.getItem("x-access-token"));
         await this.props.addToCart(obj)
     }
-
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
 
 
     renderPopup() {
@@ -162,7 +163,7 @@ class Home extends Component {
                                                 this.state.products ? (
                                                     this.state.products.map(res => {
                                                         let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
-                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
                                                     })
                                                 ) : null
                                             }
@@ -195,7 +196,7 @@ class Home extends Component {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
-                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={sellingPrice} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
 
                                                     )
                                                 })

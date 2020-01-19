@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import swal from 'sweetalert2'
 
 
 class ShopItems extends Component {
@@ -60,6 +61,7 @@ class ShopItems extends Component {
             let { success, cart } = this.props.cartResponse;
             if (success) {
                 this.setState({ cartData: cart.products })
+                return swal.fire("Response", "Item added to cart", "success")
             } else {
                 alert("An error occurred")
             }
@@ -75,16 +77,18 @@ class ShopItems extends Component {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return alert("Item has already been added")
+                    return swal.fire("Response", "Item already in cart", "info")
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetData()
+                    return swal.fire("Response", "Item added to cart", "success")
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetData()
+                return swal.fire("Response", "Item added to cart", "success")
             }
         }
 

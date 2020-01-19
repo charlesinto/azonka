@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom'
+import swal from 'sweetalert2'
 
 class FeatureProductItem extends Component {
     state = { products: [], cartItems: {} }
@@ -31,6 +32,7 @@ class FeatureProductItem extends Component {
 
             if (data.success) {
                 this.setState({ cartData: data.cart.products })
+                return swal("Response", "Item added to cart", "success")
                 this.handleSetOnlineData()
             } else {
                 alert("An error occured")
@@ -48,16 +50,20 @@ class FeatureProductItem extends Component {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return alert("Item has already been added")
+                    // return alert("Item has already been added")
+                    return swal.fire("Response", "Item already in cart", "info")
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
+                    return swal.fire("Response", "Item added to cart", "success")
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetLocalData()
+
+                return swal.fire("Response", "Item added to cart", "success")
             }
         }
 

@@ -184,9 +184,9 @@ class Cart extends Component {
 
 
 
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    {/* <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                         Launch demo modal
-</button>
+                    </button> */}
 
                     {/* <!-- Modal --> */}
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -348,7 +348,9 @@ class Cart extends Component {
                                     </table>
 
                                     <div className="checkout-methods">
-                                        <Link to="/users/checkout" className="btn btn-block btn-sm btn-primary">Go to Checkout</Link>
+                                        <Link to="/users/checkout" onClick={() => 
+                                        this.props.setAmount(this.state.sum)} 
+                                            className="btn btn-block btn-sm btn-primary">Go to Checkout</Link>
                                     </div>
                                 </div>
                             </div>

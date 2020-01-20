@@ -3,17 +3,12 @@ import {
     STOP_LOADING, SUCCESS_ALERT, ITEM_CHANGE_ACTION,
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
-<<<<<<< HEAD
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,FILES_SELECTED,
-    EXPIRED_LOGIN_SESSION,LOGOUT_USER,ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,
-    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT,
-     HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM
-=======
-    LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL,
-    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM
->>>>>>> ad61f3314ec1054bab18e685296461e71990ca42
+    EXPIRED_LOGIN_SESSION,LOGOUT_USER,ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,REMOVE_SUB_IMAGES,
+    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT,SET_AMOUNT,
+     HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM,LOCAL_SHOP_FETCHED_SUCCESSFULLY,
+     ITEM_MODAL
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -153,8 +148,17 @@ export const fetchItems = () => {
             dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
             dispatch({ type: STOP_LOADING, payload: '' })
+            if(error.response){
+                if(error.response.status === 401){
+                    
+                    dispatch({type: DISPLAY_ERROR, payload: 'Unauthorized access, please log in to continue'})
+                    return setTimeout(() => {
+                        dispatch({type: LOGOUT_USER, payload: ''})
+                    }, 1500)
+                }
+                dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            }
         }
     }
 }
@@ -287,7 +291,7 @@ export const addToCart = (details) => {
         try {
             console.log("zlat", details)
             const response = await axios.post('/api/v1/user/cart/add',
-                { productId: details.productId, quantity: details.quanity }, {
+                { productId: details.productId, quantity: details.quantity }, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
@@ -526,24 +530,29 @@ export const updateItem = (id, data) => {
                 const otherImages = []
                 let mainImageResponse = null
                 console.log('files', data.files)
+                // let otherImageUrl1 = '', otherImageUrl2 = '', otherImageUrl3 = ''
+                // otherImageUrl4 = ''
                 for (let i = 0; i < data.files.length; i++) {
                     if(data.files[i].type === 'main'){
                          mainImageResponse = await fileUpload(data.files[i].file, 'storeItems');
                     }else{
                         imageUploaded = await fileUpload(data.files[i].file, 'storeItems')
-                        otherImages.push(imageUploaded.Location)
+                        otherImages.push({elementNumber: data.files[i].elementNumber, Location: imageUploaded.Location})
+                        // `otherImageUrl${data[files].elementNumber}` = imageUploaded.Location;
                     }
                     
                 }
+                // let e = otherImages.find(element => element.elementNumber === 1) 
+                // console.log(otherImages, e)
                 const mainImageUrl =  mainImageResponse ? mainImageResponse.Location : null;
-                let otherImageUrl1 = data.subImage1.trim() !== '' ? 
-                                data.subImage1 : otherImages.length > 0 ? otherImages[0] : ''
-                let otherImageUrl2 =data.subImage2.trim() !== '' ? 
-                                data.subImage2 :  otherImages.length > 1 ? otherImages[1] : ''
-                let otherImageUrl3 = data.subImage3.trim() !== '' ? 
-                                data.subImage3 :  otherImages.length > 2 ? otherImages[2] : ''
-                let otherImageUrl4 = data.subImage4.trim() !== '' ? 
-                                data.subImage4 :  otherImages.length > 3 ? otherImages[3] : ''
+                let otherImageUrl1 =  otherImages.find(element => element.elementNumber === 1) ?
+                otherImages.find(element => element.elementNumber === 1).Location : ''      
+               let otherImageUrl2 =  otherImages.find(element => element.elementNumber === 2) ?
+               otherImages.find(element => element.elementNumber === 2).Location : ''
+                let otherImageUrl3 =  otherImages.find(element => element.elementNumber === 3) ?
+                otherImages.find(element => element.elementNumber === 3).Location : ''
+                let otherImageUrl4 =  otherImages.find(element => element.elementNumber === 4) ?
+                otherImages.find(element => element.elementNumber === 4).Location : ''
                 const item = {
                     name: data.name,
                     brandName: data.brandName,
@@ -551,10 +560,10 @@ export const updateItem = (id, data) => {
                     model: data.model,
                     year: "2020",
                     mainImageUrl: !mainImageUrl ? data.previewImage : mainImageUrl,
-                    otherImageUrl1,
-                    otherImageUrl2,
-                    otherImageUrl3,
-                    otherImageUrl4,
+                    otherImageUrl1: otherImageUrl1.trim() !== '' ? otherImageUrl1 : data.subImage1,
+                    otherImageUrl2: otherImageUrl2.trim() !== '' ? otherImageUrl2 : data.subImage2,
+                    otherImageUrl3: otherImageUrl3.trim() !== '' ? otherImageUrl3 : data.subImage3,
+                    otherImageUrl4: otherImageUrl4.trim() !== '' ? otherImageUrl4 : data.subImage4,
                     category:''+ data.category,
                     subCategory:''+ data.subCategory,
                     store:''+ data.store,
@@ -599,5 +608,17 @@ export const updateItem = (id, data) => {
 
 export const updateFilesSelected = files => {
     return {type: FILES_SELECTED, payload: files}
-    return { type: CALCULATE_PRODUCT_SUM, payload: { sum, productId } }
+    // return { type: CALCULATE_PRODUCT_SUM, payload: { sum, productId } }
+}
+
+export const renderSuccessAlert = (message='') => {
+    return {type: SUCCESS_ALERT, payload: message}
+}
+
+export const removeSubImagesFromUpload = elementNumber => {
+    return {type: REMOVE_SUB_IMAGES, payload: elementNumber}
+}
+
+export const setAmount = amount => {
+    return {type: SET_AMOUNT, payload: amount}
 }

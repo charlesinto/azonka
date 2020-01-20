@@ -17,23 +17,19 @@ class FlashSales extends Component {
             this.setState({ cartItems: props && props.cartItems, cartLength: props.cartItems ? props.cartItems.length : 0 });
         }
     }
-    handleAddCart = async (e) => {
-        let id = e.target.id;
+    handleAddCart = async (e, id) => {
         // return console.log(id)
         let token = (localStorage.getItem("x-access-token"));
         // return console.log(token)
         if (token) {
-            let postObj = { productId: id, quanity: "1" };
+            let postObj = { productId: `${id}`, quantity: "1" };
 
             await this.props.addToCart(postObj)
             // console.log("flash props", this.props)
             let { data } = this.props.cartItems;
-            if (data.success) {
+            console.log('data', data)
                 this.setState({ cartData: data.cart.products })
                 this.handleSetOnlineData()
-            } else {
-                alert("An error occured")
-            }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -111,7 +107,7 @@ class FlashSales extends Component {
                             <span>Add to Wishlist</span>
                         </a>
 
-                        <span id={id} onClick={this.handleAddCart} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart
                         </span>
 

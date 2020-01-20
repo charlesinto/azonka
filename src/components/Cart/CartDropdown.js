@@ -49,7 +49,7 @@ class CartDropdown extends Component {
     }
 
     render() {
-
+        console.log('cart o', this.state.cartData)
         let { cartData } = this.state;
         return (
             <>
@@ -71,28 +71,32 @@ class CartDropdown extends Component {
                                     cartData ? (
                                         cartData.map(_data => {
                                             // console.log(_data)
-                                            let { id, name, sellingPrice, mainImageUrl } = _data
-                                            return (
-                                                <div className="product" key={id}>
-                                                    <div className="product-details">
-                                                        <h4 className="product-title">
-                                                            <Link to="product.html">{name}</Link>
-                                                        </h4>
+                                            if(_data){
+                                                let { id, name, sellingPrice, mainImageUrl } = _data
+                                                return (
+                                                    <div className="product" key={id}>
+                                                        <div className="product-details">
+                                                            <h4 className="product-title">
+                                                                <Link to="product.html">{name}</Link>
+                                                            </h4>
 
-                                                        <span className="cart-product-info">
-                                                            {/* <span className="cart-product-qty">1</span>
-                                                            x &#8358;  */}
-                                                            ₦{this.formatMoney(sellingPrice)}
-                                                        </span>
+                                                            <span className="cart-product-info">
+                                                                {/* <span className="cart-product-qty">1</span>
+                                                                x &#8358;  */}
+                                                                ₦{this.formatMoney(sellingPrice)}
+                                                            </span>
+                                                        </div>
+                                                        <figure className="product-image-container">
+                                                            <Link to="product.html" className="product-image drp-product-image ">
+                                                                <img src={mainImageUrl} alt="product" style={{ height: "12vh" }} />
+                                                            </Link>
+                                                            <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart}></i></span>
+                                                        </figure>
                                                     </div>
-                                                    <figure className="product-image-container">
-                                                        <Link to="product.html" className="product-image drp-product-image ">
-                                                            <img src={mainImageUrl} alt="product" style={{ height: "12vh" }} />
-                                                        </Link>
-                                                        <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart}></i></span>
-                                                    </figure>
-                                                </div>
-                                            )
+                                                )
+                                            }
+                                            return null;
+                                            
                                         })
                                     ) : (
                                             <h5 className="text-dark">No data yet</h5>

@@ -443,11 +443,23 @@ class index extends Component {
             return;
         }
     }
+    goToManageItems = () => {
+        return this.props.history.push('/users/items/manage')
+    }
+    removeSubImage = (e, elementNumber) => {
+        e.preventDefault()
+        this.props.removeSubImagesFromUpload(elementNumber)
+    }
     render() {
 
         return (
             <StoreDashboard>
                 <h2>Create Item</h2>
+                <div style={{display:'flex', justifyContent:'flex-start', margin: '20px 10px'}}>
+                    <button onClick={this.goToManageItems} type="button" class="btn btn-outline-success">
+                        <span style={{marginRight: 10}}>
+                        <i className="fas fa-window-restore"></i></span>Manage Items</button>
+                </div>
                 <div className="container-fluid" style={{ marginBottom: 40 }}>
                     <div className="row">
                         <div className="col-sm-8 col-md-3">
@@ -497,7 +509,22 @@ class index extends Component {
                                                                                                             "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
                                                     />
                                                 </span>
-                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,1)}  type="button" className="btn btn-sm btn-outline-primary">Image 1</button>
+                                                {
+                                                    this.props.subImage1.trim() !== '' ? 
+                                                    (
+                                                        <div>
+                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,1)} type="button" className="btn btn-sm btn-outline-primary action-btn btn-xs dt-edit">
+                                                            <i className="fas fa-pen"></i>
+                                                            </button>
+                                                            <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 1)}  type="button" className="btn btn-sm btn-outline-danger action-btn btn-xs dt-edit">
+                                                                <i className="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                    :
+                                                    <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,1)} type="button" className="btn btn-sm btn-outline-primary">Image 1</button>
+                                                }
+                                                {/* <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,1)}  type="button" className="btn btn-sm btn-outline-primary">Image 1</button> */}
                                             </div>
                                             
                                         </div>
@@ -509,7 +536,22 @@ class index extends Component {
                                                                                                             "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
                                                     />
                                                 </span>
-                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,2)} type="button" className="btn btn-sm btn-outline-primary">Image 2</button>
+                                                {
+                                                    this.props.subImage2.trim() !== '' ? 
+                                                    (
+                                                        <div>
+                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,2)} type="button" className="btn btn-sm btn-outline-primary action-btn btn-xs dt-edit">
+                                                            <i className="fas fa-pen"></i>
+                                                            </button>
+                                                            <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 2)}  type="button" className="btn btn-sm btn-outline-danger action-btn btn-xs dt-edit">
+                                                                <i className="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                    :
+                                                    <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,2)} type="button" className="btn btn-sm btn-outline-primary">Image 2</button>
+                                                }
+                                                
                                             </div>
                                             
                                         </div>
@@ -521,7 +563,22 @@ class index extends Component {
                                                                                                             "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
                                                     />
                                                 </span>
-                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,3)} type="button" className="btn btn-sm btn-outline-primary">Image 3</button>
+                                                {
+                                                    this.props.subImage3.trim() !== '' ? 
+                                                    (
+                                                        <div>
+                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,3)} type="button" className="btn btn-sm btn-outline-primary action-btn btn-xs dt-edit">
+                                                            <i className="fas fa-pen"></i>
+                                                            </button>
+                                                            <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 3)}  type="button" className="btn btn-sm btn-outline-danger action-btn btn-xs dt-edit">
+                                                                <i className="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                    :
+                                                    <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,3)} type="button" className="btn btn-sm btn-outline-primary">Image 3</button>
+                                                }
+                                                {/* <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,3)} type="button" className="btn btn-sm btn-outline-primary">Image 3</button> */}
                                             </div>
                                             
                                         </div>
@@ -533,7 +590,22 @@ class index extends Component {
                                                                                                             "https://via.placeholder.com/40?text=Upload+Photo"} alt="upload item"
                                                     />
                                                 </span>
-                                                <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn btn-sm btn-outline-primary">Image 4</button>
+                                                {
+                                                    this.props.subImage4.trim() !== '' ? 
+                                                    (
+                                                        <div>
+                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn btn-sm btn-outline-primary action-btn btn-xs dt-edit">
+                                                            <i className="fas fa-pen"></i>
+                                                            </button>
+                                                            <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 4)}  type="button" className="btn btn-sm btn-outline-danger action-btn btn-xs dt-edit">
+                                                                <i className="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                    :
+                                                    <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn btn-sm btn-outline-primary">Image 4</button>
+                                                }
+                                                {/* <button style={{maxHeight: '4rem'}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn btn-sm btn-outline-primary">Image 4</button> */}
                                             </div>
                                             
                                         </div>

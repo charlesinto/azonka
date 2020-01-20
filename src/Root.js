@@ -44,6 +44,7 @@ import ShopItems from './components/Cart/ShopItems';
 import ShopItemDetails from './components/Cart/ShopItemDetails';
 import Header from './components/HeaderFooter/Header';
 import ItemModal from './components/Cart/ItemModal';
+import Checkout from "./components/Checkout";
 // import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
@@ -86,6 +87,7 @@ class Root extends Component {
                                 <AuthRoute redirectIfUser exact path="/users/items/manage" component={ManageItems} />
                                 <AuthRoute redirectIfUser exact path="/users/referrals" component={Referral} />
                                 <AuthRoute exact path="/users/banks" component={Bank} />
+                                <Route exact path="/users/checkout" component={Checkout} />
                                 <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} />
                                 <AuthRoute exact path="/users/addressBook" component={AddressBook} />
                                 <AuthRoute exact path="/users/agent/signup" component={AgentSignUp} />

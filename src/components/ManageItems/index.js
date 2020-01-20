@@ -35,6 +35,9 @@ class index extends Component {
 
         }
     }
+    goToCreateItems = () => {
+       return  this.props.history.push('/users/items/upload')
+    }
     render() {
         return (
             <Dashboard>
@@ -44,6 +47,11 @@ class index extends Component {
                             marginLeft: 20
                         }}>Your Store Items</h4>
                         <hr className="line-separator"/>
+                <div style={{display:'flex', justifyContent:'flex-end', margin: '20px 10px'}}>
+                    <button onClick={this.goToCreateItems} type="button" class="btn btn-outline-success">
+                        <span style={{marginRight: 10}}>
+                            <i className="fas fa-plus"></i></span> Add Item</button>
+                </div>
                 <div style={{marginTop: 20}}>
                     <ItemListDataTable data={this.props.products}
                         handleRowClick={(id, action) => this._handleRowClick(id, action)}

@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class ShopItemDetails extends Component {
-    state = { id: "", products: [], detailsData: {}, arr: [] }
+    state = { id: "",qty: 1, products: [], detailsData: {}, arr: [] }
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
@@ -19,7 +19,7 @@ class ShopItemDetails extends Component {
     getDetails = () => {
         let { products, id } = this.state;
         console.log("showst", this.state)
-        let detailsData = products.filter(data => id == data.id)[0]
+        let detailsData = products.filter(data => id === data.id)[0]
 
         this.setState({ detailsData })
     }
@@ -48,14 +48,80 @@ class ShopItemDetails extends Component {
 
 
     }
+    handleAddCart = async (e, itemSelected, id) => {
+         console.log(id)
+        let token = (localStorage.getItem("x-access-token"));
+        // return console.log(token)
+        if (token) {
+            let postObj = { productId: `${id}`, quantity: `${this.state.qty}` };
+            console.log('here o', postObj)
+            await this.props.addToCart(postObj)
+            // console.log("flash props", this.props)
+            this.handleSetOnlineData()
+                // this.props.renderError("An error occured")
+
+        } else {
+            let cartData = JSON.parse(localStorage.getItem("cart"));
+            this.setState({ cartData })
+            console.log(this.props.cartItems)
+            // let { products } = this.props
+            // let obj = products.filter(data => parseInt(id) === data.id)[0]
+            // console.log(cartData, products, obj)
+            //check if item is in cart
+
+            if (cartData) { //item exists
+               // return console.log("data", cartData)
+                let isAdded = cartData.some(data => data.id === parseInt(id)); //check if clicked item exist in cart
+                if (isAdded) {
+                    return this.props.successAlert('Item has already been added')
+                } else {
+                    localStorage.setItem("cart", JSON.stringify([...cartData, itemSelected]))
+                    this.handleSetLocalData()
+                }
+
+            } else {
+               // if cart is empty
+                localStorage.setItem("cart", JSON.stringify([itemSelected]))
+                this.handleSetLocalData()
+            }
+        }
+
+    }
+    handleSetLocalData = async () => {
+        await this.props.fetchLocalCart()
+        let { cartData } = this.props;
+        this.setState({ cartData }, () => this.props.successAlert('Item added to cart successfully'))
+    }
+    handleSetOnlineData = async () => {
+        await this.props.fetchCart()
+        let { products } = this.props.cartItems
+        this.setState({ cartData: products })
+    }
+    handleChange = (e, finalPrice, id) => {
+        let { qty } = this.state;
+        this.setState({ qty: e.target.value < 0 ? -1 * e.target.value : e.target.value })
+        // console.log(this.state)
+    }
+    handleIncreaseQty = (e, finalPrice, id) => {
+        let { qty } = this.state;
+        this.setState({ qty: qty + 1 })
+        // console.log(this.state)
+    }
+    handleDecreaseQty = (e, finalPrice, id) => {
+        let { qty } = this.state;
+        
+        this.setState({ qty: qty > 0 ? qty - 1 : 0 })
+        // console.log(this.state)
+    }
     render() {
         let { detailsData } = this.state;
         console.log("showwws", detailsData)
+        const { id, finalPrice} = detailsData ? detailsData : {}
         return (
             <>
                 <Header />
 
-                <main className="main">
+                <main className="main" style={{paddingTop:'12rem'}}>
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
                         <div className="container">
                             <ol className="breadcrumb">
@@ -63,9 +129,13 @@ class ShopItemDetails extends Component {
                                     <Link to="index.html"><i className="icon-home"></i></Link>
                                 </li>
                                 <li className="breadcrumb-item">
-                                    <Link to="#">Electronics</Link>
+                                    <Link to={`/shops/category/${detailsData && detailsData.category && detailsData.category.name}`}>
+                                        {detailsData && detailsData.category && detailsData.category.name}
+                                    </Link>
                                 </li>
-                                <li className="breadcrumb-item active" aria-current="page">Headsets</li>
+                                <li className="breadcrumb-item active" aria-current="page">
+                                    {detailsData && detailsData.subCategory && detailsData.subCategory.name}
+                                </li>
                             </ol>
                         </div>
                         {/* <!-- End .container --> */}
@@ -74,7 +144,7 @@ class ShopItemDetails extends Component {
                         <div className="row">
                             <div className="col-lg-9">
                                 <div className="product-single-container product-single-default">
-                                    <div className="row" style={{ marginTop: "25vh" }}>
+                                    <div className="row" style={{ marginTop: "2rem" }}>
                                         <div className="col-lg-7 col-md-6 product-single-gallery">
                                             <div className="product-slider-container product-item">
                                                 <img src={detailsData && detailsData.mainImageUrl} alt=".." />
@@ -115,19 +185,18 @@ class ShopItemDetails extends Component {
                                                     </div>
                                                     {/* <!-- End .product-ratings --> */}
 
-                                                    <Link to="#" className="rating-link">( 6 Reviews )</Link>
+                                                    {/* <Link to="#" className="rating-link">( 6 Reviews )</Link> */}
                                                 </div>
                                                 {/* <!-- End .product-container --> */}
 
                                                 <div className="price-box">
-                                                    <span className="old-price">${detailsData && detailsData.sellingPrice}</span>
-                                                    <span className="product-price">${detailsData && detailsData.finalPrice}</span>
+                                                    <span className="old-price">&#8358;{detailsData && detailsData.sellingPrice}</span>
+                                                    <span className="product-price">&#8358;{detailsData && detailsData.finalPrice}</span>
                                                 </div>
                                                 {/* <!-- End .price-box --> */}
 
                                                 <div className="product-desc">
-                                                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non.</p>
+                                                    <p>{detailsData && detailsData.description}</p>
                                                 </div>
                                                 {/* <!-- End .product-desc --> */}
 
@@ -157,20 +226,26 @@ class ShopItemDetails extends Component {
                                                 {/* <!-- End .product-filters-container --> */}
 
                                                 <div className="product-action product-all-icons">
-                                                    <div className="product-single-qty">
+                                                    {/* <div className="product-single-qty">
                                                         <input className="horizontal-quantity form-control" type="text" />
+                                                    </div> */}
+                                                    <div style={{marginRight: 8}} className="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
+                                                        <input className="vertical-quantity form-control" value={this.state.qty} onChange={(e) => this.handleChange(e, finalPrice, id)} type="number"  />
+                                                        <span className="input-group-btn-vertical">
+                                                            <button className="btn btn-outline bootstrap-touchspin-up icon-up-dir"  type="button" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)} ></button>
+                                                            <button className="btn btn-outline bootstrap-touchspin-down icon-down-dir" type="button" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)} ></button></span>
                                                     </div>
                                                     {/* <!-- End .product-single-qty --> */}
 
-                                                    <Link to="cart.html" className="paction add-cart" title="Add to Cart">
+                                                    <span id={id} onClick={(e) => this.handleAddCart(e, detailsData, id)} className="paction add-cart" title="Add to Cart">
                                                         <span>Add to Cart</span>
-                                                    </Link>
-                                                    <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
+                                                    </span>
+                                                    <span className="paction add-wishlist" title="Add to Wishlist">
                                                         <span>Add to Wishlist</span>
-                                                    </Link>
-                                                    <Link to="#" className="paction add-compare" title="Add to Compare">
+                                                    </span>
+                                                    <span  className="paction add-compare" title="Add to Compare">
                                                         <span>Add to Compare</span>
-                                                    </Link>
+                                                    </span>
                                                 </div>
                                                 {/* <!-- End .product-action --> */}
 
@@ -217,21 +292,17 @@ class ShopItemDetails extends Component {
                                         <div className="tab-pane fade show active" id="product-desc-content" role="tabpanel"
                                             aria-labelledby="product-tab-desc">
                                             <div className="product-desc-content">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat.</p>
-                                                <ul>
+                                            <p>{detailsData && detailsData.description}</p>
+                                                {/* <ul>
                                                     <li><i className="icon-ok"></i>Any Product types that You want - Simple,
                                                         Configurable
-                                    </li>
+                                                     </li>
                                                     <li><i className="icon-ok"></i>Downloadable/Digital Products, Virtual Products</li>
                                                     <li><i className="icon-ok"></i>Inventory Management with Backordered items</li>
-                                                </ul>
-                                                <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                                </ul> */}
+                                                {/* <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
                                     veniam, <br />quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat. </p>
+                                    consequat. </p> */}
                                             </div>
                                             {/* <!-- End .product-desc-content --> */}
                                         </div>
@@ -392,9 +463,9 @@ class ShopItemDetails extends Component {
                             <aside className="sidebar-product col-lg-3 padding-left-lg mobile-sidebar">
                                 <div className="sidebar-wrapper">
                                     <div className="widget widget-brand">
-                                        <Link to="#">
+                                        {/* <Link to="#">
                                             <img src="assets\images\product-brand.png" alt="brand name" />
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                     {/* <!-- End .widget --> */}
 
@@ -417,11 +488,11 @@ class ShopItemDetails extends Component {
                                     {/* <!-- End .widget --> */}
 
                                     <div className="widget widget-banner">
-                                        <div className="banner banner-image">
+                                        {/* <div className="banner banner-image">
                                             <Link to="#">
                                                 <img src="assets\images\banners\banner-sidebar.jpg" alt="Banner Desc" />
                                             </Link>
-                                        </div>
+                                        </div> */}
                                         {/* <!-- End .banner --> */}
                                     </div>
                                     {/* <!-- End .widget --> */}
@@ -434,9 +505,9 @@ class ShopItemDetails extends Component {
                                                 <div className="featured-col">
                                                     <div className="product product-sm">
                                                         <figure className="product-image-container">
-                                                            <Link to="product.html" className="product-image">
+                                                            {/* <Link to="product.html" className="product-image">
                                                                 <img src="assets\images\products\small\product-1.jpg" alt="product" />
-                                                            </Link>
+                                                            </Link> */}
                                                         </figure>
                                                         <div className="product-details">
                                                             <h2 className="product-title">
@@ -614,230 +685,7 @@ class ShopItemDetails extends Component {
                     </div>
                     {/* <!-- End .container --> */}
 
-                    <div className="featured-section">
-                        <div className="container">
-                            <h2 className="carousel-title">Featured Products</h2>
-
-                            <div className="featured-products owl-carousel owl-theme owl-dots-top">
-                                <div className="product">
-                                    <figure className="product-image-container">
-                                        <Link to="product.html" className="product-image">
-                                            <img src="assets\images\products\product-1.jpg" alt="product" />
-                                        </Link>
-                                        <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
-                                    </figure>
-                                    <div className="product-details">
-                                        <div className="ratings-container">
-                                            <div className="product-ratings">
-                                                <span className="ratings" style={{ width: "80%" }}></span>
-                                                {/* <!-- End .ratings --> */}
-                                            </div>
-                                            {/* <!-- End .product-ratings --> */}
-                                        </div>
-                                        {/* <!-- End .product-container --> */}
-                                        <h2 className="product-title">
-                                            <Link to="product.html">Pen drive</Link>
-                                        </h2>
-                                        <div className="price-box">
-                                            <span className="product-price">$189.00</span>
-                                        </div>
-                                        {/* <!-- End .price-box --> */}
-
-                                        <div className="product-action">
-                                            <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
-                                                <span>Add to Wishlist</span>
-                                            </Link>
-
-                                            <Link to="product.html" className="paction add-cart" title="Add to Cart">
-                                                <span>Add to Cart</span>
-                                            </Link>
-
-                                            <Link to="#" className="paction add-compare" title="Add to Compare">
-                                                <span>Add to Compare</span>
-                                            </Link>
-                                        </div>
-                                        {/* <!-- End .product-action --> */}
-                                    </div>
-                                    {/* <!-- End .product-details --> */}
-                                </div>
-                                {/* <!-- End .product --> */}
-
-                                <div className="product">
-                                    <figure className="product-image-container">
-                                        <Link to="product.html" className="product-image">
-                                            <img src="assets\images\products\product-2.jpg" alt="product" />
-                                        </Link>
-                                        <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
-                                    </figure>
-                                    <div className="product-details">
-                                        <div className="ratings-container">
-                                            <div className="product-ratings">
-                                                <span className="ratings" style={{ width: "100%" }}></span>
-                                                {/* <!-- End .ratings --> */}
-                                            </div>
-                                            {/* <!-- End .product-ratings --> */}
-                                        </div>
-                                        {/* <!-- End .product-container --> */}
-                                        <h2 className="product-title">
-                                            <Link to="product.html">Headphone</Link>
-                                        </h2>
-                                        <div className="price-box">
-                                            <span className="product-price">$55.00</span>
-                                        </div>
-                                        {/* <!-- End .price-box --> */}
-
-                                        <div className="product-action">
-                                            <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
-                                                <span>Add to Wishlist</span>
-                                            </Link>
-
-                                            <Link to="product.html" className="paction add-cart" title="Add to Cart">
-                                                <span>Add to Cart</span>
-                                            </Link>
-
-                                            <Link to="#" className="paction add-compare" title="Add to Compare">
-                                                <span>Add to Compare</span>
-                                            </Link>
-                                        </div>
-                                        {/* <!-- End .product-action --> */}
-                                    </div>
-                                    {/* <!-- End .product-details --> */}
-                                </div>
-                                {/* <!-- End .product --> */}
-
-                                <div className="product">
-                                    <figure className="product-image-container">
-                                        <Link to="product.html" className="product-image">
-                                            <img src="assets\images\products\product-3.jpg" alt="product" />
-                                        </Link>
-                                        <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
-                                    </figure>
-                                    <div className="product-details">
-                                        <div className="ratings-container">
-                                            <div className="product-ratings">
-                                                <span className="ratings" style={{ width: "40%" }}></span>
-                                                {/* <!-- End .ratings --> */}
-                                            </div>
-                                            {/* <!-- End .product-ratings --> */}
-                                        </div>
-                                        {/* <!-- End .product-container --> */}
-                                        <h2 className="product-title">
-                                            <Link to="product.html">Computer Mouse</Link>
-                                        </h2>
-                                        <div className="price-box">
-                                            <span className="product-price">$31.00</span>
-                                        </div>
-                                        {/* <!-- End .price-box --> */}
-
-                                        <div className="product-action">
-                                            <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
-                                                <span>Add to Wishlist</span>
-                                            </Link>
-
-                                            <Link to="product.html" className="paction add-cart" title="Add to Cart">
-                                                <span>Add to Cart</span>
-                                            </Link>
-
-                                            <Link to="#" className="paction add-compare" title="Add to Compare">
-                                                <span>Add to Compare</span>
-                                            </Link>
-                                        </div>
-                                        {/* <!-- End .product-action --> */}
-                                    </div>
-                                    {/* <!-- End .product-details --> */}
-                                </div>
-                                {/* <!-- End .product --> */}
-
-                                <div className="product">
-                                    <figure className="product-image-container">
-                                        <Link to="product.html" className="product-image">
-                                            <img src="assets\images\products\product-4.jpg" alt="product" />
-                                        </Link>
-                                        <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
-                                    </figure>
-                                    <div className="product-details">
-                                        <div className="ratings-container">
-                                            <div className="product-ratings">
-                                                <span className="ratings" style={{ width: "0%" }}></span>
-                                                {/* <!-- End .ratings --> */}
-                                            </div>
-                                            {/* <!-- End .product-ratings --> */}
-                                        </div>
-                                        {/* <!-- End .product-container --> */}
-                                        <h2 className="product-title">
-                                            <Link to="product.html">Camera</Link>
-                                        </h2>
-                                        <div className="price-box">
-                                            <span className="product-price">$335.00</span>
-                                        </div>
-                                        {/* <!-- End .price-box --> */}
-
-                                        <div className="product-action">
-                                            <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
-                                                <span>Add to Wishlist</span>
-                                            </Link>
-
-                                            <Link to="product.html" className="paction add-cart" title="Add to Cart">
-                                                <span>Add to Cart</span>
-                                            </Link>
-
-                                            <Link to="#" className="paction add-compare" title="Add to Compare">
-                                                <span>Add to Compare</span>
-                                            </Link>
-                                        </div>
-                                        {/* <!-- End .product-action --> */}
-                                    </div>
-                                    {/* <!-- End .product-details --> */}
-                                </div>
-                                {/* <!-- End .product --> */}
-
-                                <div className="product">
-                                    <figure className="product-image-container">
-                                        <Link to="product.html" className="product-image">
-                                            <img src="assets\images\products\product-5.jpg" alt="product" />
-                                        </Link>
-                                        <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
-                                    </figure>
-                                    <div className="product-details">
-                                        <div className="ratings-container">
-                                            <div className="product-ratings">
-                                                <span className="ratings" style={{ width: "50%" }}></span>
-                                                {/* <!-- End .ratings --> */}
-                                            </div>
-                                            {/* <!-- End .product-ratings --> */}
-                                        </div>
-                                        {/* <!-- End .product-container --> */}
-                                        <h2 className="product-title">
-                                            <Link to="product.html">Leather Boots</Link>
-                                        </h2>
-                                        <div className="price-box">
-                                            <span className="product-price">$60.00</span>
-                                        </div>
-                                        {/* <!-- End .price-box --> */}
-
-                                        <div className="product-action">
-                                            <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
-                                                <span>Add to Wishlist</span>
-                                            </Link>
-
-                                            <Link to="product.html" className="paction add-cart" title="Add to Cart">
-                                                <span>Add to Cart</span>
-                                            </Link>
-
-                                            <Link to="#" className="paction add-compare" title="Add to Compare">
-                                                <span>Add to Compare</span>
-                                            </Link>
-                                        </div>
-                                        {/* <!-- End .product-action --> */}
-                                    </div>
-                                    {/* <!-- End .product-details --> */}
-                                </div>
-                                {/* <!-- End .product --> */}
-                            </div>
-                            {/* <!-- End .featured-proucts --> */}
-                        </div>
-                        {/* <!-- End .container --> */}
-                    </div>
+                    
                     {/* <!-- End .featured-section --> */}
 
 

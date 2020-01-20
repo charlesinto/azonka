@@ -12263,3 +12263,21 @@ input[type=number] {
     justify-content: space-between;
     margin-bottom: 10px;
 }
+
+.responsive-item-image {
+    max-width: 100% !important;
+    height: auto !important;
+    width: 100% !important;
+}
+
+.product-single-details .product-single-qty, .product-single-details .paction{
+    margin: 0 !important;
+}
+
+.product-image{
+    cursor: pointer;
+}
+
+.modal-bottom-padding{
+   padding: 6rem 2rem;
+}

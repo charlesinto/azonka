@@ -14,14 +14,13 @@ class FeatureProductItem extends Component {
         }
     }
 
-    handleAddCart = async (e) => {
-        let id = e.target.id;
+    handleAddCart = async (e,id) => {
         // return console.log(id)
         let token = (localStorage.getItem("x-access-token"));
         // return console.log(token)
         if (token) {
             // return console.log(token)
-            let postObj = { productId: id, quanity: "1" };
+            let postObj = { productId: `${id}`, quantity: "1" };
 
             await this.props.addToCart(postObj)
 
@@ -114,7 +113,7 @@ class FeatureProductItem extends Component {
                             <span>Add to Wishlist</span>
                         </Link>
 
-                        <span id={id} onClick={this.handleAddCart} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart
                         </span>
 

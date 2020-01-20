@@ -5,7 +5,7 @@ import {
     ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, FILES_SELECTED,
         LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL,
+    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES,
         
 } from "../actions/types";
 
@@ -20,7 +20,7 @@ const INTIAL_STATE = {
     localProducts: [],
     itemModalData: [],
     product: null,
-    files: null,
+    files: [],
     previewImage: null,
     subImages: [],
     model: '',
@@ -112,6 +112,19 @@ export default (state = INTIAL_STATE, actions) => {
             return {...state,...INTIAL_STATE}
         case FILES_SELECTED:
             return {...state, files: actions.payload}
+        case REMOVE_SUB_IMAGES: 
+            switch(actions.payload){
+                case 1:
+                    return {...state, subImage1: ''}
+                case 2:
+                    return {...state, subImage2: ''}
+                case 3:
+                    return {...state, subImage3: ''}
+                case 4:
+                    return {...state, subImage4: ''}
+                default: 
+                return {...state}
+            }
         default:
             return { ...state }
     }

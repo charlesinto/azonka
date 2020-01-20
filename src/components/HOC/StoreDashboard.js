@@ -37,8 +37,9 @@ class StoreDashboard extends Component {
                                                 'active' : ''}><Link to="/users/store">Company</Link>
                                             </li>
                                             <li className={this.props.dashboardActiveLink === 'Manage Store' ? 'active' : ''}><Link to="/users/create/shop">Manage Store</Link></li>
-                                            <li className={this.props.dashboardActiveLink === 'Create Item' ? 'active' : ''}><Link to="/users/items/upload">Create Item</Link></li>
-                                            <li className={this.props.dashboardActiveLink === 'Manage Items' ? 'active' : ''}><Link to="/users/items/manage">Manage Items</Link></li>
+                                            {/* <li className={this.props.dashboardActiveLink === 'Create Item' ? 'active' : ''}><Link to="/users/items/upload">Create Item</Link></li> */}
+                                            <li className={this.props.dashboardActiveLink === 'Manage Items' || this.props.dashboardActiveLink === 'Create Item'
+                                                 ? 'active' : ''}><Link to="/users/items/manage">Manage Items</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Product Review' ? 'active' : ''}><Link to="#">Product Reviews</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Sales Statement' ? 'active' : ''}><Link to="#">Statement</Link></li>
 

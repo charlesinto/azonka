@@ -7,6 +7,7 @@ import {
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,FILES_SELECTED,
     EXPIRED_LOGIN_SESSION,LOGOUT_USER,ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT,SET_AMOUNT,
+    ORDER_CREATED_SUCCESSFULLY,
      HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM,LOCAL_SHOP_FETCHED_SUCCESSFULLY,
      ITEM_MODAL
 } from "./types";
@@ -621,4 +622,30 @@ export const removeSubImagesFromUpload = elementNumber => {
 
 export const setAmount = amount => {
     return {type: SET_AMOUNT, payload: amount}
+}
+
+export const registerPayment = (transactionNo, txRef, amount, paymentType ) => {
+    return async (dispatch) => {
+        try{
+           const response = await  axios.post('/api/v1/user/order/create', 
+                                {
+                                    amount: '' + amount,
+                                    transactionReference: txRef,
+                                    transactionNo,
+                                    useWallet: paymentType === 'pay with debit' ? false : true
+                                },{
+                                    headers: {
+                                        'x-access-token': localStorage.getItem('x-access-token')
+                                    }}
+                            )
+            console.log(response)
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: ORDER_CREATED_SUCCESSFULLY, payload: ''})
+            dispatch({type: SUCCESS_ALERT, payload: 'Order created successfully'})
+        }catch(error){
+            console.log(error.response)
+            dispatch({type: STOP_LOADING, payload: ''})
+           // dispatch({type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50)})
+        }
+    }
 }

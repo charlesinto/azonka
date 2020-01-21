@@ -47,7 +47,7 @@ class ProductRow extends Component {
     render() {
         let { id, name, finalPrice, mainImageUrl } = this.props
         return (
-                <div style={{display:"contents"}} key={id}>
+                <tr style={{display:"contents"}} key={id}>
 
                 
                 <tr  className="product-row" >
@@ -85,7 +85,7 @@ class ProductRow extends Component {
                     </div>
                 </td>
             </tr>
-            </div>
+            </tr>
              
             
         );

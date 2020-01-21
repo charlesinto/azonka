@@ -12281,3 +12281,86 @@ input[type=number] {
 .modal-bottom-padding{
    padding: 6rem 2rem;
 }
+
+.default-font {
+    font-family: "Titillium Web", sans-serif;
+    
+}
+
+.article-body{
+
+}
+
+.article-header{
+    font-size: 1.3em;
+}
+
+.checkout-user-icon{
+    font-size: 2.23rem;
+    margin-right: 16px;
+}
+
+.checkout-user{
+    font-size: 2.23rem;
+    text-transform: capitalize;
+}
+
+.checkout-sub-title{
+    color: #000;
+}
+
+
+/* ul li input[type=radio]{
+    position: absolute;
+    visibility: hidden;
+  }
+  
+
+ul li .check{
+  display: block;
+  position: absolute;
+  border: 5px solid #AAAAAA;
+  border-radius: 100%;
+  height: 25px;
+  width: 25px;
+  top: 30px;
+  left: 20px;
+	z-index: 5;
+	transition: border .25s linear;
+	-webkit-transition: border .25s linear;
+}
+
+ul li:hover .check {
+  border: 5px solid #FFFFFF;
+}
+
+ul li .check::before {
+  display: block;
+  position: absolute;
+	content: '';
+  border-radius: 100%;
+  height: 15px;
+  width: 15px;
+  top: 5px;
+	left: 5px;
+  margin: auto;
+	transition: background 0.25s linear;
+	-webkit-transition: background 0.25s linear;
+}
+
+input[type=radio]:checked ~ .check {
+  border: 5px solid #0DFF92;
+}
+
+input[type=radio]:checked ~ .check::before{
+  background: #0DFF92;
+}
+
+input[type=radio]:checked ~ label{
+  color: #0DFF92;
+} */
+
+.payment-type{
+    font-size: 1.43rem;
+    color: #000;
+}

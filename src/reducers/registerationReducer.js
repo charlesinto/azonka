@@ -5,9 +5,10 @@ ERROR_RESENDING_PASSCODE, SUCCESS_RESENDING_PASSCODE, GET_SEC_QUESTIONS,
  LOGIN_UNSUCCESSFUL, LOGIN_SUCCESS, PASSWORD_REST_SUCCESSFUL, USER_ROLE_UPDATED_SUCCESSFUL,
  UNAUTHORIZED_USER, EMAIL_VERIFICATION_SUCCESFFUL, UNSUCCESSFUL_VERIFICATION,RESET_VERIFY_FORM,
  REDIRECT_SELLER_TO_STORE,EXPIRED_LOGIN_SESSION,
-  DISPLAY_ERROR, STOP_LOADING, FILE_UPLOADED_FALIED, FILE_UPLOADED_SUCCESSFULL, RESET_VERIFICATION_FORM, RESET_VERIFICATION_FORM_STATE } from "../actions/types";
+  DISPLAY_ERROR, STOP_LOADING, FILE_UPLOADED_FALIED, FILE_UPLOADED_SUCCESSFULL, RESET_VERIFICATION_FORM, RESET_VERIFICATION_FORM_STATE, ORDER_CREATED_SUCCESSFULLY } from "../actions/types";
 const INITIAL_STATE = {loading: false,verified:null, error: null,errorMessage: null,
      user: null, questions:{}, successMessage: null, showSuccessBar: null,redirectToStore: '', 
+     redirectToCart: false,
     redirectToProfile: false,unAuthorized: false, redirectToVerify: false,verification:'none', redirectToHome: false, redirectToLogin: false}
 
 export default (state=INITIAL_STATE, actions) => {
@@ -17,18 +18,18 @@ export default (state=INITIAL_STATE, actions) => {
             localStorage.removeItem('azonta-user')
             localStorage.removeItem('x-access-token')
             localStorage.removeItem('userRegDetails')
-            return {...state,redirectToLogin: true, redirectToVerify:false, unAuthorized: true}
+            return {...state,redirectToLogin: true,redirectToCart: false, redirectToVerify:false, unAuthorized: true}
         case RESET_VERIFICATION_FORM:
             return {...state, verification:'none'}
         case INITIAL_REGISTRATION:
                 return {...state,redirectToVerify:null, redirectToLogin: null,
-                    redirectToHome: false, loading:true,redirectToProfile: null,redirectToStore:false, error: null}
+                    redirectToHome: false,redirectToCart: false, loading:true,redirectToProfile: null,redirectToStore:false, error: null}
         case FILE_UPLOADED_FALIED:
             return {...state, loading: false, error: true, errorMessage: 'File uploading failed'}
         case FILE_UPLOADED_SUCCESSFULL:
             return {...state, error: false, errorMessage: null}
         case SUCCESSFUL_REGISTRATION:
-            return {...state, loading:false,redirectToVerify:true, error: null, errorMessage: null}
+            return {...state, loading:false,redirectToCart: false, redirectToVerify:true, error: null, errorMessage: null}
         case STOP_LOADING:
             return {...state, loading:false}
         case STOP_IMAGE_LOADING:
@@ -70,12 +71,14 @@ export default (state=INITIAL_STATE, actions) => {
         case USER_ROLE_UPDATED_SUCCESSFUL:
             return {...state,loading: false, redirectToProfile:true}
         case EMAIL_VERIFICATION_SUCCESFFUL:
-            return {...state,loading: false,unAuthorized:false,redirectToVerify:false,error:null,verification:'true',redirectToStore:false,
+            return {...state,loading: false,redirectToCart: false,unAuthorized:false,redirectToVerify:false,error:null,verification:'true',redirectToStore:false,
              redirectToProfile: false}
         case UNSUCCESSFUL_VERIFICATION:
             return {...state, loading: false,error:true,verification:'false', errorMessage: actions.payload}
         case RESET_VERIFICATION_FORM_STATE: 
                 return {...state, verification:'none'}
+        case ORDER_CREATED_SUCCESSFULLY:
+            return {...state, redirectToCart: true}
         case REDIRECT_SELLER_TO_STORE: 
                 return {...state, redirectToStore: true}
         default: 

@@ -123,12 +123,18 @@ class Cart extends Component {
 
     loadCart = async () => {
 
+        // setInterval(async () => {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCart();
+            // console.log("aza", this.props)
+            let { products, quantity } = this.props.cartItems;
             this.setState({ cartData: this.props.cartItems.products })
+            // console.log("aza", this.state.cartData)
         } else {
-            await this.props.fetchLocalCart();
+            console.log()
+            await this.props.fetchLocalCart()
+            console.log("load drp", this.props.cartData)
             this.setState({ cartData: this.props.cartData })
         }
 
@@ -137,10 +143,10 @@ class Cart extends Component {
     calSums = (sum, productId) => {
         const { cartData } = this.state;
         cartData.forEach(element => {
-
-            if (element.id === productId) {
+            
+            if(element.id === productId){
                 element.amountOrdered = sum;
-            } else {
+            }else{
                 element.amountOrdered = element.finalPrice;
             }
         })
@@ -151,9 +157,9 @@ class Cart extends Component {
     }
 
     handleItemDelete = id => {
-        const { cartData } = this.state;
+        const { cartData} = this.state;
         const index = cartData.findIndex(element => element.id === id)
-        if (index !== -1) {
+        if(index !== -1){
             cartData.splice(index, 1)
         }
         return this.setState({
@@ -162,10 +168,6 @@ class Cart extends Component {
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    formatMoney(amount) {
-        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
     render() {
@@ -181,37 +183,6 @@ class Cart extends Component {
                             </ol>
                         </div>
                     </nav>
-
-
-
-                    {/* <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                        Launch demo modal
-                    </button> */}
-
-                    {/* <!-- Modal --> */}
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    ...
-      </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-8">
@@ -225,18 +196,18 @@ class Cart extends Component {
                                                 <th>Subtotal</th>
                                             </tr>
                                         </thead>
-                                        <tbody style={{ height: "20px" }}>
+                                        <tbody>
                                             {
                                                 this.state.cartData ? this.state.cartData.map(data => {
                                                     return (
-                                                        <ProductRow
+                                                        <ProductRow 
                                                             calSums={(sum, productId) =>
-                                                                this.calSums(sum, productId)}
-                                                            calSum={this.calSum}
+                                                                 this.calSums(sum, productId)} 
+                                                            calSum={this.calSum} 
                                                             handleItemDelete={this.handleItemDelete}
                                                             {...data}
-
-                                                        />
+                                                            
+                                                            />
                                                     )
                                                 }) : (<div>No data available</div>)
                                             }
@@ -349,8 +320,8 @@ class Cart extends Component {
 
                                     <div className="checkout-methods">
                                         <Link to="/users/checkout" onClick={() => 
-                                        this.props.setAmount(this.state.sum)} 
-                                            className="btn btn-block btn-sm btn-primary">Go to Checkout</Link>
+                                            this.props.setAmount(this.state.sum)}  
+                                            className="btn btn-block btn-sm btn-primary">Pay Now</Link>
                                     </div>
                                 </div>
                             </div>

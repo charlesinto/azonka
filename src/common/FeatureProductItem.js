@@ -21,19 +21,21 @@ class FeatureProductItem extends Component {
         if (token) {
             // return console.log(token)
             let postObj = { productId: `${id}`, quantity: "1" };
+            console.log('posObj', postObj)
+            this.props.initiateRegistration()
+            this.props.addToCart(postObj)
 
-            await this.props.addToCart(postObj)
-
-            let { data } = this.props.cartItems
+            //let { data } = this.props.cartItems
             // console.log("needs", data)
             // let {} 
-
-            if (data.success) {
-                this.setState({ cartData: data.cart.products })
-                this.handleSetOnlineData()
-            } else {
-                alert("An error occured")
-            }
+          //  this.handleSetOnlineData()
+            //this.props.("An error occured")
+            // if (data.success) {
+            //     this.setState({ cartData: data.cart.products })
+                
+            // } else {
+                
+            // }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));

@@ -34,7 +34,7 @@ class Home extends Component {
         this.props.initiateRegistration()
         this.props.getProductCategorySubcategory()
         this.loadFeaturedItems()
-
+        console.log('called ')
         //remove popup after 5secs
         setTimeout(() => {
             this.setState({
@@ -48,8 +48,9 @@ class Home extends Component {
             await this.props.fetchFeaturedItems()
             this.setState({ products: this.props.products })
         } else {
-            await this.props.fetchLocalShop()
-            this.setState({ products: this.props.localProducts })
+            //await this.props.fetchLocalShop()
+            await this.props.fetchFeaturedItems()
+            this.setState({ products: this.props.products })
 
         }
     }
@@ -458,7 +459,7 @@ class Home extends Component {
                                         <form action="#">
                                             <div className="form-group">
                                                 <input type="email" className="form-control" id="wemail" />
-                                                <label for="wemail"><i className="icon-envolope"></i>Email Address</label>
+                                                <label htmlFor="wemail"><i className="icon-envolope"></i>Email Address</label>
                                             </div>
                                             <input type="submit" className="btn btn-block" value="Subscribe Now" />
                                         </form>

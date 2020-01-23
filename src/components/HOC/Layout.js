@@ -5,7 +5,6 @@ import { ToastProvider } from 'react-toast-notifications'
 import * as actions from "../../actions";
 import Spinner from "../../assets/spinner.svg";
 import SweetAlert from "react-bootstrap-sweetalert";
-import warningIcon from '../../images/warning.png'
 import Header from '../HeaderFooter/Header';
 
 class Layout extends Component {
@@ -35,7 +34,7 @@ class Layout extends Component {
         this.props.closeSnackBar()
     }
     render() {
-        console.log(this.props.redirectToProfile, this.props.redirectToHome)
+        console.log(this.props.redirectToProfile, this.props.redirectToCart)
         return (
             <ToastProvider>
                 <Header />
@@ -94,8 +93,10 @@ class Layout extends Component {
 }
 
 const mapStateToProps = state => {
-    const { reg: { unAuthorized, loading, redirectToProfile,redirectToHome,redirectToStore, redirectToLogin, redirectToVerify },
-        home: { error, errorMessage, success, successMessage,redirectToCart } } = state;
+    const { reg: { unAuthorized, loading, redirectToProfile,redirectToCart,
+        redirectToHome,redirectToStore, redirectToLogin, redirectToVerify },
+        home: { error, errorMessage, success, successMessage } } = state;
+        console.log(redirectToCart)
     return {
         unAuthorized,
         redirectToVerify,

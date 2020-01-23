@@ -23,13 +23,13 @@ class FlashSales extends Component {
         // return console.log(token)
         if (token) {
             let postObj = { productId: `${id}`, quantity: "1" };
-
-            await this.props.addToCart(postObj)
+            this.props.initiateRegistration()
+            this.props.addToCart(postObj)
             // console.log("flash props", this.props)
-            let { data } = this.props.cartItems;
-            console.log('data', data)
-                this.setState({ cartData: data.cart.products })
-                this.handleSetOnlineData()
+            // let { data } = this.props.cartItems;
+            // console.log('data', data)
+            //     this.setState({ cartData: data.cart.products })
+            //     this.handleSetOnlineData()
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));

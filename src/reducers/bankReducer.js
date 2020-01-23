@@ -1,7 +1,8 @@
-import { GET_BANKS, GET_SAVED_ACCOUNTS, ACCOUNT_ADDED_SUCCESSFULLY, CLOSE_SNACKBAR, ACCOUNT_UPDATED } from "../actions/types";
+import { GET_BANKS, GET_SAVED_ACCOUNTS, ACCOUNT_ADDED_SUCCESSFULLY, 
+    CLOSE_SNACKBAR, ACCOUNT_UPDATED, USER_WALLET_OBTAINED_SUCCESSFULLY } from "../actions/types";
 
 const INITIATL_STATE = {
-    banks: [], savedBanks: [],
+    banks: [], savedBanks: [], transactions: [], balance: 0,
     loading: false,verified:null,resetForm: false, error: null,errorMessage: null,
      user: null, questions:{}, successMessage: null, showSuccessBar: null
 }
@@ -19,6 +20,8 @@ export default (state=INITIATL_STATE , actions) => {
                 return {...state,resetForm: false, error: null, errorMessage:null, showSuccessBar: null}
         case ACCOUNT_UPDATED:
             return {...state, resetForm: true}
+        case USER_WALLET_OBTAINED_SUCCESSFULLY: 
+            return {...state, transactions: actions.payload.transactions, balance: actions.payload.balance}
         default:
             return {...state}
     }

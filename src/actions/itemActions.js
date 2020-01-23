@@ -4,10 +4,10 @@ import {
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
-    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,FILES_SELECTED,
+    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,FILES_SELECTED,CART_UPDATED_SUCCESSFULLY,
     EXPIRED_LOGIN_SESSION,LOGOUT_USER,ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT,SET_AMOUNT,
-    ORDER_CREATED_SUCCESSFULLY,
+    ORDER_CREATED_SUCCESSFULLY,SET_CARTDROPDOW_QUANTITY,ADDRESSES_FETCHED,
      HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM,LOCAL_SHOP_FETCHED_SUCCESSFULLY,
      ITEM_MODAL
 } from "./types";
@@ -169,7 +169,7 @@ export const fetchFeaturedItems = () => {
     return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)
-
+            console.log('response', response)
             const { data: { products } } = response;
             localStorage.setItem("shop", JSON.stringify(products))
             dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
@@ -213,7 +213,7 @@ export const fetchCart = () => {
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
-            console.log('er', error.response)
+            console.log('er', error)
             if(error.response.status === 498){
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
                return setTimeout(function(){
@@ -301,18 +301,26 @@ export const addToCart = (details) => {
 
             if (response.data.success) {
                 // const accounts = 'await getUserAccount()'
-                dispatch({ type: STOP_LOADING, payload: "" })
+                const response2 = await axios.get(`/api/v1/user/cart/get`, {
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                })
+    
+                const { cart } = response2.data;
+                dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
+                dispatch({ type: STOP_LOADING, payload: '' })
                 dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
                 dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
 
             }
         } catch (error) {
             console.log(error.response)
-            if (error.response.data.message)
-                console.log(error)
-            return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            if (error.response && error.response.data.message)
+                return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
 
-            return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+            dispatch({ type: STOP_LOADING, payload: '' })
+            //return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
         }
     }
 }
@@ -624,7 +632,7 @@ export const setAmount = amount => {
     return {type: SET_AMOUNT, payload: amount}
 }
 
-export const registerPayment = (transactionNo, txRef, amount, paymentType ) => {
+export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress ) => {
     return async (dispatch) => {
         try{
            const response = await  axios.post('/api/v1/user/order/create', 
@@ -632,20 +640,202 @@ export const registerPayment = (transactionNo, txRef, amount, paymentType ) => {
                                     amount: '' + amount,
                                     transactionReference: txRef,
                                     transactionNo,
+                                    addressId,
+                                    addressString: userAddress,
                                     useWallet: paymentType === 'pay with debit' ? false : true
                                 },{
                                     headers: {
                                         'x-access-token': localStorage.getItem('x-access-token')
                                     }}
                             )
-            console.log(response)
+                console.log('cartt ', cartData)
+              for(let i = 0; i < cartData.length; i++){
+                  await axios.post('/api/v1/user/cart/remove', {productId: cartData[i].id},{
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                  } )
+              } 
+            const responseCart =  await axios.get(`/api/v1/user/cart/get`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            }) 
+            const { cart } = responseCart.data;
+            dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({type: STOP_LOADING, payload: ''})
             dispatch({type: ORDER_CREATED_SUCCESSFULLY, payload: ''})
             dispatch({type: SUCCESS_ALERT, payload: 'Order created successfully'})
         }catch(error){
-            console.log(error.response)
             dispatch({type: STOP_LOADING, payload: ''})
-           // dispatch({type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50)})
+            if(error.response.data.message)
+                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 50)})
+            return dispatch({type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50)})
+        }
+    }
+}
+
+export const removeCartItem = id => {
+    return async (dispatch) => {
+        try{
+                await axios.post('/api/v1/user/cart/remove', {
+                            productId: `${id}`
+                        }, {
+                            headers: {
+                                'x-access-token': localStorage.getItem('x-access-token')
+                            }
+                        })
+            const response2 = await axios.get(`/api/v1/user/cart/get`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+
+            const { cart } = response2.data;
+            dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({type: SUCCESS_ALERT, payload: 'Item removed from cart successfully'})
+
+        }catch(error){
+            dispatch({ type: STOP_LOADING, payload: '' })
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+            return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0,80) })
+        }
+
+    }
+}
+
+export const setCartDropDownTotalPrice = (quantity) => {
+    return {type: SET_CARTDROPDOW_QUANTITY, payload: quantity}
+}
+
+export const updateCartItems = (cart, quantity, changeItems) => {
+    return async (dispatch) => {
+        //update the backend with the new cart details
+        try{
+            for(let i = 0; i < changeItems.length; i++){
+                await axios.post('/api/v1/user/cart/add',{
+                    productId: `${changeItems[i]}`,quantity: `${quantity[changeItems[i]]}` },{
+                        headers: {
+                            'x-access-token': localStorage.getItem('x-access-token')
+                        }
+                    })
+            }
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: CART_UPDATED_SUCCESSFULLY, payload: '' })
+        }catch(error){
+            dispatch({ type: STOP_LOADING, payload: '' })
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+            return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0,80) })
+            
+        }
+        
+    }
+}
+
+export const fetchCheckoutCart = () => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/api/v1/user/cart/get`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const response2 = await axios.get('/api/v1/user/address/get/0/10',{
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const { cart } = response.data;
+            const { address } = response2.data;
+            dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
+            dispatch({type: ADDRESSES_FETCHED, payload: address})
+        } catch (error) {
+            console.log('er', error)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const stopHomeLoading = () => {
+    return { type: STOP_LOADING, payload: '' }
+}
+
+export const getAddresses = (id = 0, numberOfPage = 100) => {
+    return async  (dispatch) => {
+        try{
+            const response = await axios.get(`/api/v1/user/address/get/${id}/${numberOfPage}`,{
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+
+            const { address } = response.data;
+            console.log(address)
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: ADDRESSES_FETCHED, payload: address})
+        }catch(error){
+            console.log('er', error)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const createAddress = (data, id=0, numberOfPage= 100) => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.post('/api/v1/user/address/create', {
+                address1: data.address,
+                ...data
+            }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const response2 = await axios.get(`/api/v1/user/address/get/${id}/${numberOfPage}`,{
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+
+            const { address } = response2.data;
+            dispatch({type: ADDRESSES_FETCHED, payload: address})
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: SUCCESS_ALERT, payload: 'Address created successfully'})
+        }catch(error){
+            console.log('er', error)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_BANKS, ACCOUNT_ADDED_SUCCESSFULLY,
+import { GET_BANKS, ACCOUNT_ADDED_SUCCESSFULLY,LOGOUT_USER,USER_WALLET_OBTAINED_SUCCESSFULLY,
     GET_SAVED_ACCOUNTS, SUCCESS_ALERT, DISPLAY_ERROR, ACCOUNT_UPDATED, STOP_LOADING } from "./types";
 
 export const getBanks = () => {
@@ -107,6 +107,77 @@ export const modifyAccount = (action = null,data=null, id='') => {
                 return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
             
             return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+        }
+    }
+}
+
+export const topUpUserWalllet = (transactionReference, amount, lastCount=0, numOfRecords=100) => {
+    return async (dispatch) => {
+        try{
+            await axios.post('/api/v1/user/wallet/topup', {
+                                    transactionReference,
+                                    amount: `${amount}`
+                                }, {
+                                    headers:{
+                                        'x-access-token': localStorage.getItem('x-access-token')
+                                    }
+                                })
+            const response1 = await axios.get(`/api/v1/user/bank-account/get/${lastCount}/${numOfRecords}`, {
+                headers:{
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const response2 = await axios.get('/api/v1/user/wallet/get', {
+                headers:{
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const { transactions, balance} = response2.data.wallet
+            dispatch({type: USER_WALLET_OBTAINED_SUCCESSFULLY, payload: {transactions, balance}})
+            dispatch({type: GET_SAVED_ACCOUNTS, payload:response1.data.bankAccounts})
+            dispatch({type: STOP_LOADING, payload:''})
+            dispatch({type: SUCCESS_ALERT, payload:'Fund transfer to wallet successful'})
+        }catch(error){
+            console.log('er', error)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const getUserWalletDetals = (lastCount = 0, numOfRecords = 100) => {
+    return async (dispatch) => {
+        try{
+            const response1 = await axios.get(`/api/v1/user/bank-account/get/${lastCount}/${numOfRecords}`, {
+                headers:{
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const response2 = await axios.get('/api/v1/user/wallet/get', {
+                headers:{
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const { transactions, balance} = response2.data.wallet
+            dispatch({type: USER_WALLET_OBTAINED_SUCCESSFULLY, payload: {transactions, balance}})
+            dispatch({type: GET_SAVED_ACCOUNTS, payload:response1.data.bankAccounts})
+            dispatch({type: STOP_LOADING, payload: ''})
+        }catch(error){
+            console.log('er', error)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
 }

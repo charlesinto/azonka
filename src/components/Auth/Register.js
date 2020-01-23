@@ -351,11 +351,30 @@ class Register extends Component {
                                     
                                 </div>
                             </div>
-                            <div classsName="row" style={{paddingTop: '2rem'}}>
-                                
-                                <label htmlFor="phoneNumber" className="rl-label required">Phone Number</label>
+                            <div className="row">
+                                <div className="col-md-6 col-sm-12">
+                                    <label htmlFor="phoneNumber"  style={{
+                                        marginTop: '0px !important'
+                                    }} className="rl-label required custom">Country</label>
+                                    <ReactFlagsSelect
+                                    searchable={true} searchPlaceholder={'Plese select country'} 
+                                        className="react-flag"
+                                        onSelect={this._countryCodeChange}
+                                    />
+                                </div>
+                                <div className="col-md-6 col-sm-12">
+                                    <div className="form-group" >
+                                        <label htmlFor="phoneNumber" style={{marginTop: 
+                                            '0px !important'}} className="rl-label required custom">Phone Number</label>
+                                        <input type="text" id="phoneNumber" style={{maxWidth:'100%'}} className={`form-control ${this.state.inValidElments.includes('phoneNumber') ? 'invalid' : '' }`} value={this.state.phoneNumber} name="phoneNumber" onChange={this.handleInputChange}  placeholder="Enter your phone number..."/>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="row" style={{marginBottom: '1rem'}}>
+                            {/* <div classsName="row" style={{paddingTop: '2rem'}}>
+                                
+                                <label htmlFor="phoneNumber" className="rl-label required">Country</label>
+                            </div> */}
+                            {/* <div className="row" style={{marginBottom: '1rem'}}>
                                     
                                     <div className="col-md-6 col-sm-12">
                                         <ReactFlagsSelect
@@ -366,7 +385,7 @@ class Register extends Component {
                                     </div>
                                     <div className="col-md-6 col-sm-12">
                                         <div className="form-block-phonenumber">
-                                        
+                                        <label htmlFor="phoneNumber" className="rl-label required">Country</label>
                                         <div style={{flex: 1}}>
                                             <div className="row">
                                             <div className="col-12">
@@ -381,6 +400,7 @@ class Register extends Component {
                                     </div>
                                     
                                 </div>
+                                
                                 <ul>
                                     <li>
                                     {
@@ -407,7 +427,7 @@ class Register extends Component {
 
                                     
                                 
-                            </div>
+                            </div> */}
                             <div className="row">
                                 
                                 <div className="form-group col-md-6 col-sm-12">

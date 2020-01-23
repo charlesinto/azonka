@@ -2,10 +2,10 @@ import {
     ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING, CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM, CATEGORY_FETCHED_SUCCESSFULLY, LOCAL_CART_FETCHED_SUCCESSFULLY,
     ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA, ADD_CART_SUCCESSFULLY,
-    ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,
+    ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,CART_UPDATED_SUCCESSFULLY,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, FILES_SELECTED,
         LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES,
+    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED,
         
 } from "../actions/types";
 
@@ -28,6 +28,7 @@ const INTIAL_STATE = {
     subImage1: '',
     subImage2: '',
     subImage3: '',
+    quantity: '',
     subImage4: '',
     inValidElments: [],
     formIsValid: false,
@@ -49,10 +50,11 @@ const INTIAL_STATE = {
     height: '',
     length: '',
     unit: '',
+    address: [],
     deliveryType: '',
     deliveryLocation: '',
-    filteredSubCategory: []
-
+    filteredSubCategory: [],
+    redirectToCheckout: false,
 
 }
 
@@ -62,20 +64,22 @@ export default (state = INTIAL_STATE, actions) => {
             const { stores, categories, subCategories } = actions.payload;
             return { ...state, stores, categories, subCategories, resetForm: false }
         case STOP_LOADING:
-            return { ...state, resetForm: true }
+            return { ...state, resetForm: true, }
         case PRODUCTS_FETCED_SUCCESSFULLY:
             return { ...state, products: actions.payload }
         case CATEGORY_FETCHED_SUCCESSFULLY:
-            return { ...state, categories: actions.payload }
+            return { ...state, categories: actions.payload,redirectToCheckout: false }
         case ADD_CART_SUCCESSFULLY:
-            return { ...state, cartItems: actions.payload, }
+            return { ...state, cartItems: actions.payload,redirectToCheckout: false }
         case CART_FETCHED_SUCCESSFULLY:
-            return { ...state, cartItems: actions.payload, }
+            return { ...state, cartItems: actions.payload,quantity: actions.payload.quantity,
+                 cartData: actions.payload.products, redirectToCheckout: false }
         case LOCAL_CART_FETCHED_SUCCESSFULLY:
             return { ...state, cartData: actions.payload, }
         case ADD_LOCAL_CART_SUCCESSFULLY:
             return { ...state, cartData: actions.payload, }
-
+        case CART_UPDATED_SUCCESSFULLY: 
+                return {...state, redirectToCheckout: true}
         case LOCAL_SHOP_FETCHED_SUCCESSFULLY:
             return { ...state, localProducts: actions.payload, }
         case ADD_LOCAL_SHOP_SUCCESSFULLY:
@@ -100,6 +104,8 @@ export default (state = INTIAL_STATE, actions) => {
             return { ...state, previewImage: actions.payload }
         case CLEAR_ITEM_FORM_INPUTS:
             return { ...INTIAL_STATE, resetForm: true }
+        case SET_CARTDROPDOW_QUANTITY:
+            return {...state, quantity: actions.payload}
         case STORE_ITEM_EDIT:
             return editStoreItem(state, actions.payload)
         case HANDLE_PREFERNCE_CHANGE:
@@ -110,6 +116,8 @@ export default (state = INTIAL_STATE, actions) => {
             return renderSubImage(state, actions.payload)
         case CLEAR_PRODUCT_FORM:
             return {...state,...INTIAL_STATE}
+        case ADDRESSES_FETCHED:
+            return {...state, address: actions.payload}
         case FILES_SELECTED:
             return {...state, files: actions.payload}
         case REMOVE_SUB_IMAGES: 

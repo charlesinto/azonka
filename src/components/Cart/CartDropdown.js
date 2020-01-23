@@ -5,27 +5,32 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class CartDropdown extends Component {
-    state = { data: [], sum: 0, cartData: [], cartLength: 0 }
+    state = { data: [], sum: 0, cartData: [], cartLength: 0, quantity: {} }
 
     componentDidMount() {
-        this.loadCart()
+        // this.loadCart()
     }
     componentWillReceiveProps = props => {
         if (props.cartData !== this.props.cartData) {
-            this.setState({ cartData: props && props.cartData, cartLength: props.cartData ? props.cartData.length : 0 });
+            return this.setState({ cartData: props && 
+                props.cartData, cartLength: props.cartData ? props.cartData.length : 0 }, () => this.calSum());
         }
     }
     calSum = () => {
         let { cartData } = this.state;
         let sum = cartData ? cartData.reduce((a, b) => {
-            return a + b.finalPrice
+            return a + b.finalPrice * (this.props.quantity[b.id] || 1)
         }, 0) : 0
         return sum
     }
-    removeFromCart = async (e) => {
+    removeFromCart = async (id) => {
+        if(localStorage.getItem('x-access-token')){
+            this.props.initiateRegistration()
+            return this.props.removeCartItem(id)
+             
+        }
         let { cartData } = this.state;
-        let id = e.target.id;
-        let newItems = cartData.filter(data => data.id != id);
+        let newItems = cartData.filter(data => parseInt(data.id) !== parseInt(id));
         localStorage.setItem("cart", JSON.stringify(newItems));
         let newCartData = JSON.parse(localStorage.getItem("cart"))
         return this.setState({ cartData: newCartData })
@@ -49,7 +54,6 @@ class CartDropdown extends Component {
     }
 
     render() {
-        console.log('cart o', this.state.cartData)
         let { cartData } = this.state;
         return (
             <>
@@ -72,7 +76,7 @@ class CartDropdown extends Component {
                                         cartData.map(_data => {
                                             // console.log(_data)
                                             if(_data){
-                                                let { id, name, sellingPrice, mainImageUrl } = _data
+                                                let { id, name, finalPrice, mainImageUrl } = _data
                                                 return (
                                                     <div className="product" key={id}>
                                                         <div className="product-details">
@@ -83,14 +87,15 @@ class CartDropdown extends Component {
                                                             <span className="cart-product-info">
                                                                 {/* <span className="cart-product-qty">1</span>
                                                                 x &#8358;  */}
-                                                                ₦{this.formatMoney(sellingPrice)}
+                                                                ₦ {this.formatMoney(finalPrice)}
                                                             </span>
                                                         </div>
                                                         <figure className="product-image-container">
                                                             <Link to="product.html" className="product-image drp-product-image ">
                                                                 <img src={mainImageUrl} alt="product" style={{ height: "12vh" }} />
                                                             </Link>
-                                                            <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={this.removeFromCart}></i></span>
+                                                            <span className="btn-remove" title="Remove Product"><i className="icon-cancel" id={id} onClick={() => 
+                                                                this.removeFromCart(id)}></i></span>
                                                         </figure>
                                                     </div>
                                                 )
@@ -137,9 +142,9 @@ class CartDropdown extends Component {
 
 const mapStateToProps = state => {
 
-    let { categories, cartItems, cartData } = state.inventory;
+    let { categories, cartItems, cartData, quantity } = state.inventory;
     return {
-        categories, cartItems, cartData
+        categories, cartItems, cartData, quantity
     }
 }
 

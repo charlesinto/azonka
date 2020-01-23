@@ -3,30 +3,38 @@ import PrdoctImage from "../css/images/products/product-4.jpg";
 import { Link } from "react-router-dom";
 
 class ProductRow extends Component {
-    state = { qty: 1, sum: 0 }
+    state = { qty: 0, sum: 0 }
     componentDidMount() {
-        this.setState({ sum: this.props.calSum, })
-        console.log("aza", this.props)
+        this.setState({ sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ? 
+                this.props.quantity : 1 })
+        
     }
-
+    static getDerivedStateFromProps(nextProps, state){
+        if(state.qty !== nextProps.quantity){
+            
+            return {...state, sum: nextProps.finalPrice * (nextProps.quantity || 1), qty: nextProps.quantity ? 
+                nextProps.quantity : 1 }
+        }
+        return {...state}
+    }
     handleChange = (e, finalPrice, id) => {
-        let { qty } = this.state;
+        const newQuantity = e.target.value < 0 ? -1 * e.target.value : e.target.value === 0
+             ? 1 : e.target.value ;
+        this.props.calSums(finalPrice * this.state.qty, id, newQuantity )
         this.setState({ qty: e.target.value < 0 ? -1 * e.target.value : e.target.value },
-            () => this.props.calSums(finalPrice * this.state.qty, id))
-        console.log(this.state)
+            () => this.props.calSums(finalPrice * this.state.qty, id, this.state.qty))
+        
     }
     handleIncreaseQty = (e, finalPrice, id) => {
         let { qty } = this.state;
-        this.setState({ qty: qty + 1 }, 
-            () => this.props.calSums(finalPrice * this.state.qty, id))
-        console.log(this.state)
+        this.props.calSums(finalPrice * (qty + 1), id, qty + 1)
+        
     }
     handleDecreaseQty = (e, finalPrice, id) => {
         let { qty } = this.state;
+        let newQuantity =  qty > 1 ? qty - 1 : 1;
+        this.props.calSums(finalPrice * newQuantity, id, newQuantity)
         
-        this.setState({ qty: qty > 0 ? qty - 1 : 0 }, 
-                () => this.props.calSums(finalPrice * this.state.qty, id))
-        console.log(this.state)
     }
     handleCheckout = () => {
 
@@ -45,19 +53,20 @@ class ProductRow extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     render() {
+        console.log(this.state)
         let { id, name, finalPrice, mainImageUrl } = this.props
         return (
                 <tr style={{display:"contents"}} key={id}>
 
                 
                 <tr  className="product-row" >
-                    <td className="product-col">
+                    <td className="product-col" colSpan={4}>
                         <figure className="product-image-container">
                             <Link to="/products" className="product-image">
                                 <img src={mainImageUrl} alt="product" />
                             </Link>
                         </figure>
-                        <h2 className="product-title">
+                        <h2 className="product-title" >
                             <Link to="/product">{name}</Link>
                         </h2>
                     </td>

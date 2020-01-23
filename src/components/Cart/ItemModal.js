@@ -23,18 +23,22 @@ class ItemModal extends Component {
         let token = (localStorage.getItem("x-access-token"));
         // console.log(token)
         if (token) {
-            let postObj = { productId: id, quanity: "1" };
-
-            await this.props.addToCart(postObj)
+            let postObj = { productId: id, quantity: "1" };
+            
+            this.props.initiateRegistration()
+            this.props.addToCart(postObj)
             // console.log("flash props", this.props)
             let { data } = this.props.cartItems;
-            if (data && data.success) {
-                this.setState({ cartData: data.cart.products })
-                this.props.addToCart(postObj)
-                //this.handleSetOnlineData()
-            } else {
-                this.props.renderError('An error occured')
-            }
+            console.log('data', data)
+            //this.props.addToCart(postObj)
+            //this.handleSetOnlineData()
+            // if (data && data.success) {
+            //     this.setState({ cartData: data.cart.products })
+            //     this.props.addToCart(postObj)
+            //     //this.handleSetOnlineData()
+            // } else {
+            //     this.props.renderError('An error occured')
+            // }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -63,6 +67,12 @@ class ItemModal extends Component {
             }
         }
 
+    }
+    handleSetOnlineData = async () => {
+        await this.props.fetchCart()
+        let { products } = this.props.cartItems
+        // console.log("firedata", cartData)
+        this.setState({ cartData: products })
     }
     formatMoney(amount) {
         return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');

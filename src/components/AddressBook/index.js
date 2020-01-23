@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from '../../actions'
-import UserLayout from "../HOC/UserLayout";
-import Validator from "validator";
+import Dashboard from "../HOC/Dashboard";
+import AddressDataTable from "../../common/AddressDataTable";
 
 class index extends Component {
     state = {
@@ -12,186 +12,248 @@ class index extends Component {
         copyToShip: false,
         showBalanceInStatusBar: true,
         sendEmails: true,
-        inValidElements: []
+        inValidElements: [],
+        country: '',
+        address: '',
+        state: '',
+        validationMessage: [],
+        inValidElments: [],
+        actionMode: 'save',
+        isoCode: '234',
+        id: null
     }
     componentDidMount(){
-        this.props.switchActiveLink('address')
+        this.props.setActiveLink('My Address Book')
+        this.props.initiateRegistration()
+        this.props.getAddresses()
     }
-    static getDerivedStateFromProps(nextProps, state){
-        const {user} = nextProps;
-        if(user){
-            const { firstName, lastName, emailAddress, phoneNumber} = user
-            return {
-                profileInformation: {
-                    firstName,
-                    lastName,
-                    emailAddress,
-                    phoneNumber,
-                    ...state.profileInformation
-                }
-            }
-        }
-        return {...state}
-    }
-    handleInputChange = ({event, field}) => {
-        const { target: {name, value}} = event;
-        const index = this.state.inValidElements.findIndex(element => element.field === field && element.input === name)
-        if(index !== -1){
-            this.state.inValidElements.splice(index, 1)
-        }
-        this.setState({
-            [field] : {...this.state[field], [name]: value},
-            inValidElements: [...this.state.inValidElements]
-        })
-    }
-    copyToShipInformation = (event) => {
-        this.setState({
-            copyToShip: !this.state.copyToShip
-        }, () => {
-            if(this.state.copyToShip){
-                this.setState({
-                    shippingInformation: {...this.state.billingInformation}
-                })
-            }
-        })
-    }
-    toggleSendEmailNotification = (event) => {
-        this.setState({
-            sendEmails: !this.state.sendEmails
-        })
-    }
-    toggleShowAccountBalance = (event) => {
-        this.setState({
-            showBalanceInStatusBar: !this.state.showBalanceInStatusBar
-        })
-    }
-    validateProfileInformation = (data, field) => {
-        let isValid = true
-        let inValidElements = []
-        if(!Validator.isEmail(data['emailAddress'])){
-            isValid = false;
-            inValidElements.push({field, input:'emailAddress'})
-        }
-        if(!/^[0-9]*$/.test(data['phoneNumber'])){
-            isValid = false;
-            inValidElements.push({field, input:'phoneNumber'})
-        }
-        if(data['firstName'].trim() === ''){
-            isValid = false;
-            inValidElements.push({field, input:'firstName'})
-        }
-        if(data['lastName'].trim() === ''){
-            isValid = false;
-            inValidElements.push({field, input:'lastName'})
-        }
-        if( data['newPassword'] && data['newPassword'].trim() !== ''){
 
-            if( !data['new_pwd2'] || data['new_pwd2'].trim() === '' ){
-                isValid = false
-                inValidElements.push({field, input:'new_pwd2'})
-            }
-            if( !data['currentPassword'] || data['currentPassword'].trim() === ''){
-                isValid = false
-                inValidElements.push({field, input:'currentPassword'})
-            }
+    handleInputChange = e => {
+        const {target:{ name, value}} = e
+        const index = this.state.inValidElments.indexOf(name)
+        let newInvalidElements = []
+        if(index !== -1){
+            this.state.inValidElments.splice(index, 1)
+        }
+        newInvalidElements = [...this.state.inValidElments]
+        this.setState({
+            [name]: value,
+            newInvalidElements
+        })
+    }
+    validateFormData = (formdata) => {
+        const {  state, country, address} = formdata;
+        let isValid = true;
+        const inValidElments = []
+        const validationMessage = {}
+        if(!(state && state.trim() !== '')){
+            isValid = false;
+            inValidElments.push('state')
+            validationMessage['state'] = 'Please select state'
+        }
+        if(!(country && country.trim() !== '')){
+            isValid = false;
+            inValidElments.push('country')
+            validationMessage['country'] = 'Please select country'
+        }
+        if(!(address && address.trim() !== '')){
+            isValid = false;
+            inValidElments.push('address')
+            validationMessage['address'] = 'Address is required'
         }
         return {
             isValid,
-            inValidElements
+            validationMessage,
+            inValidElments,
+            formdata
+        }
+    }
+    processForm = (actionType = 'save') => {
+        const {isValid, inValidElments, validationMessage} = this.validateFormData(this.state)
+        if(!isValid){
+            this.props.renderError('Action cannot be performed,one or more fields required', { appearance: 'error' })
+        
+            return this.setState({
+                inValidElments, validationMessage
+            })
+            
         }
 
-    }
-    validateFormData = (data, field) => {
-        switch(field){
-            case 'profileInformation':
-               return this.validateProfileInformation(data, field)
-            default:
-                return {}
+        this.props.initiateRegistration()
+        switch(actionType){
+            case 'save':
+                return this.props.createAddress(this.state)
+            case 'update':
+                return this.props.updateAddress(this.state);
+            case 'delete':
+                return this.props.deleteAddress(this.state.id)
+            default: 
+                return ;
         }
-
+        
     }
-
     handleFormSubmit = e => {
         e.preventDefault()
-        const {toastManager: {add}} = this.props;
-        const {isValid, inValidElements} = this.validateFormData(this.state.profileInformation, 'profileInformation')
-        
-        console.log('this profile', this.state.profileInformation)
-        console.log(isValid, inValidElements)
-
-        if(isValid){
-            console.log('cla')
-            // this.props.initiateRegistration()
-           this.props.updateUserProfile(this.state.profileInformation)
-        }else{
-            console.log('not called')
-            add('One or more fields not filled, Please check your form and try again', { appearance: 'error' })
-            this.setState({
-                inValidElements
-            })
-        }
-    }
-    isInvalid = (target,field) => {
-        const index = this.state.inValidElements.findIndex(element => element.field === field && element.input === target)
-        return index !== -1
+        this.processForm()
     }
     render() {
         return (
-            <UserLayout>
-                <div className="headline buttons primary">
-                    <h4>Billing Information</h4>
-                    <button form="profile-info-form" onClick={this.handleFormSubmit} className="button mid-short primary">Save Changes</button>
-                </div>
-                <div className="form-box-item">
-                        <h4>Billing Information</h4>
-                        <hr className="line-separator"/>
-                        <div className="input-container half">
-                            <label htmlFor="first_name2" className="rl-label required">First Name</label>
-                            <input onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} type="text" form="profile-info-form" id="first_name2" value={this.state.billingInformation.firstName} name="firstName" placeholder="Enter your first name here..."/>
-					    </div>
-                        <div className="input-container half">
-                            <label htmlFor="last_name2" className="rl-label required">Last Name</label>
-                            <input onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} type="text" form="profile-info-form" value={this.state.billingInformation.lastName} id="last_name2" name="lastName" placeholder="Enter your last name here..."/>
+          <Dashboard>
+            <h2>Manange Address Book</h2>
+            <div className="add-bank">
+              <form>
+                <div className="container">
+                  <div className="row">
+                    <div className="col-md-4 col-sm-12">
+                      <label htmlFor="name" className="rl-label">
+                        Address
+                      </label>
+                      <input
+                        type="text"
+                        name="address"
+                        className={`${
+                          this.state.inValidElments.includes("address")
+                            ? "invalid"
+                            : ""
+                        }`}
+                        value={this.state.name}
+                        onChange={this.handleInputChange}
+                        placeholder="Enter Address"
+                      />
+                      {this.state.inValidElments.includes("address") ? (
+                        <div className="error-message required">
+                          {this.state.validationMessage["address"]}
                         </div>
-                        <div className="input-container">
-                            <label htmlFor="email_address2" className="rl-label required">Email Address</label>
-                            <input onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} type="email" value={this.state.billingInformation.email} form="profile-info-form" id="email_address2" name="email" placeholder="Enter your email address here..."/>
-                        </div>
-                        <div className="input-container">
-                            <label htmlFor="country2" className="rl-label required">Country</label>
-                            <label htmlFor="country2" className="select-block">
-                                <select onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} value={this.state.billingInformation.country} form="profile-info-form" name="country" id="country2">
-                                    <option value="0">Select your Country...</option>
-                                    <option value="Nigeria">Nigeria</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div className="input-container half">
-                            <label htmlFor="state_city2" className="rl-label required">State/City</label>
-                            <label htmlFor="state_city2" className="select-block">
-                                <select onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} value={this.state.billingInformation.city} form="profile-info-form" name="city" id="state_city2">
-                                    <option value="0">Select your State/City...</option>
-                                    <option value="Nigeria">Nigeria</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div className="input-container half">
-                            <label htmlFor="zipcode2" className="rl-label required">Zip Code</label>
-                            <input onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} form="profile-info-form" value={this.state.billingInformation.zipcode} type="text" id="zipcode2" name="zipcode" placeholder="Enter your Zip Code here..."/>
-                        </div>
-                        <div className="input-container">
-                            <label htmlFor="address2" className="rl-label required">Full Address</label>
-                            <input onChange={(event) => this.handleInputChange({event, field:'billingInformation'})} form="profile-info-form" value={this.state.billingInformation.address} type="text" id="address" name="address" placeholder="Enter your address here..."/>
-                        </div>
+                      ) : null}
                     </div>
-            </UserLayout>
+                    
+                    <div className="col-md-4 col-sm-12">
+                      <label htmlFor="state" className="rl-label">
+                        State
+                      </label>
+                      <select
+                        name="state"
+                        className={`${
+                          this.state.inValidElments.includes("state")
+                            ? "invalid"
+                            : ""
+                        }`}
+                        value={this.state.state}
+                        onChange={this.handleInputChange}
+                      >
+                        <option value="">Select State</option>
+                        <option value="Lagos">Lagos</option>
+                      </select>
+                      {this.state.inValidElments.includes("state") ? (
+                        <div className="error-message required">
+                          {this.state.validationMessage["state"]}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="col-md-4 col-sm-12">
+                      <label htmlFor="country" className="rl-label">
+                        Country
+                      </label>
+                      <select
+                        name="country"
+                        className={`${
+                          this.state.inValidElments.includes("country")
+                            ? "invalid"
+                            : ""
+                        }`}
+                        value={this.state.country}
+                        onChange={this.handleInputChange}
+                      >
+                        <option value="">Select Country</option>
+                        <option value="Nigeria">Nigeria</option>
+                      </select>
+                      {this.state.inValidElments.includes("country") ? (
+                        <div className="error-message required">
+                          {this.state.validationMessage["country"]}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div style={{ padding: "20px 0 10px" }}>
+                    {this.state.actionMode === "save" ? (
+                      <div className="row">
+                        <div className="col-md-8 col-sm-12"></div>
+                        <div className="col-md-4 col-sm-12">
+                          <button
+                            onClick={this.handleFormSubmit}
+                            className="btn btn-primary"
+                            style={{ margin: "0 auto" }}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="row">
+                        <div className="col-md-8 col-sm-12"></div>
+                        <div className="col-md-4 col-sm-12">
+                          <div style={{ marginBottom: 10 }}>
+                            <button
+                              onClick={this.handleFormUpdate}
+                              className="btn btn-warning"
+                              style={{
+                                margin: "0 auto",
+                                borderColor: "#ffc107",
+                                background: "#ffc107",
+                                width: "100%"
+                              }}
+                            >
+                              Update
+                            </button>
+                          </div>
+                          <div style={{ marginBottom: 10 }}>
+                            <button
+                              onClick={this.handleFormDelete}
+                              className="btn btn-danger"
+                              style={{ margin: "0 auto", width: "100%" }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div className="container">
+                <h4 className="popup-title verify-email" style={{
+                            fontWeight: 'normal',
+                            fontFamily: 'Roboto, sans-serif',
+                            marginLeft: 20,
+                            marginTop: 30,
+                            marginBottom: 10
+                        }}>Your Addresses</h4>
+                    <hr className="line-separator" />
+                    <AddressDataTable
+                        data={this.props.address}
+                    />
+            </div>
+          </Dashboard>
         );
     }
 }
 
 const mapStateToProps = state => {
-
-    return {}
+    const {store: {stores, resetForm, pageNumber, lastId}, home: {
+        subCategories, categories
+    }, inventory: { address}} = state;
+    console.log('address', address)
+    return {
+        stores,
+        resetForm,
+        pageNumber,
+        lastId,
+        subCategories,
+        categories,
+        address
+    }
 }
 
 export default connect(mapStateToProps, actions)(index);

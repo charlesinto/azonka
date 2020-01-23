@@ -33,6 +33,7 @@ import Store from "./components/Store";
 import ResetPassword from './components/Auth/ResetPassword';
 import Layout from "./components/HOC/Layout";
 import ConfirmAccount from "./components/Auth/confirmAccount";
+import Wallet from "./components/Wallet";
 import StoreDetail from "./components/StoreDetail";
 import ScrollTop from './common/ScrollTop';
 import { connect } from "react-redux";
@@ -74,11 +75,13 @@ class Root extends Component {
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />
                                 <AuthRoute exact path="/users/securityquestions" component={SecurityQuestion} />
                                 <AuthRoute exact path="/users/profile" component={Profile} />
+                                <AuthRoute exact path="/users/address" component={AddressBook} />
                                 <AuthRoute exact path="/users/profile/account" component={AccountSetting} />
                                 <AuthRoute noAuthRequired exact path="/users/purchases" component={Purchases} />
                                 <AuthRoute noAuthRequired exact path="/users/cart" component={Cart} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
+                                <AuthRoute exact path="/users/wallet" component={Wallet} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
                                 <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />
                                 <AuthRoute redirectIfUser exact path="/users/withdrawal" component={WithDrawal} />
@@ -89,7 +92,6 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/banks" component={Bank} />
                                 <Route exact path="/users/checkout" component={Checkout} />
                                 <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} />
-                                <AuthRoute exact path="/users/addressBook" component={AddressBook} />
                                 <AuthRoute exact path="/users/agent/signup" component={AgentSignUp} />
                                 <AuthRoute exact path="/users/seller/signup" component={SellerSignUp} />
                                 <AuthRoute noAuthRequired path="/users/wishlist" component={WishList} />

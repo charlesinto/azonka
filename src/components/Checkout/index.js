@@ -12,21 +12,57 @@ import { PAY_STACK_PUBLIC_KEY } from '../../config/config';
 class Checkout extends Component {
     state = {
         sum: 0, modal: false, firstName: '', lastName: '', userAddress: '',
-        address: [], state: '', country: '', payType: '', paystack: false,
-        emailAddress: '', auth: false
+        address: [], state: '', country: '', payType: 'pay with debit', paystack: false,
+        emailAddress: '', auth: false, transactionNumber: '', addressId: ''
     }
     componentDidMount() {
+
         let token = (localStorage.getItem("x-access-token"));
 
-        if (this.props.amount <= 0) {
-            return this.props.history.push('/users/cart')
-        }
         if (!token) {
-            this.setState({ modal: true, auth: false })
+            return this.props.history.push('/users/cart')
         } else {
-            const { firstName, lastName, emailAddress } = JSON.parse(localStorage.getItem('azonta-user'))
-            this.setState({ auth: true, firstName, lastName, emailAddress })
+            if (this.props.amount > 0) {
+                this.props.initiateRegistration()
+                this.loadCart()
+                const { firstName, lastName, emailAddress } = JSON.parse(localStorage.getItem('azonta-user'))
+                return this.setState({ auth: true, firstName, lastName, emailAddress })
+            } else {
+                return this.props.history.push('/users/cart')
+            }
         }
+    }
+    loadCart = async () => {
+
+        // setInterval(async () => {
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchCheckoutCart();
+            console.log("aza o", this.props.cartItems)
+            let { products, quantity } = this.props.cartItems;
+            this.setState({
+                cartData: this.props.cartItems.products,
+                quantity: this.props.cartItems.quantity
+            }, () => {
+                console.log(this.state)
+                this.calculateSum()
+            })
+            // console.log("aza", this.state.cartData)
+        } else {
+            await this.props.fetchLocalCart()
+            console.log("load drp", this.props.cartData)
+            this.setState({ cartData: this.props.cartData })
+        }
+
+    }
+
+    calculateSum = () => {
+        const { cartData } = this.state;
+        let amountOrdered = cartData ? cartData.reduce((a, b) => {
+            return a + (b.finalPrice * (this.state.quantity[b.id] || 1))
+        }, 0) : 0
+
+        this.setState({ sum: amountOrdered }, () => this.props.stopHomeLoading())
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -40,7 +76,9 @@ class Checkout extends Component {
         console.log(response);
         if (response.status === 'success' && response.message === 'Approved') {
             this.props.initiateRegistration()
-            this.props.registerPayment(response.transaction, response.trxref, this.props.amount, this.state.payType)
+            this.props.registerPayment(response.transaction, response.trxref,
+                this.props.amount, this.state.payType, this.state.cartData,
+                this.state.addressId, this.state.userAddress)
         } // card charged successfully, get reference here
         //this.props.initiateRegistration()
     }
@@ -81,7 +119,7 @@ class Checkout extends Component {
                                             textTransform: 'capitalize'
                                         }}>
                                             login or create account </strong>
-                                        to enjoy the full benefits provided for you
+                                        to make purchases and enjoy the full benefits provided for you
                                     </p>
                                 </div>
                             </div>
@@ -120,8 +158,13 @@ class Checkout extends Component {
             [name]: value
         })
     }
+    handleAddressSelect = (id) => {
+        this.setState({
+            addressId: id
+        })
+    }
     renderShippingLocation = () => {
-        if (!this.state.auth) {
+        if (this.state.auth) {
             return (
                 <div className="card">
                     <div className="card-header">
@@ -152,25 +195,56 @@ class Checkout extends Component {
                             <div className="row">
 
                                 {
-                                    this.state.address.length > 0 ? (
-                                        <ul>
-                                            {this.state.address.map((item, i) => (
-                                                <li style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }} key={i}>
-                                                    <input style={{ display: 'block', marginRight: 8 }}
-                                                        type="radio" id={`f-option${i}`} name="selector" />
-                                                    <label htmlFor="f-option">
-                                                        <span className="checkout-user-icon">
-                                                            <i className="fas fa-home"></i>
-                                                        </span>
-                                                        <span>
-                                                            {item.address1}
-                                                        </span>
-                                                    </label>
+                                    this.props.address.length > 0 ? (
+                                        <ul style={{ width: '100%' }}>
+                                            {this.props.address.map((item, i) => (
+                                                <li style={{
+                                                    display: 'flex', width: "100%",
+                                                    alignItems: 'center', marginBottom: 16
+                                                }} key={i}>
+                                                    <input type="checkbox" value={`${item.id}`}
+                                                        name={`${item.id}`} onChange={(e) => this.handleInputChange(e, 'address')}
+                                                        checked={parseInt(this.state.addressId) === item.id} />
+                                                    <label style={{ display: 'flex' }} value={`${item.id}`} name={`${item.id}`} className="label-check"
+                                                        onClick={(e) => this.handleAddressSelect(item.id)}>
+                                                        <span className="checkbox primary primary"><span></span></span>
+                                                        <h3 className="address-htag" style={{
+                                                            padding: '0 8px',
+                                                            fontFamily: "open sans, sans-serif", fontSize: '2.1rem'
+                                                        }}>
+                                                            <span style={{ marginLeft: 8, textTransform: 'capitalize' }}>
+                                                                {item.address1},
+                                                            </span>
+                                                            <span style={{ marginLeft: 8, textTransform: 'capitalize' }}>
+                                                                {item.state},
+                                                            </span>
+                                                            <span style={{ marginLeft: 8, textTransform: 'capitalize' }}>
+                                                                {item.country}
+                                                            </span>
+                                                        </h3>
 
-                                                    <div className="check"></div>
+                                                    </label>
                                                 </li>
                                             ))
                                             }
+                                            <li style={{
+                                                display: 'flex', width: "100%",
+                                                alignItems: 'center', marginBottom: 16
+                                            }}>
+                                                <form action="#" style={{ width: '100%' }} className="mb-1">
+                                                    <div className="row">
+                                                        <div className="col-md-12 col-sm-12">
+                                                            <label htmlFor="address">Address
+                                                                <span className="required">*</span></label>
+                                                            <input name='userAddress' placeholder="Enter delivery address" value={this.state.userAddress}
+                                                                onChange={(e) =>
+                                                                    this.handleInputChange(e, 'login')} type="text"
+                                                                className="form-input form-wide mb-2"
+                                                                required="" />
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </li>
                                         </ul>
                                     ) :
                                         (
@@ -179,27 +253,7 @@ class Checkout extends Component {
                                                     <div className="col-md-12 col-sm-12">
                                                         <label htmlFor="address">Address
                                                         <span className="required">*</span></label>
-                                                        <input name='userAddress' value={this.state.userAddress}
-                                                            onChange={(e) =>
-                                                                this.handleInputChange(e, 'login')} type="text"
-                                                            className="form-input form-wide mb-2"
-                                                            required="" />
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-md-6 col-sm-12">
-                                                        <label htmlFor="state">State
-                                                            <span className="required">*</span></label>
-                                                        <input name='state' value={this.state.state}
-                                                            onChange={(e) =>
-                                                                this.handleInputChange(e, 'login')} type="text"
-                                                            className="form-input form-wide mb-2"
-                                                            required="" />
-                                                    </div>
-                                                    <div className="col-md-6 col-sm-12">
-                                                        <label htmlFor="address">Country
-                                                        <span className="country">*</span></label>
-                                                        <input name='country' value={this.state.country}
+                                                        <input name='userAddress' placeholder="Enter delivery address" value={this.state.userAddress}
                                                             onChange={(e) =>
                                                                 this.handleInputChange(e, 'login')} type="text"
                                                             className="form-input form-wide mb-2"
@@ -332,38 +386,51 @@ class Checkout extends Component {
         return (
             <>
                 <div className="col-md-6 col-sm-12" style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
-                    <input disabled={!this.state.auth} style={{ display: 'block', marginRight: 8 }}
-                        type="radio" value="pay with wallet" name="paymentType" onChange={(e) => this.handleInputChange(e, 'pay')} />
-                    <label className="payment-type" htmlFor="paymentType">
+
+                    <input disabled={!this.state.auth} style={{ marginRight: 8 }}
+                        type="checkbox" id="paymentType2" value="pay with wallet"
+                        name="paymentTypet"
+                        checked={this.state.payType === 'pay with wallet' ? true : false} />
+                    <label value="pay with wallet" name="paymentTypet" className="label-check" htmlFor='paymentTypet'
+                        onClick={(e) => this.handleCheckBoxClick('pay with wallet')}>
+                        <span className="checkbox primary primary"><span></span></span>
                         <span className="checkout-user-icon">
                             <i className="fas fa-wallet"></i>
                         </span>
-                        <span>
-                            Pay with your Azonka Wallet
-                        </span>
+                        Pay with your Azonka Wallet
                     </label>
 
                 </div>
                 <div className="col-md-6 col-sm-12" style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
-                    <input style={{ display: 'block', marginRight: 8 }} value="pay with debit"
-                        type="radio" name="paymentType" onChange={(e) => this.handleInputChange(e, 'pay')} />
-                    <label className="payment-type" htmlFor="paymentType">
+
+                    <input type="checkbox" id="paymentType" value="pay with debit"
+                        name="paymentType" onChange={(e) => this.handleInputChange(e, 'paymentType')}
+                        checked={this.state.payType === 'pay with debit'} />
+                    <label value="pay with debit" name="paymentType" className="label-check" htmlFor='paymentType'
+                        onClick={(e) => this.handleCheckBoxClick('pay with debit')}>
+                        <span className="checkbox primary primary"><span></span></span>
                         <span className="checkout-user-icon">
                             <i className="far fa-credit-card"></i>
                         </span>
-                        <span>
-                            Pay with a Debit Card
-                        </span>
+                        Pay with a Debit Card
                     </label>
                 </div>
             </>
         )
+    }
+    handleCheckBoxClick = paymentType => {
+        this.setState({ payType: paymentType })
     }
     payNow = e => {
         e.preventDefault()
         if (!this.state.auth) {
             const { firstName, lastName, emailAddress, userAddress,
                 state, country, payType } = this.state;
+            if (!this.state.auth) {
+                return this.setState({
+                    modal: true
+                })
+            }
             if (!Validator.isEmail(emailAddress)) {
                 return this.props.renderError('Email address is required or invalid')
             }
@@ -383,19 +450,19 @@ class Checkout extends Component {
                 return this.props.renderError('Please select payment type')
             }
 
-            if (payType === 'pay with debit') {
-                //this.props.successAlert('hello')
-                return this.payWithPayStack()
-            }
-        } else {
-            const { firstName, lastName, emailAddress, payType } = this.state;
-            if (!Validator.isEmail(emailAddress)) {
-                return this.props.renderError('Email address is required or invalid')
-            }
-            else if (Validator.isEmpty(firstName) || Validator.isEmpty(lastName)) {
-                return this.props.renderError('First Name and Last Name is required')
-            }
 
+            // if(payType === 'pay with debit'){
+            //     //this.props.successAlert('hello')
+            //    return  this.payWithPayStack()
+            // }
+        } else {
+            const { userAddress, addressId, payType } = this.state;
+            if (Validator.isEmail(addressId) && Validator.isEmpty(userAddress)) {
+                return this.props.renderError('Please provide a delivery location')
+            }
+            else if (Validator.isEmpty(this.state.payType)) {
+                return this.props.renderError('Please choose a payment type')
+            }
             if (payType === 'pay with debit') {
                 //this.props.successAlert('hello')
                 return this.payWithPayStack()
@@ -405,6 +472,14 @@ class Checkout extends Component {
     payWithPayStack = () => {
         this.setState({ paystack: true })
         console.log('called paystack')
+    }
+    getTransactionNumber = () => {
+        const txnRef = this.getReference()
+        this.setState({ transactionNumber: txnRef })
+        return txnRef;
+    }
+    componentWillUnmount() {
+        this.setState({ transactionNumber: '' })
     }
     render() {
         return (
@@ -436,16 +511,19 @@ class Checkout extends Component {
                                     </div> */}
                                     <div className="row">
                                         <div className="col-12">
-                                            {this.renderUserData()}
+
+                                            {
+                                                this.state.auth ?
+                                                    this.renderUserData() : null}
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-12">
-                                            {this.renderShippingLocation()}
+                                            {this.state.auth ? this.renderShippingLocation() : null}
                                         </div>
                                     </div>
                                     <div className="row">
-                                        {this.paymentType()}
+                                        {this.state.auth ? this.paymentType() : null}
                                     </div>
                                 </div>
 
@@ -454,62 +532,12 @@ class Checkout extends Component {
                                 <div className="cart-summary">
                                     <h3>Summary</h3>
 
-                                    {/* <h4>
-                                        <a data-toggle="collapse" href="#total-estimate-section" className="collapsed" role="button" aria-expanded="false" aria-controls="total-estimate-section">Estimate Shipping and Tax</a>
-                                    </h4> */}
-                                    {/* 
-                                    <div className="collapse" id="total-estimate-section">
-                                        <form action="#">
-                                            <div className="form-group form-group-sm">
-                                                <label>Country</label>
-                                                <div className="select-custom">
-                                                    <select className="form-control form-control-sm">
-                                                        <option value="USA">United States</option>
-                                                        <option value="Turkey">Turkey</option>
-                                                        <option value="China">China</option>
-                                                        <option value="Germany">Germany</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group form-group-sm">
-                                                <label>State/Province</label>
-                                                <div className="select-custom">
-                                                    <select className="form-control form-control-sm">
-                                                        <option value="CA">California</option>
-                                                        <option value="TX">Texas</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group form-group-sm">
-                                                <label>Zip/Postal Code</label>
-                                                <input type="text" className="form-control form-control-sm" />
-                                            </div>
-
-                                            <div className="form-group form-group-custom-control">
-                                                <label>Flat Way</label>
-                                                <div className="custom-control custom-checkbox">
-                                                    <input type="checkbox" className="custom-control-input" id="flat-rate" />
-                                                    <label className="custom-control-label" htmlFor="flat-rate">Fixed $5.00</label>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group form-group-custom-control">
-                                                <label>Best Rate</label>
-                                                <div className="custom-control custom-checkbox">
-                                                   <input type="checkbox" className="custom-control-input" id="best-rate" />
-                                                    <label className="custom-control-label" htmlFor="best-rate">Table Rate $15.00</label>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div> */}
 
                                     <table className="table table-totals">
                                         <tbody>
                                             <tr>
                                                 <td>Subtotal</td>
-                                                <td>&#8358; {this.numberWithCommas(this.props.amount)}</td>
+                                                <td>&#8358; {this.numberWithCommas(this.state.sum)}</td>
                                             </tr>
 
                                             <tr>
@@ -520,7 +548,7 @@ class Checkout extends Component {
                                         <tfoot>
                                             <tr>
                                                 <td>Order Total</td>
-                                                <td>&#8358;  {this.numberWithCommas(this.props.amount)}</td>
+                                                <td>&#8358;  {this.numberWithCommas(this.state.sum)}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -539,7 +567,8 @@ class Checkout extends Component {
                                                             embed={false}
                                                             reference={this.getReference()}
                                                             email={this.state.emailAddress}
-                                                            amount={30 * 100}
+                                                            amount={this.state.sum < 10000 ?
+                                                                this.state.sum * 100 : 300 * 100}
                                                             paystackkey={PAY_STACK_PUBLIC_KEY}
                                                             tag="button"
                                                         />
@@ -573,9 +602,12 @@ class Checkout extends Component {
 }
 
 const mapStateToProps = state => {
-    const { home: { amount } } = state;
-    console.log('amount', amount)
-    return { amount }
+    const { home: { amount }, inventory: { categories, cartItems, cartData, address } } = state;
+
+    return {
+        amount,
+        categories, cartItems, cartData, address
+    }
 }
 
 export default connect(mapStateToProps, actions)(Checkout);

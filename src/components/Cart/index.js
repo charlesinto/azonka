@@ -6,12 +6,14 @@ import CartPrice from "../../common/CartPrice";
 import CartItem from "../../common/CartItem";
 import CartActions from "../../common/CartActions";
 import ProductRow from '../../common/ProductRow';
+import Drawer from '@material-ui/core/Drawer';
 import ProductRowActions from '../../common/ProductRowActions';
 import Header from '../HeaderFooter/Header';
 import Footer from '../HeaderFooter/Footer';
 
 class Cart extends Component {
-    state = { data: [], sum: 0, cartData: [], cartLength: 0 }
+    state = { data: [], sum: 0, cartData: [], cartLength: 0, quantity: {}, 
+        deletedCartItems: [], changeItems: [], modal: false }
     async componentDidMount() {
         this.props.switchActiveLink('Cart')
         await this.loadCart()
@@ -99,15 +101,31 @@ class Cart extends Component {
     }
 
     componentWillReceiveProps = props => {
-        console.log("new props", props)
         if (props.cartData !== this.props.cartData) {
-            this.setState({ cartData: props && props.cartData, cartLength: props.cartData ? props.cartData.length : 0 });
+            this.setState({ cartData: props && props.cartData, 
+                cartLength: props.cartData ? props.cartData.length : 0 });
+        }
+        else if(props.cartItems !== this.props.cartItems){
+            console.log('cart Items', props.cartItems)
+            this.setState({
+                quantity: props.cartItems.quantity,
+                cartData: props.cartItems.products
+            }, () => this.calSum())
         }
     }
+    componentWillUnmount() {
+        
+        if(this.state.changeItems.length > 0){
+            this.props.initiateRegistration()
+            this.props.updateCartItems(this.state.cartData, this.state.quantity, this.state.changeItems)
+        }
+        
+    }
     calSum = () => {
+        console.log('/>?',this.state.quantity)
         const { cartData } = this.state;
         let amountOrdered = cartData ? cartData.reduce((a, b) => {
-            return a + b.finalPrice
+            return a + (b.finalPrice * (this.state.quantity[b.id] || 1))
         }, 0) : 0
         this.setState({ sum: amountOrdered })
         return amountOrdered
@@ -127,12 +145,13 @@ class Cart extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCart();
-            // console.log("aza", this.props)
+            console.log("aza o", this.props.cartItems)
             let { products, quantity } = this.props.cartItems;
-            this.setState({ cartData: this.props.cartItems.products })
+            this.setState({ cartData: this.props.cartItems.products, 
+                quantity: this.props.cartItems.quantity    
+            })
             // console.log("aza", this.state.cartData)
         } else {
-            console.log()
             await this.props.fetchLocalCart()
             console.log("load drp", this.props.cartData)
             this.setState({ cartData: this.props.cartData })
@@ -140,34 +159,119 @@ class Cart extends Component {
 
     }
 
-    calSums = (sum, productId) => {
-        const { cartData } = this.state;
-        cartData.forEach(element => {
-            
-            if(element.id === productId){
-                element.amountOrdered = sum;
-            }else{
-                element.amountOrdered = element.finalPrice;
-            }
+    calSums = (sum, productId, qty) => {
+        console.log(qty, sum)
+        const { changeItems } = this.state;
+        this.setState({quantity: 
+            {...this.state.quantity, [productId]: qty}}, () => {
+                const { cartData } = this.state;
+                cartData.forEach(element => {
+                    
+                    if(element.id === productId){
+                        element.amountOrdered = sum;
+                    }else{
+                        element.amountOrdered = element.finalPrice * this.state.quantity[element.id];
+                    }
+                })
+                let amountOrdered = cartData ? cartData.reduce((a, b) => {
+                    return a + b.amountOrdered
+                }, 0) : 0
+                if(!changeItems.includes(productId)){
+                    changeItems.push(productId)
+                }
+                this.props.setCartDropDownTotalPrice(this.state.quantity)
+                this.setState({ sum: amountOrdered, changeItems: [...changeItems] })
         })
-        let amountOrdered = cartData ? cartData.reduce((a, b) => {
-            return a + b.amountOrdered
-        }, 0) : 0
-        this.setState({ sum: amountOrdered })
+        
     }
 
-    handleItemDelete = id => {
-        const { cartData} = this.state;
-        const index = cartData.findIndex(element => element.id === id)
-        if(index !== -1){
-            cartData.splice(index, 1)
+    handleItemDelete = async (id) => {
+        //const { cartData} = this.state;
+        if(localStorage.getItem('x-access-token')){
+            this.props.initiateRegistration()
+             await this.props.removeCartItem(id)
+             return console.log('vvv', this.props.cartItems.products)
         }
-        return this.setState({
-            cartData: [...cartData]
-        })
+        // const index = cartData.findIndex(element => element.id === id)
+        // const deletedItems = this.state.deletedCartItems;
+        // if(index !== -1){
+        //     if(!deletedItems.includes(id)){
+        //         deletedItems.push(id)
+        //     }
+        //     cartData.splice(index, 1)
+        // }
+        // return this.setState({
+        //     cartData: [...cartData],
+        //     deletedCartItems: [...deletedItems]
+        // }, () => this.calSum())
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    toggleDrawer = () => {
+        this.setState({
+            modal: !this.state.modal
+        })
+    }
+    payNowClickHandler = e => {
+        e.preventDefault()
+        if(localStorage.getItem('x-access-token')){
+            this.props.setAmount(this.state.sum)
+            if(this.state.cartData.length > 0){
+                return this.props.history.push("/users/checkout")
+            }else{
+                return this.props.renderError('Please add 1 or more items to cart')
+            }
+            
+        }
+        return this.setState({modal: true})
+    }
+    renderModal = () => {
+        if(this.state.modal){
+            return (
+
+                <Drawer anchor="bottom" open={this.state.modal} onClose={() => this.toggleDrawer()}>
+                    <div
+                    role="presentation"
+                    anchor="bottom"
+                    onClick={this.toggleDrawer}
+                    onKeyDown={this.toggleDrawer}
+                    className="modal-bottom-padding"
+                    >
+                        <main className="container">
+                            <div className="row">
+                                <div className="col-12">
+                                    <article className="default-font article-header">
+                                        Hello, Awesome User
+                                    </article>
+                                    <p className="default-font article-body" >
+                                        Thank you for shopping through Azonka, please kindly <strong style={{color:'#000',
+                                            textTransform:'capitalize'}}>
+                                            login or create account </strong>
+                                        to make purchases and enjoy the full benefits provided for you
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12">
+                                    <div
+                                        style={{display:'flex',margin:"10px 0px",
+                                        justifyContent:'flex-end'}}>
+                                        
+                                        <button onClick={this.toggleDrawer} style={{marginRight: 10}}
+                                                className="btn btn-sm btn-outline-dark">
+                                                    Thanks, Later
+                                        </button>
+                                        <Link to="/users/login" className="btn btn-sm btn-success" >
+                                            Login</Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                </Drawer>
+            )
+        }
     }
 
     render() {
@@ -198,18 +302,37 @@ class Cart extends Component {
                                         </thead>
                                         <tbody>
                                             {
-                                                this.state.cartData ? this.state.cartData.map(data => {
+                                                this.state.cartData && this.state.cartData.length > 0 ? this.state.cartData.map(data => {
                                                     return (
                                                         <ProductRow 
-                                                            calSums={(sum, productId) =>
-                                                                 this.calSums(sum, productId)} 
+                                                            calSums={(sum, productId, qty) =>
+                                                                 this.calSums(sum, productId, qty)} 
                                                             calSum={this.calSum} 
+                                                            quantity={this.state.quantity[data.id]}
                                                             handleItemDelete={this.handleItemDelete}
                                                             {...data}
-                                                            
+                                                                
                                                             />
                                                     )
-                                                }) : (<div>No data available</div>)
+                                                }) : (
+                                                    <tr  className="product-row" >
+                                                        <td className="product-col" style={{ backgroundColor:'transparent'}}>
+                                                            <figure style={{border:'0', backgroundColor:'transparent'}} 
+                                                            className="product-image-container">
+                                                                <span style={{fontSize: '4rem', color: '#000'}}>
+                                                                    <i className="fas fa-shopping-bag"></i>
+                                                                </span>
+                                                            </figure>
+                                                            <h2 className="product-title" style={{width: '14em'}}>
+                                                                Your cart is empty
+                                                            </h2>
+                                                        </td>
+                                                        <td></td>
+                                                        <td>
+
+                                                        </td>
+                                                    </tr>
+                                                )
                                             }
                                         </tbody>
 
@@ -319,9 +442,8 @@ class Cart extends Component {
                                     </table>
 
                                     <div className="checkout-methods">
-                                        <Link to="/users/checkout" onClick={() => 
-                                            this.props.setAmount(this.state.sum)}  
-                                            className="btn btn-block btn-sm btn-primary">Pay Now</Link>
+                                        <span onClick={this.payNowClickHandler}  
+                                            className="btn btn-block btn-sm btn-primary">Pay Now</span>
                                     </div>
                                 </div>
                             </div>
@@ -330,6 +452,9 @@ class Cart extends Component {
 
                     <div className="mb-6"></div>
                 </div>
+                {
+                    this.renderModal()
+                }
                 <Footer />
             </div>
         )
@@ -337,8 +462,9 @@ class Cart extends Component {
 }
 
 const mapStateToProps = state => {
-
+    
     let { categories, cartItems, cartData } = state.inventory
+    console.log('cartData', cartData)
     return {
         categories, cartItems, cartData
     }

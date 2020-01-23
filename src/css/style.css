@@ -2496,6 +2496,9 @@ header,
 }
 
 @media screen and (max-width: 460px) {
+    address-htag{
+        font-size: 1.5rem !important;
+    }
     .list-breadcrumbs li.breadcrumb-item:nth-child(3n)::after{
         content: '...' !important;
     }
@@ -3573,6 +3576,9 @@ header .account-actions .button:last-child {
 }
 
 @media screen and (max-width: 460px) {
+    .address-htag{
+        font-size: 1.5rem !important;
+    }
     .banner {
         padding-top: 55px
     }
@@ -5091,6 +5097,9 @@ header .account-actions .button:last-child {
 }
 
 @media screen and (max-width: 935px) {
+    address-htag{
+        font-size: 1.5rem !important;
+    }
     .section .content .headline,
     .dashboard-content .headline {
         height: 175px;
@@ -12279,7 +12288,7 @@ input[type=number] {
 }
 
 .modal-bottom-padding{
-   padding: 6rem 2rem;
+   padding: 2rem 2rem;
 }
 
 .default-font {
@@ -12363,4 +12372,82 @@ input[type=radio]:checked ~ label{
 .payment-type{
     font-size: 1.43rem;
     color: #000;
+}
+
+label.custom{
+    margin-top: 0px !important;
+}
+
+.address-htag{
+    padding: 0px 8px;
+    font-family: "open sans", sans-serif;
+    width: 100%;
+    word-break: break-word !important;
+}
+
+/* .fa-shopping-bag:before{
+    content: "\e87f" !important
+} */
+
+.mt-card {
+  /* box-shadow: 0 1px 2px 0 rgba(0,0,0,.15); */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  /* margin: 20px; */
+  position: relative;
+  margin-bottom: 50px;
+  transition: all .2s ease-in-out;
+}
+
+.mt-card:hover{
+    /* box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); */
+  /* margin-bottom: 54px */
+}
+
+.mt-card.pack-box {
+    width: 100% !important;
+}
+
+.mt-card.pack-box .price {
+    font-family: "Titillium", sans-serif !important;
+    font-size: 1.5rem !important;
+}
+
+.wallet-btn{
+    width: 70% !important;
+    margin: 0 auto;
+}
+
+.mt-card-shadow{
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
+  /* margin: 20px; */
+  position: relative;
+  transition: all .2s ease-in-out;
+}
+
+.rm-margin-top{
+    margin-top: 0px !important;
+}
+
+.rm-border{
+    border: 0
+}
+
+.wallet-text{
+    font-family: Roboto, sans-serif;
+    font-size: 1.2em;
+    text-transform: capitalize;
+}
+
+.wallet-amount{
+    font-weight: bold;
+}
+
+.current-balance{
+    width: 100%;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    font-family: Roboto, sans-serif;
+    color: #000;
+    font-size: 1.9rem;
 }

@@ -75,10 +75,10 @@ class Dashboard extends Component {
                                             <li className={this.props.dashboardActiveLink === 'Change Password' ? 'active' : ''}><Link to="/users/reset-password">Change Password</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Change Pincode' ? 'active' : ''}><Link to="#">Change Pincode</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Bank' ? 'active' : ''}><Link to="/users/banks">My Bank</Link></li>
-                                            <li className={this.props.dashboardActiveLink === 'Azonka Wallet' ? 'active' : ''}><Link to="#">My Azonka Wallet</Link></li>
+                                            <li className={this.props.dashboardActiveLink === 'Azonka Wallet' ? 'active' : ''}><Link to="/users/wallet">My Azonka Wallet</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Azonka Credit' ? 'active' : ''}><Link to="#">My Azonka Credit</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Azonka Pay' ? 'active' : ''}><Link to="#">Azonka Pay</Link></li>
-                                            <li className={this.props.dashboardActiveLink === 'Address Book' ? 'active' : ''}><Link to="#">Address Book</Link></li>
+                                            <li className={this.props.dashboardActiveLink === 'My Address Book' ? 'active' : ''}><Link to="/users/address">Address Book</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Referral' ? 'active' : ''}><Link to="/users/referrals">Referral</Link></li>
                                             {
                                                 userData && userData.type !== 'user' ?

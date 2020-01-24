@@ -7,7 +7,7 @@ import {
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, FILES_SELECTED, CART_UPDATED_SUCCESSFULLY,
     EXPIRED_LOGIN_SESSION, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
-    ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED,
+    ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
     HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
     ITEM_MODAL
 } from "./types";
@@ -658,14 +658,15 @@ export const setAmount = amount => {
 }
 
 export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress) => {
+
     return async (dispatch) => {
         try {
-            const response = await axios.post('/api/v1/user/order/create',
+            await axios.post('/api/v1/user/order/create',
                 {
                     amount: '' + amount,
                     transactionReference: txRef,
                     transactionNo,
-                    addressId,
+                    addressId: `${addressId}`,
                     addressString: userAddress,
                     useWallet: paymentType === 'pay with debit' ? false : true
                 }, {
@@ -694,9 +695,10 @@ export const registerPayment = (transactionNo, txRef, amount, paymentType, cartD
             dispatch({ type: SUCCESS_ALERT, payload: 'Order created successfully' })
         } catch (error) {
             dispatch({ type: STOP_LOADING, payload: '' })
+            console.log(error.response)
             if (error.response.data.message)
                 return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 50) })
-            return dispatch({ type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50) })
+            // return dispatch({type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50)})
         }
     }
 }
@@ -783,8 +785,15 @@ export const fetchCheckoutCart = () => {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
+            const response3 = await axios.get('/api/v1/user/wallet/get', {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
             const { cart } = response.data;
             const { address } = response2.data;
+            const { transactions, balance } = response3.data.wallet
+            dispatch({ type: USER_WALLET_OBTAINED_SUCCESSFULLY, payload: { transactions, balance } })
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: ADDRESSES_FETCHED, payload: address })
         } catch (error) {

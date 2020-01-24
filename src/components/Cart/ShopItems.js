@@ -124,8 +124,7 @@ class ShopItems extends Component {
             finalPrice: ""
         }
         await this.props.SearchItem(postObj)
-        let { success, products } = this.props.search
-        console.log("elvis", success, products)
+        let { success, products } = this.props.search;
         this.setState({ products })
     }
 

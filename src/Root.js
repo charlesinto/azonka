@@ -46,6 +46,7 @@ import ShopItemDetails from './components/Cart/ShopItemDetails';
 import Header from './components/HeaderFooter/Header';
 import ItemModal from './components/Cart/ItemModal';
 import Checkout from "./components/Checkout";
+import CartTest from './components/Cart/CartTest';
 // import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
@@ -70,6 +71,7 @@ class Root extends Component {
                                 <Route exact path="/shop" component={ShopItems} />
                                 <Route exact path="/shop-details/:id" component={ShopItemDetails} />
                                 <Route exact path="/modal" component={ItemModal} />
+                                <Route exact path="/cartest" component={CartTest} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register" component={Register} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />

@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Header from '../HeaderFooter/Header'
 import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
-import { ShopItemAside } from './ShopItemAside'
 import { ShopItemHeader } from './ShopItemHeader'
 import { ShopItemPaginate } from './ShopItemPaginate'
 import { Link } from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import ShopItemAside from './ShopItemAside'
 
 
 class ShopItems extends Component {
@@ -225,7 +225,7 @@ class ShopItems extends Component {
                             </div>
                             {/* <!-- End .col-lg-9 --> */}
 
-                            <ShopItemAside />
+                            < ShopItemAside />
                             {/* <!-- End .col-lg-3 --> */}
                         </div>
                         {/* <!-- End .row --> */}

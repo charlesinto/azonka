@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Route } from "react-router-dom";
 import englishFlag from "../../css/images/flags/en.png";
 import nigeriaFlag from "../../css/images/flags/nigeria.png";
 import frenchFlag from "../../css/images/flags/fr.png";
@@ -8,6 +8,8 @@ import product1 from "../../css/images/products/cart/product-1.jpg";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import CartDropdown from '../Cart/CartDropdown';
+import ShopItem from '../Cart/ShopItems'
+import ShopItems from '../Cart/ShopItems';
 
 class Header extends Component {
     state = {
@@ -15,7 +17,7 @@ class Header extends Component {
         showSearchBar: false,
         currentUser: null,
         cartData: [],
-        search: "",
+        name: "",
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
@@ -72,28 +74,11 @@ class Header extends Component {
         this.setState({ category: this.props.categories })
     }
     handleSearchSubmit = async () => {
-        let { search } = this.state;
+        let { name } = this.state
         let category = document.querySelector("#category").value;
-        let postObj = {
-            search,
-            category,
-            brandName: "",
-            year: "0",
-            category: "0",
-            subCategory: "0",
-            store: "0",
-            sellingPrice: "",
-            costPrice: "",
-            discounts: true,
-            finalPrice: ""
-        }
-        await this.props.SearchItem(postObj)
-        let { products } = this.props;
-        if (products.status === 200) {
-            this.props.history.push('/shop');
-        } else {
-            return null;
-        }
+        console.log(name, category)
+        return this.props.history.push(`/shop?name=${name}&category=${category}`);
+
     }
 
 
@@ -195,7 +180,7 @@ class Header extends Component {
                                             onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
                                             <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
-                                                <input type="search" className="form-control" id="search" placeholder="Search..." required="" onChange={this.handleSearchChange} />
+                                                <input type="search" className="form-control" id="name" placeholder="Search..." required="" onChange={this.handleSearchChange} />
                                                 <div className="select-custom">
                                                     <select id="category" onChange={this.handleSearchChange}>
                                                         {

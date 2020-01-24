@@ -4,18 +4,32 @@ import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
 import { ShopItemHeader } from './ShopItemHeader'
 import { ShopItemPaginate } from './ShopItemPaginate'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import ShopItemAside from './ShopItemAside'
+import queryString from 'query-string';
+import { SearchItem } from '../../actions'
 
 
 class ShopItems extends Component {
-    state = { products: [], sortState: "", cartData: [], cartLength: 0 }
+    state = {
+        products: [], sortState: "", cartData: [],
+        name: "", category: "",
+        cartLength: 0
+    }
     componentDidMount() {
         this.loadShopData()
+        let params = queryString.parse(this.props.location.search)
+        const { name, category } = params;
+        this.setState({ name, category })
+        this.searchItem()
     }
+    componentDidUpdate() {
+        this.searchItem()
+    }
+
     handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
@@ -41,8 +55,9 @@ class ShopItems extends Component {
         }
 
     }
-    handleItemDetails = (e) => {
-        this.props.history.push(`/shop-details/${e.target.id}`)
+    handleItemDetails = (e, id) => {
+        e.preventDefault()
+        this.props.history.push(`/shop-details/${id}`)
     }
     handleAddCart = async (e) => {
         let id = e.target.id;
@@ -92,11 +107,26 @@ class ShopItems extends Component {
     loadShopData = async () => {
         let { data } = this.props.products;
 
-        if (data && data.success) {
-            this.setState({ products: data.products })
-        } else {
-            this.props.history.push('/')
+
+    }
+    searchItem = async () => {
+        let { name, category } = this.state;
+        let postObj = {
+            name,
+            category,
+            brandName: "",
+            year: "0",
+            category: "0",
+            subCategory: "0",
+            store: "0",
+            sellingPrice: "",
+            costPrice: "",
+            discounts: true,
+            finalPrice: ""
         }
+        await this.props.SearchItem(postObj)
+        let { success, products } = this.props.search;
+        this.setState({ products })
     }
 
     render() {
@@ -171,10 +201,10 @@ class ShopItems extends Component {
                                                     <div className="col-6 col-md-4 col-xl-3" key={id}>
                                                         <div className="product">
                                                             <figure className="product-image-container">
-                                                                <span id={id} className="product-image shop-product-image" onClick={this.handleItemDetails}>
+                                                                <span id={id} className="product-image shop-product-image" onClick={(e) => this.handleItemDetails(e, id)}>
                                                                     <img src={mainImageUrl} alt="product" />
                                                                 </span>
-                                                                <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
+                                                                <Link to="#" className="btn-quickview">Quick View</Link>
                                                             </figure>
                                                             <div className="product-details">
                                                                 <div className="ratings-container">
@@ -183,12 +213,12 @@ class ShopItems extends Component {
                                                                     </div>
                                                                 </div>
                                                                 <h2 className="product-title">
-                                                                    <Link to="product.html">{name}</Link>
+                                                                    <Link to="#">{name}</Link>
                                                                 </h2>
                                                                 <div className="price-box">
-                                                                    <span className="product-price"> ₦{finalPrice}</span>
+                                                                    <span className="product-price"> ₦ {finalPrice}</span>
                                                                     <h2 className="product-title">
-                                                                        <Link to="product.html">{new Date(createdAt).toLocaleString()}</Link>
+                                                                        <Link to="#">{new Date(createdAt).toLocaleString()}</Link>
                                                                     </h2>
                                                                 </div>
 
@@ -244,12 +274,14 @@ class ShopItems extends Component {
 
 
 const mapStateToProps = state => {
-    const { cartItems, cartData, products } = state.inventory;
+
+    let { cartItems, cartData, products, search } = state.inventory;
     let cartResponse = cartItems.data
+    search = search.data
     return {
-        cartItems, cartResponse, cartData, products
+        cartItems, cartResponse, cartData, products, search
     }
 }
 
 
-export default connect(mapStateToProps, actions)(ShopItems);
+export default withRouter(connect(mapStateToProps, actions)(ShopItems));

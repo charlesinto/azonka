@@ -4,18 +4,32 @@ import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
 import { ShopItemHeader } from './ShopItemHeader'
 import { ShopItemPaginate } from './ShopItemPaginate'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import ShopItemAside from './ShopItemAside'
+import queryString from 'query-string';
+import { SearchItem } from '../../actions'
 
 
 class ShopItems extends Component {
-    state = { products: [], sortState: "", cartData: [], cartLength: 0 }
+    state = {
+        products: [], sortState: "", cartData: [],
+        name: "", category: "",
+        cartLength: 0
+    }
     componentDidMount() {
         this.loadShopData()
+        let params = queryString.parse(this.props.location.search)
+        const { name, category } = params;
+        this.setState({ name, category })
+        this.searchItem()
     }
+    componentDidUpdate() {
+        this.searchItem()
+    }
+
     handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
@@ -92,11 +106,27 @@ class ShopItems extends Component {
     loadShopData = async () => {
         let { data } = this.props.products;
 
-        if (data && data.success) {
-            this.setState({ products: data.products })
-        } else {
-            this.props.history.push('/')
+
+    }
+    searchItem = async () => {
+        let { name, category } = this.state;
+        let postObj = {
+            name,
+            category,
+            brandName: "",
+            year: "0",
+            category: "0",
+            subCategory: "0",
+            store: "0",
+            sellingPrice: "",
+            costPrice: "",
+            discounts: true,
+            finalPrice: ""
         }
+        await this.props.SearchItem(postObj)
+        let { success, products } = this.props.search
+        console.log("elvis", success, products)
+        this.setState({ products })
     }
 
     render() {
@@ -244,12 +274,14 @@ class ShopItems extends Component {
 
 
 const mapStateToProps = state => {
-    const { cartItems, cartData, products } = state.inventory;
+
+    let { cartItems, cartData, products, search } = state.inventory;
     let cartResponse = cartItems.data
+    search = search.data
     return {
-        cartItems, cartResponse, cartData, products
+        cartItems, cartResponse, cartData, products, search
     }
 }
 
 
-export default connect(mapStateToProps, actions)(ShopItems);
+export default withRouter(connect(mapStateToProps, actions)(ShopItems));

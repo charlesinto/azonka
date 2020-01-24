@@ -142,10 +142,10 @@ class Checkout extends Component{
     handleInputChange = (e, form) => {
         e.preventDefault()
         const {target:{name, value}} = e;
-        if(name === 'paymentType'){
+        if(name === 'paymentType' || name === 'paymentTypet'){
             return this.setState({
                 payType: value
-            })
+            }, () => console.log(this.state))
         }
         this.setState({
             [name]: value
@@ -438,7 +438,7 @@ class Checkout extends Component{
             // }
         }else{
             const { userAddress, addressId, payType} = this.state;
-            if(Validator.isEmail(addressId) && Validator.isEmpty(userAddress)){
+            if(Validator.isEmpty(`${addressId}`) && Validator.isEmpty(userAddress)){
                 return this.props.renderError('Please provide a delivery location')
             }
             else if(Validator.isEmpty(this.state.payType)){
@@ -447,6 +447,14 @@ class Checkout extends Component{
             if(payType === 'pay with debit'){
                 //this.props.successAlert('hello')
                return  this.payWithPayStack()
+            }else{
+                if(parseInt(this.props.amount) > parseInt(this.props.balance /100)){
+                    return this.props.renderError('Insufficient funds, please fund your wallet')
+                }
+                this.props.initiateRegistration()
+                this.props.registerPayment('', '', 
+                this.props.amount, this.state.payType, this.state.cartData, 
+                this.state.addressId, this.state.userAddress)
             }
         }
     }
@@ -548,8 +556,7 @@ class Checkout extends Component{
                                                         embed={false}
                                                         reference={this.getReference()}
                                                         email={this.state.emailAddress}
-                                                        amount={this.state.sum < 10000 ? 
-                                                            this.state.sum * 100 : 300 * 100}
+                                                        amount={this.state.sum * 100}
                                                         paystackkey={PAY_STACK_PUBLIC_KEY}
                                                         tag="button"
                                                     />
@@ -583,10 +590,12 @@ class Checkout extends Component{
 }
 
 const mapStateToProps = state => {
-    const {home: {amount}, inventory: {categories, cartItems, cartData, address}} = state;
+    const {home: {amount},bank:{balance},
+     inventory: {categories, cartItems, cartData, address}} = state;
     
     return {amount,
-        categories, cartItems, cartData, address
+        categories, cartItems, cartData, address,
+        balance
     }
 }
 

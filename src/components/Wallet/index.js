@@ -5,9 +5,10 @@ import Dashboard from "../HOC/Dashboard";
 import { PAY_STACK_PUBLIC_KEY } from "../../config/config";
 import PaystackButton from "react-paystack";
 import WalletDataTable  from "../../common/WalletDataTable";
+import validator from "validator";
 
 class Wallet extends Component {
-    state = {emailAddress: '', amount: 0}
+    state = {emailAddress: '', amount: 0, pin: '', bank: '', amountToWithdraw: ''}
     componentDidMount(){
         document.querySelector('.pay-1').addEventListener('click', () => {
             this.setState({amount: 1000})
@@ -74,6 +75,52 @@ class Wallet extends Component {
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    handlePinCodeInputChange = e => {
+        // console.log(e.key)
+        const KEYS_ALLOWED = ['1', '2','3','4','5','6','7','8','9','0',]
+        const CONTROLS = ['Backspace', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+        if(KEYS_ALLOWED.includes(e.key) || CONTROLS.includes(e.key)){
+            if(e.target.value.trim().length === 4 && !CONTROLS.includes(e.key) ){
+                return e.preventDefault()
+            }
+            return e;
+        }
+        return e.preventDefault()
+    }
+    handleInputChange = e => {
+        const {target: {name, value}} = e;
+        let amountToWithdraw = '';
+        if(name === 'amountToWithdraw'){
+            amountToWithdraw = value.split(',').join('')
+            return this.setState({
+                [name] : amountToWithdraw
+            })
+        }
+        this.setState({
+            [name] : value
+        })
+        
+    }
+    handleFormSubmit = e => {
+        e.preventDefault()
+        const {amountToWithdraw, bank, pin} = this.state
+        if(validator.isEmpty(amountToWithdraw) || validator.isEmpty(pin) || validator.isEmpty(bank)){
+            if(validator.isEmpty(bank)){
+                return this.props.renderError('Please Select Bank')
+            }
+            if(validator.isEmpty(pin)){
+                return this.props.renderError('Please provide pin')
+            }
+            if(validator.isEmpty(amountToWithdraw)){
+                return this.props.renderError('Please provide amount to withdraw')
+            }
+        }
+        if(parseInt(amountToWithdraw) > parseInt(this.props.balance)){
+            return this.props.renderError('Action could not be performed, Insufficient fund in wallet')
+        }
+        this.props.initiateRegistration()
+        this.props.withdrawlFromWallet(parseInt(amountToWithdraw), bank, pin)
     }
     render(){
         return (
@@ -307,15 +354,16 @@ class Wallet extends Component {
                                     <hr className="line-separator top"/>
                                     <div className="row" style={{marginTop: '1rem'}}>
                                         <div className="form-group col-md-12 col-sm-12">
-                                            <label htmlFor="ccnum" className="rl-label required rm-margin-top" >Amount to withdral</label>
-                                            <input type="text" className="form-control" id="ccnum" name="ccnum" placeholder="Enter your credit card number here..." />
+                                            <label htmlFor="ccnum" className="rl-label required rm-margin-top" >Amount to withdraw</label>
+                                            <input onKeyDown={this.handlePinCodeInputChange} onChange={this.handleInputChange} value={this.numberWithCommas(this.state.amountToWithdraw)} type="text" className="form-control"
+                                             id="ccnum" name="amountToWithdraw" placeholder="Enter amount to withdraw" />
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="form-group col-md-6 col-sm-12">
                                             <label htmlFor="exp_year" className="rl-label required rm-margin-top">Bank to be paid</label>
                                             <label htmlFor="exp_year" className="select-block">
-                                                <select className="form-control" name="exp_year" id="exp_year">
+                                                <select className="form-control" onChange={this.handleInputChange} value={this.state.bank} name="bank" id="exp_year">
                                                     <option value="">Select Bank</option>
                                                     {
                                                         this.props.savedBanks.map(bank => (
@@ -331,11 +379,11 @@ class Wallet extends Component {
                                         </div>
                                         <div className="form-group col-md-6 col-sm-12">
                                             <label htmlFor="secode" className="rl-label required rm-margin-top">Security Pin</label>
-                                            <input style={{marginTop:'2.3rem'}} type="password" className="form-control" id="secode" name="secode" placeholder="Enter your security pin here..." />
+                                            <input onChange={this.handleInputChange} value={this.state.pin} style={{marginTop:'2.3rem'}} type="password" className="form-control" id="secode" name="pin" placeholder="Enter your security pin here..." />
                                         </div>
                                     </div>
                                     <hr className="line-separator"/>
-                                    <button style={{width:'100%'}} className="btn btn-sm btn-outline-success">Make Withdrawal</button>
+                                    <button onClick={this.handleFormSubmit} style={{width:'100%'}} className="btn btn-sm btn-outline-success">Make Withdrawal</button>
                                 </form>
                             </div>
                         </div>

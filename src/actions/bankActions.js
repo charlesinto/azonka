@@ -181,3 +181,37 @@ export const getUserWalletDetals = (lastCount = 0, numOfRecords = 100) => {
         }
     }
 }
+
+export const withdrawlFromWallet = (amount, bank, pin,currency="") => {
+    console.log(amount, bank, currency, pin)
+    return async (dispatch) => {
+        try{
+             await axios.post('/api/v1/user/wallet/request-withdrawal', {
+                amount: `${amount}`, bank, pin, currency
+            }, {
+                headers:{
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const response2 = await axios.get('/api/v1/user/wallet/get', {
+                headers:{
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const { transactions, balance} = response2.data.wallet
+            dispatch({type: USER_WALLET_OBTAINED_SUCCESSFULLY, payload: {transactions, balance}})
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: SUCCESS_ALERT, payload: 'Fund withdrawal successful'})
+        }catch(error){
+            console.log('er', error.response)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}

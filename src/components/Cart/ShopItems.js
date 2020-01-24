@@ -16,14 +16,11 @@ import * as actions from "../../actions";
 class ShopItems extends Component {
     state = { products: [], sortState: "", cartData: [], cartLength: 0 }
     componentDidMount() {
-        // let products = JSON.parse(localStorage.getItem("shop"));
-        // this.setState({ produc })
         this.loadShopData()
     }
     handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
-        console.log("setted", this.state.cartData)
     }
     handleSort = () => {
         let { products } = this.state
@@ -88,24 +85,24 @@ class ShopItems extends Component {
             }
         }
 
-
-
-
-
     }
     handleSetData = async () => {
         await this.props.fetchLocalCart()
         let { cartData } = this.props;
-        console.log("firedata", cartData)
         this.setState({ cartData })
     }
     loadShopData = async () => {
-        await this.props.fetchFeaturedItems()
-        this.setState({ products: this.props.products })
+        let { data } = this.props.products;
+
+        if (data.success) {
+            this.setState({ products: data.products })
+        } else {
+            this.props.history.push('/')
+        }
     }
+
     render() {
         const { products, cartData } = this.state;
-        console.log("zlatan before", cartData);
         return (
             <div>
                 <main className="main">

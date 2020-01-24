@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import englishFlag from "../../css/images/flags/en.png";
 import nigeriaFlag from "../../css/images/flags/nigeria.png";
 import frenchFlag from "../../css/images/flags/fr.png";
@@ -14,7 +14,8 @@ class Header extends Component {
         mobileMenu: false,
         showSearchBar: false,
         currentUser: null,
-        cartData: []
+        cartData: [],
+        search: "",
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
@@ -24,7 +25,6 @@ class Header extends Component {
         })
         this.loadSearchCategory()
         this.loadCart()
-
     }
     _toggleMenu = () => {
         this.setState({
@@ -67,12 +67,40 @@ class Header extends Component {
         }
     }
 
+    handleSearchChange = (e) => {
+        this.setState({ [e.target.id]: e.target.value })
+        this.setState({ category: this.props.categories })
+    }
+    handleSearchSubmit = async () => {
+        let { search } = this.state;
+        let category = document.querySelector("#category").value;
+        let postObj = {
+            search,
+            category,
+            brandName: "",
+            year: "0",
+            category: "0",
+            subCategory: "0",
+            store: "0",
+            sellingPrice: "",
+            costPrice: "",
+            discounts: true,
+            finalPrice: ""
+        }
+        await this.props.SearchItem(postObj)
+        let { products } = this.props;
+        if (products.status === 200) {
+            this.props.history.push('/shop');
+        } else {
+            return null;
+        }
+    }
+
+
+
 
     render() {
         const { currentUser } = this.state;
-        const { cartData } = this.state;
-        // console.log("ayes", this.state.cartData)
-        // let { setCartData } = this.props;
         let { category } = this.state;
         return (
             <div>
@@ -167,9 +195,9 @@ class Header extends Component {
                                             onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
                                             <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
-                                                <input type="search" className="form-control" name="q" id="q" placeholder="Search..." required="" />
+                                                <input type="search" className="form-control" id="search" placeholder="Search..." required="" onChange={this.handleSearchChange} />
                                                 <div className="select-custom">
-                                                    <select id="cat" name="cat">
+                                                    <select id="category" onChange={this.handleSearchChange}>
                                                         {
                                                             category ? (
                                                                 category.map(_data => {
@@ -184,7 +212,7 @@ class Header extends Component {
                                                         }
                                                     </select>
                                                 </div>
-                                                <button className="btn" type="submit"><i className="icon-magnifier"></i></button>
+                                                <button className="btn" type="button" onClick={this.handleSearchSubmit}><i className="icon-magnifier"></i></button>
                                             </div>
                                         </form>
                                     </div>
@@ -327,12 +355,12 @@ class Header extends Component {
 
 const mapStateToProps = state => {
 
-    let { categories, cartItems, cartData } = state.inventory
+    let { categories, cartItems, cartData, products } = state.inventory
 
     const { home: { currentUser } } = state;
     return {
-        currentUser, categories, cartItems, cartData
+        currentUser, categories, cartItems, cartData, products
     }
 }
 
-export default connect(mapStateToProps, actions)(Header);
+export default withRouter(connect(mapStateToProps, actions)(Header));

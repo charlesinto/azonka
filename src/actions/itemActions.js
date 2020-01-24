@@ -4,12 +4,12 @@ import {
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
-    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE,FILES_SELECTED,CART_UPDATED_SUCCESSFULLY,
-    EXPIRED_LOGIN_SESSION,LOGOUT_USER,ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,REMOVE_SUB_IMAGES,
-    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT,SET_AMOUNT,
-    ORDER_CREATED_SUCCESSFULLY,SET_CARTDROPDOW_QUANTITY,ADDRESSES_FETCHED,
-     HANDLE_PREFERNCE_CHANGE,CALCULATE_PRODUCT_SUM,LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-     ITEM_MODAL
+    INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, FILES_SELECTED, CART_UPDATED_SUCCESSFULLY,
+    EXPIRED_LOGIN_SESSION, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
+    INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
+    ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED,
+    HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
+    ITEM_MODAL
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -150,12 +150,12 @@ export const fetchItems = () => {
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             dispatch({ type: STOP_LOADING, payload: '' })
-            if(error.response){
-                if(error.response.status === 401){
-                    
-                    dispatch({type: DISPLAY_ERROR, payload: 'Unauthorized access, please log in to continue'})
+            if (error.response) {
+                if (error.response.status === 401) {
+
+                    dispatch({ type: DISPLAY_ERROR, payload: 'Unauthorized access, please log in to continue' })
                     return setTimeout(() => {
-                        dispatch({type: LOGOUT_USER, payload: ''})
+                        dispatch({ type: LOGOUT_USER, payload: '' })
                     }, 1500)
                 }
                 dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
@@ -214,13 +214,13 @@ export const fetchCart = () => {
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             console.log('er', error)
-            if(error.response.status === 498){
+            if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-               return setTimeout(function(){
-                    dispatch({type: LOGOUT_USER, payload: ''})
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -253,6 +253,8 @@ export const fetchLocalShop = () => {
     }
 }
 
+
+
 export const addLocalCart = (id, cartData, obj) => {
     return async (dispatch) => {
         try {
@@ -261,12 +263,12 @@ export const addLocalCart = (id, cartData, obj) => {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return dispatch({type: SUCCESS_ALERT, payload: 'Item already added to cart'})
+                    return dispatch({ type: SUCCESS_ALERT, payload: 'Item already added to cart' })
                 } else {
                     // return console.log(cartData, obj)
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     let data = JSON.parse(localStorage.getItem("cart"))
-                    dispatch({type: SUCCESS_ALERT, payload: 'Item added to cart successfully'})
+                    dispatch({ type: SUCCESS_ALERT, payload: 'Item added to cart successfully' })
                     dispatch({ type: ADD_LOCAL_CART_SUCCESSFULLY, payload: data, message: "loca cart added" })
                     dispatch({ type: STOP_LOADING, payload: '' })
                 }
@@ -306,13 +308,36 @@ export const addToCart = (details) => {
                         'x-access-token': localStorage.getItem('x-access-token')
                     }
                 })
-    
+
                 const { cart } = response2.data;
                 dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
                 dispatch({ type: STOP_LOADING, payload: '' })
                 dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
                 dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
 
+            }
+        } catch (error) {
+            console.log(error.response)
+            if (error.response && error.response.data.message)
+                return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+
+            dispatch({ type: STOP_LOADING, payload: '' })
+            //return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+        }
+    }
+}
+
+export const SearchItem = (details) => {
+
+    return async (dispatch) => {
+        try {
+            const response = await axios.post('/api/v1/user/search-product', details)
+            console.log(response)
+            if (response.data.success) {
+                dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: response })
+                dispatch({ type: STOP_LOADING, payload: '' })
+                // dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
+                // dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
             }
         } catch (error) {
             console.log(error.response)
@@ -517,23 +542,23 @@ export const handleSellerPrefence = preference => {
 }
 
 export const calculateSumProducts = (sum, productId) => {
-    return {type: CALCULATE_PRODUCT_SUM, payload: {sum, productId}}
+    return { type: CALCULATE_PRODUCT_SUM, payload: { sum, productId } }
 }
 
 export const successAlert = (message = '') => {
-    if(message.trim() !== ''){
-        return {type: SUCCESS_ALERT, payload: message}
+    if (message.trim() !== '') {
+        return { type: SUCCESS_ALERT, payload: message }
     }
 }
 
-export const addSubImages = (index , image) => {
-    return {type: ADD_SUB_IMAGES, payload: {image, index}}
+export const addSubImages = (index, image) => {
+    return { type: ADD_SUB_IMAGES, payload: { image, index } }
 }
 
 export const updateItem = (id, data) => {
     return async (dispatch) => {
-        if(id){
-            try{
+        if (id) {
+            try {
                 console.log('data', data)
                 let imageUploaded = null;
                 const otherImages = []
@@ -542,26 +567,26 @@ export const updateItem = (id, data) => {
                 // let otherImageUrl1 = '', otherImageUrl2 = '', otherImageUrl3 = ''
                 // otherImageUrl4 = ''
                 for (let i = 0; i < data.files.length; i++) {
-                    if(data.files[i].type === 'main'){
-                         mainImageResponse = await fileUpload(data.files[i].file, 'storeItems');
-                    }else{
+                    if (data.files[i].type === 'main') {
+                        mainImageResponse = await fileUpload(data.files[i].file, 'storeItems');
+                    } else {
                         imageUploaded = await fileUpload(data.files[i].file, 'storeItems')
-                        otherImages.push({elementNumber: data.files[i].elementNumber, Location: imageUploaded.Location})
+                        otherImages.push({ elementNumber: data.files[i].elementNumber, Location: imageUploaded.Location })
                         // `otherImageUrl${data[files].elementNumber}` = imageUploaded.Location;
                     }
-                    
+
                 }
                 // let e = otherImages.find(element => element.elementNumber === 1) 
                 // console.log(otherImages, e)
-                const mainImageUrl =  mainImageResponse ? mainImageResponse.Location : null;
-                let otherImageUrl1 =  otherImages.find(element => element.elementNumber === 1) ?
-                otherImages.find(element => element.elementNumber === 1).Location : ''      
-               let otherImageUrl2 =  otherImages.find(element => element.elementNumber === 2) ?
-               otherImages.find(element => element.elementNumber === 2).Location : ''
-                let otherImageUrl3 =  otherImages.find(element => element.elementNumber === 3) ?
-                otherImages.find(element => element.elementNumber === 3).Location : ''
-                let otherImageUrl4 =  otherImages.find(element => element.elementNumber === 4) ?
-                otherImages.find(element => element.elementNumber === 4).Location : ''
+                const mainImageUrl = mainImageResponse ? mainImageResponse.Location : null;
+                let otherImageUrl1 = otherImages.find(element => element.elementNumber === 1) ?
+                    otherImages.find(element => element.elementNumber === 1).Location : ''
+                let otherImageUrl2 = otherImages.find(element => element.elementNumber === 2) ?
+                    otherImages.find(element => element.elementNumber === 2).Location : ''
+                let otherImageUrl3 = otherImages.find(element => element.elementNumber === 3) ?
+                    otherImages.find(element => element.elementNumber === 3).Location : ''
+                let otherImageUrl4 = otherImages.find(element => element.elementNumber === 4) ?
+                    otherImages.find(element => element.elementNumber === 4).Location : ''
                 const item = {
                     name: data.name,
                     brandName: data.brandName,
@@ -573,13 +598,13 @@ export const updateItem = (id, data) => {
                     otherImageUrl2: otherImageUrl2.trim() !== '' ? otherImageUrl2 : data.subImage2,
                     otherImageUrl3: otherImageUrl3.trim() !== '' ? otherImageUrl3 : data.subImage3,
                     otherImageUrl4: otherImageUrl4.trim() !== '' ? otherImageUrl4 : data.subImage4,
-                    category:''+ data.category,
-                    subCategory:''+ data.subCategory,
-                    store:''+ data.store,
-                    sellingPrice:''+ data.sellingPrice,
-                    costPrice: ''+ data.finalPrice,
+                    category: '' + data.category,
+                    subCategory: '' + data.subCategory,
+                    store: '' + data.store,
+                    sellingPrice: '' + data.sellingPrice,
+                    costPrice: '' + data.finalPrice,
                     discounts: data.discounts,
-                    finalPrice:''+ data.finalPrice,
+                    finalPrice: '' + data.finalPrice,
                     deliveryType: data.deliveryType,
                     deliveryLocation: data.deliveryLocation,
                     width: data.width,
@@ -590,25 +615,25 @@ export const updateItem = (id, data) => {
                     weightUnit: data.weightUnit
                 }
                 console.log('item', item)
-                 await axios.put(`/api/v1/seller/product/update/${id}`, {
+                await axios.put(`/api/v1/seller/product/update/${id}`, {
                     ...item
                 }, {
                     headers: {
                         'x-access-token': localStorage.getItem('x-access-token')
                     }
                 })
-                dispatch({type: STOP_LOADING, payload: ''})
-                dispatch({type: SUCCESS_ALERT, payload: 'Item updated successfully'})
-                dispatch({type: CLEAR_PRODUCT_FORM, payload: ''})
-            } catch(error){
+                dispatch({ type: STOP_LOADING, payload: '' })
+                dispatch({ type: SUCCESS_ALERT, payload: 'Item updated successfully' })
+                dispatch({ type: CLEAR_PRODUCT_FORM, payload: '' })
+            } catch (error) {
                 console.log('er', error)
-                if(error.response.status === 498){
+                if (error.response.status === 498) {
                     dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function(){
-                        dispatch({type: LOGOUT_USER, payload: ''})
+                    return setTimeout(function () {
+                        dispatch({ type: LOGOUT_USER, payload: '' })
                     }, 1500)
                 }
-                dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+                dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
                 dispatch({ type: STOP_LOADING, payload: '' })
             }
         }
@@ -616,75 +641,76 @@ export const updateItem = (id, data) => {
 }
 
 export const updateFilesSelected = files => {
-    return {type: FILES_SELECTED, payload: files}
+    return { type: FILES_SELECTED, payload: files }
     // return { type: CALCULATE_PRODUCT_SUM, payload: { sum, productId } }
 }
 
-export const renderSuccessAlert = (message='') => {
-    return {type: SUCCESS_ALERT, payload: message}
+export const renderSuccessAlert = (message = '') => {
+    return { type: SUCCESS_ALERT, payload: message }
 }
 
 export const removeSubImagesFromUpload = elementNumber => {
-    return {type: REMOVE_SUB_IMAGES, payload: elementNumber}
+    return { type: REMOVE_SUB_IMAGES, payload: elementNumber }
 }
 
 export const setAmount = amount => {
-    return {type: SET_AMOUNT, payload: amount}
+    return { type: SET_AMOUNT, payload: amount }
 }
 
-export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress ) => {
+export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress) => {
     return async (dispatch) => {
-        try{
-           const response = await  axios.post('/api/v1/user/order/create', 
-                                {
-                                    amount: '' + amount,
-                                    transactionReference: txRef,
-                                    transactionNo,
-                                    addressId,
-                                    addressString: userAddress,
-                                    useWallet: paymentType === 'pay with debit' ? false : true
-                                },{
-                                    headers: {
-                                        'x-access-token': localStorage.getItem('x-access-token')
-                                    }}
-                            )
-                console.log('cartt ', cartData)
-              for(let i = 0; i < cartData.length; i++){
-                  await axios.post('/api/v1/user/cart/remove', {productId: cartData[i].id},{
-                    headers: {
-                        'x-access-token': localStorage.getItem('x-access-token')
-                    }
-                  } )
-              } 
-            const responseCart =  await axios.get(`/api/v1/user/cart/get`, {
+        try {
+            const response = await axios.post('/api/v1/user/order/create',
+                {
+                    amount: '' + amount,
+                    transactionReference: txRef,
+                    transactionNo,
+                    addressId,
+                    addressString: userAddress,
+                    useWallet: paymentType === 'pay with debit' ? false : true
+                }, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
-            }) 
+            }
+            )
+            console.log('cartt ', cartData)
+            for (let i = 0; i < cartData.length; i++) {
+                await axios.post('/api/v1/user/cart/remove', { productId: cartData[i].id }, {
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                })
+            }
+            const responseCart = await axios.get(`/api/v1/user/cart/get`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
             const { cart } = responseCart.data;
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
-            dispatch({type: STOP_LOADING, payload: ''})
-            dispatch({type: ORDER_CREATED_SUCCESSFULLY, payload: ''})
-            dispatch({type: SUCCESS_ALERT, payload: 'Order created successfully'})
-        }catch(error){
-            dispatch({type: STOP_LOADING, payload: ''})
-            if(error.response.data.message)
-                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 50)})
-            return dispatch({type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50)})
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({ type: ORDER_CREATED_SUCCESSFULLY, payload: '' })
+            dispatch({ type: SUCCESS_ALERT, payload: 'Order created successfully' })
+        } catch (error) {
+            dispatch({ type: STOP_LOADING, payload: '' })
+            if (error.response.data.message)
+                return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 50) })
+            return dispatch({ type: DISPLAY_ERROR, payload: error.response.message.substr(0, 50) })
         }
     }
 }
 
 export const removeCartItem = id => {
     return async (dispatch) => {
-        try{
-                await axios.post('/api/v1/user/cart/remove', {
-                            productId: `${id}`
-                        }, {
-                            headers: {
-                                'x-access-token': localStorage.getItem('x-access-token')
-                            }
-                        })
+        try {
+            await axios.post('/api/v1/user/cart/remove', {
+                productId: `${id}`
+            }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
             const response2 = await axios.get(`/api/v1/user/cart/get`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
@@ -694,52 +720,53 @@ export const removeCartItem = id => {
             const { cart } = response2.data;
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
             dispatch({ type: STOP_LOADING, payload: '' })
-            dispatch({type: SUCCESS_ALERT, payload: 'Item removed from cart successfully'})
+            dispatch({ type: SUCCESS_ALERT, payload: 'Item removed from cart successfully' })
 
-        }catch(error){
+        } catch (error) {
             dispatch({ type: STOP_LOADING, payload: '' })
-            if(error.response.status === 498){
+            if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-            return setTimeout(function(){
-                    dispatch({type: LOGOUT_USER, payload: ''})
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0,80) })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 80) })
         }
 
     }
 }
 
 export const setCartDropDownTotalPrice = (quantity) => {
-    return {type: SET_CARTDROPDOW_QUANTITY, payload: quantity}
+    return { type: SET_CARTDROPDOW_QUANTITY, payload: quantity }
 }
 
 export const updateCartItems = (cart, quantity, changeItems) => {
     return async (dispatch) => {
         //update the backend with the new cart details
-        try{
-            for(let i = 0; i < changeItems.length; i++){
-                await axios.post('/api/v1/user/cart/add',{
-                    productId: `${changeItems[i]}`,quantity: `${quantity[changeItems[i]]}` },{
-                        headers: {
-                            'x-access-token': localStorage.getItem('x-access-token')
-                        }
-                    })
+        try {
+            for (let i = 0; i < changeItems.length; i++) {
+                await axios.post('/api/v1/user/cart/add', {
+                    productId: `${changeItems[i]}`, quantity: `${quantity[changeItems[i]]}`
+                }, {
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                })
             }
-            dispatch({type: STOP_LOADING, payload: ''})
-            dispatch({type: CART_UPDATED_SUCCESSFULLY, payload: '' })
-        }catch(error){
             dispatch({ type: STOP_LOADING, payload: '' })
-            if(error.response.status === 498){
+            dispatch({ type: CART_UPDATED_SUCCESSFULLY, payload: '' })
+        } catch (error) {
+            dispatch({ type: STOP_LOADING, payload: '' })
+            if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-            return setTimeout(function(){
-                    dispatch({type: LOGOUT_USER, payload: ''})
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0,80) })
-            
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 80) })
+
         }
-        
+
     }
 }
 
@@ -751,7 +778,7 @@ export const fetchCheckoutCart = () => {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
-            const response2 = await axios.get('/api/v1/user/address/get/0/10',{
+            const response2 = await axios.get('/api/v1/user/address/get/0/10', {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
@@ -759,16 +786,16 @@ export const fetchCheckoutCart = () => {
             const { cart } = response.data;
             const { address } = response2.data;
             dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
-            dispatch({type: ADDRESSES_FETCHED, payload: address})
+            dispatch({ type: ADDRESSES_FETCHED, payload: address })
         } catch (error) {
             console.log('er', error)
-            if(error.response.status === 498){
+            if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-               return setTimeout(function(){
-                    dispatch({type: LOGOUT_USER, payload: ''})
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -779,9 +806,9 @@ export const stopHomeLoading = () => {
 }
 
 export const getAddresses = (id = 0, numberOfPage = 100) => {
-    return async  (dispatch) => {
-        try{
-            const response = await axios.get(`/api/v1/user/address/get/${id}/${numberOfPage}`,{
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/api/v1/user/address/get/${id}/${numberOfPage}`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
@@ -789,25 +816,25 @@ export const getAddresses = (id = 0, numberOfPage = 100) => {
 
             const { address } = response.data;
             console.log(address)
-            dispatch({type: STOP_LOADING, payload: ''})
-            dispatch({type: ADDRESSES_FETCHED, payload: address})
-        }catch(error){
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({ type: ADDRESSES_FETCHED, payload: address })
+        } catch (error) {
             console.log('er', error)
-            if(error.response.status === 498){
+            if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-               return setTimeout(function(){
-                    dispatch({type: LOGOUT_USER, payload: ''})
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
 }
 
-export const createAddress = (data, id=0, numberOfPage= 100) => {
+export const createAddress = (data, id = 0, numberOfPage = 100) => {
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.post('/api/v1/user/address/create', {
                 address1: data.address,
                 ...data
@@ -816,25 +843,25 @@ export const createAddress = (data, id=0, numberOfPage= 100) => {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
-            const response2 = await axios.get(`/api/v1/user/address/get/${id}/${numberOfPage}`,{
+            const response2 = await axios.get(`/api/v1/user/address/get/${id}/${numberOfPage}`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
 
             const { address } = response2.data;
-            dispatch({type: ADDRESSES_FETCHED, payload: address})
-            dispatch({type: STOP_LOADING, payload: ''})
-            dispatch({type: SUCCESS_ALERT, payload: 'Address created successfully'})
-        }catch(error){
+            dispatch({ type: ADDRESSES_FETCHED, payload: address })
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({ type: SUCCESS_ALERT, payload: 'Address created successfully' })
+        } catch (error) {
             console.log('er', error)
-            if(error.response.status === 498){
+            if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-               return setTimeout(function(){
-                    dispatch({type: LOGOUT_USER, payload: ''})
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }

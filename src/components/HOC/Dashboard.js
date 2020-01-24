@@ -72,6 +72,7 @@ class Dashboard extends Component {
                                                 }
                                             </li>
                                             <li className={this.props.dashboardActiveLink === 'Cart' ? 'active' : ''}><Link to="/users/cart">Cart</Link></li>
+                                            <li className={this.props.dashboardActiveLink === 'My Orders' ? 'active' : ''}><Link to="/users/placed-orders">My Orders</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Change Password' ? 'active' : ''}><Link to="/users/reset-password">Change Password</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Change Pincode' ? 'active' : ''}><Link to="#">Change Pincode</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Bank' ? 'active' : ''}><Link to="/users/banks">My Bank</Link></li>

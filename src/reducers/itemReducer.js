@@ -5,7 +5,7 @@ import {
     ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,CART_UPDATED_SUCCESSFULLY,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, FILES_SELECTED,
         LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED,
+    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, ORDER_FETCHED_SUCCESSFULLY,
         
 } from "../actions/types";
 
@@ -55,7 +55,7 @@ const INTIAL_STATE = {
     deliveryLocation: '',
     filteredSubCategory: [],
     redirectToCheckout: false,
-
+    orders: []
 }
 
 export default (state = INTIAL_STATE, actions) => {
@@ -133,6 +133,8 @@ export default (state = INTIAL_STATE, actions) => {
                 default: 
                 return {...state}
             }
+        case ORDER_FETCHED_SUCCESSFULLY: 
+            return {...state, orders: actions.payload}
         default:
             return { ...state }
     }

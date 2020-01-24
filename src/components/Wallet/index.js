@@ -120,7 +120,7 @@ class Wallet extends Component {
             return this.props.renderError('Action could not be performed, Insufficient fund in wallet')
         }
         this.props.initiateRegistration()
-        this.props.withdrawlFromWallet(parseInt(amountToWithdraw), bank, pin)
+        this.props.withdrawlFromWallet(parseInt(amountToWithdraw) * 100, bank, pin)
     }
     render(){
         return (

@@ -12451,3 +12451,9 @@ label.custom{
     color: #000;
     font-size: 1.9rem;
 }
+
+.my-order-status{
+    /* font-family: Roboto, sans-serif; */
+    text-transform: capitalize;
+    /* font-weight: bold; */
+}

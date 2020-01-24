@@ -3,7 +3,7 @@ import {
     STOP_LOADING, SUCCESS_ALERT, ITEM_CHANGE_ACTION,
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
-    LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
+    LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,ORDER_FETCHED_SUCCESSFULLY, 
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, FILES_SELECTED, CART_UPDATED_SUCCESSFULLY,
     EXPIRED_LOGIN_SESSION, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
@@ -863,6 +863,33 @@ export const createAddress = (data, id = 0, numberOfPage = 100) => {
             dispatch({ type: STOP_LOADING, payload: '' })
             dispatch({ type: SUCCESS_ALERT, payload: 'Address created successfully' })
         } catch (error) {
+            console.log('er', error)
+            if (error.response.status === 498) {
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
+                }, 1500)
+            }
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const fetchOrders = (id=0,numberOfPage = 100) => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.get(`/api/v1/user/order/get-orders/${id}/${numberOfPage}`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            console.log(response)
+
+            const { order } = response.data
+            dispatch({type: ORDER_FETCHED_SUCCESSFULLY, payload: order})
+            dispatch({type: STOP_LOADING, payload:''})
+        }catch(error){
             console.log('er', error)
             if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })

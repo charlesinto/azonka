@@ -47,6 +47,7 @@ import Header from './components/HeaderFooter/Header';
 import ItemModal from './components/Cart/ItemModal';
 import Checkout from "./components/Checkout";
 import CartTest from './components/Cart/CartTest';
+import MyOrders from './components/MyOrders';
 // import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
@@ -81,6 +82,7 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/profile/account" component={AccountSetting} />
                                 <AuthRoute noAuthRequired exact path="/users/purchases" component={Purchases} />
                                 <AuthRoute noAuthRequired exact path="/users/cart" component={Cart} />
+                                <AuthRoute exact path="/users/placed-orders" component={MyOrders} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
                                 <AuthRoute exact path="/users/wallet" component={Wallet} />

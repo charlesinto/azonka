@@ -36,17 +36,15 @@ export const ShopItemAside = () => {
                             <form action="#">
                                 <div className="price-slider-wrapper">
                                     <div id="price-slider"></div>
-                                    {/* <!-- End #price-slider --> */}
                                 </div>
                                 {/* <!-- End .price-slider-wrapper --> */}
 
                                 <div className="filter-price-action">
                                     <button type="submit" className="btn btn-primary">Filter</button>
-
-                                    <div className="filter-price-text">
-                                        <span id="filter-price-range"></span>
+                                    <div class="form-group">
+                                        {/* <label for="formControlRange">Example Range input</label> */}
+                                        <input type="range" class="form-control-range" id="formControlRange" />
                                     </div>
-                                    {/* <!-- End .filter-price-text --> */}
                                 </div>
                                 {/* <!-- End .filter-price-action --> */}
                             </form>

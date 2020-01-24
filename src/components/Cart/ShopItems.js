@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import Header from '../HeaderFooter/Header'
 import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
-import productImg1 from './images/products/cart/product-1.jpg'
-import productImg2 from './images/products/cart/product-2.jpg'
 import { ShopItemAside } from './ShopItemAside'
 import { ShopItemHeader } from './ShopItemHeader'
 import { ShopItemPaginate } from './ShopItemPaginate'
@@ -94,7 +92,7 @@ class ShopItems extends Component {
     loadShopData = async () => {
         let { data } = this.props.products;
 
-        if (data.success) {
+        if (data && data.success) {
             this.setState({ products: data.products })
         } else {
             this.props.history.push('/')

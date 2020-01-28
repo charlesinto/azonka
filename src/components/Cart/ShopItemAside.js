@@ -33,6 +33,10 @@ class ShopItemAside extends Component {
                             <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true"
                                 aria-controls="widget-body-2">Price</a>
                         </h3>
+                        <input type="range" class="form-control-range" id="formControlRange"
+                            min="10" max="1000000" value="50"
+                        // onChange={this.handleRangeChange} 
+                        />
 
                         <div className="collapse show" id="widget-body-2">
                             <div className="widget-body">
@@ -43,12 +47,10 @@ class ShopItemAside extends Component {
                                     {/* <!-- End .price-slider-wrapper --> */}
 
                                     <div className="filter-price-action">
-                                        <button type="submit" className="btn btn-primary">Filter</button>
-                                        <div class="form-group">
-                                            {/* <label for="formControlRange">Example Range input</label> */}
-                                            <input type="range" class="form-control-range" id="formControlRange"
-                                                min="10" max="1000000" value="50" onChange={this.handleRangeChange} />
-                                        </div>
+                                        <button type="submit" className="btn btn-primary">Filter</button><br />
+
+
+
                                     </div>
                                     {/* <!-- End .filter-price-action --> */}
                                 </form>

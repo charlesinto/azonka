@@ -337,7 +337,6 @@ export const SearchItem = (details) => {
                 dispatch({ type: HEADER_SEARCH_SUCCESS, payload: response })
                 dispatch({ type: STOP_LOADING, payload: '' })
                 // dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
-                // dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
             }
         } catch (error) {
             console.log(error.response)

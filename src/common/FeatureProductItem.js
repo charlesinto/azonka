@@ -14,8 +14,7 @@ class FeatureProductItem extends Component {
         }
     }
 
-    handleAddCart = async (e,id) => {
-        // return console.log(id)
+    handleAddCart = async (e, id) => {
         let token = (localStorage.getItem("x-access-token"));
         // return console.log(token)
         if (token) {
@@ -28,13 +27,13 @@ class FeatureProductItem extends Component {
             //let { data } = this.props.cartItems
             // console.log("needs", data)
             // let {} 
-          //  this.handleSetOnlineData()
+            //  this.handleSetOnlineData()
             //this.props.("An error occured")
             // if (data.success) {
             //     this.setState({ cartData: data.cart.products })
-                
+
             // } else {
-                
+
             // }
 
         } else {

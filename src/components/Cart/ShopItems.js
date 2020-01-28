@@ -10,7 +10,6 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 import ShopItemAside from './ShopItemAside'
 import queryString from 'query-string';
-import { SearchItem } from '../../actions'
 
 
 class ShopItems extends Component {
@@ -19,15 +18,39 @@ class ShopItems extends Component {
         name: "", category: "",
         cartLength: 0
     }
-    componentDidMount() {
+    componentWillMount() {
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.searchItem()
+        });
+    }
+    async componentDidMount() {
+        console.log("mounted")
         this.loadShopData()
         let params = queryString.parse(this.props.location.search)
         const { name, category } = params;
-        this.setState({ name, category })
+        await this.setState({ name, category })
         this.searchItem()
     }
-    componentDidUpdate() {
-        this.searchItem()
+    searchItem = async () => {
+        let { name } = this.state;
+        let postObj = {
+            name,
+            category: "0",
+            brandName: "",
+            year: "0",
+            subCategory: "0",
+            store: "0",
+            sellingPrice: "",
+            costPrice: "",
+            discounts: true,
+            finalPrice: ""
+        }
+        await this.props.SearchItem(postObj)
+        let { success, products } = this.props.search;
+        if (this.props.search && success) {
+            this.setState({ products })
+        }
+
     }
 
     handleSetCartData = () => {
@@ -65,7 +88,6 @@ class ShopItems extends Component {
         if (token) {
             let postObj = { productId: id, quanity: "1" };
             await this.props.addToCart(postObj)
-            console.log("fire after", this.props)
             let { success, cart } = this.props.cartResponse;
             if (success) {
                 this.setState({ cartData: cart.products })
@@ -108,25 +130,14 @@ class ShopItems extends Component {
 
 
     }
-    searchItem = async () => {
-        let { name, category } = this.state;
-        let postObj = {
-            name,
-            category,
-            brandName: "",
-            year: "0",
-            category: "0",
-            subCategory: "0",
-            store: "0",
-            sellingPrice: "",
-            costPrice: "",
-            discounts: true,
-            finalPrice: ""
-        }
-        await this.props.SearchItem(postObj)
-        let { success, products } = this.props.search;
-        this.setState({ products })
+    handleDetailModal = async (e) => {
+        let { products } = this.state;
+        let itemDetails = products.filter(data => data.id == e.target.id);
+        console.log(itemDetails, this.props)
+        await this.props.itemDetailModalAction(itemDetails)
+        return this.setState({ itemDetails })
     }
+
 
     render() {
         const { products, cartData } = this.state;
@@ -193,7 +204,6 @@ class ShopItems extends Component {
                                     {
                                         products ? (
                                             products.map(data => {
-                                                console.log("shop state", data)
                                                 let { id, name, finalPrice, createdAt, mainImageUrl } = data
                                                 return (
 
@@ -203,7 +213,7 @@ class ShopItems extends Component {
                                                                 <span id={id} className="product-image shop-product-image" onClick={this.handleItemDetails}>
                                                                     <img src={mainImageUrl} alt="product" />
                                                                 </span>
-                                                                <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
+                                                                <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                                                             </figure>
                                                             <div className="product-details">
                                                                 <div className="ratings-container">

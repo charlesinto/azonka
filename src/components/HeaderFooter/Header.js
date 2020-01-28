@@ -76,9 +76,9 @@ class Header extends Component {
     handleSearchSubmit = async () => {
         let { name } = this.state
         let category = document.querySelector("#category").value;
-        console.log(name, category)
-        return this.props.history.push(`/shop?name=${name}&category=${category}`);
-
+        console.log()
+        this.props.history.push(`/shop?name=${name}&category=${category}`);
+        window.location.reload()
     }
 
 

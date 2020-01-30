@@ -68,19 +68,27 @@ class Header extends Component {
     }
 
     handleSearchChange = (e) => {
-        this.setState({ [e.target.id]: e.target.value, categoryValue: e.target.value })
+        this.setState({ name: e.target.value })
         this.setState({ category: this.props.categories })
+    }
+    handleSelectChange = (e) => {
+        this.setState({ categoryValue: e.target.value })
     }
     handleSearchSubmit = async () => {
         let { name, categoryValue } = this.state
         let category = categoryValue;
-        if (category === "" || category === "Select category") return null;
+        // if (category === "" || category === "Select category") return null;
         this.props.history.push(`/shop?name=${name}&category=${category}`);
         window.location.reload()
     }
+    handleEnterSubmit = async (e) => {
+        if (e.key === 'Enter') {
+            // alert("hello")
+            e.preventDefault()
+            return console.log(this.state)
+        }
 
-
-
+    }
 
     render() {
         const { currentUser } = this.state;
@@ -178,9 +186,10 @@ class Header extends Component {
                                             onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
                                             <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
-                                                <input type="search" className="form-control" id="name" placeholder="Search..." required={false} onChange={this.handleSearchChange} />
+                                                <input type="text" className="form-control" id="name" placeholder="Search..." value={this.state.name} required={false} onChange={this.handleSearchChange}
+                                                    onKeyPress={this.handleEnterSubmit} />
                                                 <div className="select-custom">
-                                                    <select id="category" onChange={this.handleSearchChange} value={this.state.categoryValue} >
+                                                    <select id="category" onChange={this.handleSelectChange} >
                                                         <option>Select category</option>
                                                         {
                                                             category ? (

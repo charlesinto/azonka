@@ -83,9 +83,8 @@ class Header extends Component {
     }
     handleEnterSubmit = async (e) => {
         if (e.key === 'Enter') {
-            // alert("hello")
             e.preventDefault()
-            return console.log(this.state)
+            return this.handleSearchSubmit()
         }
 
     }

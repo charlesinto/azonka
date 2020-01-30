@@ -211,7 +211,7 @@ class ShopItems extends Component {
                                                         <div className="product">
                                                             <figure className="product-image-container">
                                                                 <span id={id} className="product-image shop-product-image" onClick={this.handleItemDetails}>
-                                                                    <img src={mainImageUrl} alt="product" />
+                                                                    <img src={mainImageUrl} loading="lazy" alt="product" />
                                                                 </span>
                                                                 <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                                                             </figure>

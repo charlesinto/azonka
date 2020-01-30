@@ -147,7 +147,7 @@ class ShopItemDetails extends Component {
                                     <div className="row" style={{ marginTop: "2rem" }}>
                                         <div className="col-lg-7 col-md-6 product-single-gallery">
                                             <div className="product-slider-container product-item">
-                                                <img src={detailsData && detailsData.mainImageUrl} alt=".." />
+                                                <img src={detailsData && detailsData.mainImageUrl} alt=".." loading="lazy" />
                                                 <span className="prod-full-screen">
                                                     <i className="icon-plus"></i>
                                                 </span>

@@ -7,6 +7,9 @@ class ShopItemAside extends Component {
         console.log(e.target.value)
         this.setState({ priceRange: e.target.value })
     }
+    handleRangeSubmit = async () => {
+
+    }
     render() {
         let { priceRange } = this.state
         return (

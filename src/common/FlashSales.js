@@ -84,7 +84,7 @@ class FlashSales extends Component {
             <div className="product col-md-4" key={id}>
                 <figure className="product-image-container" >
                     <span className="product-image" id={id} onClick={this.handleItemDetails}>
-                        <img src={mainImageUrl} alt="product" className="image-view" />
+                        <img src={mainImageUrl} alt="product" className="image-view" loading="lazy" />
                     </span>
                     <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>

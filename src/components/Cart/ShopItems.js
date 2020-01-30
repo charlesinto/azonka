@@ -24,7 +24,6 @@ class ShopItems extends Component {
         });
     }
     async componentDidMount() {
-        console.log("mounted")
         this.loadShopData()
         let params = queryString.parse(this.props.location.search)
         const { name, category } = params;
@@ -32,7 +31,8 @@ class ShopItems extends Component {
         this.searchItem()
     }
     searchItem = async () => {
-        let { name } = this.state;
+        let { name, category } = this.state;
+
         let postObj = {
             name,
             category: "0",

@@ -18,6 +18,7 @@ class Header extends Component {
         currentUser: null,
         cartData: [],
         name: "",
+        categoryValue: ""
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
@@ -58,25 +59,22 @@ class Header extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCart()
-
-            // console.log("firess", this.props.cartItems)
             this.setState({ cartData: this.props.cartItems })
         } else {
             await this.props.fetchLocalCart()
             let { cartData } = this.props;
-            // console.log("cart data", this.props)
             this.setState({ cartData })
         }
     }
 
     handleSearchChange = (e) => {
-        this.setState({ [e.target.id]: e.target.value })
+        this.setState({ [e.target.id]: e.target.value, categoryValue: e.target.value })
         this.setState({ category: this.props.categories })
     }
     handleSearchSubmit = async () => {
-        let { name } = this.state
-        let category = document.querySelector("#category").value;
-        console.log()
+        let { name, categoryValue } = this.state
+        let category = categoryValue;
+        if (category === "" || category === "Select category") return null;
         this.props.history.push(`/shop?name=${name}&category=${category}`);
         window.location.reload()
     }
@@ -180,15 +178,17 @@ class Header extends Component {
                                             onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
                                             <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
-                                                <input type="search" className="form-control" id="name" placeholder="Search..." required="" onChange={this.handleSearchChange} />
+                                                <input type="search" className="form-control" id="name" placeholder="Search..." required={false} onChange={this.handleSearchChange} />
                                                 <div className="select-custom">
-                                                    <select id="category" onChange={this.handleSearchChange}>
+                                                    <select id="category" onChange={this.handleSearchChange} value={this.state.categoryValue} >
+                                                        <option>Select category</option>
                                                         {
                                                             category ? (
                                                                 category.map(_data => {
                                                                     let { id, name, owner } = _data;
                                                                     return (
-                                                                        <option value={name} key={id} data-id={id} data-owner={owner}>- {name}</option>
+
+                                                                        <option value={name} key={id} id={id} data-owner={owner}>- {name}</option>
                                                                     )
                                                                 })
                                                             ) : (

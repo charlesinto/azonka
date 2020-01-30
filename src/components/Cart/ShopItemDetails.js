@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class ShopItemDetails extends Component {
-    state = { id: "",qty: 1, products: [], detailsData: {}, arr: [] }
+    state = { id: "", qty: 1, products: [], detailsData: {}, arr: [] }
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
@@ -49,7 +49,7 @@ class ShopItemDetails extends Component {
 
     }
     handleAddCart = async (e, itemSelected, id) => {
-         console.log(id)
+        console.log(id)
         let token = (localStorage.getItem("x-access-token"));
         // return console.log(token)
         if (token) {
@@ -58,7 +58,7 @@ class ShopItemDetails extends Component {
             await this.props.addToCart(postObj)
             // console.log("flash props", this.props)
             this.handleSetOnlineData()
-                // this.props.renderError("An error occured")
+            // this.props.renderError("An error occured")
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -70,7 +70,7 @@ class ShopItemDetails extends Component {
             //check if item is in cart
 
             if (cartData) { //item exists
-               // return console.log("data", cartData)
+                // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id === parseInt(id)); //check if clicked item exist in cart
                 if (isAdded) {
                     return this.props.successAlert('Item has already been added')
@@ -80,7 +80,7 @@ class ShopItemDetails extends Component {
                 }
 
             } else {
-               // if cart is empty
+                // if cart is empty
                 localStorage.setItem("cart", JSON.stringify([itemSelected]))
                 this.handleSetLocalData()
             }
@@ -109,19 +109,19 @@ class ShopItemDetails extends Component {
     }
     handleDecreaseQty = (e, finalPrice, id) => {
         let { qty } = this.state;
-        
+
         this.setState({ qty: qty > 0 ? qty - 1 : 0 })
         // console.log(this.state)
     }
     render() {
         let { detailsData } = this.state;
         console.log("showwws", detailsData)
-        const { id, finalPrice} = detailsData ? detailsData : {}
+        const { id, finalPrice } = detailsData ? detailsData : {}
         return (
             <>
                 <Header />
 
-                <main className="main" style={{paddingTop:'12rem'}}>
+                <main className="main" style={{ paddingTop: '12rem' }}>
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
                         <div className="container">
                             <ol className="breadcrumb">
@@ -229,10 +229,10 @@ class ShopItemDetails extends Component {
                                                     {/* <div className="product-single-qty">
                                                         <input className="horizontal-quantity form-control" type="text" />
                                                     </div> */}
-                                                    <div style={{marginRight: 8}} className="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
-                                                        <input className="vertical-quantity form-control" value={this.state.qty} onChange={(e) => this.handleChange(e, finalPrice, id)} type="number"  />
+                                                    <div style={{ marginRight: 8 }} className="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
+                                                        <input className="vertical-quantity form-control" value={this.state.qty} onChange={(e) => this.handleChange(e, finalPrice, id)} type="number" />
                                                         <span className="input-group-btn-vertical">
-                                                            <button className="btn btn-outline bootstrap-touchspin-up icon-up-dir"  type="button" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)} ></button>
+                                                            <button className="btn btn-outline bootstrap-touchspin-up icon-up-dir" type="button" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)} ></button>
                                                             <button className="btn btn-outline bootstrap-touchspin-down icon-down-dir" type="button" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)} ></button></span>
                                                     </div>
                                                     {/* <!-- End .product-single-qty --> */}
@@ -243,7 +243,7 @@ class ShopItemDetails extends Component {
                                                     <span className="paction add-wishlist" title="Add to Wishlist">
                                                         <span>Add to Wishlist</span>
                                                     </span>
-                                                    <span  className="paction add-compare" title="Add to Compare">
+                                                    <span className="paction add-compare" title="Add to Compare">
                                                         <span>Add to Compare</span>
                                                     </span>
                                                 </div>
@@ -292,7 +292,7 @@ class ShopItemDetails extends Component {
                                         <div className="tab-pane fade show active" id="product-desc-content" role="tabpanel"
                                             aria-labelledby="product-tab-desc">
                                             <div className="product-desc-content">
-                                            <p>{detailsData && detailsData.description}</p>
+                                                <p>{detailsData && detailsData.description}</p>
                                                 {/* <ul>
                                                     <li><i className="icon-ok"></i>Any Product types that You want - Simple,
                                                         Configurable
@@ -685,7 +685,7 @@ class ShopItemDetails extends Component {
                     </div>
                     {/* <!-- End .container --> */}
 
-                    
+
                     {/* <!-- End .featured-section --> */}
 
 

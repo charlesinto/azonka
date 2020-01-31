@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Route } from "react-router-dom";
 import englishFlag from "../../css/images/flags/en.png";
 import nigeriaFlag from "../../css/images/flags/nigeria.png";
 import frenchFlag from "../../css/images/flags/fr.png";
@@ -8,6 +8,8 @@ import product1 from "../../css/images/products/cart/product-1.jpg";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import CartDropdown from '../Cart/CartDropdown';
+import ShopItem from '../Cart/ShopItems'
+import ShopItems from '../Cart/ShopItems';
 
 class Header extends Component {
     state = {
@@ -15,7 +17,8 @@ class Header extends Component {
         showSearchBar: false,
         currentUser: null,
         cartData: [],
-        search: "",
+        name: "",
+        categoryValue: ""
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
@@ -56,48 +59,35 @@ class Header extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCart()
-
-            // console.log("firess", this.props.cartItems)
             this.setState({ cartData: this.props.cartItems })
         } else {
             await this.props.fetchLocalCart()
             let { cartData } = this.props;
-            // console.log("cart data", this.props)
             this.setState({ cartData })
         }
     }
 
     handleSearchChange = (e) => {
-        this.setState({ [e.target.id]: e.target.value })
+        this.setState({ name: e.target.value })
         this.setState({ category: this.props.categories })
     }
-    handleSearchSubmit = async () => {
-        let { search } = this.state;
-        let category = document.querySelector("#category").value;
-        let postObj = {
-            search,
-            category,
-            brandName: "",
-            year: "0",
-            category: "0",
-            subCategory: "0",
-            store: "0",
-            sellingPrice: "",
-            costPrice: "",
-            discounts: true,
-            finalPrice: ""
-        }
-        await this.props.SearchItem(postObj)
-        let { products } = this.props;
-        if (products.status === 200) {
-            this.props.history.push('/shop');
-        } else {
-            return null;
-        }
+    handleSelectChange = (e) => {
+        this.setState({ categoryValue: e.target.value })
     }
+    handleSearchSubmit = async () => {
+        let { name, categoryValue } = this.state
+        let category = categoryValue;
+        // if (category === "" || category === "Select category") return null;
+        this.props.history.push(`/shop?name=${name}&category=${category}`);
+        window.location.reload()
+    }
+    handleEnterSubmit = async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            return this.handleSearchSubmit()
+        }
 
-
-
+    }
 
     render() {
         const { currentUser } = this.state;
@@ -195,15 +185,18 @@ class Header extends Component {
                                             onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
                                             <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
-                                                <input type="search" className="form-control" id="search" placeholder="Search..." required="" onChange={this.handleSearchChange} />
+                                                <input type="text" className="form-control" id="name" placeholder="Search..." value={this.state.name} required={false} onChange={this.handleSearchChange}
+                                                    onKeyPress={this.handleEnterSubmit} />
                                                 <div className="select-custom">
-                                                    <select id="category" onChange={this.handleSearchChange}>
+                                                    <select id="category" onChange={this.handleSelectChange} >
+                                                        <option>Select category</option>
                                                         {
                                                             category ? (
                                                                 category.map(_data => {
                                                                     let { id, name, owner } = _data;
                                                                     return (
-                                                                        <option value={name} key={id} data-id={id} data-owner={owner}>- {name}</option>
+
+                                                                        <option value={name} key={id} id={id} data-owner={owner}>- {name}</option>
                                                                     )
                                                                 })
                                                             ) : (

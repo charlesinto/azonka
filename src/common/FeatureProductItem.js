@@ -14,8 +14,7 @@ class FeatureProductItem extends Component {
         }
     }
 
-    handleAddCart = async (e,id) => {
-        // return console.log(id)
+    handleAddCart = async (e, id) => {
         let token = (localStorage.getItem("x-access-token"));
         // return console.log(token)
         if (token) {
@@ -28,13 +27,13 @@ class FeatureProductItem extends Component {
             //let { data } = this.props.cartItems
             // console.log("needs", data)
             // let {} 
-          //  this.handleSetOnlineData()
+            //  this.handleSetOnlineData()
             //this.props.("An error occured")
             // if (data.success) {
             //     this.setState({ cartData: data.cart.products })
-                
+
             // } else {
-                
+
             // }
 
         } else {
@@ -92,7 +91,7 @@ class FeatureProductItem extends Component {
                 {/* <ItemModal /> */}
                 <figure class="product-image-container">
                     <span className="product-image" id={id} onClick={this.handleItemDetails}>
-                        <img src={mainImageUrl} alt="product" className="image-view" />
+                        <img src={mainImageUrl} alt="product" className="image-view" loading="lazy" />
                     </span>
                     <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>

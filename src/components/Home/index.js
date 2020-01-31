@@ -167,20 +167,10 @@ class Home extends Component {
                                                     })
                                                 ) : null
                                             }
-
-                                            {/* <FeatureProductItem />
-                                            <FeatureProductItem />
-
-                                            <FeatureProductItem />
-                                            <FeatureProductItem />
-                                            <FeatureProductItem />
-                                            <FeatureProductItem /> */}
                                         </Slider>
 
 
                                     </div>
-
-
 
                                     <div className="mb-6"></div>
 

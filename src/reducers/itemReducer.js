@@ -2,15 +2,18 @@ import {
     ITEMS_FETCHED_SUCCESSFULLY, STOP_LOADING, CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, EDIT_ITEM, INIT_FORM, CATEGORY_FETCHED_SUCCESSFULLY, LOCAL_CART_FETCHED_SUCCESSFULLY,
     ITEM_CHANGE_ACTION, VALIDATE_FORM_DATA, INVALIDE_FORM_DATA, ADD_CART_SUCCESSFULLY,
-    ADD_SUB_IMAGES,CLEAR_PRODUCT_FORM,CART_UPDATED_SUCCESSFULLY,
+    ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, CART_UPDATED_SUCCESSFULLY,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, FILES_SELECTED,
-        LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, ORDER_FETCHED_SUCCESSFULLY,
         
+    LOCAL_SHOP_FETCHED_SUCCESSFULLY, HEADER_SEARCH_SUCCESS,
+    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED,
+    ORDER_FETCHED_SUCCESSFULLY
+
 } from "../actions/types";
 
 const INTIAL_STATE = {
     stores: [],
+    search: [],
     subCategories: [],
     categories: [],
     cartItems: [],
@@ -68,20 +71,24 @@ export default (state = INTIAL_STATE, actions) => {
         case PRODUCTS_FETCED_SUCCESSFULLY:
             return { ...state, products: actions.payload }
         case CATEGORY_FETCHED_SUCCESSFULLY:
-            return { ...state, categories: actions.payload,redirectToCheckout: false }
+            return { ...state, categories: actions.payload, redirectToCheckout: false }
         case ADD_CART_SUCCESSFULLY:
-            return { ...state, cartItems: actions.payload,redirectToCheckout: false }
+            return { ...state, cartItems: actions.payload, redirectToCheckout: false }
         case CART_FETCHED_SUCCESSFULLY:
-            return { ...state, cartItems: actions.payload,quantity: actions.payload.quantity,
-                 cartData: actions.payload.products, redirectToCheckout: false }
+            return {
+                ...state, cartItems: actions.payload, quantity: actions.payload.quantity,
+                cartData: actions.payload.products, redirectToCheckout: false
+            }
         case LOCAL_CART_FETCHED_SUCCESSFULLY:
             return { ...state, cartData: actions.payload, }
         case ADD_LOCAL_CART_SUCCESSFULLY:
             return { ...state, cartData: actions.payload, }
-        case CART_UPDATED_SUCCESSFULLY: 
-                return {...state, redirectToCheckout: true}
+        case CART_UPDATED_SUCCESSFULLY:
+            return { ...state, redirectToCheckout: true }
         case LOCAL_SHOP_FETCHED_SUCCESSFULLY:
             return { ...state, localProducts: actions.payload, }
+        case HEADER_SEARCH_SUCCESS:
+            return { ...state, search: actions.payload, }
         case ADD_LOCAL_SHOP_SUCCESSFULLY:
             return { ...state, PRODUCTS: actions.payload, }
 
@@ -105,7 +112,7 @@ export default (state = INTIAL_STATE, actions) => {
         case CLEAR_ITEM_FORM_INPUTS:
             return { ...INTIAL_STATE, resetForm: true }
         case SET_CARTDROPDOW_QUANTITY:
-            return {...state, quantity: actions.payload}
+            return { ...state, quantity: actions.payload }
         case STORE_ITEM_EDIT:
             return editStoreItem(state, actions.payload)
         case HANDLE_PREFERNCE_CHANGE:
@@ -115,23 +122,23 @@ export default (state = INTIAL_STATE, actions) => {
         case ADD_SUB_IMAGES:
             return renderSubImage(state, actions.payload)
         case CLEAR_PRODUCT_FORM:
-            return {...state,...INTIAL_STATE}
+            return { ...state, ...INTIAL_STATE }
         case ADDRESSES_FETCHED:
-            return {...state, address: actions.payload}
+            return { ...state, address: actions.payload }
         case FILES_SELECTED:
-            return {...state, files: actions.payload}
-        case REMOVE_SUB_IMAGES: 
-            switch(actions.payload){
+            return { ...state, files: actions.payload }
+        case REMOVE_SUB_IMAGES:
+            switch (actions.payload) {
                 case 1:
-                    return {...state, subImage1: ''}
+                    return { ...state, subImage1: '' }
                 case 2:
-                    return {...state, subImage2: ''}
+                    return { ...state, subImage2: '' }
                 case 3:
-                    return {...state, subImage3: ''}
+                    return { ...state, subImage3: '' }
                 case 4:
-                    return {...state, subImage4: ''}
-                default: 
-                return {...state}
+                    return { ...state, subImage4: '' }
+                default:
+                    return { ...state }
             }
         case ORDER_FETCHED_SUCCESSFULLY: 
             return {...state, orders: actions.payload}
@@ -141,17 +148,17 @@ export default (state = INTIAL_STATE, actions) => {
 }
 
 const renderSubImage = (state, payload) => {
-    switch(payload.index){
+    switch (payload.index) {
         case 1:
-            return {...state, subImage1: payload.image}
+            return { ...state, subImage1: payload.image }
         case 2:
-            return {...state, subImage2: payload.image}
+            return { ...state, subImage2: payload.image }
         case 3:
-            return {...state, subImage3: payload.image}
+            return { ...state, subImage3: payload.image }
         case 4:
-            return {...state, subImage4: payload.image}
+            return { ...state, subImage4: payload.image }
         default:
-            return {...state}
+            return { ...state }
     }
 }
 
@@ -165,7 +172,7 @@ const editStoreItem = (state, product) => {
     // console.log('sub categories',state.subCategories,  product.category)
     const filteredSubCategory = state.subCategories.filter(cat => cat.parentCategory.id === product.category)
     return {
-        ...state,action:'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
+        ...state, action: 'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
         filteredSubCategory: filteredSubCategory, subImage1: otherImageUrl1, subImage2: otherImageUrl2,
         subImage3: otherImageUrl3, subImage4: otherImageUrl4, productId: product.id
     }

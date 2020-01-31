@@ -9,7 +9,7 @@ import {
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
     ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
     HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ITEM_MODAL
+    ITEM_MODAL, HEADER_SEARCH_SUCCESS
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -334,10 +334,9 @@ export const SearchItem = (details) => {
             const response = await axios.post('/api/v1/user/search-product', details)
             console.log(response)
             if (response.data.success) {
-                dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: response })
+                dispatch({ type: HEADER_SEARCH_SUCCESS, payload: response })
                 dispatch({ type: STOP_LOADING, payload: '' })
                 // dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
-                // dispatch({ type: ADD_CART_SUCCESSFULLY, payload: response })
             }
         } catch (error) {
             console.log(error.response)

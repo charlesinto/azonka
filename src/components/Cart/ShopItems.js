@@ -4,18 +4,55 @@ import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
 import { ShopItemHeader } from './ShopItemHeader'
 import { ShopItemPaginate } from './ShopItemPaginate'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import ShopItemAside from './ShopItemAside'
+import queryString from 'query-string';
 
 
 class ShopItems extends Component {
-    state = { products: [], sortState: "", cartData: [], cartLength: 0 }
-    componentDidMount() {
-        this.loadShopData()
+    state = {
+        products: [], sortState: "", cartData: [],
+        name: "", category: "",
+        cartLength: 0
     }
+    componentWillMount() {
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.searchItem()
+        });
+    }
+    async componentDidMount() {
+        this.loadShopData()
+        let params = queryString.parse(this.props.location.search)
+        const { name, category } = params;
+        await this.setState({ name, category })
+        this.searchItem()
+    }
+    searchItem = async () => {
+        let { name, category } = this.state;
+
+        let postObj = {
+            name,
+            category: "0",
+            brandName: "",
+            year: "0",
+            subCategory: "0",
+            store: "0",
+            sellingPrice: "",
+            costPrice: "",
+            discounts: true,
+            finalPrice: ""
+        }
+        await this.props.SearchItem(postObj)
+        let { success, products } = this.props.search;
+        if (this.props.search && success) {
+            this.setState({ products })
+        }
+
+    }
+
     handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
@@ -51,7 +88,6 @@ class ShopItems extends Component {
         if (token) {
             let postObj = { productId: id, quanity: "1" };
             await this.props.addToCart(postObj)
-            console.log("fire after", this.props)
             let { success, cart } = this.props.cartResponse;
             if (success) {
                 this.setState({ cartData: cart.products })
@@ -92,12 +128,16 @@ class ShopItems extends Component {
     loadShopData = async () => {
         let { data } = this.props.products;
 
-        if (data && data.success) {
-            this.setState({ products: data.products })
-        } else {
-            this.props.history.push('/')
-        }
+
     }
+    handleDetailModal = async (e) => {
+        let { products } = this.state;
+        let itemDetails = products.filter(data => data.id == e.target.id);
+        console.log(itemDetails, this.props)
+        await this.props.itemDetailModalAction(itemDetails)
+        return this.setState({ itemDetails })
+    }
+
 
     render() {
         const { products, cartData } = this.state;
@@ -164,7 +204,6 @@ class ShopItems extends Component {
                                     {
                                         products ? (
                                             products.map(data => {
-                                                console.log("shop state", data)
                                                 let { id, name, finalPrice, createdAt, mainImageUrl } = data
                                                 return (
 
@@ -172,9 +211,9 @@ class ShopItems extends Component {
                                                         <div className="product">
                                                             <figure className="product-image-container">
                                                                 <span id={id} className="product-image shop-product-image" onClick={this.handleItemDetails}>
-                                                                    <img src={mainImageUrl} alt="product" />
+                                                                    <img src={mainImageUrl} loading="lazy" alt="product" />
                                                                 </span>
-                                                                <Link to="ajax\product-quick-view.html" className="btn-quickview">Quick View</Link>
+                                                                <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                                                             </figure>
                                                             <div className="product-details">
                                                                 <div className="ratings-container">
@@ -244,12 +283,14 @@ class ShopItems extends Component {
 
 
 const mapStateToProps = state => {
-    const { cartItems, cartData, products } = state.inventory;
+
+    let { cartItems, cartData, products, search } = state.inventory;
     let cartResponse = cartItems.data
+    search = search.data
     return {
-        cartItems, cartResponse, cartData, products
+        cartItems, cartResponse, cartData, products, search
     }
 }
 
 
-export default connect(mapStateToProps, actions)(ShopItems);
+export default withRouter(connect(mapStateToProps, actions)(ShopItems));

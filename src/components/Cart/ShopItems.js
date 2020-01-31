@@ -78,8 +78,9 @@ class ShopItems extends Component {
         }
 
     }
-    handleItemDetails = (e) => {
-        this.props.history.push(`/shop-details/${e.target.id}`)
+    handleItemDetails = (e, id) => {
+        e.preventDefault()
+        this.props.history.push(`/shop-details/${id}`)
     }
     handleAddCart = async (e) => {
         let id = e.target.id;
@@ -222,12 +223,12 @@ class ShopItems extends Component {
                                                                     </div>
                                                                 </div>
                                                                 <h2 className="product-title">
-                                                                    <Link to="product.html">{name}</Link>
+                                                                    <Link to="#">{name}</Link>
                                                                 </h2>
                                                                 <div className="price-box">
-                                                                    <span className="product-price"> ₦{finalPrice}</span>
+                                                                    <span className="product-price"> ₦ {finalPrice}</span>
                                                                     <h2 className="product-title">
-                                                                        <Link to="product.html">{new Date(createdAt).toLocaleString()}</Link>
+                                                                        <Link to="#">{new Date(createdAt).toLocaleString()}</Link>
                                                                     </h2>
                                                                 </div>
 

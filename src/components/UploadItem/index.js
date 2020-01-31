@@ -33,6 +33,8 @@ class index extends Component {
             unit: '',
             deliveryType: '',
             deliveryLocation: '',
+            weightUnit:'',
+            weight: '',
             filteredSubCategory: []
         }
         this.uploadFileButton = React.createRef();
@@ -878,9 +880,35 @@ class index extends Component {
                                                         value={this.props.unit} onChange={this.handleInputChange}>
                                                         <option value="cm">CM</option>
                                                         <option value="mm">MM</option>
+                                                        <option value="m">M</option>
                                                     </select>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <h4>Item Weight</h4>
+                                        <hr className="line-separator" />
+                                        <div className="row add-margin-item">
+                                           <div className="col-md-6">
+                                                    <label className="rl-label">Weight</label>
+                                                    <select name="weight"
+                                                        className={`${this.props.inValidElments.includes('weight') ? 'invalid' : ''}`}
+                                                        value={this.props.weight} onChange={this.handleInputChange}>
+                                                        <option value="">Select Weight</option>
+                                                        <option value="100 - 200">100 - 200</option>
+                                                        <option value="200 - 500">200 - 500</option>
+                                                        <option value="500 - 1000">500 - 1000</option>
+                                                    </select>
+                                           </div>
+                                           <div className="col-md-6">
+                                                <label className="rl-label">Unit</label>
+                                                <select name="weightUnit"
+                                                        className={`${this.props.inValidElments.includes('weightUnit') ? 'invalid' : ''}`}
+                                                        value={this.props.weightUnit} onChange={this.handleInputChange}>
+                                                        <option value="">Select Unit</option>
+                                                        <option value="KG">KG</option>
+                                                        <option value="POUND">POUNDS</option>
+                                                    </select>
+                                           </div>
                                         </div>
                                         <h4 className="add-margin-top">Delivery Location</h4>
                                         <hr className="line-separator" />

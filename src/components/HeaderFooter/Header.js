@@ -86,7 +86,6 @@ class Header extends Component {
             e.preventDefault()
             return this.handleSearchSubmit()
         }
-
     }
 
     render() {

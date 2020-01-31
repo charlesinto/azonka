@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react'
+import { Link, withRouter } from 'react-router-dom'
 
 class ShopItemAside extends Component {
     state = { priceRange: 0 }
@@ -7,7 +8,17 @@ class ShopItemAside extends Component {
         console.log(e.target.value)
         this.setState({ priceRange: e.target.value })
     }
-    handleRangeSubmit = async () => {
+    handleSearchSubmit = async () => {
+        let { name, categoryValue, priceRange } = this.state
+        let category = categoryValue, finalPrice = priceRange
+        // return console.log(finalPrice)
+        if (finalPrice <= 100) return null
+        this.props.history.push(`/shop?price=${finalPrice}`);
+        window.location.reload()
+    }
+    handleRangeSubmit = async (e) => {
+        e.preventDefault();
+        this.handleSearchSubmit()
 
     }
     render() {
@@ -17,8 +28,8 @@ class ShopItemAside extends Component {
                 <div className="sidebar-wrapper">
                     <div className="widget">
                         <h3 className="widget-title">
-                            <a data-toggle="collapse" href="#widget-body-1" role="button" aria-expanded="true"
-                                aria-controls="widget-body-1">electronics</a>
+                            <Link data-toggle="collapse" to="#widget-body-1" role="button" aria-expanded="true"
+                                aria-controls="widget-body-1">electronics</Link>
                         </h3>
 
                         <div className="collapse show" id="widget-body-1">
@@ -27,10 +38,10 @@ class ShopItemAside extends Component {
                                     {/* {
 
                                     } */}
-                                    <li><a href="#">Smart TVs</a></li>
-                                    <li><a href="#">Cameras</a></li>
-                                    <li><a href="#">Head Phones</a></li>
-                                    <li><a href="#">Games</a></li>
+                                    <li><Link to="#">Smart TVs</Link></li>
+                                    <li><Link to="#">Cameras</Link></li>
+                                    <li><Link to="#">Head Phones</Link></li>
+                                    <li><Link to="#">Games</Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -38,8 +49,8 @@ class ShopItemAside extends Component {
 
                     <div className="widget">
                         <h3 className="widget-title">
-                            <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true"
-                                aria-controls="widget-body-2">Price- ₦{priceRange ? priceRange : 100}</a>
+                            <Link data-toggle="collapse" to="#widget-body-2" role="button" aria-expanded="true"
+                                aria-controls="widget-body-2">Price- ₦{priceRange ? priceRange : 100}</Link>
                         </h3><br />
 
                         <input type="range" class="form-control-range"
@@ -47,15 +58,13 @@ class ShopItemAside extends Component {
 
                         <div className="collapse show" id="widget-body-2">
                             <div className="widget-body">
-                                <form action="#">
-                                    <div className="price-slider-wrapper">
-                                        <div id="price-slider"></div>
-                                    </div>
+                                <div className="price-slider-wrapper">
+                                    <div id="price-slider"></div>
+                                </div>
 
-                                    <div className="filter-price-action mx-auto">
-                                        <button type="submit" className="btn btn-primary">Filter</button><br />
-                                    </div>
-                                </form>
+                                <div className="filter-price-action mx-auto">
+                                    <button type="button" className="btn btn-primary" onClick={this.handleRangeSubmit}>Filter</button><br />
+                                </div>
                             </div>
                             {/* <!-- End .widget-body --> */}
                         </div>
@@ -69,4 +78,4 @@ class ShopItemAside extends Component {
 }
 
 
-export default ShopItemAside
+export default withRouter(ShopItemAside)

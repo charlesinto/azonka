@@ -48,10 +48,18 @@ class Home extends Component {
             await this.props.fetchFeaturedItems()
             this.setState({ products: this.props.products })
         } else {
-            //await this.props.fetchLocalShop()
             await this.props.fetchFeaturedItems()
             this.setState({ products: this.props.products })
-
+        }
+    }
+    loadHomeItems = async () => {
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+            await this.props.fetchFeaturedItems()
+            this.setState({ products: this.props.products })
+        } else {
+            await this.props.fetchFeaturedItems()
+            this.setState({ products: this.props.products })
         }
     }
     handleAddToCart = async (id) => {

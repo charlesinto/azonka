@@ -45,11 +45,11 @@ class ShopItems extends Component {
             finalPrice: finalPrice == null ? "0" : finalPrice
         }
         await this.props.SearchItem(postObj)
+        if (this.props.search == null) return null
         let { success, products } = this.props.search;
         if (this.props.search && success) {
             this.setState({ products })
         }
-
     }
 
     handleSetCartData = () => {

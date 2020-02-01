@@ -165,7 +165,22 @@ export const fetchItems = () => {
 }
 
 export const fetchFeaturedItems = () => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)
+            console.log('response', response)
+            const { data: { products } } = response;
+            localStorage.setItem("shop", JSON.stringify(products))
+            dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
+            // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
 
+export const homeItems = () => {
     return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)

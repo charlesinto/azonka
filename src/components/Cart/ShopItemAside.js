@@ -10,8 +10,7 @@ class ShopItemAside extends Component {
     }
     handleSearchSubmit = async () => {
         let { name, categoryValue, priceRange } = this.state
-        let category = categoryValue, finalPrice = priceRange
-        // return console.log(finalPrice)
+        let category = categoryValue, finalPrice = priceRange;
         if (finalPrice <= 100) return null
         this.props.history.push(`/shop?price=${finalPrice}`);
         window.location.reload()

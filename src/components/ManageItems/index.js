@@ -6,7 +6,6 @@ import * as actions from "../../actions";
 import { connect } from "react-redux";
 import Dashboard from '../HOC/StoreDashboard';
 import ItemListDataTable from "../../common/ItemListDataTable";
-import { element } from 'prop-types';
 
 class index extends Component {
     componentDidMount(){
@@ -17,6 +16,9 @@ class index extends Component {
     uploadNewItem = (e) => {
         e.preventDefault()
         return this.props.history.push('/users/items/upload')
+    }
+    componentWillUnmount(){
+        this.props.resetManageItemsState()
     }
     _handleRowClick = (selectedItemId, action) => {
         if(action === 'edit'){

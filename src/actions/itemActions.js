@@ -5,11 +5,11 @@ import {
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,ORDER_FETCHED_SUCCESSFULLY, 
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, FILES_SELECTED, CART_UPDATED_SUCCESSFULLY,
-    EXPIRED_LOGIN_SESSION, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
+    RESET_MANAGE_ITEMS_STATE, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
     ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
     HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ITEM_MODAL, HEADER_SEARCH_SUCCESS
+    ITEM_MODAL, HEADER_SEARCH_SUCCESS, GET_SELLER_DELIVERIES
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -884,7 +884,7 @@ export const createAddress = (data, id = 0, numberOfPage = 100) => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -911,7 +911,35 @@ export const fetchOrders = (id=0,numberOfPage = 100) => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const resetManageItemsState = () => {
+    return {type: RESET_MANAGE_ITEMS_STATE, payload: ''}
+}
+
+export const getSellerDeliveries = (id= 0, numberOfPage=100) => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.get(`/api/v1/seller/delivery/get-delivery/${id}/${numberOfPage}`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            dispatch({type: GET_SELLER_DELIVERIES, payload: response.data.delivery})
+            dispatch({type: STOP_LOADING, payload: ''})
+        }catch(error){
+            console.log('er', error.response)
+            if (error.response.status === 498) {
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
+                }, 1500)
+            }
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }

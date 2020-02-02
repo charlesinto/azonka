@@ -351,16 +351,18 @@ class Register extends Component {
                                     
                                 </div>
                             </div>
-                            <div className="row">
+                            <div className="row" style={{marginBottom: 14}}>
                                 <div className="col-md-6 col-sm-12">
                                     <label htmlFor="phoneNumber"  style={{
                                         marginTop: '0px !important'
                                     }} className="rl-label required custom">Country</label>
-                                    <ReactFlagsSelect
-                                    searchable={true} searchPlaceholder={'Plese select country'} 
-                                        className="react-flag"
-                                        onSelect={this._countryCodeChange}
-                                    />
+                                    <div class="react-flag-wrapper">
+                                        <ReactFlagsSelect
+                                        searchable={true} searchPlaceholder={'Select'} 
+                                            className="react-flag"
+                                            onSelect={this._countryCodeChange}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="col-md-6 col-sm-12">
                                     <div className="form-group" >

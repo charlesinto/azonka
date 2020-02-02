@@ -12218,18 +12218,18 @@ input[type=number] {
 }
 
 .flag-select img{
-    width: 3em;
-    height: 3em;
+    width: 1.5em;
+    height: 1.5em;
     margin-right: 1.3em;
 }
 
 .flag-select .flag-option .country-label{
-    font-size: 1.6em;
-    line-height: 2em;
+    font-size: 1.3em;
+    /* line-height: 2em; */
 }
 .country-label{
     font-size: 1.6em;
-    line-height: 4.3em;
+    /* line-height: 4.3em; */
     font-family: "Titillium web", sans-serif;
 }
 .flag-select .country-flag{
@@ -12253,7 +12253,7 @@ input[type=number] {
 }
 
 .flag-select .arrow-down{
-    line-height: 3em;
+    /* line-height: 3em; */
     font-size: 1.3em;
 }
 
@@ -12466,4 +12466,20 @@ label.custom{
     display: block;
     padding: .9rem 0 .8rem 2rem;
     border-bottom: 1px solid #EDEDDE;
+}
+
+.order-number{
+    text-decoration: underline;
+    font-family: roboto, sans-serif;
+    font-size: 1.1em;
+}
+
+.react-flag-wrapper{
+    width: 100%;
+    height: 40px;
+    padding: 0 15px;
+    border: 1px solid #ebebeb;
+    line-height: 40px;
+    border-radius: 4px;
+    margin-bottom: 1.3em;
 }

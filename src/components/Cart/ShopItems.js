@@ -93,7 +93,7 @@ class ShopItems extends Component {
             if (success) {
                 this.setState({ cartData: cart.products })
             } else {
-                alert("An error occurred")
+                this.props.renderError("An error occurred")
             }
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -107,7 +107,7 @@ class ShopItems extends Component {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return alert("Item has already been added")
+                    return this.props.showSuccessALert("Item has already been added")
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetData()
@@ -211,7 +211,7 @@ class ShopItems extends Component {
                                                     <div className="col-6 col-md-4 col-xl-3" key={id}>
                                                         <div className="product">
                                                             <figure className="product-image-container">
-                                                                <span id={id} className="product-image shop-product-image" onClick={this.handleItemDetails}>
+                                                                <span id={id} className="product-image shop-product-image" onClick={(e) => this.handleItemDetails(e, id)}>
                                                                     <img src={mainImageUrl} loading="lazy" alt="product" />
                                                                 </span>
                                                                 <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>

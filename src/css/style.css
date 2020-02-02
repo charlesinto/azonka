@@ -12457,3 +12457,13 @@ label.custom{
     text-transform: capitalize;
     /* font-weight: bold; */
 }
+
+.activeParent a.parent-link{
+    color: #2b2b2d;
+    font-size: 1.35rem;
+    position: relative;
+    font-weight: 600;
+    display: block;
+    padding: .9rem 0 .8rem 2rem;
+    border-bottom: 1px solid #EDEDDE;
+}

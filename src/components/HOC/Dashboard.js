@@ -76,7 +76,18 @@ class Dashboard extends Component {
                                             <li className={this.props.dashboardActiveLink === 'Change Password' ? 'active' : ''}><Link to="/users/reset-password">Change Password</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Change Pincode' ? 'active' : ''}><Link to="#">Change Pincode</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Bank' ? 'active' : ''}><Link to="/users/banks">My Bank</Link></li>
-                                            <li className={this.props.dashboardActiveLink === 'Azonka Wallet' ? 'active' : ''}><Link to="/users/wallet">My Azonka Wallet</Link></li>
+                                            <li className={this.props.dashboardActiveLink === 'Azonka Wallet' || this.props.dashboardActiveLink === 'Wallet Withdrawal'
+                                                || this.props.dashboardActiveLink === 'Wallet Transfer' ? 'activeParent': '' }>
+                                                <a className="parent-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                    My Azonka Wallet
+                                                </a>
+                                                {/* <Link to="/users/wallet">My Azonka Wallet</Link> */}
+                                                <ul style={{marginLeft: '0.9em'}} className="list collapse" id="collapseExample">
+                                                    <li className={this.props.dashboardActiveLink === 'Azonka Wallet' ? 'active' : ''}><Link to="/users/wallet/fund">Fund Wallet</Link></li>
+                                                    <li className={this.props.dashboardActiveLink === 'Wallet Withdrawal' ? 'active' : ''}><Link to="/users/wallet/withdraw">Wallet Withdrawal</Link></li>
+                                                    <li className={this.props.dashboardActiveLink === 'Wallet Transfer' ? 'active' : ''}><Link to="/users/wallet/transfer">Wallet To Wallet Transfer</Link></li> 
+                                                </ul>
+                                            </li>
                                             <li className={this.props.dashboardActiveLink === 'Azonka Credit' ? 'active' : ''}><Link to="#">My Azonka Credit</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Azonka Pay' ? 'active' : ''}><Link to="#">Azonka Pay</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'My Address Book' ? 'active' : ''}><Link to="/users/address">Address Book</Link></li>
@@ -85,7 +96,7 @@ class Dashboard extends Component {
                                                 userData && userData.type !== 'user' ?
                                                     (
                                                         <li>
-                                                            <Link to="/users/store">Store <span class="tip tip-hot" style={{background:'#e81279'}}>
+                                                            <Link to="/users/store">Store <span className="tip tip-hot" style={{background:'#e81279'}}>
                                                                 NEW!</span></Link>
                                                         </li>
                                                     ) : null

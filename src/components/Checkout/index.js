@@ -10,13 +10,16 @@ import Validator from 'validator';
 import { PAY_STACK_PUBLIC_KEY } from '../../config/config';
 
 class Checkout extends Component {
-    state = {
+    INITIAL_STATE = {
         sum: 0, modal: false, firstName: '', lastName: '', userAddress: '',
         address: [], state: '', country: '', payType: 'pay with debit', paystack: false,
         emailAddress: '', auth: false, transactionNumber: '', addressId: ''
     }
+    constructor(props){
+        super(props)
+        this.state = {...this.INITIAL_STATE}
+    }
     componentDidMount() {
-
         let token = (localStorage.getItem("x-access-token"));
 
         if (!token) {
@@ -31,7 +34,9 @@ class Checkout extends Component {
                 return this.props.history.push('/users/cart')
             }
         }
+        
     }
+    
     loadCart = async () => {
 
         // setInterval(async () => {
@@ -227,6 +232,7 @@ class Checkout extends Component {
                                                 </li>
                                             ))
                                             }
+                                            
                                             <li style={{
                                                 display: 'flex', width: "100%",
                                                 alignItems: 'center', marginBottom: 16
@@ -487,7 +493,7 @@ class Checkout extends Component {
         return txnRef;
     }
     componentWillUnmount() {
-        this.setState({ transactionNumber: '' })
+        this.setState({...this.INITIAL_STATE})
     }
     render() {
         return (

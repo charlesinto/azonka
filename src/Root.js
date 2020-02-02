@@ -85,7 +85,8 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/placed-orders" component={MyOrders} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
-                                <AuthRoute exact path="/users/wallet" component={Wallet} />
+                                <AuthRoute exact path="/users/wallet/fund" component={Wallet} />
+                                <AuthRoute exact path="/users/wallet/withdraw" component={WithDrawal} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
                                 <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />
                                 <AuthRoute redirectIfUser exact path="/users/withdrawal" component={WithDrawal} />

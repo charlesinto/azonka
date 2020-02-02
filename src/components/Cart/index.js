@@ -194,20 +194,22 @@ class Cart extends Component {
         if (localStorage.getItem('x-access-token')) {
             this.props.initiateRegistration()
             await this.props.removeCartItem(id)
+            this.calSum()
             return console.log('vvv', this.props.cartItems.products)
         }
-        // const index = cartData.findIndex(element => element.id === id)
-        // const deletedItems = this.state.deletedCartItems;
-        // if(index !== -1){
-        //     if(!deletedItems.includes(id)){
-        //         deletedItems.push(id)
-        //     }
-        //     cartData.splice(index, 1)
-        // }
-        // return this.setState({
-        //     cartData: [...cartData],
-        //     deletedCartItems: [...deletedItems]
-        // }, () => this.calSum())
+        const cartData = this.state.cartData;
+        const index = cartData.findIndex(element => element.id === id)
+        const deletedItems = this.state.deletedCartItems;
+        if(index !== -1){
+            if(!deletedItems.includes(id)){
+                deletedItems.push(id)
+            }
+            cartData.splice(index, 1)
+        }
+        return this.setState({
+            cartData: [...cartData],
+            deletedCartItems: [...deletedItems]
+        }, () => this.calSum())
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

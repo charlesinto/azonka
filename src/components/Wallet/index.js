@@ -8,7 +8,7 @@ import WalletDataTable  from "../../common/WalletDataTable";
 import validator from "validator";
 
 class Wallet extends Component {
-    state = {emailAddress: '', amount: 0, pin: '', bank: '', amountToWithdraw: ''}
+    state = {emailAddress: '', amount: 0, pin: '', bank: '', customAmount:0, amountToWithdraw: ''}
     componentDidMount(){
         document.querySelector('.pay-1').addEventListener('click', () => {
             this.setState({amount: 1000})
@@ -56,9 +56,13 @@ class Wallet extends Component {
         console.log(response);
         if(response.status === 'success' && response.message === 'Approved'){
             this.props.initiateRegistration()
-            this.props.topUpUserWalllet(response.trxref, this.state.amount )
+             this.topUpUserWalllet(response.trxref, this.state.amount )
         } // card charged successfully, get reference here
         //this.props.initiateRegistration()
+    }
+    topUpUserWalllet = async (txnRef, amount) => {
+        await this.props.topUpUserWalllet(txnRef, amount )
+        this.setState({customAmount: 0})
     }
     close = () => {
         console.log("Payment closed");
@@ -79,7 +83,8 @@ class Wallet extends Component {
     handlePinCodeInputChange = e => {
         // console.log(e.key)
         const KEYS_ALLOWED = ['1', '2','3','4','5','6','7','8','9','0',]
-        const CONTROLS = ['Backspace', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+        const CONTROLS = ['Backspace', 'ArrowUp','Enter', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+        console.log(e.key)
         if(KEYS_ALLOWED.includes(e.key) || CONTROLS.includes(e.key)){
             if(e.target.value.trim().length === 4 && !CONTROLS.includes(e.key) ){
                 return e.preventDefault()
@@ -91,15 +96,18 @@ class Wallet extends Component {
     handleInputChange = e => {
         const {target: {name, value}} = e;
         let amountToWithdraw = '';
-        if(name === 'amountToWithdraw'){
+        if(name === 'customAmount'){
             amountToWithdraw = value.split(',').join('')
+            if(amountToWithdraw !== ''){
+                return this.setState({
+                    [name] : parseInt(amountToWithdraw)
+                })
+            }
             return this.setState({
-                [name] : amountToWithdraw
+                [name] : 0
             })
         }
-        this.setState({
-            [name] : value
-        })
+        
         
     }
     handleFormSubmit = e => {
@@ -343,7 +351,37 @@ class Wallet extends Component {
                             </div>
                         </div>
                     </div>
+                    
+                    <div className="row">
+                        <h3 style={{fontFamily:"Roboto, sans-serif", fontSize:"1.8em"}}>Enter Custom Amount</h3>
+                        <div className="col-12" style={{display:'flex'}}>
+                            
+                            <div className="form-group col-sm-8 col-md-8 col-lg-6">
+                                
+                                <input onKeyDown={(e) => this.handlePinCodeInputChange(e)} onChange={(e) => this.handleInputChange(e)} value={this.numberWithCommas(this.state.customAmount)} type="text" className="form-control"
+                                                id="customAmount" name="customAmount" placeholder="Enter amount" />
+                            </div>
+                            <div className="form-group col-sm-4 col-md-4 col-lg-6">
+                                <p>
+                                <PaystackButton
+                                        text="Fund Wallet"
+                                        className="btn btn-sm btn-primary"
+                                        callback={this.callback}
+                                        close={this.close}
+                                        disabled={false}
+                                        embed={false}
+                                        reference={this.getReference()}
+                                        email={this.state.emailAddress}
+                                        amount={parseInt(this.state.customAmount) * 100}
+                                        paystackkey={PAY_STACK_PUBLIC_KEY}
+                                        tag="button"
+                                    />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                {/* 
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12 col-md-12 col-sm-12 mt-card-shadow">
@@ -400,7 +438,8 @@ class Wallet extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
+                */}
             </Dashboard>
         )
     }

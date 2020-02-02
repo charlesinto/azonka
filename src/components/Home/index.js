@@ -129,7 +129,7 @@ class Home extends Component {
                                 <div className="col-lg-9">
                                     <div className="home-slider">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
                                         <Slider
-                                            {...{ ...settings, slidesToShow: 1, arrows: false }}
+                                            {...{ ...settings, slidesToShow: 1, arrows: true }}
                                         >
 
                                             <HomeSlide

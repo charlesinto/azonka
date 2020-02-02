@@ -128,8 +128,9 @@ class ShopItemDetails extends Component {
                                 <li className="breadcrumb-item">
                                     <Link to="index.html"><i className="icon-home"></i></Link>
                                 </li>
+                                 {/**shop?name=&category= */}
                                 <li className="breadcrumb-item">
-                                    <Link to={`/shops/category/${detailsData && detailsData.category && detailsData.category.name}`}>
+                                    <Link to={`/shop?name=&category=${detailsData && detailsData.category && detailsData.category.name}`}>
                                         {detailsData && detailsData.category && detailsData.category.name}
                                     </Link>
                                 </li>

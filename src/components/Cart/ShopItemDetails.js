@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../HeaderFooter/Header'
-
+import imgLoader from '../../common/tenor.gif'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class ShopItemDetails extends Component {
-    state = { id: "", qty: 1, products: [], detailsData: {}, arr: [] }
+    state = { id: "", qty: 1, products: [], detailsData: {}, arr: [], imgLoaded: false }
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
@@ -111,11 +111,11 @@ class ShopItemDetails extends Component {
         let { qty } = this.state;
 
         this.setState({ qty: qty > 0 ? qty - 1 : 0 })
-        // console.log(this.state)
+        // console.log(this.state) imgLoaded ? detailsData.mainImageUrl :
     }
     render() {
-        let { detailsData } = this.state;
-        console.log("showwws", detailsData)
+        let { detailsData, imgLoaded } = this.state;
+        let productImage = detailsData != null ? detailsData.mainImageUrl : imgLoader
         const { id, finalPrice } = detailsData ? detailsData : {}
         return (
             <>
@@ -148,7 +148,7 @@ class ShopItemDetails extends Component {
                                     <div className="row" style={{ marginTop: "2rem" }}>
                                         <div className="col-lg-7 col-md-6 product-single-gallery">
                                             <div className="product-slider-container product-item">
-                                                <img src={detailsData && detailsData.mainImageUrl} alt=".." loading="lazy" />
+                                                <img src={imgLoaded ? productImage : imgLoader} alt=".." loading="lazy" onLoad={() => this.setState({ imgLoaded: true })} />
                                                 <span className="prod-full-screen">
                                                     <i className="icon-plus"></i>
                                                 </span>

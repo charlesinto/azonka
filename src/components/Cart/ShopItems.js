@@ -15,7 +15,7 @@ import queryString from 'query-string';
 class ShopItems extends Component {
     state = {
         products: [], sortState: "", cartData: [],
-        name: "", category: "",
+        name: "", category: "", finalPrice: 0,
         cartLength: 0
     }
     componentWillMount() {
@@ -26,13 +26,12 @@ class ShopItems extends Component {
     async componentDidMount() {
         this.loadShopData()
         let params = queryString.parse(this.props.location.search)
-        const { name, category } = params;
-        await this.setState({ name, category })
+        const { name, category, price } = params;
+        await this.setState({ name, category, finalPrice: price })
         this.searchItem()
     }
     searchItem = async () => {
-        let { name, category } = this.state;
-
+        let { name, category, finalPrice } = this.state;
         let postObj = {
             name,
             category: "0",
@@ -43,14 +42,14 @@ class ShopItems extends Component {
             sellingPrice: "",
             costPrice: "",
             discounts: true,
-            finalPrice: ""
+            finalPrice: finalPrice == null ? "0" : finalPrice
         }
         await this.props.SearchItem(postObj)
+        if (this.props.search == null) return null
         let { success, products } = this.props.search;
         if (this.props.search && success) {
             this.setState({ products })
         }
-
     }
 
     handleSetCartData = () => {

@@ -8,7 +8,7 @@ import ItemModal from '../components/Cart/ItemModal';
 
 
 class FlashSales extends Component {
-    state = { products: [], itemDetails: {} }
+    state = { products: [], itemDetails: {}, imgLoaded: false }
     componentDidMount() {
         this.setState({ products: this.props.featArray })
     }
@@ -77,14 +77,16 @@ class FlashSales extends Component {
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
     }
+
     render() {
+        // console.log("nonso", this.state.imgLoaded)
         const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
         return (
 
             <div className="product col-md-4" key={id}>
                 <figure className="product-image-container" >
                     <span className="product-image" id={id} onClick={this.handleItemDetails}>
-                        <img src={mainImageUrl} alt="product" className="image-view" loading="lazy" />
+                        <img src={mainImageUrl} alt="product" className="image-view" loading="lazy" onLoad={() => this.setState({ imgLoaded: true })} />
                     </span>
                     <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>

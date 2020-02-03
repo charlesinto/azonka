@@ -27,6 +27,8 @@ class ShopItems extends Component {
         this.loadShopData()
         let params = queryString.parse(this.props.location.search)
         const { name, category, price } = params;
+
+
         await this.setState({ name, category, finalPrice: price })
         this.searchItem()
         this.listen()
@@ -74,11 +76,12 @@ class ShopItems extends Component {
 
 
     searchItem = async () => {
-        this.props.initiateRegistration()
+        // this.props.initiateRegistration()
         let { name, category, finalPrice } = this.state;
+
         let postObj = {
             name,
-            category: "0",
+            category: category == "Select category" || category == "" ? "0" : category,
             brandName: "",
             year: "0",
             subCategory: "0",
@@ -88,6 +91,7 @@ class ShopItems extends Component {
             discounts: true,
             finalPrice: finalPrice == null ? "0" : finalPrice
         }
+        // return console.log("nonso", postObj)
         await this.props.SearchItem(postObj)
         if (this.props.search == null) return null
         let { success, products } = this.props.search;
@@ -242,8 +246,6 @@ class ShopItems extends Component {
 
                                 <div className="row row-sm mt-5">
                                     <hr />
-
-
                                     {/* Shop box */}
 
                                     {
@@ -291,12 +293,12 @@ class ShopItems extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-
-
                                                 )
                                             })
                                         ) : (
-                                                <div>Loading...</div>
+                                                <div className="empty-products">
+                                                    <img src='https://res.cloudinary.com/demo/image/upload/w_400,h_300,c_pad/sample.jpg' />
+                                                </div>
                                             )
                                     }
 

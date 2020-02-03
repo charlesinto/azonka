@@ -79,7 +79,8 @@ class Header extends Component {
         let category = categoryValue;
         // if (category === "" || category === "Select category") return null;
         this.props.history.push(`/shop?name=${name}&category=${category}`);
-        window.location.reload()
+        // window.location.reload()
+        // console.log("nonso")
     }
     handleEnterSubmit = async (e) => {
         if (e.key === 'Enter') {
@@ -87,6 +88,7 @@ class Header extends Component {
             return this.handleSearchSubmit()
         }
     }
+
 
     render() {
         const { currentUser } = this.state;
@@ -195,7 +197,7 @@ class Header extends Component {
                                                                     let { id, name, owner } = _data;
                                                                     return (
 
-                                                                        <option value={name} key={id} id={id} data-owner={owner}>- {name}</option>
+                                                                        <option value={id} key={id} id={id} data-owner={owner}>- {name}</option>
                                                                     )
                                                                 })
                                                             ) : (

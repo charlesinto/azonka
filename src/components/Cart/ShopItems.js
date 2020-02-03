@@ -18,19 +18,63 @@ class ShopItems extends Component {
         name: "", category: "", finalPrice: 0,
         cartLength: 0
     }
-    componentWillMount() {
-        this.unlisten = this.props.history.listen((location, action) => {
-            this.searchItem()
-        });
-    }
+    // componentWillMount() {
+    //     this.unlisten = this.props.history.listen((location, action) => {
+    //         this.searchItem()
+    //     });
+    // }
     async componentDidMount() {
         this.loadShopData()
         let params = queryString.parse(this.props.location.search)
         const { name, category, price } = params;
         await this.setState({ name, category, finalPrice: price })
         this.searchItem()
+        this.listen()
     }
+    listen = () => {
+        this.props.history.listen((location, action) => {
+            let params = queryString.parse(location.search)
+            let { name } = this.state
+            if (params.name != name) {
+                this.setState({ name: params.name, category: params.category })
+                return console.log("one change", this.state, params);
+                this.searchItem()
+            }
+
+            // const { name, category, price } = params;
+            // console.log(params)
+        })
+    }
+    static getDerivedStateFromProps(props, state) {
+        // Store prevId in state so we can compare when props change.
+        // Clear out previously-loaded data (so we don't render stale stuff).
+
+        // let params = queryString.parse(this.props.location.search)
+        // const { name, category, price } = params;
+        // console.log("static nonso", params)
+        // if (props.id !== state.prevId) {
+        //   return {
+        //     externalData: null,
+        //     prevId: props.id,
+        //   };
+        // }
+
+        // No state update necessary
+        return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        let params = queryString.parse(this.props.location.search)
+        const { name, category, price } = params;
+        if (name != prevState.name || category != prevState.category) {
+            this.setState({ name, category, finalPrice: price })
+            return this.searchItem()
+        }
+    }
+
+
     searchItem = async () => {
+        this.props.initiateRegistration()
         let { name, category, finalPrice } = this.state;
         let postObj = {
             name,
@@ -51,7 +95,6 @@ class ShopItems extends Component {
             this.setState({ products })
         }
     }
-
     handleSetCartData = () => {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.setState({ cartData })
@@ -137,6 +180,8 @@ class ShopItems extends Component {
         await this.props.itemDetailModalAction(itemDetails)
         return this.setState({ itemDetails })
     }
+
+
 
 
     render() {

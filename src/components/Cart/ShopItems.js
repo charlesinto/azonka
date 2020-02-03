@@ -39,8 +39,8 @@ class ShopItems extends Component {
             let { name } = this.state
             if (params.name != name) {
                 this.setState({ name: params.name, category: params.category })
-                return console.log("one change", this.state, params);
-                this.searchItem()
+                // return console.log("one change", this.state, params);
+                //this.searchItem()
             }
 
             // const { name, category, price } = params;

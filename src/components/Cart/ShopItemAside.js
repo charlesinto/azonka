@@ -13,14 +13,12 @@ class ShopItemAside extends Component {
     handleSearchSubmit = async () => {
         let { name, categoryValue, priceRange } = this.state
         let category = categoryValue, finalPrice = priceRange;
-        if (finalPrice <= 1000) return null
         this.props.history.push(`/shop?price=${finalPrice}`);
-        window.location.reload()
+        // window.location.reload()
     }
     handleRangeSubmit = async (e) => {
         e.preventDefault();
         this.handleSearchSubmit()
-
     }
     render() {
         let { priceRange } = this.state
@@ -51,11 +49,11 @@ class ShopItemAside extends Component {
                     <div className="widget">
                         <h3 className="widget-title">
                             <Link data-toggle="collapse" to="#widget-body-2" role="button" aria-expanded="true"
-                                aria-controls="widget-body-2">Price- ₦{priceRange ? priceRange : 100}</Link>
+                                aria-controls="widget-body-2">Price- ₦{priceRange ? priceRange : 1000}</Link>
                         </h3><br />
 
                         <input type="range" class="form-control-range"
-                            name="points" min="1000" max="100000" onChange={this.handleRange} />
+                            name="points" min="1000" max="1000000" onChange={this.handleRange} />
 
                         <div className="collapse show" id="widget-body-2">
                             <div className="widget-body">

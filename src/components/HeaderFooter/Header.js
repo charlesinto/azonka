@@ -89,10 +89,8 @@ class Header extends Component {
     handleSearchSubmit = async () => {
         let { name, categoryValue } = this.state
         let category = categoryValue;
-        // if (category === "" || category === "Select category") return null;
+        category = category == "Select category" || category == "" ? "0" : category;
         this.props.history.push(`/shop?name=${name}&category=${category}`);
-        // window.location.reload()
-        // console.log("nonso")
     }
     handleEnterSubmit = async (e) => {
         if (e.key === 'Enter') {

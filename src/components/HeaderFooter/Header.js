@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter, Route } from "react-router-dom";
+import { Link, withRouter, } from "react-router-dom";
 import englishFlag from "../../css/images/flags/en.png";
 import nigeriaFlag from "../../css/images/flags/nigeria.png";
 import frenchFlag from "../../css/images/flags/fr.png";
@@ -12,22 +12,32 @@ import ShopItem from '../Cart/ShopItems'
 import ShopItems from '../Cart/ShopItems';
 
 class Header extends Component {
-    state = {
-        mobileMenu: false,
-        showSearchBar: false,
-        currentUser: null,
-        cartData: [],
-        name: "",
-        categoryValue: ""
+    
+    constructor(props){
+        super(props);
+        this.state = {mobileMenu: false,
+            showSearchBar: false,
+            currentUser: null,
+            cartData: [],
+            name: "",
+            categoryValue: ""}
+            
     }
     componentDidMount() {
         const user = JSON.parse(localStorage.getItem('azonta-user'))
         let cartData = JSON.parse(localStorage.getItem("cart"));
+        this.$select = React.createRef()
         this.setState({
             currentUser: user, cartData
         })
         this.loadSearchCategory()
         this.loadCart()
+        document.querySelector('#category').addEventListener('change', function(e){
+            console.log(this.dataset.search)
+        })
+    }
+    componentWillUnmount(){
+        document.querySelector('#category').removeEventListener('change', () => {})
     }
     _toggleMenu = () => {
         this.setState({
@@ -68,11 +78,13 @@ class Header extends Component {
     }
 
     handleSearchChange = (e) => {
+        console.log(e)
         this.setState({ name: e.target.value })
         this.setState({ category: this.props.categories })
     }
-    handleSelectChange = (e) => {
-        this.setState({ categoryValue: e.target.value })
+    handleSelectChange(e, $this){
+        console.log(this)
+        $this.setState({ categoryValue: e.target.value })
     }
     handleSearchSubmit = async () => {
         let { name, categoryValue } = this.state
@@ -189,19 +201,19 @@ class Header extends Component {
                                                 <input type="text" className="form-control" id="name" placeholder="Search..." value={this.state.name} required={false} onChange={this.handleSearchChange}
                                                     onKeyPress={this.handleEnterSubmit} />
                                                 <div className="select-custom">
-                                                    <select id="category" onChange={this.handleSelectChange} >
-                                                        <option>Select category</option>
+                                                    <select id="category" onChange={(e) => this.handleSelectChange(e, this)} >
+                                                        <option className=".option">Select category</option>
                                                         {
                                                             category ? (
                                                                 category.map(_data => {
                                                                     let { id, name, owner } = _data;
                                                                     return (
 
-                                                                        <option value={id} key={id} id={id} data-owner={owner}>- {name}</option>
+                                                                        <option className=".option" value={id} key={id} id={id} data-search={name} data-owner={owner}>- {name}</option>
                                                                     )
                                                                 })
                                                             ) : (
-                                                                    <option value="">- Loading...</option>
+                                                                    <option className=".option" value="">- Loading...</option>
                                                                 )
                                                         }
                                                     </select>

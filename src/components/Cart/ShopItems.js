@@ -66,9 +66,11 @@ class ShopItems extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // console.log("happened", prevState)
         let params = queryString.parse(this.props.location.search)
         const { name, category, price } = params;
-        if (name != prevState.name || category != prevState.category) {
+        // console.log(params, prevState)
+        if (name != prevState.name || category != prevState.category || price != prevState.finalPrice) {
             this.setState({ name, category, finalPrice: price })
             return this.searchItem()
         }
@@ -76,7 +78,7 @@ class ShopItems extends Component {
 
 
     searchItem = async () => {
-        // this.props.initiateRegistration()
+        this.props.initiateRegistration()
         let { name, category, finalPrice } = this.state;
 
         let postObj = {

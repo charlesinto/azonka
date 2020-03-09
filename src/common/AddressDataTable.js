@@ -61,6 +61,18 @@ class StoreDataTable extends Component {
                 }
             ]
         })
+        const $this = this;
+        $(this.el).on('click', 'button', function(){
+            //console.log('clicked', this.classList)
+            if(this.classList.contains('dt-edit')){
+                const selectedId = this.dataset.id
+                $this.props.handleRowClick(selectedId, 'edit')
+            }
+            else if(this.classList.contains('dt-delete')){
+                const selectedId = this.dataset.id
+                $this.props.handleRowClick(selectedId, 'delete')
+            }
+        })
     }
     componentWillUnmount(){
         this.$el = $(this.el)

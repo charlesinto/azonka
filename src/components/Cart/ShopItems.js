@@ -30,6 +30,7 @@ class ShopItems extends Component {
 
 
         await this.setState({ name, category, finalPrice: price })
+        console.log('called here o')
         this.searchItem()
         this.listen()
     }
@@ -65,13 +66,14 @@ class ShopItems extends Component {
         return null;
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps, prevState) {
         // console.log("happened", prevState)
         let params = queryString.parse(this.props.location.search)
         const { name, category, price } = params;
         // console.log(params, prevState)
         if (name != prevState.name || category != prevState.category || price != prevState.finalPrice) {
-            this.setState({ name, category, finalPrice: price })
+            console.log('calle here twice')
+            await this.setState({ name, category, finalPrice: price }, () => console.log(this.state))
             return this.searchItem()
         }
     }
@@ -94,10 +96,12 @@ class ShopItems extends Component {
             finalPrice: finalPrice == null ? "0" : finalPrice
         }
         // return console.log("nonso", postObj)
+        console.log('called', postObj)
         await this.props.SearchItem(postObj)
         if (this.props.search == null) return null
-        let { success, products } = this.props.search;
-        if (this.props.search && success) {
+        let {  products } = this.props.search;
+        console.log('products', products)
+        if (this.props.search) {
             this.setState({ products })
         }
     }
@@ -192,6 +196,7 @@ class ShopItems extends Component {
 
     render() {
         const { products, cartData } = this.state;
+        console.log(products)
         return (
             <div>
                 <main className="main">
@@ -251,7 +256,7 @@ class ShopItems extends Component {
                                     {/* Shop box */}
 
                                     {
-                                        products ? (
+                                        products && products.length > 0 ? (
                                             products.map(data => {
                                                 let { id, name, finalPrice, createdAt, mainImageUrl } = data
                                                 return (
@@ -299,7 +304,7 @@ class ShopItems extends Component {
                                             })
                                         ) : (
                                                 <div className="empty-products">
-                                                    <img src='https://res.cloudinary.com/demo/image/upload/w_400,h_300,c_pad/sample.jpg' />
+                                                    <h3>No search result</h3>
                                                 </div>
                                             )
                                     }

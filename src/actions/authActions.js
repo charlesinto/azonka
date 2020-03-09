@@ -132,12 +132,17 @@ export const login = user => {
                 return dispatch({type: LOGIN_SUCCESS, payload:''})
             }
         }catch(error){
-            if(error.response.data.message.toLowerCase() === 'please verify your email address'){
+            if(error.response.data.message && error.response.data.message.toLowerCase() === 'please verify your email address'){
                 localStorage.setItem('userRegDetails', JSON.stringify(user))
-                return dispatch({type: LOGIN_UNSUCCESSFUL, payload: '' })
+                 dispatch({type: LOGIN_UNSUCCESSFUL, payload: '' })
+                 return dispatch({type: UNSUCCESSFUL_VERIFICATION, payload: error.response.data.message.substr(0,100)})
             }
-            dispatch({type: UNSUCCESSFUL_VERIFICATION, payload: error.response.data.message.substr(0,100)})
-            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0,100) })
+            // console.log(error.response)
+            // dispatch({type: UNSUCCESSFUL_VERIFICATION, payload: error.response.data.message.substr(0,100)})
+            if(error.response.data.message)
+                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            
+            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
         }
     }
 }
@@ -201,14 +206,16 @@ export const resetPasswordWithToken = userData => {
         try{
             const response = await axios.post('/api/v1/user/reset-password', {...userData})
             console.log('respnse', response)
+            dispatch({type: STOP_LOADING, payload: ''})
             dispatch({type: EMAIL_FORGOT_PASSWORD_SENT, payload: 'Password update successful, please login'})
             setTimeout(() => {
                 //window.location.href = window.origin + '/users/login'
                 dispatch({type: PASSWORD_REST_SUCCESSFUL, payload: ''})
-            },2000)
-            dispatch({type: SUCCESS_ALERT, payload: 'Password reset successful'})
+            },1500)
+            dispatch({type: SUCCESS_ALERT, payload: 'Password reset successful, please login'})
         }catch(error){
             console.log('error response', error.response.data)
+            dispatch({type: STOP_LOADING, payload: ''})
             if(error.response.data.message){
                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0,100)})
             }
@@ -326,4 +333,43 @@ export const resetVerificationForm = () => {
 
 export const resetVerificationState = () => {
     return {type: RESET_VERIFICATION_FORM_STATE, payload: ''}
+}
+
+export const resetAccountPin = userData => {
+    return async (dispatch) => {
+        console.log('user data', userData)
+        try{
+            await axios.post('/api/v1/user/request-pin-update', userData, {
+                                headers: {
+                                    'x-access-token': localStorage.getItem('x-access-token')
+                                }
+                            })
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: SUCCESS_ALERT, payload: 'Action performed successfully'})
+        }catch(error){
+            if(error.response.data.message)
+                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            
+            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+        }
+    }
+}
+
+export const resetUserPassword = (data) => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.post('/api/v1/user/forgot-password', data, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: SUCCESS_ALERT, payload: response.data.message})
+        }catch(error){
+            if(error.response.data.message)
+                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            
+            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+        }
+    }
 }

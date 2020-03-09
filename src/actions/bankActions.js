@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { GET_BANKS, ACCOUNT_ADDED_SUCCESSFULLY,LOGOUT_USER,USER_WALLET_OBTAINED_SUCCESSFULLY,
-    GET_SAVED_ACCOUNTS, SUCCESS_ALERT, DISPLAY_ERROR, ACCOUNT_UPDATED, STOP_LOADING } from "./types";
+    GET_SAVED_ACCOUNTS, SUCCESS_ALERT, DISPLAY_ERROR, ACCOUNT_UPDATED, STOP_LOADING,ADDRESSES_FETCHED } from "./types";
 
 export const getBanks = () => {
     return async (dispatch) => {
@@ -70,6 +70,54 @@ const getUserAccount = (lastCount = 0, numOfRecords = 10) => {
         }
     })
     
+}
+
+export const modifyAddress = (action, data, id) => {
+    return async (dispatch) => {
+        try{
+            switch(action){
+                case 'update':
+                    await axios.put(`/api/v1/user/address/update/${id}`, data, {
+                            headers:{
+                            'x-access-token': localStorage.getItem('x-access-token')
+                        }})
+                    const response2 = await axios.get(`/api/v1/user/address/get/${0}/${1000}`, {
+                        headers: {
+                            'x-access-token': localStorage.getItem('x-access-token')
+                        }
+                    })
+        
+                    let { address } = response2.data;
+                    console.log(address)
+                    dispatch({ type: STOP_LOADING, payload: '' })
+                    dispatch({type: SUCCESS_ALERT, payload: 'Action Peformed successfully'})
+                    dispatch({ type: ADDRESSES_FETCHED, payload: address })
+                break;
+                case 'delete':
+                    await axios.delete(`/api/v1/user/address/delete/${id}`,{
+                                headers: {
+                                    'x-access-token': localStorage.getItem('x-access-token')
+                                }
+                            })
+                    const response3 = await axios.get(`/api/v1/user/address/get/${0}/${1000}`, {
+                        headers: {
+                            'x-access-token': localStorage.getItem('x-access-token')
+                        }
+                    })
+                    dispatch({ type: STOP_LOADING, payload: '' })
+                    dispatch({type: SUCCESS_ALERT, payload: 'Action Peformed successfully'})
+                    dispatch({ type: ADDRESSES_FETCHED, payload: response3.data.address })
+                break;
+                default:
+                    return;
+            }
+        }catch(error){
+            if(error.response.data.message)
+                return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+            
+            return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+        }
+    }
 }
 
 export const modifyAccount = (action = null,data=null, id='') => {
@@ -202,6 +250,30 @@ export const withdrawlFromWallet = (amount, bank, pin,currency="") => {
             dispatch({type: USER_WALLET_OBTAINED_SUCCESSFULLY, payload: {transactions, balance}})
             dispatch({type: STOP_LOADING, payload: ''})
             dispatch({type: SUCCESS_ALERT, payload: 'Fund withdrawal successful'})
+        }catch(error){
+            console.log('er', error.response)
+            if(error.response.status === 498){
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+               return setTimeout(function(){
+                    dispatch({type: LOGOUT_USER, payload: ''})
+                }, 1500)
+            }
+            dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const transferToWallet = data => {
+    return async (dispatch) => {
+        try{
+            await axios.post('/api/v1/user/wallet/wallet-transfer', data, {
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                })
+            dispatch({type: STOP_LOADING, payload: ''})
+            return dispatch({type: SUCCESS_ALERT, payload: 'Wallet Transfer successful'})
         }catch(error){
             console.log('er', error.response)
             if(error.response.status === 498){

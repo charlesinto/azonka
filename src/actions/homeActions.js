@@ -1,6 +1,7 @@
 import { FETCH_USER, SWITCH_ACTIVE_LINK,TOGGLE_VIEW_TYPE,INITIAL_REGISTRATION,CLOSE_SNACKBAR,
     SUCCESS_ALERT,STOP_IMAGE_LOADING,
-     DISPLAY_ERROR, STOP_LOADING, ERROR_FETCHING_ITEMS, ITEMS_FETCHED_SUCCESSFULLY, SET_ACTIVE_LINK
+     DISPLAY_ERROR, STOP_LOADING, ERROR_FETCHING_ITEMS, ITEMS_FETCHED_SUCCESSFULLY, SET_ACTIVE_LINK,
+     ADVERT_CATEGORIES_FETCHED
  } from "./types";
 import axios from "axios";
 
@@ -126,4 +127,21 @@ const isEmpty = (obj) => {
 
 export const setActiveLink = (link = '') => {
     return {type: SET_ACTIVE_LINK, payload:link}
+}
+
+
+export const getAdvertCategory = () => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.get(`/api/v1/ad-category/get-ad-categories/0/100`)
+            const {adCategories} = response.data
+            dispatch({type: ADVERT_CATEGORIES_FETCHED, payload: adCategories})
+        }catch(error){
+            if(error){
+                dispatch({type: ERROR_FETCHING_ITEMS, payload: ''})
+                 return dispatch({type: STOP_LOADING, payload:''})
+            }
+            dispatch({type: STOP_LOADING, payload: ''})
+        }
+    }
 }

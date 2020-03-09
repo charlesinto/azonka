@@ -5,9 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
 import queryString from "query-string";
 import * as actions from "../../actions";
-import ErrorAlert from "../../common/ErrorAlert";
-import SuccessAlert from "../../common/SuccessAlert";
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header from '../HeaderFooter/Header';
 import Footer from '../HeaderFooter/Footer';
 
@@ -22,12 +20,12 @@ class ResetPassword extends Component {
         resetPwdEmail: '',
         passwordResetToken: ''
     }
-    componentDidMount(){
+    async componentDidMount(){
         const query = queryString.parse(this.props.location.search)
         if(!query['token']){
             return this.props.history.push('/users/login')
         }
-        this.setState({
+        await this.setState({
             passwordResetToken: query['token']
         })
     }
@@ -59,16 +57,15 @@ class ResetPassword extends Component {
             formdata
         }
     }
-    handleFormSubmit = (event) => {
+    handleFormSubmit = async (event) => {
         event.preventDefault();
-        const {add} = this.props.toastManager;
         const userData = {...this.state}
 
         const validationResponse = this.validateFormData(userData)
         const { isValid} = validationResponse;
         if(!isValid){
             const { inValidElments, validationMessage} = validationResponse
-            add('form invalid, please check and try again', { appearance: 'error' })
+            this.props.renderError('One or more fields missing, Email Address and New Password is required')
            return  this.setState({
                 inValidElments,
                 validationMessage
@@ -76,8 +73,14 @@ class ResetPassword extends Component {
         }
 
         //call the api
-        const {emailAddress, newPassword, passwordResetToken} = this.state
-        this.props.resetPasswordWithToken({emailAddress, newPassword, passwordResetToken})
+        const {emailAddress, newPassword, passwordResetToken} = this.state;
+        this.props.initiateRegistration()
+        await this.props.resetPasswordWithToken({emailAddress, newPassword, passwordResetToken})
+        await this.setState({
+            emailAddress: '',
+            newPassword: '',
+            passwordResetToken: ''
+        })
     }
     handleInputChange = (event) => {
         const {target: { name, value}} = event;
@@ -134,9 +137,8 @@ class ResetPassword extends Component {
                     </div>
                 </nav>
             <div className="form-popup custom-input">
-                <div className="form-popup-headline secondary">
-                    <h2>Reset Your Password</h2>
-                </div>
+                <h2 className="h2-header">Reset Password</h2>
+                <hr />
                 <div className="form-popup-content">
                     <form id="login-form2">
                         <label htmlFor="emailAddress" className="rl-label">Email Adress</label>
@@ -165,20 +167,12 @@ class ResetPassword extends Component {
                                     </div>
                                 ): null 
                         }
-                        <button className="button mid secondary" onClick={this.handleFormSubmit}>Reset Password <span className="primary">Now!</span></button>
-                        <p style={{textAlign:'center', margin:'15px 0px'}}>Have an Account?
-                                <Link to="/users/login" style={{color:'#00d7b3', cursor:'pointer'}}> Login</Link></p>
+                        <button className="btn btn-sm btn-primary" onClick={this.handleFormSubmit}>Reset Password <span className="primary"></span></button>
+                        <p style={{textAlign:'center', fontSize:'1.3rem', margin:'15px 0px'}}>Have an Account?
+                                <Link to="/users/login" className="text-primary" style={{ cursor:'pointer'}}> Login</Link></p>
                     </form>
                     <hr className="line-separator double" />
                 </div>
-                <SuccessAlert 
-                    open={this.props.showSuccessBar} closeSnackBar={this.closeSnackBar}
-                    message={this.props.successMessage} 
-                />
-                <ErrorAlert open={this.props.error} closeSnackBar={this.closeSnackBar} errorMessage={this.props.errorMessage} />
-                {
-                    this.props.redirectToLogin ? <Redirect to="/users/login" />: null
-                }
             </div>
             </div>
             <Footer/>

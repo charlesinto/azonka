@@ -67,9 +67,9 @@ class DeliveryDataTable extends Component {
                 {
                     title:' Action',
                     render: (data, type, row, meta) => {
-                        return `<button type="button" data-id=${row.id} class="btn btn-outline-primary action-btn btn-xs dt-edit" style="margin-right:16px;">
-                        <i class="fas fa-pen"></i></button>
-                        <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>`
+                        return `<div class="data-table-action-wrapper"><button type="button" data-id=${row.id} data-toggle="modal" data-target="#exampleModalLong" data-controls-modal="#exampleModalLong" data-backdrop="static" data-keyboard="false" class="btn btn-outline-primary action-btn btn-xs dt-view-product-detail" style="margin-right:16px;">
+                        <i class="far fa-eye"></i> View</button>
+                        `
                     },
                     responsivePriority: 1
                 }
@@ -77,12 +77,15 @@ class DeliveryDataTable extends Component {
         })
         const $this = this;
         $(this.el).on('click', 'button', function(){
+            console.log('called')
             //console.log('clicked', this.classList)
             if(this.classList.contains('dt-edit')){
+                console.log('here o is edit')
                 const selectedId = this.dataset.id
                 $this.props.handleRowClick(selectedId, 'edit')
             }
             if(this.classList.contains('dt-view-product-detail')){
+                console.log('here o is view')
                 const selectedId = this.dataset.id
                 $this.props.handleRowClick(selectedId, 'view')
             }
@@ -113,7 +116,8 @@ class DeliveryDataTable extends Component {
     }
     render(){
         return (
-            <table className="display table data-table-class table-striped table-bordered" style={{width:'100%',
+            
+            <table className="display table data-table-class data-table table-striped table-bordered" style={{width:'100%',
             overflowX:'auto'}} ref={el => this.el = el}></table>
         
     );
@@ -121,3 +125,5 @@ class DeliveryDataTable extends Component {
 }
 
 export default DeliveryDataTable;
+
+//<button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-times"></i> Reject</button></div>

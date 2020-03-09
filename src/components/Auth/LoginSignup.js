@@ -40,6 +40,9 @@ class LoginSignup extends Component {
         validationMessage: {},
         inValidElments: []
     },
+    resetAccount: {
+        emailAddress: ''
+    },
      validationMessage: {},
      agreeToTerms: false,
      showSpinner: false
@@ -131,6 +134,11 @@ class LoginSignup extends Component {
                         
                     })
                 }
+        }
+        else if (form === 'resetAccount'){
+            this.setState({
+                resetAccount: {...this.state['resetAccount'], [name]: value}
+            })
         }
         
         
@@ -303,7 +311,17 @@ class LoginSignup extends Component {
             agreeToTerms: !this.state.agreeToTerms
         })
     }
-
+    recoverPassword = async (e) => {
+        e.preventDefault();
+        if(this.state.resetAccount.emailAddress.trim() === ''){
+            return this.props.renderError('Please Provide Email Address')
+        }
+        this.props.initiateRegistration()
+        await this.props.resetUserPassword(this.state.resetAccount)
+        await this.setState({
+            resetAccount: {...this.state.resetAccount, emailAddress: ''}
+        })
+    }
     render() {
         const {classes} = this.props
         return (
@@ -350,7 +368,9 @@ class LoginSignup extends Component {
                                                     <label className="custom-control-label form-footer-right" for="lost-password">Remember Me</label>
                                                 </div> */}
                                             </div>
-                                            <Link to="/users" style={{ display: 'block', width: '100%', textAlign: 'center' }} className="forget-password"> Forgot your password?</Link>
+                                            <a  href="#exampleModal23" data-toggle="modal"  
+                                                style={{ display: 'block', width: '100%', textAlign: 'center' }} 
+                                                className="forget-password"> Forgot your password?</a>
                                         </form>
                                     </div>
 
@@ -425,7 +445,9 @@ class LoginSignup extends Component {
                                                     <label className="custom-control-label form-footer-right" for="lost-password">Remember Me</label>
                                                 </div> */}
                                             </div>
-                                            <a href="#" style={{ display: 'block', width: '100%', textAlign: 'center' }} className="forget-password"> Forgot your password?</a>
+                                            <a  href="#exampleModal23" data-toggle="modal"  
+                                                style={{ display: 'block', width: '100%', textAlign: 'center' }} 
+                                                className="forget-password"> Forgot your password?</a>
                                     </form>
                                 </TabPanel>
                                 <TabPanel value={this.state.tab} index="signup">
@@ -545,6 +567,32 @@ class LoginSignup extends Component {
 
                     </div>
                 </div>
+                <div className="modal fade" id="exampleModal23" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Forgot Password</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <form>
+                            <div className="form-group">
+                                <label htmlFor="emailAddress" className="col-form-label">Email Address:</label>
+                                <input type="email" value={this.state.resetAccount.emailAddress}
+                                onChange={(e ) => this.handleInputChange(e, 'resetAccount')} name="emailAddress"
+                                 className="form-control" id="recipient-name" />
+                            </div>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" onClick={this.recoverPassword} className="btn btn-primary">Recover Password</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
                 <Footer />
             </div>
         );

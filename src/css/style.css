@@ -12483,3 +12483,33 @@ label.custom{
     border-radius: 4px;
     margin-bottom: 1.3em;
 }
+
+.h2-header{
+    margin: 10px 10px;
+    font-size: 2rem;
+    padding: 2rem 0rem;
+}
+
+.dataTables_wrapper{
+    width: 100% !important;
+    margin: 16px 0;
+    overflow: auto !important;
+}
+
+.data-table-action-wrapper{
+    display: flex;
+}
+
+.data-table{
+    overflow-x: auto !important;
+}
+
+@media screen and (min-width: 768px){
+    .transfer-btn{
+        margin-top: 3.4rem;
+    }
+}
+
+.label>.radio, label>.checkbox.data-table{
+ background-color: #fff;
+}

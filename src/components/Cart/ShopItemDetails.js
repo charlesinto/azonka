@@ -11,24 +11,31 @@ class ShopItemDetails extends Component {
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
-        this.setState({ id })
-        this.loadShopData()
+        await this.setState({ id })
+        // await this.loadShopData()
         this.getDetails()
 
     }
-    getDetails = () => {
-        let { products, id } = this.state;
-        console.log("showst", this.state)
-        let detailsData = products.filter(data => id === data.id)[0]
-
-        this.setState({ detailsData })
+    static getDerivedStateFromProps(nextProps, state){
+        return {...state, detailsData: nextProps.productFound}
+        
+    }
+    getDetails = async () => {
+        let {  id } = this.state;
+        // console.log("showst", this.state)
+        await this.props.getProductById(id)
+        // let detailsData = products.filter(data => parseInt(id) === data.id)[0]
+        // console.log('det', detailsData)
+        // this.setState({ detailsData })
     }
     loadShopData = async () => {
 
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchFeaturedItems()
-            this.setState({ products: this.props.products })
+            // await this.props.searchItem(this.state.id)
+            console.log(this.props.products)
+            await this.setState({ products: this.props.products })
             console.log("show", this.state)
 
             let { products, id } = this.state;
@@ -699,11 +706,11 @@ class ShopItemDetails extends Component {
 
 const mapStateToProps = state => {
 
-    const { cartItems, cartData, products } = state.inventory;
+    const { cartItems, cartData, products, productFound } = state.inventory;
     let cartResponse = cartItems.data
     // console.log("fire", state)
     return {
-        cartItems, cartResponse, cartData, products
+        cartItems, cartResponse, cartData, products, productFound
     }
 }
 

@@ -56,12 +56,12 @@ class index extends Component {
         console.log('called')
         this.props.initForm()
     }
-    static getDerivedStateFromProps(nextProps, state) {
-        console.log(nextProps.resetForm)
-        if (nextProps.resetForm) {
-            return { ...state, deliveryType: '', deliveryLocation: '', subImages: [] }
-        }
-    }
+    // static getDerivedStateFromProps(nextProps, state) {
+    //     console.log(nextProps.resetForm)
+    //     if (nextProps.resetForm) {
+    //         return { ...state, deliveryType: '', deliveryLocation: '', subImages: [] }
+    //     }
+    // }
     hanldeFormUpdate = e => {
         e.preventDefault()
         const { isValid, inValidElments, validationMessage } = this.validateFormData(this.props)
@@ -345,7 +345,7 @@ class index extends Component {
         }
         return null
     }
-    handleFormSubmit = e => {
+    handleFormSubmit = async (e) => {
         e.preventDefault()
         // this.props.validateFormData(this.state)
         const { isValid, inValidElments, validationMessage } = this.validateFormData(this.props)
@@ -368,7 +368,8 @@ class index extends Component {
             return this.props.renderError('Please select delivery location')
         }
         this.props.initiateRegistration()
-        this.props.createItem({ ...this.state, discounts })
+        await this.props.createItem({ ...this.state, discounts })
+        await this.props._initUploadPage();
 
     }
     numberWithCommas = (number = '') => {
@@ -453,7 +454,6 @@ class index extends Component {
         this.props.removeSubImagesFromUpload(elementNumber)
     }
     render() {
-
         return (
             <StoreDashboard>
                 <h2>Create Item</h2>
@@ -1018,6 +1018,7 @@ const mapStateToProps = state => {
         filteredSubCategory
 
     } } = state;
+    
     return {
         subCategories, categories, stores, product, resetForm,
         sellingPriceWithComma,

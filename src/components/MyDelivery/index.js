@@ -7,7 +7,7 @@ import DeliveryDataTable  from "../../common/DeliveryDataTable";
 import ProductDetailModal from '../../common/ProductDetailModal';
 
 class MyDelivery extends Component{
-    INITIAL_STATE = {product: [], quantity: 0, updateDt: false}
+    INITIAL_STATE = {product: [], quantity: 0, updateDt: false, selectedId: null}
     constructor(props){
         super(props);
         this.state = {...this.INITIAL_STATE}
@@ -23,6 +23,7 @@ class MyDelivery extends Component{
                 const index = this.props.delivery.findIndex(element => element.id === parseInt(selectedId));
                 this.props.initiateRegistration()
                 return this.setState({
+                    selectedId,
                     product: this.props.delivery[index]['products'],
                     quantity: this.props.delivery[index]['quantity'],
                     updateDt: false,
@@ -56,7 +57,7 @@ class MyDelivery extends Component{
                         
                     />
                 </div>
-                <ProductDetailModal removeItemsFromTable={this.removeItemsFromTable} updateDt={this.state.updateDt} quantity={this.state.quantity} product={this.state.product} />
+                <ProductDetailModal selectedId={this.state.selectedId} removeItemsFromTable={this.removeItemsFromTable} updateDt={this.state.updateDt} quantity={this.state.quantity} product={this.state.product} />
         </StoreDashboard>)
     }
 }

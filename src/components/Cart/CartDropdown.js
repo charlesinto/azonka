@@ -18,10 +18,13 @@ class CartDropdown extends Component {
     }
     calSum = () => {
         let { cartData } = this.state;
-        let sum = cartData ? cartData.reduce((a, b) => {
-            return a + b.finalPrice * (this.props.quantity[b.id] || 1)
-        }, 0) : 0
-        return sum
+        if(cartData && cartData.length > 0){
+            let sum = cartData ? cartData.reduce((a, b) => {
+                return a + b.finalPrice * (this.props.quantity ? this.props.quantity[b.id] || 1 : 1)
+            }, 0) : 0
+            return sum
+        }
+        return 0;
     }
     removeFromCart = async (id) => {
         if(localStorage.getItem('x-access-token')){

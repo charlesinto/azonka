@@ -478,7 +478,7 @@ class Checkout extends Component {
                 }
                 this.props.initiateRegistration()
                 this.props.registerPayment('', '',
-                    this.props.amount, this.state.payType, this.state.cartData,
+                    this.props.amount * 100, this.state.payType, this.state.cartData,
                     this.state.addressId, this.state.userAddress)
             }
         }

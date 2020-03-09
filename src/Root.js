@@ -43,12 +43,16 @@ import * as actions from "./actions";
 import LoginSignup from "./components/Auth/LoginSignup";
 import ShopItems from './components/Cart/ShopItems';
 import ShopItemDetails from './components/Cart/ShopItemDetails';
+import SpecialItemDetail  from "./components/SpecialItemDetail";
 import Header from './components/HeaderFooter/Header';
 import ItemModal from './components/Cart/ItemModal';
 import Checkout from "./components/Checkout";
 import CartTest from './components/Cart/CartTest';
 import MyOrders from './components/MyOrders';
+import ChangePincode from "./components/ChangePincode";
+import MyAzonkaCredits from "./components/MyAzonkaCredits";
 import MyDelivery from "./components/MyDelivery";
+import WalletToWalletTransfer from "./components/WalletToWalletTransfer";
 // import ShopItems from './components/Shop/ShopItems';
 
 class Root extends Component {
@@ -74,6 +78,7 @@ class Root extends Component {
                                 <Route exact path="/shop-details/:id" component={ShopItemDetails} />
                                 <Route exact path="/modal" component={ItemModal} />
                                 <Route exact path="/cartest" component={CartTest} />
+                                <Route exact path="/specials/:id" component={SpecialItemDetail} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register" component={Register} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />
@@ -86,10 +91,14 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/placed-orders" component={MyOrders} />
                                 <AuthRoute redirectIfUser exact path="/users/create-store" component={CreateStore} />
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
+                                <AuthRoute exact path="/users/change-pincode" component={ChangePincode} />
                                 <AuthRoute exact path="/users/transactions/delivery" component={MyDelivery} />
                                 <AuthRoute exact path="/users/wallet/fund" component={Wallet} />
                                 <AuthRoute exact path="/users/wallet/withdraw" component={WithDrawal} />
+                                <AuthRoute exact path="/users/wallet/wallet-transfer" component={WalletToWalletTransfer} />
+
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
+                                <AuthRoute exact path="/users/azonka-credits" component={MyAzonkaCredits} />
                                 <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />
                                 <AuthRoute redirectIfUser exact path="/users/withdrawal" component={WithDrawal} />
                                 <AuthRoute redirectIfUser exact path="/users/items/upload" component={UploadItem} />

@@ -87,8 +87,6 @@ class ItemModal extends Component {
                 <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
-
-
                             <div className="product-single-container product-single-default product-quick-view container">
                                 <div className="row">
                                     <div  className="col-lg-6 col-md-6 product-single-gallery">

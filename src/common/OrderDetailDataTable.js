@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import  * as actions from "../actions";
 const $ = require('jquery')
 
 $.DataTable = require('datatables.net')
 require( 'datatables.net-responsive' )
 
+
+//confirmation Dialog
 class OrderDe extends Component {
+    INITIAL_STATE = {selectedOrders: []}
+    constructor(props){
+        super(props);
+        this.state = {...this.INITIAL_STATE};
+    }
+    static getDerivedStateFromProps(nextProps, state){
+        if(nextProps.resetState){
+            return {...state, selectedOrders: []}
+        }
+        return null;
+    }
     componentDidMount(){
         this.$el = $(this.el)
         this.$el.DataTable({
@@ -13,6 +28,17 @@ class OrderDe extends Component {
             autoWidth: true,
             
             columns: [
+                {
+                    title: '',
+                    render: (data, type, row, meta) => {
+                        return `<input type="checkbox"
+                          data-id=${row.id} name=checkbox-${row.id} value="sellers" />
+                            <label class="label-check">
+                                    <span style="width:2.4rem;height:2.4rem;" data-id=${row.id} class="checkbox primary data-table primary"><span></span></span>
+                            </label>
+                          `
+                    }
+                },
                 {title:'Item Image',
                  render: (data, type, row, meta ) => {
                     if ( type === 'display' ) {
@@ -84,9 +110,13 @@ class OrderDe extends Component {
                 {
                     title:' Action',
                     render: (data, type, row, meta) => {
-                        return `<button type="button" data-id=${row.id} class="btn btn-outline-primary action-btn btn-xs dt-edit" style="margin-right:16px;">
-                        <i class="fas fa-pen"></i></button>
-                        <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>`
+                        return `<button type="button" data-id=${row.id}
+                        data-toggle="tooltip" data-placement="bottom" title="Accept Order"
+                         class="btn btn-outline-primary action-btn btn-xs dt-edit" style="margin-right:16px;">
+                        <i class="fas fa-clipboard-check"></i></button>
+                        <button type="button" data-id=${row.id} 
+                        data-toggle="tooltip" data-placement="bottom" title="Reject Order"
+                        class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-times"></i></button>`
                     },
                     responsivePriority: 2
                 }
@@ -113,33 +143,92 @@ class OrderDe extends Component {
                 $this.props.handleRowClick(selectedId, 'delete')
             }
         })
+        $(this.el).on('click', 'span.data-table', function(e) {
+            const inputfield = document.querySelector(`input[data-id="${this.dataset.id}"]`)
+            const index = $this.state.selectedOrders.findIndex(item => item === this.dataset.id )
+            if(index !== -1){
+                inputfield.removeAttribute('checked')
+                const SelectedOrders = $this.state.selectedOrders;
+                SelectedOrders.splice(index, 1)
+                $this.resetState([...SelectedOrders])
+            }else{
+                inputfield.setAttribute('checked', true)
+                const newSelectedOrders = $this.state.selectedOrders;
+                newSelectedOrders.push(this.dataset.id)
+                $this.resetState([...newSelectedOrders])
+                
+            }
+            
+            
+        })
+    }
+    resetState = newState => {
+        console.log('called', newState)
+        this.setState({
+            selectedOrders: newState
+        }, () => this.props.itemSelectedOrderDetailModal(this.state.selectedOrders))
     }
     componentWillUnmount(){
         this.$el = $(this.el)
+        this.setState({...this.INITIAL_STATE})
         this.$el.DataTable().destroy(true)
         this.props.removeItemsFromTable()
     }
     reloadTableData(data, $el){
+        // this.setState({selectedOrders: []})
         $el.DataTable().clear()
         $el.DataTable().rows.add(data)
+        
         $el.DataTable().draw()
     }
     shouldComponentUpdate(nextProps) {
         if (nextProps.updateDt) {
+            
             this.reloadTableData(nextProps.data, $(this.el));
         }
-        return false;
+        return true;
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     render() {
         return (
-                <table className="display table data-table-class table-striped table-bordered" style={{width:'100%',
-                overflowX:'auto'}} ref={el => this.el = el}></table>
+            <div className="container">
+                {/* <div className="row">
+                    {
+                        this.state.selectedOrders.length > 0 ? 
+                        (
+                            <div className="row">
+                                <div className="d-flex  bd-highlight">
+                                <button type="button" style={{marginRight: 8}} className="btn btn-primary btn-small">
+                                    Accept {this.state.selectedOrders.length}</button>
+                                    <button type="button" className="btn btn-danger btn-small">
+                                        Reject {this.state.selectedOrders.length}</button>
+                                </div>
+                            </div>
+                        ) :
+
+                        (
+                            <div className="row">
+                                <div className="d-flex  bd-highlight">
+                                    <button type="button" style={{marginRight: 8}} className="btn btn-primary btn-small">
+                                        Accept All</button>
+                                    <button type="button" className="btn btn-danger btn-small">
+                                        Reject All</button>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div> */}
+                <div className="row">
+                    <table className="display table data-table-class table-striped table-bordered" style={{width:'100%',
+                    overflowX:'auto'}} ref={el => this.el = el}></table>
+                </div>
+            </div>
+                
             
         );
     }
 }
 
-export default OrderDe;
+export default connect(null, actions)(OrderDe);

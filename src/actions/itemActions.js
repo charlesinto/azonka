@@ -8,8 +8,9 @@ import {
     RESET_MANAGE_ITEMS_STATE, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
     ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
-    HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,
-    ITEM_MODAL, HEADER_SEARCH_SUCCESS, GET_SELLER_DELIVERIES
+    HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,PRODUCT_NOT_FOUND,
+    ITEM_MODAL, HEADER_SEARCH_SUCCESS, GET_SELLER_DELIVERIES, ITEM_SELECTED_ORDER_DETAIL_MODAL,PRODUCT_FOUND,
+    HEADER_SEARCH_SUCCESS_ADVERT
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -364,6 +365,26 @@ export const SearchItem = (details) => {
     }
 }
 
+export const searchAdvertCategory = (details) => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.get(`/api/v1/admin/ad-category/get/${details.id}` );
+            if (response.data.success) {
+                const {adCategory: {products}} = response.data
+                dispatch({ type: HEADER_SEARCH_SUCCESS_ADVERT, payload: products })
+                dispatch({ type: STOP_LOADING, payload: '' })
+                // dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
+            }
+        }catch(error){
+            console.log(error.response)
+            if (error.response && error.response.data.message)
+                return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
 export const itemDetailModalAction = (data) => {
     console.log("inside", data)
     return async (dispatch) => {
@@ -689,7 +710,6 @@ export const registerPayment = (transactionNo, txRef, amount, paymentType, cartD
                 }
             }
             )
-            console.log('cartt ', cartData)
             for (let i = 0; i < cartData.length; i++) {
                 await axios.post('/api/v1/user/cart/remove', { productId: cartData[i].id }, {
                     headers: {
@@ -941,6 +961,64 @@ export const getSellerDeliveries = (id= 0, numberOfPage=100) => {
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+
+export const itemSelectedOrderDetailModal = selectedItems => {
+    return {type: ITEM_SELECTED_ORDER_DETAIL_MODAL, payload: selectedItems}
+}
+
+export const rejectProducts = (deliveryId = null, selectedItem = []) => {
+    return async (dispatch) => {
+        try{
+            // selectedItem.forEach(async (id) => {
+            //     await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
+            //         productId: id
+            //     }, {
+            //         headers: {
+            //             'x-access-token': localStorage.getItem('x-access-token')
+            //         }
+            //     } )
+            // })
+            await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
+                productId: selectedItem
+            }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            } )
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully'})
+        }catch(error){
+            console.log('er', error.response)
+            if (error.response.status === 498) {
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
+                }, 1500)
+            }
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+export const getProductById = (id = '') => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.get(`/api/v1/seller/product/get/${id}`)
+            const {product} = response.data;
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch({type: PRODUCT_FOUND, payload: product})
+        }catch(error){
+            if (error.response.status === 404) {
+                return dispatch({ type: PRODUCT_NOT_FOUND, payload: '' })
+            }
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            
         }
     }
 }

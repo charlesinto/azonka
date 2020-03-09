@@ -5,7 +5,7 @@ import {
     ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, CART_UPDATED_SUCCESSFULLY,
     SET_ITEM_IMAGE, INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, HANDLE_PREFERNCE_CHANGE, FILES_SELECTED,
         LOCAL_SHOP_FETCHED_SUCCESSFULLY,HEADER_SEARCH_SUCCESS,
-    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, ORDER_FETCHED_SUCCESSFULLY, RESET_MANAGE_ITEMS_STATE, GET_SELLER_DELIVERIES,
+    ADD_LOCAL_SHOP_SUCCESSFULLY, ITEM_MODAL, REMOVE_SUB_IMAGES, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, ORDER_FETCHED_SUCCESSFULLY, RESET_MANAGE_ITEMS_STATE, GET_SELLER_DELIVERIES, ITEM_SELECTED_ORDER_DETAIL_MODAL, PRODUCT_FOUND, HEADER_SEARCH_SUCCESS_ADVERT,
         
 } from "../actions/types";
 
@@ -59,13 +59,17 @@ const INTIAL_STATE = {
     filteredSubCategory: [],
     redirectToCheckout: false,
     orders: [],
-    delivery: []
+    delivery: [],
+    selectedItems: [],
+    productFound: {},
+    adverts:[]
 }
 
 export default (state = INTIAL_STATE, actions) => {
     switch (actions.type) {
         case ITEMS_FETCHED_SUCCESSFULLY:
             const { stores, categories, subCategories } = actions.payload;
+            console.log('am not her')
             return { ...state, stores, categories, subCategories, resetForm: false }
         case STOP_LOADING:
             return { ...state, resetForm: true, }
@@ -90,6 +94,8 @@ export default (state = INTIAL_STATE, actions) => {
             return { ...state, localProducts: actions.payload, }
         case HEADER_SEARCH_SUCCESS:
             return { ...state, search: actions.payload, }
+        case HEADER_SEARCH_SUCCESS_ADVERT:
+            return {...state, adverts: actions.payload}
         case ADD_LOCAL_SHOP_SUCCESSFULLY:
             return { ...state, PRODUCTS: actions.payload, }
 
@@ -111,11 +117,11 @@ export default (state = INTIAL_STATE, actions) => {
         case SET_ITEM_IMAGE:
             return { ...state, previewImage: actions.payload }
         case CLEAR_ITEM_FORM_INPUTS:
-            return { ...INTIAL_STATE, resetForm: true }
+            return { ...state, ...INTIAL_STATE, resetForm: true }
         case SET_CARTDROPDOW_QUANTITY:
             return { ...state, quantity: actions.payload }
         case STORE_ITEM_EDIT:
-            return editStoreItem(state, actions.payload)
+            return {...INTIAL_STATE, ...editStoreItem(state, actions.payload)}
         case HANDLE_PREFERNCE_CHANGE:
             return { ...state, [actions.payload.target.name]: actions.payload.target.value }
         case INVALID_ITEM_FORM_DATA:
@@ -141,12 +147,17 @@ export default (state = INTIAL_STATE, actions) => {
                 default:
                     return { ...state }
             }
-        case RESET_MANAGE_ITEMS_STATE:
-            return {...state, ...INTIAL_STATE}
+        // case RESET_MANAGE_ITEMS_STATE:
+        //     console.log('se me se trouble')
+        //     return {...state, ...INTIAL_STATE}
         case GET_SELLER_DELIVERIES:
             return {...state, delivery: actions.payload}
         case ORDER_FETCHED_SUCCESSFULLY: 
             return {...state, orders: actions.payload}
+        case ITEM_SELECTED_ORDER_DETAIL_MODAL:
+            return {...state, selectedItems: [...actions.payload]}
+        case PRODUCT_FOUND:
+            return {...state, productFound: actions.payload}
         default:
             return { ...state }
     }
@@ -168,7 +179,7 @@ const renderSubImage = (state, payload) => {
 }
 
 const editStoreItem = (state, product) => {
-    console.log(product)
+    // console.log(product)
     const previewImage = product.mainImageUrl;
     const { otherImageUrl1, otherImageUrl2, otherImageUrl3, otherImageUrl4 } = product
     const subImages = [otherImageUrl1, otherImageUrl2, otherImageUrl3, otherImageUrl4]
@@ -176,8 +187,11 @@ const editStoreItem = (state, product) => {
     const finalPriceWithComma = numberWithCommas(product.finalPrice)
     // console.log('sub categories',state.subCategories,  product.category)
     const filteredSubCategory = state.subCategories.filter(cat => cat.parentCategory.id === product.category)
+    // console.log({...state, action: 'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
+    // filteredSubCategory: filteredSubCategory, subImage1: otherImageUrl1, subImage2: otherImageUrl2,
+    // subImage3: otherImageUrl3, subImage4: otherImageUrl4, productId: product.id})
     return {
-        ...state, action: 'update', ...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
+        ...state, action: 'update',...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
         filteredSubCategory: filteredSubCategory, subImage1: otherImageUrl1, subImage2: otherImageUrl2,
         subImage3: otherImageUrl3, subImage4: otherImageUrl4, productId: product.id
     }

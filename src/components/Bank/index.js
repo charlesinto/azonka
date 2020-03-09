@@ -19,7 +19,9 @@ class Bank extends Component {
         banks: [],
         showAlert: false,
         actionMode: 'save',
-        pin: ''
+        pin: '', 
+        showInfo: false,
+        id: ''
     }
 
     validateFormData = (formdata) => {
@@ -161,7 +163,10 @@ class Bank extends Component {
             }
         }
         if (action === 'delete') {
-            console.log('id', id)
+            this.setState({
+                showInfo: true,
+                id
+            })
         }
 
     }
@@ -227,6 +232,17 @@ class Bank extends Component {
                 accountNumber: this.state.accountNumber, accountName: this.state.accountName,
                 pin: this.state.pin
             }, this.state.id)
+        })
+    }
+    deleteFile = async () => {
+        this.props.initiateRegistration()
+       await this.props.modifyAccount('delete', null, this.state.id)
+       this.setState({showInfo: false, id: null})
+    }
+    onCancel = () => {
+        this.setState({
+            id: null,
+            showInfo: false
         })
     }
     render() {
@@ -411,6 +427,20 @@ class Bank extends Component {
                             </SweetAlert> : null
 
                     }
+                    {
+                            this.state.showInfo ? <SweetAlert
+                                    info
+                                    showCancel
+                                    confirmBtnText="Yes, delete it"
+                                    confirmBtnBsStyle="danger"
+                                    title="Are you sure?"
+                                    onConfirm={this.deleteFile}
+                                    onCancel={this.onCancel}
+                                    focusCancelBtn
+                                >
+                                    Action can not be undone
+                                </SweetAlert> : null
+                }
                 </div>
             </Dashboard>
         );

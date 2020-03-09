@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from '../../actions'
 import Dashboard from "../HOC/Dashboard";
+import SweetAlert from 'react-bootstrap-sweetalert';
 import AddressDataTable from "../../common/AddressDataTable";
 
 class index extends Component {
-    state = {
+    INITIAL_STATE = {
         profileInformation: {},
         billingInformation: {},
         shippingInformation: {},
@@ -16,11 +17,16 @@ class index extends Component {
         country: '',
         address: '',
         state: '',
+        name: '',
         validationMessage: [],
         inValidElments: [],
         actionMode: 'save',
         isoCode: '234',
         id: null
+    }
+    constructor(props){
+      super(props);
+      this.state = {...this.INITIAL_STATE}
     }
     componentDidMount(){
         this.props.setActiveLink('My Address Book')
@@ -68,6 +74,24 @@ class index extends Component {
             formdata
         }
     }
+    _handleRowClick = async (id, action = '') => {
+      if (action === 'edit') {
+          const index = this.props.address.findIndex(element => element.id === parseInt(id))
+          if (index !== -1) {
+              const userAddress = this.props.address.find(element => element.id === parseInt(id))
+              console.log(userAddress)
+              await this.setState({...userAddress,id, name:userAddress.address1,
+                  address: userAddress.address1, actionMode: 'edit'})
+          }
+      }
+      if (action === 'delete') {
+          this.setState({
+              showInfo: true,
+              id
+          })
+      }
+
+  }
     processForm = (actionType = 'save') => {
         const {isValid, inValidElments, validationMessage} = this.validateFormData(this.state)
         if(!isValid){
@@ -78,6 +102,7 @@ class index extends Component {
             })
             
         }
+
 
         this.props.initiateRegistration()
         switch(actionType){
@@ -96,6 +121,43 @@ class index extends Component {
         e.preventDefault()
         this.processForm()
     }
+    handleFormDelete = (e, actionMode = null) => {
+      e.preventDefault()
+      // if(this.state.pin.trim() === ''){
+      //     this.setState({
+      //         showAlert: true,
+      //         actionMode
+      //     })
+      // }
+      this.setState({...this.INITIAL_STATE})
+  }
+    deleteFile = async () => {
+      this.props.initiateRegistration()
+     await this.props.modifyAddress('delete', null, this.state.id)
+     this.setState({showInfo: false, id: null})
+  }
+  onCancel = () => {
+      this.setState({
+          id: null,
+          showInfo: false
+      })
+  }
+  handleFormUpdate = async (e, actionType) => {
+    e.preventDefault()
+    const { address, state, country} = this.state;
+    if(address.trim() === ''){
+      return this.props.renderError('Address is required')
+    }
+    if(state.trim() === ''){
+      return this.props.renderError('State is required')
+    }
+    if(country.trim() === ''){
+      return this.props.renderError('Country is required')
+    } 
+    this.props.initiateRegistration()
+    await this.props.modifyAddress('update', {...this.state, address1: this.state.address}, this.state.id)
+    await this.setState({...this.INITIAL_STATE})
+  }
     render() {
         return (
           <Dashboard>
@@ -116,7 +178,7 @@ class index extends Component {
                             ? "invalid"
                             : ""
                         }`}
-                        value={this.state.name}
+                        value={this.state.address}
                         onChange={this.handleInputChange}
                         placeholder="Enter Address"
                       />
@@ -190,32 +252,20 @@ class index extends Component {
                       </div>
                     ) : (
                       <div className="row">
-                        <div className="col-md-8 col-sm-12"></div>
-                        <div className="col-md-4 col-sm-12">
-                          <div style={{ marginBottom: 10 }}>
-                            <button
-                              onClick={this.handleFormUpdate}
-                              className="btn btn-warning"
-                              style={{
-                                margin: "0 auto",
-                                borderColor: "#ffc107",
-                                background: "#ffc107",
-                                width: "100%"
-                              }}
-                            >
-                              Update
-                            </button>
+                          <div className="col-md-8 col-sm-12"></div>
+                          <div className="col-md-4 col-sm-12">
+                              <div style={{ marginBottom: 10, marginLeft: 10 }}>
+                                  <button onClick={(e) => this.handleFormUpdate(e, 'update')} className="btn btn-sm btn-warning"
+                                      style={{
+                                          margin: '0 auto', borderColor: '#ffc107',
+                                          background: '#ffc107', width: '100%', color: "#fff"
+                                      }}>Update</button>
+                              </div>
+                              <div style={{ marginBottom: 10, marginLeft: 10 }}>
+                                  <button onClick={(e) => this.handleFormDelete(e, 'delete')} className="btn btn-sm btn-danger"
+                                      style={{ margin: '0 auto', width: '100%' }}>Cancel</button>
+                              </div>
                           </div>
-                          <div style={{ marginBottom: 10 }}>
-                            <button
-                              onClick={this.handleFormDelete}
-                              className="btn btn-danger"
-                              style={{ margin: "0 auto", width: "100%" }}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
                       </div>
                     )}
                   </div>
@@ -233,8 +283,23 @@ class index extends Component {
                     <hr className="line-separator" />
                     <AddressDataTable
                         data={this.props.address}
+                        handleRowClick={(id, action) => this._handleRowClick(id, action)}
                     />
             </div>
+            {
+                            this.state.showInfo ? <SweetAlert
+                                    info
+                                    showCancel
+                                    confirmBtnText="Yes, delete it"
+                                    confirmBtnBsStyle="danger"
+                                    title="Are you sure?"
+                                    onConfirm={this.deleteFile}
+                                    onCancel={this.onCancel}
+                                    focusCancelBtn
+                                >
+                                    Action can not be undone
+                                </SweetAlert> : null
+                }
           </Dashboard>
         );
     }

@@ -10,6 +10,7 @@ import * as actions from "../../actions";
 import CartDropdown from '../Cart/CartDropdown';
 import ShopItem from '../Cart/ShopItems'
 import ShopItems from '../Cart/ShopItems';
+import queryString from "query-string";
 
 class Header extends Component {
     
@@ -20,10 +21,18 @@ class Header extends Component {
             currentUser: null,
             cartData: [],
             name: "",
+            selectedValue: "",
             categoryValue: ""}
             
     }
-    componentDidMount() {
+    async componentDidMount() {
+        let params = queryString.parse(this.props.location.search)
+        const { category } = params;
+        await this.setState({selectedValue: category})
+        document.querySelector('#category').addEventListener('change', function(e){
+            alert()
+            console.log(this.dataset.search)
+        })
         const user = JSON.parse(localStorage.getItem('azonta-user'))
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.$select = React.createRef()
@@ -32,9 +41,7 @@ class Header extends Component {
         })
         this.loadSearchCategory()
         this.loadCart()
-        document.querySelector('#category').addEventListener('change', function(e){
-            console.log(this.dataset.search)
-        })
+        
     }
     componentWillUnmount(){
         document.querySelector('#category').removeEventListener('change', () => {})
@@ -83,8 +90,7 @@ class Header extends Component {
         this.setState({ category: this.props.categories })
     }
     handleSelectChange(e, $this){
-        console.log(this)
-        $this.setState({ categoryValue: e.target.value })
+        $this.setState({ categoryValue: e.target.value, selectedValue: e.target.value })
     }
     handleSearchSubmit = async () => {
         let { name, categoryValue } = this.state
@@ -199,7 +205,7 @@ class Header extends Component {
                                                 <input type="text" className="form-control" id="name" placeholder="Search..." value={this.state.name} required={false} onChange={this.handleSearchChange}
                                                     onKeyPress={this.handleEnterSubmit} />
                                                 <div className="select-custom">
-                                                    <select id="category" onChange={(e) => this.handleSelectChange(e, this)} >
+                                                    <select value={this.state.selectedValue} id="category" onChange={(e) => this.handleSelectChange(e, this)} >
                                                         <option className=".option">Select category</option>
                                                         {
                                                             category ? (

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import notifCloseIcon from "../../images/dashboard/notif-close-icon.png";
 import Zoom from 'react-reveal/Zoom';
 import logoHeader from "../../images/logo_header.png";
@@ -35,6 +36,7 @@ class Home extends Component {
         this.props.getProductCategorySubcategory()
         this.loadFeaturedItems()
         console.log('called ')
+        this.props.getAdvertCategory()
         //remove popup after 5secs
         setTimeout(() => {
             this.setState({
@@ -71,6 +73,33 @@ class Home extends Component {
     }
     formatMoney(amount) {
         return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+    renderAdverts = () => {
+       return this.props.adverts.map(item => (
+           item.products.length > 0 ? <div className="border mb-2" key={item.id}>
+                <div className="d-flex justify-content-between py-4 px-4">
+                    <h3>{item.name}</h3>
+                    <Link to={`/specials/${item.id}`}><span> see all > </span></Link>
+                </div>
+                <hr />
+                <div className="container">
+                    <div className="py-4 px-4">
+                        <Slider {...settingsAdvert}>
+                            {
+                                item.products.map(product => {
+                                    let { id, name, brandName, model, sellingPrice, mainImageUrl } = product
+                                    return <FeatureProductItem id={id} name={name} 
+                                    brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} 
+                                    model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                })
+                            }
+                        </Slider>
+                    </div>
+                </div>
+            </div>
+            : null
+        ))
+        
     }
 
 
@@ -207,7 +236,13 @@ class Home extends Component {
                                     </div>
 
 
+                                    <div className="home-featured-products">
+                                        {
+                                            this.renderAdverts()
+                                        }
+                                    </div>
 
+                                    <div class="mb-4"></div>
 
 
 
@@ -520,9 +555,9 @@ class Home extends Component {
 const mapStateToProps = state => {
 
     const { products, localProducts } = state.inventory;
-    const { home: { categories, subCategories } } = state;
+    const { home: { categories, subCategories, adverts } } = state;
     return {
-        categories, subCategories, products, localProducts
+        categories, subCategories, products, localProducts, adverts
     }
 }
 
@@ -531,6 +566,18 @@ const settings = {
     infinite: true,
     speed: 500,
     slidesToShow: 3,
+    arrows: true,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000
+}
+
+
+const settingsAdvert = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
     arrows: true,
     slidesToScroll: 1,
     autoplay: true,

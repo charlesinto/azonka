@@ -65,6 +65,7 @@ class Layout extends Component {
                 {
                     this.props.error ? <SweetAlert
                         warning
+                        title=""
                         onConfirm={this.hideAlert} onCancel={this.hideAlert}
                     >
                         <span style={{
@@ -87,6 +88,7 @@ class Layout extends Component {
                     </SweetAlert> : null
 
                 }
+                
             </ToastProvider>
         );
     }
@@ -96,7 +98,6 @@ const mapStateToProps = state => {
     const { reg: { unAuthorized, loading, redirectToProfile,redirectToCart,
         redirectToHome,redirectToStore, redirectToLogin, redirectToVerify },
         home: { error, errorMessage, success, successMessage } } = state;
-        console.log(redirectToCart)
     return {
         unAuthorized,
         redirectToVerify,

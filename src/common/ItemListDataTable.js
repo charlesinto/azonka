@@ -61,7 +61,7 @@ class ItemListDataTable extends Component {
                     },
                     
                 },
-                {title: 'Final Price',
+                {title: 'Discounted Price',
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
                             return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.finalPrice)}</span>`

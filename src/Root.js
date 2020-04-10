@@ -54,6 +54,7 @@ import MyAzonkaCredits from "./components/MyAzonkaCredits";
 import MyDelivery from "./components/MyDelivery";
 import WalletToWalletTransfer from "./components/WalletToWalletTransfer";
 // import ShopItems from './components/Shop/ShopItems';
+import ProductReview from "./components/ProductReview";
 
 class Root extends Component {
     componentDidMount() {
@@ -96,7 +97,7 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/wallet/fund" component={Wallet} />
                                 <AuthRoute exact path="/users/wallet/withdraw" component={WithDrawal} />
                                 <AuthRoute exact path="/users/wallet/wallet-transfer" component={WalletToWalletTransfer} />
-
+                                <AuthRoute exact path="product/review/:id"  component={ProductReview} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
                                 <AuthRoute exact path="/users/azonka-credits" component={MyAzonkaCredits} />
                                 <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />

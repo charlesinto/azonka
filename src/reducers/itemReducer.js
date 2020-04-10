@@ -61,6 +61,7 @@ const INTIAL_STATE = {
     orders: [],
     delivery: [],
     selectedItems: [],
+    deliveryDays: 1,
     productFound: {},
     adverts:[]
 }
@@ -69,7 +70,6 @@ export default (state = INTIAL_STATE, actions) => {
     switch (actions.type) {
         case ITEMS_FETCHED_SUCCESSFULLY:
             const { stores, categories, subCategories } = actions.payload;
-            console.log('am not her')
             return { ...state, stores, categories, subCategories, resetForm: false }
         case STOP_LOADING:
             return { ...state, resetForm: true, }
@@ -193,7 +193,8 @@ const editStoreItem = (state, product) => {
     return {
         ...state, action: 'update',...product, previewImage, subImages, sellingPriceWithComma, finalPriceWithComma,
         filteredSubCategory: filteredSubCategory, subImage1: otherImageUrl1, subImage2: otherImageUrl2,
-        subImage3: otherImageUrl3, subImage4: otherImageUrl4, productId: product.id
+        subImage3: otherImageUrl3, subImage4: otherImageUrl4, productId: product.id,
+        deliveryDays: product.deliveryDays
     }
 }
 

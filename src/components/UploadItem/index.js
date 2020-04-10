@@ -617,9 +617,9 @@ class index extends Component {
                             </div>
                             <div className="row" style={{ marginBottom: 20 }}>
                                 <div className="col-sm-12 col-md-12 ">
-                                    <div className="small-images" style={{ marginBottom: 20 }}>
+                                    {/* <div className="small-images" style={{ marginBottom: 20 }}>
                                         {this.renderSmallImage()}
-                                    </div>
+                                    </div> */}
                                     <div className="form-box-item full">
                                         <h4>Upload Guidelines</h4>
                                         <hr className="line-separator" />
@@ -888,7 +888,7 @@ class index extends Component {
                                         <h4>Item Weight</h4>
                                         <hr className="line-separator" />
                                         <div className="row add-margin-item">
-                                           <div className="col-md-6">
+                                           <div className="col-md-4">
                                                     <label className="rl-label">Weight</label>
                                                     <select name="weight"
                                                         className={`${this.props.inValidElments.includes('weight') ? 'invalid' : ''}`}
@@ -899,7 +899,7 @@ class index extends Component {
                                                         <option value="500 - 1000">500 - 1000</option>
                                                     </select>
                                            </div>
-                                           <div className="col-md-6">
+                                           <div className="col-md-4">
                                                 <label className="rl-label">Unit</label>
                                                 <select name="weightUnit"
                                                         className={`${this.props.inValidElments.includes('weightUnit') ? 'invalid' : ''}`}
@@ -908,6 +908,15 @@ class index extends Component {
                                                         <option value="KG">KG</option>
                                                         <option value="POUND">POUNDS</option>
                                                     </select>
+                                           </div>
+                                           <div className="col-md-4">
+                                                <div className="rl-labelp">
+                                                    <label>Number of Days to Deliver</label>
+                                                    <input 
+                                                        value={this.props.deliveryDays}
+                                                         name="deliveryDays" type="number" 
+                                                         min="1" max="21" onChange={this.handleInputChange} />
+                                                </div>
                                            </div>
                                         </div>
                                         <h4 className="add-margin-top">Delivery Location</h4>
@@ -1015,6 +1024,7 @@ const mapStateToProps = state => {
         subImage4,
         deliveryType,
         deliveryLocation,
+        deliveryDays,
         filteredSubCategory
 
     } } = state;
@@ -1051,7 +1061,8 @@ const mapStateToProps = state => {
         unit,
         deliveryType,
         deliveryLocation,
-        filteredSubCategory
+        filteredSubCategory,
+        deliveryDays
     }
 }
 

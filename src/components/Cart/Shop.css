@@ -34,3 +34,14 @@
 .empty-products{
     width: 100%
 }
+
+.delivery-timeline{
+    color: rgb(0, 136, 204);
+    font-size: 1.98rem;
+    padding: 8px 0;
+}
+
+.delivery-timeline-wrapper{
+    color: #000;
+    padding: 10px 0;
+}

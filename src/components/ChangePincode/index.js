@@ -60,7 +60,7 @@ class ChangePinConde extends Component{
     render(){
         return (
             <Dashboard>
-                <h2>Rest Wallet Pincode</h2>
+                <h2>Reset Wallet Pincode</h2>
                 <form action="" className="col-md-12 col-sm-12">
                     <div className="row">
                         <div className="col-md-8 col-sm-12">

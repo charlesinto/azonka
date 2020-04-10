@@ -81,8 +81,9 @@ class Checkout extends Component {
         console.log(response);
         if (response.status === 'success' && response.message === 'Approved') {
             this.props.initiateRegistration()
+            // console.log(this.props.cartData);
             this.props.registerPayment(response.transaction, response.trxref,
-                this.props.amount, this.state.payType, this.state.cartData,
+                this.state.sum * 100, this.state.payType, this.props.cartData,
                 this.state.addressId, this.state.userAddress)
         } // card charged successfully, get reference here
         //this.props.initiateRegistration()

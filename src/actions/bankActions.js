@@ -6,7 +6,8 @@ export const getBanks = () => {
     return async (dispatch) => {
         try{
             const response = await axios.get('https://api.paystack.co/bank' )
-            dispatch({type: GET_BANKS, payload: response.data.data})
+            const banks = response.data.data.filter(element => element.longcode.trim() !== '')
+            dispatch({type: GET_BANKS, payload: banks})
         }catch(error){
             console.log('error in: => ', error.response)
         }

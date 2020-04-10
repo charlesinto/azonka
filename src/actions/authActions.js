@@ -21,7 +21,8 @@ export const registerUser = (userData) => {
                 ...data
             })
                 console.log(response.data);
-                 localStorage.setItem('userRegDetails', JSON.stringify(data))
+                 await localStorage.setItem('userRegDetails', JSON.stringify({emailAddress: userData.emailAddress, 
+                    password: userData.password}))
                 //  dispatch({type: SUCCESS_ALERT, payload: 'Registration successful please check your mail to continue'})
                  dispatch({type: SUCCESSFUL_REGISTRATION, payload: ''})
                 // return window.location.href = window.origin + '/users/verify'

@@ -1022,3 +1022,31 @@ export const getProductById = (id = '') => {
         }
     }
 }
+
+export const markOrderAsAccepted = (orderNumber = null) => {
+    return async (dispatch) => {
+        try{
+           const response = await axios.post(`/api/v1/seller/delivery/accept-delivery/${orderNumber}`,{
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            } )
+            dispatch({type: STOP_LOADING, payload: ''})
+            const { message} = response.data
+            dispatch({type: SUCCESS_ALERT, payload: message})
+            setTimeout(() => {
+                window.location.reload()
+            },1500)
+        }catch(error){
+            console.log('er', error.response)
+            if (error.response.status === 498 || error.response.status === 401) {
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
+                }, 1500)
+            }
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}

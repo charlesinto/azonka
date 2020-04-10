@@ -50,10 +50,7 @@ class confirmAccount extends Component {
         //this.props.resetVerifyForm()
         const userRegDetails = JSON.parse(localStorage.getItem('userRegDetails'))
         if(!userRegDetails)  {
-            this.setState({
-                emailAddress:'',
-                password: ''
-            }, () => this.verifyEmail())
+            this.props.history.push('/users/login')
         }else{
             this.setState({
                 emailAddress: JSON.parse(localStorage.getItem('userRegDetails')).emailAddress,
@@ -126,6 +123,11 @@ class confirmAccount extends Component {
             emailProofToken: code,
             password: this.state.password
         })
+    }
+    refreshPage = e => {
+        e.preventDefault();
+        // window.location.reload();
+        this.props.history.push('/users/login')
     }
     renderVerificationForm = () => {
         console.log(this.props.verification)
@@ -231,9 +233,9 @@ class confirmAccount extends Component {
                                 </div>
                                 <div className="web-font" style={{textAlign:"right",
                                     margin:'10px 20px 20px 0px'}}>
-                                    <Link to="/users/login"
+                                    <button onClick={this.refreshPage}
                                       style={{color:'#fff'}} className="web-font btn-sm btn btn-warning"
-                                      >CONTINUE TO Login</Link>
+                                      >CONTINUE TO Login</button>
                                 </div>
                             </div>
             )

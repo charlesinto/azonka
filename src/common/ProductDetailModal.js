@@ -38,6 +38,13 @@ class ProductDetailModal extends Component{
         this.props.rejectProducts(this.props.selectedId, this.props.selectedItems)
 
     }
+    acceptOrder= async (e) => {
+        e.preventDefault()
+        // console.log(this.props.selectedId)
+        this.props.initiateRegistration()
+        await this.props.markOrderAsAccepted(this.props.selectedId)
+        // window.location.reload()
+    }
     render(){
         return (
         <div className="modal fade" id="exampleModalLong" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -45,11 +52,17 @@ class ProductDetailModal extends Component{
                 <div className="modal-content">
                 <div className="modal-header">
                     <h5 className="modal-title" id="exampleModalLongTitle">Product Order Details</h5>
+                    <div className="mx-4 my-4">
+                        <button type="button" style={{padding:'0.4rem 0.5rem'}}
+                        onClick={this.acceptOrder}
+                        className="btn btn-primary btn-sm">
+                                <i class="fas fa-check"></i> Accept Order </button>
+                    </div>
                     {
+                        
                         this.props.selectedItems.length > 0 ? (
                             <div className="d-flex mx-2  bd-highlight">
-                                {/* <button type="button" style={{padding:'0.4rem 0.5rem', marginRight: 8}} className="btn btn-primary btn-sm">
-                                    Accept ({this.props.selectedItems.length}) </button> */}
+                                
                                     <button onClick={this.rejectProduct} style={{padding:'0.4rem 0.5rem'}} type="button" className="btn btn-danger btn-sm">
                                         Reject ({this.props.selectedItems.length}) </button>
                             </div>

@@ -12513,3 +12513,38 @@ label.custom{
 .label>.radio, label>.checkbox.data-table{
  background-color: #fff;
 }
+
+.container{
+    max-width: 100% !important;
+}
+
+.add-to-cart-mobile{
+    display: none !important;
+}
+
+@media screen and (max-width: 768px){
+    .image-view{
+        height: 200px !important;
+    }
+    .product-price{
+        font-size: 10px !important;
+    }
+    .add-to-cart-mobile{
+        display: block !important;
+        min-width: 40px !important;
+    }
+    .add-to-cart-desktop{
+        display: none !important;
+    }
+}
+
+.wordbreak {
+    white-space: nowrap !important; 
+    width: 50px !important; 
+    overflow: hidden !important;
+    text-overflow: "..." !important; 
+  }
+
+  /* .slick-track{
+      width: 100% !important;
+  } */

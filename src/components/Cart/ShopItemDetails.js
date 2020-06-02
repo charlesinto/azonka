@@ -40,16 +40,16 @@ class ShopItemDetails extends Component {
 
             let { products, id } = this.state;
 
-            let detailsData = products.filter(data => id == data.id)[0]
+            let detailsData = products.filter(data => id === data.id)[0]
             this.setState({ detailsData })
         } else {
             let localShopData = await JSON.parse(localStorage.getItem("shop"))
             let { id } = this.state;
 
 
-            let detailsData = localShopData.filter(data => id == data.id)[0]
+            let detailsData = localShopData.filter(data => id === data.id)[0]
             console.log("shows", detailsData)
-            this.setState({ detailsData, arr: localShopData.filter(data => id == data.id) })
+            this.setState({ detailsData, arr: localShopData.filter(data => id === data.id) })
         }
 
 
@@ -105,7 +105,6 @@ class ShopItemDetails extends Component {
         this.setState({ cartData: products })
     }
     handleChange = (e, finalPrice, id) => {
-        let { qty } = this.state;
         this.setState({ qty: e.target.value < 0 ? -1 * e.target.value : e.target.value })
         // console.log(this.state)
     }

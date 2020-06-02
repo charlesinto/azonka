@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, } from "react-router-dom";
 import { AnimatedSwitch } from 'react-router-transition';
 import Home from "./components/Home";
-import VerifyEmail from "./components/Auth/VerifyEmail";
-import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Referral from "./components/Referrals";
 import SecurityQuestion from "./components/Auth/SecurityQuestion";

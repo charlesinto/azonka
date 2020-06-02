@@ -493,7 +493,7 @@ class LoginSignup extends Component {
                                             {
                                                 this.state.countryData.map((data, i) => {
                                                     if(data.callingCodes[0].trim() === ''){
-                                                        return ;
+                                                        return null ;
                                                     }
                                                     return <option key={i}  value={data.callingCodes[0]}>{data.name}</option>
                                                 })
@@ -556,7 +556,7 @@ class LoginSignup extends Component {
                                             <div className="custom-control custom-checkbox">
                                                 <input checked={this.state.agreeToTerms} onChange={this.toggleCheck} type="checkbox" className="custom-control-input" id="newsletter-signup1" />
                                                 <label className="custom-control-label" for="newsletter-signup1">
-                                                    <a href="#">I agree to Terms and Policy</a></label>
+                                                    <a href="#n">I agree to Terms and Policy</a></label>
                                             </div>
                                         </div>
                                     </form>
@@ -623,26 +623,7 @@ function TabPanel(props) {
     };
   }
 
-const contentStyle = {
-    form:{
-        marginBottom: 20,
-         marginTop: 40
-    },
-    formCaption: {
-        color: '#08c',
-        fontSize: '1.65rem',
-        fontWeight: 700,
-        textTransform:'capitalize',
-        textAlign:'center',
-        fontFamily: "Titillium Web, sans-serif",
-    },
-    form1: {
-        borderRight: '1px solid #f3f3f3',
-    },
-    form2: {
-        paddingLeft: 30
-    }
-}
+
 
 const styles = theme => {
     return {

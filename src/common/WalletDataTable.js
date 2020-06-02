@@ -18,14 +18,14 @@ class WalletDataTable extends Component {
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
                             if(row.type === 'deposit'){
-                                return `<span class="wallet-text text-success">${row.type}</span>`
+                                return `<span class="wallet-text text-success">${row.type === 'deposit' ? 'Credit' : 'Debit'}</span>`
                             }
-                            return `<span class="wallet-text text-danger">${row.type}</span>`
+                            return `<span class="wallet-text text-danger">${row.type === 'deposit' ? 'Credit' : 'Debit'}</span>`
                         }
                         if(row.type === 'deposit'){
-                            return `<span class="wallet-text text-success">${row.type}</span>`
+                            return `<span class="wallet-text text-success">${row.type === 'deposit' ? 'Credit' : 'Debit'}</span>`
                         }
-                        return `<span class="wallet-text text-danger">${row.type}</span>`   
+                        return `<span class="wallet-text text-danger">${row.type === 'deposit' ? 'Credit' : 'Debit'}</span>`   
                     },
                     // responsivePriority: 3
                 },
@@ -60,10 +60,11 @@ class WalletDataTable extends Component {
         this.$el.DataTable().destroy(true)
     }
     converToDate = timestamp => {
-        const MONTHS = ['January','February', 'March', 'April', 'May', 'June', 'July'
-            ,'August','September', 'October', 'November', 'Decemeber']
+        // const MONTHS = ['January','February', 'March', 'April', 'May', 'June', 'July'
+        //     ,'August','September', 'October', 'November', 'Decemeber']
         const date = new Date(timestamp)
-        return `${date.getDate()} ${MONTHS[date.getMonth()]}, ${date.getFullYear()}`
+        // return `${date.getDate()} ${MONTHS[date.getMonth()]}, ${date.getFullYear()}`
+        return date.toLocaleString()
     }
     reloadTableData(data, $el){
         $el.DataTable().clear()

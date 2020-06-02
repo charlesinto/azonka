@@ -20,7 +20,6 @@ class FeatureProductItem extends Component {
         if (token) {
             // return console.log(token)
             let postObj = { productId: `${id}`, quantity: "1" };
-            console.log('posObj', postObj)
             this.props.initiateRegistration()
             this.props.addToCart(postObj)
 
@@ -40,13 +39,13 @@ class FeatureProductItem extends Component {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
             let { products } = this.state
-            let obj = products.filter(data => id == data.id)[0]
+            let obj = products.filter(data => id === data.id)[0]
 
             //check if item is in cart
 
             if (cartData) { //item exists
                 // return console.log("data", cartData)
-                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                let isAdded = cartData.some(data => data.id === id); //check if clicked item exist in cart
                 if (isAdded) {
                     return this.props.successAlert("Item has already been added")
                 } else {
@@ -74,20 +73,21 @@ class FeatureProductItem extends Component {
         this.setState({ cartData: products })
     }
     handleDetailModal = async (e) => {
-        let id = e.target.id;
         let { products } = this.state;
-        let itemDetails = products.filter(data => data.id == e.target.id);
+        // console.log(e.target.id);
+        let itemDetails = products.filter(data => data.id === parseInt(e.target.id));
+        // console.log(itemDetails)
         await this.props.itemDetailModalAction(itemDetails)
-        this.setState({ itemDetails })
+        // this.setState({ itemDetails })
     }
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
     }
     render() {
         // console.log("joro", this.props)
-        const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
+        const { id, name, sellingPrice, mainImageUrl } = this.props
         return (
-            <div class="product" key={id}>
+            <div class="product" key={id} style={{marginRight: 8}}>
                 {/* <ItemModal /> */}
                 <figure class="product-image-container">
                     <span className="product-image" id={id} onClick={this.handleItemDetails}>
@@ -103,7 +103,7 @@ class FeatureProductItem extends Component {
                     </div>
 
                     <h2 class="product-title">
-                        <a href="product.html">{name} </a>
+                        <a href="product.html" className="wordbreak">{name} </a>
                     </h2>
                     <div class="price-box">
                         <span class="product-price">&#8358; {sellingPrice}</span>
@@ -113,8 +113,10 @@ class FeatureProductItem extends Component {
                         <Link to="#" class="paction add-wishlist" title="Add to Wishlist">
                             <span>Add to Wishlist</span>
                         </Link>
-
-                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-mobile add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                            
+                        </span>
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-desktop add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart
                         </span>
 

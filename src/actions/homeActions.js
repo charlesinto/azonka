@@ -145,3 +145,26 @@ export const getAdvertCategory = () => {
         }
     }
 }
+
+export const completeOrder = ({orderId, deliveryCode}) => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.post(`/api/v1/seller/delivery/update/${orderId}`, {
+                deliveryCode
+            })
+            dispatch({type: STOP_LOADING, payload: ''})
+            console.log(response.data);
+
+            // dispatch({type: SUCCESS_ALERT, payload: ''})
+        }catch(error){
+            dispatch({type: STOP_LOADING, payload: ''})
+            if(error.response && error.response.data.message){
+                dispatch({type: DISPLAY_ERROR, payload: error.response.data.message})
+            }else{
+                dispatch({type: DISPLAY_ERROR, payload: 'Could not fulfill request, please try again later'})
+            }
+            
+            console.error(error.response.data);
+        }
+    }
+}

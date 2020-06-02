@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import AdminLayout from '../HOC/AdminLayout';
 import StoreDashboard from "../HOC/StoreDashboard";
 
 class index extends Component {
@@ -167,8 +166,8 @@ class index extends Component {
     }
     validateFormData = (formdata) => {
         
-        const { name, brandName, sellingPrice, finalPrice, deliveryLocation,
-            deliveryType, category, subCategory, model, description } = formdata;
+        const { name, brandName, sellingPrice, finalPrice,
+             category, subCategory, model, description } = formdata;
             console.log('category', category)
         let isValid = true;
         const inValidElments = []

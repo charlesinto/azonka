@@ -16,12 +16,12 @@ const AuthRoute = ({component: Component, noAuthRequired,redirectIfUser, redirec
     <Redirect to="/users/login" {...rest} />
 };
 
-const isEmpty = (obj) => {
-    for(var key in obj) {
-        console.log('key', key, obj[key])
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
+// const isEmpty = (obj) => {
+//     for(var key in obj) {
+//         console.log('key', key, obj[key])
+//         if(obj.hasOwnProperty(key))
+//             return false;
+//     }
+//     return true;
+// }
 export default AuthRoute;

@@ -4,7 +4,6 @@ import * as actions from "../../actions";
 import Dashboard from "../HOC/Dashboard";
 import { PAY_STACK_PUBLIC_KEY } from "../../config/config";
 import PaystackButton from "react-paystack";
-import WalletDataTable  from "../../common/WalletDataTable";
 import validator from "validator";
 
 class Wallet extends Component {

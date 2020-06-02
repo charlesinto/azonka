@@ -37,7 +37,7 @@ class index extends Component {
     }
     render() {
         console.log('current user', this.props.currentUser)
-        const user = this.props.currentUser ? this.props.currentUser : {}
+        const user = JSON.parse(localStorage.getItem('azonta-user'))
         const { referralCode } = user;
         return (
             <Dashboard>

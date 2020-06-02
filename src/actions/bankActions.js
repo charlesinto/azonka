@@ -6,7 +6,10 @@ export const getBanks = () => {
     return async (dispatch) => {
         try{
             const response = await axios.get('https://api.paystack.co/bank' )
-            const banks = response.data.data.filter(element => element.longcode.trim() !== '')
+            const banks = response.data.data.filter(element => (element.longcode && element.longcode.trim() !== '') && 
+            (element.gateway && element.gateway.trim() !== '' ) && (element.code && element.code.trim() !== '' )
+            && (element.slug && element.slug.trim() !== '' ) )
+            // console.log(banks);
             dispatch({type: GET_BANKS, payload: banks})
         }catch(error){
             console.log('error in: => ', error.response)
@@ -38,7 +41,7 @@ export const saveBank = (details) => {
     }
 }
 
-export const getSavedBanks = (lastCount = 0, numOfRecords = 10) => {
+export const getSavedBanks = (lastCount = 0, numOfRecords = 1000) => {
     return async (dispatch) => {
         try{
             const response = await axios.get(`/api/v1/user/bank-account/get/${lastCount}/${numOfRecords}`, {
@@ -47,6 +50,7 @@ export const getSavedBanks = (lastCount = 0, numOfRecords = 10) => {
                                     }
                                 })
             console.log('banksssssss')
+            
             return dispatch({type: GET_SAVED_ACCOUNTS, payload:response.data.bankAccounts})
         }catch(error){
             if(error.response.data.message)

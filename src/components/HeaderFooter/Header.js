@@ -4,12 +4,9 @@ import englishFlag from "../../css/images/flags/en.png";
 import nigeriaFlag from "../../css/images/flags/nigeria.png";
 import frenchFlag from "../../css/images/flags/fr.png";
 import azonkaLogo from "../../images/logo_header.png";
-import product1 from "../../css/images/products/cart/product-1.jpg";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import CartDropdown from '../Cart/CartDropdown';
-import ShopItem from '../Cart/ShopItems'
-import ShopItems from '../Cart/ShopItems';
 import queryString from "query-string";
 
 class Header extends Component {
@@ -95,7 +92,7 @@ class Header extends Component {
     handleSearchSubmit = async () => {
         let { name, categoryValue } = this.state
         let category = categoryValue;
-        category = category == "Select category" || category == "" ? "0" : category;
+        category = category === "Select category" || category === "" ? "0" : category;
         this.props.history.push(`/shop?name=${name}&category=${category}`);
     }
     handleEnterSubmit = async (e) => {
@@ -117,26 +114,26 @@ class Header extends Component {
                             <div className="container-fluid">
                                 <div className="header-left header-dropdowns">
                                     <div className="header-dropdown">
-                                        <a href="#">NGN</a>
+                                        <a href="#N">NGN</a>
                                         <div className="header-menu">
                                             <ul>
-                                                <li><a href="#">NGN</a></li>
-                                                <li><a href="#">USD</a></li>
+                                                <li><a href="#M">NGN</a></li>
+                                                <li><a href="#N">USD</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div className="header-dropdown">
-                                        <a href="#"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a>
+                                        <a href="#N"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a>
                                         <div className="header-menu">
                                             <ul>
-                                                <li><a href="#"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a></li>
-                                                <li><a href="#"><img src={englishFlag} alt="England flag" />ENGLISH</a></li>
-                                                <li><a href="#"><img src={frenchFlag} alt="France flag" />FRENCH</a></li>
+                                                <li><a href="#N"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a></li>
+                                                <li><a href="#N"><img src={englishFlag} alt="England flag" />ENGLISH</a></li>
+                                                <li><a href="#N"><img src={frenchFlag} alt="France flag" />FRENCH</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div className="dropdown compare-dropdown" style={{ border: 'none', zIndex: '900', backgroundColor: 'transparent', position: 'relative' }}>
-                                        <a href="#" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                        <a href="#N" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                             <i className="icon-retweet"></i> Compare (2)
                                         </a>
 
@@ -144,18 +141,18 @@ class Header extends Component {
                                             <div className="dropdownmenu-wrapper">
                                                 <ul className="compare-products">
                                                     <li className="product">
-                                                        <a href="#" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></a>
+                                                        <a href="#N" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></a>
                                                         <h4 className="product-title"><a href="product.html">Lady White Top</a></h4>
                                                     </li>
                                                     <li className="product">
-                                                        <a href="#" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></a>
+                                                        <a href="#N" className="btn-remove" title="Remove Product"><i className="icon-cancel"></i></a>
                                                         <h4 className="product-title"><a href="product.html">Blue Women Shirt</a></h4>
                                                     </li>
                                                 </ul>
 
                                                 <div className="compare-actions">
-                                                    <a href="#" className="action-link">Clear All</a>
-                                                    <a href="#" className="btn btn-primary">Compare</a>
+                                                    <a href="#N" className="action-link">Clear All</a>
+                                                    <a href="#N" className="btn btn-primary">Compare</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -170,7 +167,7 @@ class Header extends Component {
                                     }</p>
 
                                     <div className="header-dropdown dropdown-expanded">
-                                        <a href="#">Links</a>
+                                        <a href="#N">Links</a>
                                         <div className="header-menu">
                                             <ul>
                                                 <li><Link to="/users/profile">MY ACCOUNT </Link></li>
@@ -198,7 +195,7 @@ class Header extends Component {
                                 </div>
                                 <div className="header-center">
                                     <div className="header-search">
-                                        <a href="#" className="search-toggle"
+                                        <a href="#N" className="search-toggle"
                                             onClick={() => this._showSearchBar()} role="button"><i className="icon-magnifier"></i></a>
                                         <form action="#" method="get">
                                             <div className={`header-search-wrapper ${this.state.showSearchBar ? 'show' : ''}`}>
@@ -262,7 +259,7 @@ class Header extends Component {
                                             <li><a href="category-flex-grid.html">Product Flex Grid</a></li>
                                             <li><a href="category-horizontal-filter1.html">Horizontal Filter 1</a></li>
                                             <li><a href="category-horizontal-filter2.html">Horizontal Filter 2</a></li>
-                                            <li><a href="#">Product List Item Types</a></li>
+                                            <li><a href="#N">Product List Item Types</a></li>
                                             <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll<span className="tip tip-new">New</span></a></li>
                                             <li><a href="category.html">3 Columns Products</a></li>
                                             <li><a href="category-4col.html">4 Columns Products</a></li>
@@ -311,7 +308,7 @@ class Header extends Component {
                                         <ul>
                                             <li><a href="cart.html">Shopping Cart</a></li>
                                             <li>
-                                                <a href="#">Checkout</a>
+                                                <a href="#N">Checkout</a>
                                                 <ul>
                                                     <li><a href="checkout-shipping.html">Checkout Shipping</a></li>
                                                     <li><a href="checkout-shipping-2.html">Checkout Shipping 2</a></li>
@@ -319,7 +316,7 @@ class Header extends Component {
                                                 </ul>
                                             </li>
                                             <li><a href="about.html">About</a></li>
-                                            <li><a href="#" className="login-link">Login</a></li>
+                                            <li><a href="#N" className="login-link">Login</a></li>
                                             <li><a href="forgot-password.html">Forgot Password</a></li>
                                         </ul>
                                     </li>

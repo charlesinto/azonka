@@ -45,9 +45,9 @@ class BankDataTable extends Component {
                 {title: 'Date Created',
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
-                            return this.converToDate(row.createdAt)
+                            return new Date(row.createdAt).toLocaleString()
                         } 
-                        return this.converToDate(row.createdAt)
+                        return new Date(row.createdAt).toLocaleString()
                     },
                     responsivePriority: 5
                 },

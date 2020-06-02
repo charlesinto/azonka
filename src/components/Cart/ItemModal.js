@@ -8,7 +8,8 @@ class ItemModal extends Component {
 
     }
     componentWillReceiveProps = props => {
-        if (props.itemModalData !== this.props.itemModalData) {
+        // console.log('props: ', props);zs
+        if (props.itemModalData !== this.props.itemModalData && props.itemModalData.length > 0) {
             this.setState({ modalData: props && props.itemModalData[0] });
         }
     }
@@ -28,29 +29,18 @@ class ItemModal extends Component {
             this.props.initiateRegistration()
             this.props.addToCart(postObj)
             // console.log("flash props", this.props)
-            let { data } = this.props.cartItems;
-            console.log('data', data)
-            //this.props.addToCart(postObj)
-            //this.handleSetOnlineData()
-            // if (data && data.success) {
-            //     this.setState({ cartData: data.cart.products })
-            //     this.props.addToCart(postObj)
-            //     //this.handleSetOnlineData()
-            // } else {
-            //     this.props.renderError('An error occured')
-            // }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             let localShop = JSON.parse(localStorage.getItem("shop"));
             this.setState({ cartData })
-            let obj = localShop.filter(data => id == data.id)[0]
+            let obj = localShop.filter(data => id === data.id)[0]
 
             //check if item is in cart
 
             if (cartData) { //item exists
                 // return console.log("data", cartData)
-                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                let isAdded = cartData.some(data => data.id === id); //check if clicked item exist in cart
                 if (isAdded) {
                     return this.props.renderSuccessAlert("Item has already been added")
                 } else {
@@ -78,10 +68,11 @@ class ItemModal extends Component {
         return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
     render() {
-
-        let { id, name, model,description, brandName, 
+        // console.log(this.state)
+        let { id, name,description, brandName, 
             mainImageUrl, sellingPrice, finalPrice, otherImageUrl1, otherImageUrl2,
             otherImageUrl3, otherImageUrl4 } = this.state.modalData
+            // this.state.modalData
         return (
             <>
                 <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

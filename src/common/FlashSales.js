@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom'
+import {  withRouter } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
 
 
@@ -41,7 +41,7 @@ class FlashSales extends Component {
 
             if (cartData) { //item exists
                 // return console.log("data", cartData)
-                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                let isAdded = cartData.some(data => data.id === id); //check if clicked item exist in cart
                 if (isAdded) {
                     return this.props.successAlert('Item has already been added')
                 } else {
@@ -68,9 +68,8 @@ class FlashSales extends Component {
         this.setState({ cartData: products })
     }
     handleDetailModal = async (e) => {
-        let id = e.target.id;
         let { products } = this.state;
-        let itemDetails = products.filter(data => data.id == e.target.id);
+        let itemDetails = products.filter(data => data.id === parseInt(e.target.id));
         await this.props.itemDetailModalAction(itemDetails)
         this.setState({ itemDetails })
     }
@@ -80,7 +79,7 @@ class FlashSales extends Component {
 
     render() {
         // console.log("nonso", this.state.imgLoaded)
-        const { id, name, brandName, model, sellingPrice, mainImageUrl } = this.props
+        const { id, name, sellingPrice, mainImageUrl } = this.props
         return (
 
             <div className="product col-md-4" key={id}>
@@ -105,7 +104,7 @@ class FlashSales extends Component {
                     </div>
 
                     <div className="product-action">
-                        <a href="#" className="paction add-wishlist" title="Add to Wishlist">
+                        <a href="#N" className="paction add-wishlist" title="Add to Wishlist">
                             <span>Add to Wishlist</span>
                         </a>
 
@@ -113,7 +112,7 @@ class FlashSales extends Component {
                             Add to Cart
                         </span>
 
-                        <a href="#" className="paction add-compare" title="Add to Compare">
+                        <a href="#N" className="paction add-compare" title="Add to Compare">
                             <span>Add to Compare</span>
                         </a>
                     </div>

@@ -46,21 +46,21 @@ class DeliveryDataTable extends Component {
                     },
                     responsivePriority: 4
                 },
-                {title: 'Delivery Code',
-                    render: (data, type, row, meta ) => {
-                        if ( type === 'display' ) {
-                            return row.deliveryCode
-                        } 
-                        return row.deliveryCode
-                    },
-                    responsivePriority: 5
-                },
+                // {title: 'Delivery Code',
+                //     render: (data, type, row, meta ) => {
+                //         if ( type === 'display' ) {
+                //             return row.deliveryCode
+                //         } 
+                //         return row.deliveryCode
+                //     },
+                //     responsivePriority: 5
+                // },
                 {title: 'Date Created',
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
-                            return this.converToDate(row.createdAt)
+                            return new Date(row.createdAt).toLocaleString()
                         } 
-                        return this.converToDate(row.createdAt)
+                        return new Date(row.createdAt).toLocaleString()
                     },
                     responsivePriority: 6
                 },
@@ -69,6 +69,8 @@ class DeliveryDataTable extends Component {
                     render: (data, type, row, meta) => {
                         return `<div class="data-table-action-wrapper"><button type="button" data-id=${row.id} data-toggle="modal" data-target="#exampleModalLong" data-controls-modal="#exampleModalLong" data-backdrop="static" data-keyboard="false" class="btn btn-outline-primary action-btn btn-xs dt-view-product-detail" style="margin-right:16px;">
                         <i class="far fa-eye"></i> View</button>
+                        <button type="button" data-id=${row.id}  class="btn btn-success action-btn btn-xs dt-update" data-toggle="modal" data-target="#deliverycode" style="margin-right:16px;">
+                        <i class="fas fa-check"></i> Update</button>
                         `
                     },
                     responsivePriority: 1
@@ -89,9 +91,9 @@ class DeliveryDataTable extends Component {
                 const selectedId = this.dataset.id
                 $this.props.handleRowClick(selectedId, 'view')
             }
-            else if(this.classList.contains('dt-delete')){
+            else if(this.classList.contains('dt-update')){
                 const selectedId = this.dataset.id
-                $this.props.handleRowClick(selectedId, 'delete')
+                $this.props.handleRowClick(selectedId, 'approve')
             }
         })
     }

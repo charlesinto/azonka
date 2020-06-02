@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PrdoctImage from "../css/images/products/product-4.jpg";
 import { Link } from "react-router-dom";
 
 class ProductRow extends Component {

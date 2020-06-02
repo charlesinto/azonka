@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import StoreListItem from "../../common/StoreListItem";
-import NoRecordFound from "../../common/NoRecordFound";
-import AdminLayout from '../HOC/AdminLayout';
 import StoreDashboard from '../HOC/StoreDashboard';
 import StoreDataTable from '../../common/StoreDataTable';
 class Store extends Component {

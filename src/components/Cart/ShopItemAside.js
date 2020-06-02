@@ -11,8 +11,9 @@ class ShopItemAside extends Component {
         this.setState({ priceRange: e.target.value })
     }
     handleSearchSubmit = async () => {
-        let { name, categoryValue, priceRange } = this.state
-        let category = categoryValue, finalPrice = priceRange;
+        let {   priceRange } = this.state
+        // let category = categoryValue
+        let finalPrice = priceRange;
         this.props.history.push(`/shop?price=${finalPrice}`);
         // window.location.reload()
     }

@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import uploadNew from "../../images/dashboard/uploadnew-bg.jpg";
-import StoreItem from "../../common/StoreItem";
-import cardImage from "../../images/items/miniverse_m.jpg";
 import * as actions from "../../actions";
 import { connect } from "react-redux";
 import Dashboard from '../HOC/StoreDashboard';

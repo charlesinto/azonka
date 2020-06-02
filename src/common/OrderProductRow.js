@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PrdoctImage from "../css/images/products/product-4.jpg";
 import { Link } from "react-router-dom";
 
 class OrderProductRow extends Component {
@@ -84,7 +83,7 @@ class OrderProductRow extends Component {
 
                     </td>
                     <td><span className="my-order-status">{this.props.data.status}</span></td>
-                    <td></td>
+                    {/* <td></td> */}
                     <td>&#8358; {this.calculateSum(finalPrice, this.state.qty, id)}</td>
                 </tr>
                  <tr className="product-action-row">

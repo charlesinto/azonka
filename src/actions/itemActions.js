@@ -236,7 +236,12 @@ export const fetchCart = () => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            if(error.response &&  error.response.data.message ){
+                dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            }else{
+                // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            }
+            
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -277,7 +282,7 @@ export const addLocalCart = (id, cartData, obj) => {
             // return console.log("here", id, cartData, obj)
             if (cartData) { //item exists
                 // return console.log("data", cartData)
-                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                let isAdded = cartData.some(data => data.id === id); //check if clicked item exist in cart
                 if (isAdded) {
                     return dispatch({ type: SUCCESS_ALERT, payload: 'Item already added to cart' })
                 } else {
@@ -386,7 +391,7 @@ export const searchAdvertCategory = (details) => {
 }
 
 export const itemDetailModalAction = (data) => {
-    console.log("inside", data)
+    // console.log("inside", data)
     return async (dispatch) => {
         try {
             dispatch({ type: ITEM_MODAL, payload: data })
@@ -502,6 +507,7 @@ export const validateFormData = (state) => {
         if (parseInt(this.state.finalPrice) < parseInt(state.sellingPrice)) {
             discount = true
         }
+        console.log(discount)
         dispatch({ type: INITIAL_REGISTRATION, payload: '' })
 
         // save item
@@ -878,7 +884,7 @@ export const getAddresses = (id = 0, numberOfPage = 100) => {
 export const createAddress = (data, id = 0, numberOfPage = 100) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('/api/v1/user/address/create', {
+            await axios.post('/api/v1/user/address/create', {
                 address1: data.address,
                 ...data
             }, {

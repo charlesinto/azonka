@@ -13,7 +13,6 @@ import Footer from '../HeaderFooter/Footer';
 
 import FeatureProductItem from "../../common/FeatureProductItem";
 import HotProduct from "../../common/HotProduct";
-import Testimonial from "../../common/Testimonial";
 import Banner from '../../common/Banner';
 import Trending from '../../common/Trending';
 
@@ -21,7 +20,6 @@ import slide1 from "../../css/images/products/product-8-white.jpg";//product-2-w
 import slide2 from "../../css/images/products/home-featured-3.jpg";
 import HomeSlide from '../../common/HomeSlide';
 import FlashSales from '../../common/FlashSales';
-import ItemModal from '../Cart/ItemModal';
 
 class Home extends Component {
     state = { showPopUp: true }
@@ -68,7 +66,6 @@ class Home extends Component {
         let productId = id;
         let quanity = "1";
         let obj = { productId, quanity }
-        let token = (localStorage.getItem("x-access-token"));
         await this.props.addToCart(obj)
     }
     formatMoney(amount) {
@@ -76,7 +73,7 @@ class Home extends Component {
     }
     renderAdverts = () => {
        return this.props.adverts.map(item => (
-           item.products.length > 0 ? <div className="border mb-2" key={item.id}>
+           item.products.length >= 3 ? <div className="border mb-2" key={item.id}>
                 <div className="d-flex justify-content-between py-4 px-4">
                     <h3>{item.name}</h3>
                     <Link to={`/specials/${item.id}`}><span> see all > </span></Link>
@@ -219,11 +216,11 @@ class Home extends Component {
                                         <br />
                                         {
                                             this.state.products ? (
-                                                this.state.products.map(res => {
+                                                this.state.products.map((res, i) => {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
-                                                        <FlashSales id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        <FlashSales key={i} id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
 
                                                     )
                                                 })
@@ -242,7 +239,7 @@ class Home extends Component {
                                         }
                                     </div>
 
-                                    <div class="mb-4"></div>
+                                    <div className="mb-4"></div>
 
 
 
@@ -291,7 +288,7 @@ class Home extends Component {
                                                 <div className="feature-box-content">
                                                     <h3>Dedicated Service</h3>
                                                     <p>Consult our specialists for help with an order, customization, or design advice</p>
-                                                    <a href="#" className="btn btn-outline-dark">Get in touch</a>
+                                                    <a href="#n" className="btn btn-outline-dark">Get in touch</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -303,7 +300,7 @@ class Home extends Component {
                                                 <div className="feature-box-content">
                                                     <h3>Free Returns</h3>
                                                     <p>We stand behind our goods and services and want you to be satisfied with them.</p>
-                                                    <a href="#" className="btn btn-outline-dark">Return Policy</a>
+                                                    <a href="#n" className="btn btn-outline-dark">Return Policy</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -315,7 +312,7 @@ class Home extends Component {
                                                 <div className="feature-box-content">
                                                     <h3>International Shipping</h3>
                                                     <p>Currently over 50 countries qualify for express international shipping.</p>
-                                                    <a href="#" className="btn btn-outline-dark">Lear More</a>
+                                                    <a href="#m" className="btn btn-outline-dark">Lear More</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -338,7 +335,7 @@ class Home extends Component {
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
                                                                         <div className="menu-title">
-                                                                            <a href="#">Variations 1<span className="tip tip-new">New!</span></a>
+                                                                            <a href="#n">Variations 1<span className="tip tip-new">New!</span></a>
                                                                         </div>
                                                                         <ul>
                                                                             <li><a href="category.html">Fullwidth Banner<span className="tip tip-hot">Hot!</span></a></li>
@@ -353,10 +350,10 @@ class Home extends Component {
                                                                     </div>
                                                                     <div className="col-lg-6">
                                                                         <div className="menu-title">
-                                                                            <a href="#">Variations 2</a>
+                                                                            <a href="#n">Variations 2</a>
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="#">Product List Item Types</a></li>
+                                                                            <li><a href="#n">Product List Item Types</a></li>
                                                                             <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a></li>
                                                                             <li><a href="category.html">3 Columns Products</a></li>
                                                                             <li><a href="category-4col.html">4 Columns Products <span className="tip tip-new">New</span></a></li>
@@ -370,7 +367,7 @@ class Home extends Component {
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="banner">
-                                                                    <a href="#">
+                                                                    <a href="#n">
                                                                         <img src="assets\images\menu-banner-2.jpg" alt="Menu banner" />
                                                                     </a>
                                                                 </div>
@@ -386,7 +383,7 @@ class Home extends Component {
                                                                 <div className="row">
                                                                     <div className="col-lg-4">
                                                                         <div className="menu-title">
-                                                                            <a href="#">Variations</a>
+                                                                            <a href="#n">Variations</a>
                                                                         </div>
                                                                         <ul>
                                                                             <li><a href="product.html">Horizontal Thumbnails</a></li>
@@ -398,7 +395,7 @@ class Home extends Component {
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="menu-title">
-                                                                            <a href="#">Variations</a>
+                                                                            <a href="#n">Variations</a>
                                                                         </div>
                                                                         <ul>
                                                                             <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
@@ -408,7 +405,7 @@ class Home extends Component {
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="menu-title">
-                                                                            <a href="#">Product Layout Types</a>
+                                                                            <a href="#n">Product Layout Types</a>
                                                                         </div>
                                                                         <ul>
                                                                             <li><a href="product.html">Default Layout</a></li>
@@ -423,7 +420,7 @@ class Home extends Component {
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="banner">
-                                                                    <a href="#">
+                                                                    <a href="#n">
                                                                         <img src="assets\images\menu-banner.jpg" alt="Menu banner" className="product-promo" />
                                                                     </a>
                                                                 </div>
@@ -432,43 +429,43 @@ class Home extends Component {
                                                     </div>
                                                 </li>
                                                 <li>
-                                                    <a href="#" className="sf-with-ul"><i className="icon-docs-inv"></i>Pages</a>
+                                                    <a href="#n" className="sf-with-ul"><i className="icon-docs-inv"></i>Pages</a>
 
                                                     <ul>
                                                         <li><a href="cart.html">Shopping Cart</a></li>
-                                                        <li><a href="#">Checkout</a>
+                                                        <li><a href="#n">Checkout</a>
                                                             <ul>
                                                                 <li><a href="checkout-shipping.html">Checkout Shipping</a></li>
                                                                 <li><a href="checkout-shipping-2.html">Checkout Shipping 2</a></li>
                                                                 <li><a href="checkout-review.html">Checkout Review</a></li>
                                                             </ul>
                                                         </li>
-                                                        <li><a href="#">Dashboard</a>
+                                                        <li><a href="#n">Dashboard</a>
                                                             <ul>
                                                                 <li><a href="dashboard.html">Dashboard</a></li>
                                                                 <li><a href="my-account.html">My Account</a></li>
                                                             </ul>
                                                         </li>
                                                         <li><a href="about.html">About Us</a></li>
-                                                        <li><a href="#">Blog</a>
+                                                        <li><a href="#n">Blog</a>
                                                             <ul>
                                                                 <li><a href="blog.html">Blog</a></li>
                                                                 <li><a href="single.html">Blog Post</a></li>
                                                             </ul>
                                                         </li>
                                                         <li><a href="contact.html">Contact Us</a></li>
-                                                        <li><a href="#" className="login-link">Login</a></li>
+                                                        <li><a href="#n" className="login-link">Login</a></li>
                                                         <li><a href="forgot-password.html">Forgot Password</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="#" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
+                                                <li><a href="#n" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
                                                     <ul>
-                                                        <li><a href="#">Header Types</a></li>
-                                                        <li><a href="#">Footer Types</a></li>
+                                                        <li><a href="#n">Header Types</a></li>
+                                                        <li><a href="#n">Footer Types</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="#"><i className="icon-cat-gift"></i>Special Offer!</a></li>
-                                                <li><a href="#"><i className="icon-star-empty"></i>Buy Porto!</a></li>
+                                                <li><a href="#n"><i className="icon-cat-gift"></i>Special Offer!</a></li>
+                                                <li><a href="#n"><i className="icon-star-empty"></i>Buy Porto!</a></li>
                                             </ul>
                                         </nav>
                                     </div>
@@ -519,19 +516,19 @@ class Home extends Component {
                                         <div className="widget-posts-slider owl-carousel owl-theme">
                                             <div className="post">
                                                 <span className="post-date">01- Jun -2018</span>
-                                                <h4 className="post-title"><a href="#">Fashion News</a></h4>
+                                                <h4 className="post-title"><a href="#n">Fashion News</a></h4>
                                                 <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat mi. </p>
                                             </div>
 
                                             <div className="post">
                                                 <span className="post-date">22- May -2018</span>
-                                                <h4 className="post-title"><a href="#">Shopping News</a></h4>
+                                                <h4 className="post-title"><a href="#n">Shopping News</a></h4>
                                                 <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non plasasyi. </p>
                                             </div>
 
                                             <div className="post">
                                                 <span className="post-date">13- May -2018</span>
-                                                <h4 className="post-title"><a href="#">Fashion News</a></h4>
+                                                <h4 className="post-title"><a href="#n">Fashion News</a></h4>
                                                 <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat. </p>
                                             </div>
                                         </div>
@@ -577,7 +574,7 @@ const settingsAdvert = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     arrows: true,
     slidesToScroll: 1,
     autoplay: true,

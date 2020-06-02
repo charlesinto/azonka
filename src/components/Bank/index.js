@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, } from "react-router-dom";
 import { connect } from "react-redux";
 import NoRecordFound from "../../common/NoRecordFound";
 import { withToastManager } from 'react-toast-notifications';
@@ -80,9 +80,11 @@ class Bank extends Component {
         })
         return lookupdata
     }
-    componentDidMount() {
+    async componentDidMount() {
+        
         this.props.setActiveLink('Bank')
-        this.props.getBanks()
+        await this.props.getBanks()
+        
         this.props.getSavedBanks();
     }
     static getDerivedStateFromProps(nextProps, state) {
@@ -124,6 +126,7 @@ class Bank extends Component {
         }
         const selectedBank = this.state.banks.filter(element => element.longcode === this.state.longcode)
         const { accountNumber, accountName } = this.state
+        console.log(selectedBank, accountName, accountNumber)
         this.props.initiateRegistration()
         if (selectedBank.length > 0) {
             const bankDetails = selectedBank[0]
@@ -249,44 +252,7 @@ class Bank extends Component {
         return (
             <Dashboard>
                 <div style={{}}>
-                    {/* <div className="container">
-                        <div className="row cards">
-                            <div className="col-sm-12 col-md-6">
-                                <div className="card card-container wallet">
-                                    <div className="card-box-details">
-                                        <div>
-                                            <div className="money">
-                                                &#x20a6; 25000
-                                            </div>
-                                            <div className="card-title-money">
-                                               Total Balance
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span className="card-icon"><i className="fas fa-wallet"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-sm-12 col-md-6">
-                                <div className="card card-container loyalty">
-                                <div className="card-box-details">
-                                        <div>
-                                            <div className="money">
-                                                25000
-                                            </div>
-                                            <div className="card-title-money">
-                                               Azonka Credits
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span className="card-icon"><i className="fas fa-coins"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
+                    
                     <div className="add-bank">
                         <h4 className="popup-title verify-email" style={{
                             fontWeight: 'normal',

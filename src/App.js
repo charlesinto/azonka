@@ -12,6 +12,7 @@ import  "./css/css/app.css";
 import 'react-awesome-slider/dist/styles.css';
 import { ToastProvider} from 'react-toast-notifications'
 //Banners
+import axios from "axios";
 
 import Reducer from './reducers';
 const createStoreWithMiddleware = applyMiddleware(ReduxThunk)(createStore)
@@ -21,6 +22,11 @@ const theme = createMuiTheme(defaultTheme)
 
 
 class App extends Component {
+  componentDidMount(){
+    console.log('app mounted here now o')
+    const token = localStorage.getItem('x-access-token');
+    axios.defaults.headers.common["x-access-token"] = token;
+  }
   render(){
     return (
       <ToastProvider>

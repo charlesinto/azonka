@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Header from '../HeaderFooter/Header'
 import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
 import { ShopItemHeader } from './ShopItemHeader'
@@ -38,7 +37,7 @@ class ShopItems extends Component {
         this.props.history.listen((location, action) => {
             let params = queryString.parse(location.search)
             let { name } = this.state
-            if (params.name != name) {
+            if (params.name !== name) {
                 this.setState({ name: params.name, category: params.category })
                 // return console.log("one change", this.state, params);
                 //this.searchItem()
@@ -71,7 +70,7 @@ class ShopItems extends Component {
         let params = queryString.parse(this.props.location.search)
         const { name, category, price } = params;
         // console.log(params, prevState)
-        if (name != prevState.name || category != prevState.category || price != prevState.finalPrice) {
+        if (name !== prevState.name || category !== prevState.category || price !== prevState.finalPrice) {
             console.log('calle here twice')
             await this.setState({ name, category, finalPrice: price }, () => console.log(this.state))
             return this.searchItem()
@@ -85,7 +84,7 @@ class ShopItems extends Component {
 
         let postObj = {
             name,
-            category: category == "Select category" || category == "" ? "0" : category,
+            category: category === "Select category" || category === "" ? "0" : category,
             brandName: "",
             year: "0",
             subCategory: "0",
@@ -151,13 +150,13 @@ class ShopItems extends Component {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
             let { products } = this.state
-            let obj = products.filter(data => id == data.id)[0]
+            let obj = products.filter(data => id === data.id)[0]
 
             //check if item is in cart
 
             if (cartData) { //item exists
                 // return console.log("data", cartData)
-                let isAdded = cartData.some(data => data.id == id); //check if clicked item exist in cart
+                let isAdded = cartData.some(data => data.id === id); //check if clicked item exist in cart
                 if (isAdded) {
                     return this.props.showSuccessALert("Item has already been added")
                 } else {
@@ -179,13 +178,10 @@ class ShopItems extends Component {
         this.setState({ cartData })
     }
     loadShopData = async () => {
-        let { data } = this.props.products;
-
-
     }
     handleDetailModal = async (e) => {
         let { products } = this.state;
-        let itemDetails = products.filter(data => data.id == e.target.id);
+        let itemDetails = products.filter(data => data.id === e.target.id);
         console.log(itemDetails, this.props)
         await this.props.itemDetailModalAction(itemDetails)
         return this.setState({ itemDetails })
@@ -195,7 +191,7 @@ class ShopItems extends Component {
 
 
     render() {
-        const { products, cartData } = this.state;
+        const { products } = this.state;
         console.log(products)
         return (
             <div>

@@ -5,10 +5,8 @@ import * as actions from "../../actions";
 import CartPrice from "../../common/CartPrice";
 import CartItem from "../../common/CartItem";
 import CartActions from "../../common/CartActions";
-import ProductRow from '../../common/ProductRow';
 import Drawer from '@material-ui/core/Drawer';
 import OrderProductRow from '../../common/OrderProductRow';
-import Header from '../HeaderFooter/Header';
 import Footer from '../HeaderFooter/Footer';
 
 class Cart extends Component {
@@ -133,7 +131,7 @@ class Cart extends Component {
     removeFromCart = async (e) => {
         let { cartData } = this.state;
         let id = e.target.id;
-        let newItems = cartData.filter(data => data.id != id);
+        let newItems = cartData.filter(data => data.id !== id);
         localStorage.setItem("cart", JSON.stringify(newItems));
         let newCartData = JSON.parse(localStorage.getItem("cart"))
         return this.setState({ cartData: newCartData })
@@ -146,7 +144,6 @@ class Cart extends Component {
         if (token) {
             await this.props.fetchOrders();
             console.log("aza o", this.props.cartItems)
-            let { products, quantity } = this.props.cartItems;
             this.setState({ cartData: this.props.cartItems.products, 
                 quantity: this.props.cartItems.quantity    
             })
@@ -296,7 +293,7 @@ class Cart extends Component {
                                                 <th className="price-col">Price</th>
                                                 <th className="qty-col">Qty</th>
                                                 <th className="price-col">Status</th>
-                                                <th className="price-col">Payment Channel</th>
+                                                {/* <th className="price-col">Payment Channel</th> */}
                                                 <th>Subtotal</th>
                                                 
                                             </tr>
@@ -345,7 +342,7 @@ class Cart extends Component {
                                                     </div>
 
                                                     <div className="float-right">
-                                                        <a href="#" className="btn btn-outline-secondary btn-clear-cart">Clear Orders</a>
+                                                        <a href="#n" className="btn btn-outline-secondary btn-clear-cart">Clear Orders</a>
                                                     </div>
                                                 </td>
                                             </tr>

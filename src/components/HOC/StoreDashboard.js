@@ -24,7 +24,7 @@ class StoreDashboard extends Component {
                             </div>
 
                         </nav>
-                        <div className="container">
+                        <div className="container store-dashboard">
                             <div className="row">
                                 <div className="col-lg-9 order-lg-last dashboard-content">
                                     {this.props.children}

@@ -74,7 +74,7 @@ export const verifyEmail = (userData) => {
                 //axios.defaults.headers.common['x-access-token'] = response.data.token
                 localStorage.setItem('x-access-token', response.data.token)
                 
-                
+                axios.defaults.headers.common["x-access-token"] = response.data.token;
                 localStorage.removeItem('userRegDetails')
                 //dispatch({type: SUCCESS_ALERT, payload: 'Account Verified successfully'})
                 return dispatch({type: EMAIL_VERIFICATION_SUCCESFFUL, payload: ''})
@@ -128,6 +128,7 @@ export const login = user => {
                     ...response2.data.user
                 }))
                 localStorage.setItem('x-access-token',response.data.token) 
+                axios.defaults.headers.common["x-access-token"] = response.data.token;
                 localStorage.removeItem('userRegDetails')
                 localStorage.removeItem('passcode')
                 return dispatch({type: LOGIN_SUCCESS, payload:''})

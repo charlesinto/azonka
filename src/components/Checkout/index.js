@@ -43,8 +43,6 @@ class Checkout extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCheckoutCart();
-            console.log("aza o", this.props.cartItems)
-            let { products, quantity } = this.props.cartItems;
             this.setState({
                 cartData: this.props.cartItems.products,
                 quantity: this.props.cartItems.quantity

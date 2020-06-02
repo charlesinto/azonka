@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import { withToastManager } from 'react-toast-notifications';
-import CustomInput from "../../common/CustomInput";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "../HeaderFooter/Header";
 
 class SellerSignUp extends Component {
@@ -87,7 +86,6 @@ class SellerSignUp extends Component {
     }
     handleFormSubmit = (event) => {
         event.preventDefault();
-        const {toastManager: { add}} = this.props;
         const isValid = this.validateFormData(this.state)
         if(isValid){
             console.log('form is valid')

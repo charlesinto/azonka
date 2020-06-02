@@ -9,7 +9,7 @@ export const ShopItemHeader = () => {
                     <h1 className="banner-title">
                         INCREDIBLE deals
 </h1>
-                    <a href="#" className="btn btn-dark">Shop Now</a>
+                    <a href="#n" className="btn btn-dark">Shop Now</a>
                 </div>
                 {/* <!-- End .banner-content --> */}
             </div>
@@ -19,7 +19,7 @@ export const ShopItemHeader = () => {
                 <div className="container">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><a href="index.html"><i className="icon-home"></i></a></li>
-                        <li className="breadcrumb-item"><a href="#">Electronics</a></li>
+                        <li className="breadcrumb-item"><a href="#n">Electronics</a></li>
                         <li className="breadcrumb-item active" aria-current="page">Headsets</li>
                     </ol>
                 </div>

@@ -7,8 +7,6 @@ import CartItem from "../../common/CartItem";
 import CartActions from "../../common/CartActions";
 import ProductRow from '../../common/ProductRow';
 import Drawer from '@material-ui/core/Drawer';
-import ProductRowActions from '../../common/ProductRowActions';
-import Header from '../HeaderFooter/Header';
 import Footer from '../HeaderFooter/Footer';
 
 class Cart extends Component {
@@ -137,7 +135,7 @@ class Cart extends Component {
     removeFromCart = async (e) => {
         let { cartData } = this.state;
         let id = e.target.id;
-        let newItems = cartData.filter(data => data.id != id);
+        let newItems = cartData.filter(data => data.id !== id);
         localStorage.setItem("cart", JSON.stringify(newItems));
         let newCartData = JSON.parse(localStorage.getItem("cart"))
         return this.setState({ cartData: newCartData })
@@ -149,7 +147,6 @@ class Cart extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchCart();
-            let { products, quantity } = this.props.cartItems;
             this.setState({
                 cartData: this.props.cartItems.products,
                 quantity: this.props.cartItems.quantity
@@ -354,8 +351,8 @@ class Cart extends Component {
                                                     </div>
 
                                                     <div className="float-right">
-                                                        <a href="#" className="btn btn-outline-secondary btn-clear-cart">Clear Shopping Cart</a>
-                                                        <a href="#" className="btn btn-outline-secondary btn-update-cart">Update Shopping Cart</a>
+                                                        <a href="#n" className="btn btn-outline-secondary btn-clear-cart">Clear Shopping Cart</a>
+                                                        <a href="#n" className="btn btn-outline-secondary btn-update-cart">Update Shopping Cart</a>
                                                     </div>
                                                 </td>
                                             </tr>

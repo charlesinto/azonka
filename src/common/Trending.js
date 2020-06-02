@@ -3,9 +3,9 @@ import bannerImage from "../css/images/banners/banner-1.jpg";
 class Trending extends Component {
     render() {
         return (
-            <div class="col-md-4">
-                <div class="banner banner-image">
-                    <a href="#">
+            <div className="col-md-4">
+                <div className="banner banner-image">
+                    <a href="#h">
                         <img src={bannerImage} alt="banner" />
                     </a>
                 </div>

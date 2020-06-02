@@ -217,13 +217,13 @@ class confirmAccount extends Component {
             )
         }
         else if(this.props.verification === 'false'){
-            console.log('here now')
+            console.log('here now') //color:'#08c',
             return (
                 <div className="col-md-4 card" style={{padding:'20px 10px 20px 10px',
                                  margin:'10px'}}>
                                 
                                 <div className="web-font" style={{display:'flex', flexDirection:'row'}}>
-                                    <span style={{marginRight: 16, color:'#08c',color:'red',
+                                    <span style={{marginRight: 16, color:'red',
                                      fontSize:'2rem', marginTop:'0.4rem'}}>
                                         <i className="fas fa-times"></i>
                                     </span>

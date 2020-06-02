@@ -1,0 +1,47 @@
+
+
+
+.banner.banner-cat {
+    background-image: url('./images/banners/banner-top.jpg');
+    display: flex;
+    align-items: center;
+    height: 220px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #ccc;
+    margin-bottom: 0;
+}
+.add-cart{
+    cursor: pointer;
+}
+
+
+.shop-product-image img{
+    height: 30vh !important;
+}
+.drp-shop-product-image{
+    height: 12vh;
+}
+
+.dropdown-cart-products{
+    height: 48vh;
+    overflow-y: scroll;
+}
+
+
+
+.empty-products{
+    width: 100%
+}
+
+.delivery-timeline{
+    color: rgb(0, 136, 204);
+    font-size: 1.98rem;
+    padding: 8px 0;
+}
+
+.delivery-timeline-wrapper{
+    color: #000;
+    padding: 10px 0;
+}

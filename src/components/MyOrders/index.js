@@ -10,8 +10,10 @@ import OrderProductRow from '../../common/OrderProductRow';
 import Footer from '../HeaderFooter/Footer';
 
 class Cart extends Component {
-    state = { data: [], sum: 0, cartData: [], cartLength: 0, quantity: {}, 
-        deletedCartItems: [], changeItems: [], modal: false }
+    state = {
+        data: [], sum: 0, cartData: [], cartLength: 0, quantity: {},
+        deletedCartItems: [], changeItems: [], modal: false
+    }
     async componentDidMount() {
         this.props.switchActiveLink('My Orders')
         await this.loadCart()
@@ -100,10 +102,12 @@ class Cart extends Component {
 
     componentWillReceiveProps = props => {
         if (props.cartData !== this.props.cartData) {
-            this.setState({ cartData: props && props.cartData, 
-                cartLength: props.cartData ? props.cartData.length : 0 });
+            this.setState({
+                cartData: props && props.cartData,
+                cartLength: props.cartData ? props.cartData.length : 0
+            });
         }
-        else if(props.cartItems !== this.props.cartItems){
+        else if (props.cartItems !== this.props.cartItems) {
             console.log('cart Items', props.cartItems)
             this.setState({
                 quantity: props.cartItems.quantity,
@@ -112,15 +116,15 @@ class Cart extends Component {
         }
     }
     componentWillUnmount() {
-        
-        if(this.state.changeItems.length > 0){
+
+        if (this.state.changeItems.length > 0) {
             this.props.initiateRegistration()
             this.props.updateCartItems(this.state.cartData, this.state.quantity, this.state.changeItems)
         }
-        
+
     }
     calSum = () => {
-        console.log('/>?',this.state.quantity)
+        console.log('/>?', this.state.quantity)
         const { cartData } = this.state;
         let amountOrdered = cartData ? cartData.reduce((a, b) => {
             return a + (b.finalPrice * (this.state.quantity[b.id] || 1))
@@ -144,8 +148,9 @@ class Cart extends Component {
         if (token) {
             await this.props.fetchOrders();
             console.log("aza o", this.props.cartItems)
-            this.setState({ cartData: this.props.cartItems.products, 
-                quantity: this.props.cartItems.quantity    
+            this.setState({
+                cartData: this.props.cartItems.products,
+                quantity: this.props.cartItems.quantity
             })
             // console.log("aza", this.state.cartData)
         }
@@ -155,35 +160,37 @@ class Cart extends Component {
     calSums = (sum, productId, qty) => {
         console.log(qty, sum)
         const { changeItems } = this.state;
-        this.setState({quantity: 
-            {...this.state.quantity, [productId]: qty}}, () => {
-                const { cartData } = this.state;
-                cartData.forEach(element => {
-                    
-                    if(element.id === productId){
-                        element.amountOrdered = sum;
-                    }else{
-                        element.amountOrdered = element.finalPrice * this.state.quantity[element.id];
-                    }
-                })
-                let amountOrdered = cartData ? cartData.reduce((a, b) => {
-                    return a + b.amountOrdered
-                }, 0) : 0
-                if(!changeItems.includes(productId)){
-                    changeItems.push(productId)
+        this.setState({
+            quantity:
+                { ...this.state.quantity, [productId]: qty }
+        }, () => {
+            const { cartData } = this.state;
+            cartData.forEach(element => {
+
+                if (element.id === productId) {
+                    element.amountOrdered = sum;
+                } else {
+                    element.amountOrdered = element.finalPrice * this.state.quantity[element.id];
                 }
-                this.props.setCartDropDownTotalPrice(this.state.quantity)
-                this.setState({ sum: amountOrdered, changeItems: [...changeItems] })
+            })
+            let amountOrdered = cartData ? cartData.reduce((a, b) => {
+                return a + b.amountOrdered
+            }, 0) : 0
+            if (!changeItems.includes(productId)) {
+                changeItems.push(productId)
+            }
+            this.props.setCartDropDownTotalPrice(this.state.quantity)
+            this.setState({ sum: amountOrdered, changeItems: [...changeItems] })
         })
-        
+
     }
 
     handleItemDelete = async (id) => {
         //const { cartData} = this.state;
-        if(localStorage.getItem('x-access-token')){
+        if (localStorage.getItem('x-access-token')) {
             this.props.initiateRegistration()
-             await this.props.removeCartItem(id)
-             return console.log('vvv', this.props.cartItems.products)
+            await this.props.removeCartItem(id)
+            return console.log('vvv', this.props.cartItems.products)
         }
         // const index = cartData.findIndex(element => element.id === id)
         // const deletedItems = this.state.deletedCartItems;
@@ -208,28 +215,28 @@ class Cart extends Component {
     }
     payNowClickHandler = e => {
         e.preventDefault()
-        if(localStorage.getItem('x-access-token')){
+        if (localStorage.getItem('x-access-token')) {
             this.props.setAmount(this.state.sum)
-            if(this.state.cartData.length > 0){
+            if (this.state.cartData.length > 0) {
                 return this.props.history.push("/users/checkout")
-            }else{
+            } else {
                 return this.props.renderError('Please add 1 or more items to cart')
             }
-            
+
         }
-        return this.setState({modal: true})
+        return this.setState({ modal: true })
     }
     renderModal = () => {
-        if(this.state.modal){
+        if (this.state.modal) {
             return (
 
                 <Drawer anchor="bottom" open={this.state.modal} onClose={() => this.toggleDrawer()}>
                     <div
-                    role="presentation"
-                    anchor="bottom"
-                    onClick={this.toggleDrawer}
-                    onKeyDown={this.toggleDrawer}
-                    className="modal-bottom-padding"
+                        role="presentation"
+                        anchor="bottom"
+                        onClick={this.toggleDrawer}
+                        onKeyDown={this.toggleDrawer}
+                        className="modal-bottom-padding"
                     >
                         <main className="container">
                             <div className="row">
@@ -238,8 +245,10 @@ class Cart extends Component {
                                         Hello, Awesome User
                                     </article>
                                     <p className="default-font article-body" >
-                                        Thank you for shopping through Azonka, please kindly <strong style={{color:'#000',
-                                            textTransform:'capitalize'}}>
+                                        Thank you for shopping through Azonka, please kindly <strong style={{
+                                            color: '#000',
+                                            textTransform: 'capitalize'
+                                        }}>
                                             login or create account </strong>
                                         to make purchases and enjoy the full benefits provided for you
                                     </p>
@@ -248,12 +257,14 @@ class Cart extends Component {
                             <div className="row">
                                 <div className="col-12">
                                     <div
-                                        style={{display:'flex',margin:"10px 0px",
-                                        justifyContent:'flex-end'}}>
-                                        
-                                        <button onClick={this.toggleDrawer} style={{marginRight: 10}}
-                                                className="btn btn-sm btn-outline-dark">
-                                                    Thanks, Later
+                                        style={{
+                                            display: 'flex', margin: "10px 0px",
+                                            justifyContent: 'flex-end'
+                                        }}>
+
+                                        <button onClick={this.toggleDrawer} style={{ marginRight: 10 }}
+                                            className="btn btn-sm btn-outline-dark">
+                                            Thanks, Later
                                         </button>
                                         <Link to="/users/login" className="btn btn-sm btn-success" >
                                             Login</Link>
@@ -281,73 +292,123 @@ class Cart extends Component {
                             </ol>
                         </div>
                     </nav>
-                    <div className="container">
+                    <div className="container" style={{ background: "#cac2c233" }}>
                         <div className="row">
-                            <div className="col-lg-12">
-                                <div className="cart-table-container">
-                                    <table className="table table-cart">
-                                        <thead>
-                                            <tr>
-                                                <th className="qty-col">Order Number</th>
-                                                <th className="product-col">Product</th>
-                                                <th className="price-col">Price</th>
-                                                <th className="qty-col">Qty</th>
-                                                <th className="price-col">Status</th>
-                                                {/* <th className="price-col">Payment Channel</th> */}
-                                                <th>Subtotal</th>
-                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
-                                                    return (
-                                                        <OrderProductRow 
-                                                            calSums={(sum, productId, qty) =>
-                                                                 this.calSums(sum, productId, qty)} 
-                                                            calSum={this.calSum} 
-                                                            // quantity={this.state.quantity[data.id]}
-                                                            handleItemDelete={this.handleItemDelete}
-                                                            data={data}
-                                                                
-                                                            />
-                                                    )
-                                                }) : (
-                                                    <tr  className="product-row" >
-                                                        <td className="product-col" style={{ backgroundColor:'transparent'}}>
-                                                            <figure style={{border:'0', backgroundColor:'transparent'}} 
-                                                            className="product-image-container">
-                                                                <span style={{fontSize: '4rem', color: '#000'}}>
-                                                                    <i className="fas fa-shopping-bag"></i>
-                                                                </span>
-                                                            </figure>
-                                                            <h2 className="product-title" style={{width: '14em'}}>
-                                                                Your Orders list is empty
-                                                            </h2>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
+                            <div className="col-lg-10 mx-auto  my-5">
+                                <div className="cart-table-container container">
+                                    <div className="row">
+                                        <div className="header-item-orderId col-md-1 ">
+                                            ORDER
+                                        </div>
+                                        <div className="header-item-name col-md-5 ">
+                                            ITEM
+                                            </div>
+                                        <div className="header-item-quantity col-md-2  text-center">
+                                            QUANTITY
+                                            </div>
+                                        <div className="header-item-price col-md-2  text-center">
+                                            UNIT PRICE
+                                            </div>
+                                        <div className="header-item-subtotal col-md-2  text-center">
+                                            SUBTOTAL
+                                            </div>
+                                    </div>
 
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
-                                        </tbody>
 
-                                        <tfoot>
-                                            <tr>
-                                                <td colSpan="4" className="clearfix">
-                                                    <div className="float-left">
-                                                        <Link to="/" className="btn btn-outline-secondary">Continue Shopping</Link>
-                                                    </div>
+                                    <div className="row item-row py-3 my-4 bg-white">
+                                        <div className="item-orderId col-md-1 ">
+                                            1
+                                            </div>
+                                        <div className=" col-md-5 border-right">
+                                            <div className="d-flex item-name-wrapper">
+                                                <img className="item-img"
+                                                    src="https://res.cloudinary.com/data-infosec-consult-limited/image/upload/v1591353533/Nonso_Daniel_5e7aaf1ba56b930016de0de3.jpg"
+                                                    alt=".../"
+                                                />
+                                                <p className="pl-4 item-name text-dark"> 55''Curved Smart UHD 4K TV+Netflix&Youtube APP- 55A7600</p>
+                                            </div>
 
-                                                    <div className="float-right">
-                                                        <a href="#n" className="btn btn-outline-secondary btn-clear-cart">Clear Orders</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                            <div className="d-flex item-actions">
+
+                                                <div>Move to wishlist</div>
+                                                <div>REMOVE</div>
+                                            </div>
+                                        </div>
+                                        <div className="item-qty col-md-2 border-right text-center">
+                                            1
+                                            </div>
+                                        <div className="item-price col-md-2 border-right text-center">
+                                            ₦ 235,000
+                                            </div>
+                                        <div className="item-subtotal col-md-2 border-right text-center">
+                                            ₦ 235,000
+                                            </div>
+                                    </div>
+
+
+                                    <div className="row item-row py-3 my-4 bg-white">
+                                        <div className="item-orderId col-md-1 ">
+                                            1
+                                            </div>
+                                        <div className=" col-md-5 border-right">
+                                            <div className="d-flex item-name-wrapper">
+                                                <img className="item-img"
+                                                    src="https://res.cloudinary.com/data-infosec-consult-limited/image/upload/v1591353533/Nonso_Daniel_5e7aaf1ba56b930016de0de3.jpg"
+                                                    alt=".../"
+                                                />
+                                                <p className="pl-4 item-name text-dark"> 55''Curved Smart UHD 4K TV+Netflix&Youtube APP- 55A7600</p>
+                                            </div>
+
+                                            <div className="d-flex item-actions">
+
+                                                <div>Move to wishlist</div>
+                                                <div>REMOVE</div>
+                                            </div>
+                                        </div>
+                                        <div className="item-qty col-md-2 border-right text-center">
+                                            1
+                                            </div>
+                                        <div className="item-price col-md-2 border-right text-center">
+                                            ₦ 235,000
+                                            </div>
+                                        <div className="item-subtotal col-md-2 border-right text-center">
+                                            ₦ 235,000
+                                            </div>
+                                    </div>
+
+
+                                    <div className="row item-row py-3 my-4 bg-white">
+                                        <div className="item-orderId col-md-1 ">
+                                            1
+                                            </div>
+                                        <div className=" col-md-5 border-right">
+                                            <div className="d-flex item-name-wrapper">
+                                                <img className="item-img"
+                                                    src="https://res.cloudinary.com/data-infosec-consult-limited/image/upload/v1591353533/Nonso_Daniel_5e7aaf1ba56b930016de0de3.jpg"
+                                                    alt=".../"
+                                                />
+                                                <p className="pl-4 item-name text-dark"> 55''Curved Smart UHD 4K TV+Netflix&Youtube APP- 55A7600</p>
+                                            </div>
+
+                                            <div className="d-flex item-actions">
+
+                                                <div>Move to wishlist</div>
+                                                <div>REMOVE</div>
+                                            </div>
+                                        </div>
+                                        <div className="item-qty col-md-2 border-right text-center">
+                                            1
+                                            </div>
+                                        <div className="item-price col-md-2 border-right text-center">
+                                            ₦ 235,000
+                                            </div>
+                                        <div className="item-subtotal col-md-2 border-right text-center">
+                                            ₦ 235,000
+                                            </div>
+                                    </div>
+
+
+
                                 </div>
 
                                 <div className="cart-discount">
@@ -377,7 +438,7 @@ class Cart extends Component {
 }
 
 const mapStateToProps = state => {
-    
+
     let { categories, cartItems, cartData, orders } = state.inventory
     console.log('cartData', cartData, orders)
     return {

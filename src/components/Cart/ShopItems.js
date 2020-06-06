@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 import ShopItemAside from './ShopItemAside'
 import queryString from 'query-string';
+import swal from 'sweetalert2'
 
 
 class ShopItems extends Component {

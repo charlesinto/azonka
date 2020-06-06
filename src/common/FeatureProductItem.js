@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom'
-import swal from 'sweetalert2'
+// import swal from 'sweetalert2'
 
 class FeatureProductItem extends Component {
     state = { products: [], cartItems: {} }
@@ -32,13 +32,9 @@ class FeatureProductItem extends Component {
             // if (data.success) {
             //     this.setState({ cartData: data.cart.products })
 
-            if (data.success) {
-                this.setState({ cartData: data.cart.products })
-                return swal("Response", "Item added to cart", "success")
-                this.handleSetOnlineData()
-            } else {
-                alert("An error occured")
-            }
+            // } else {
+
+            // }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -56,7 +52,8 @@ class FeatureProductItem extends Component {
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
-                    return swal.fire("Response", "Item added to cart", "success")
+                    // return swal.fire("Response", "Item added to cart", "success")
+                    return this.props.showSuccessALert("Item has already been added")
                 }
 
             } else {
@@ -64,7 +61,8 @@ class FeatureProductItem extends Component {
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetLocalData()
 
-                return swal.fire("Response", "Item added to cart", "success")
+                // return swal.fire("Response", "Item added to cart", "success")
+                return this.props.showSuccessALert("Item has already been added")
             }
         }
 

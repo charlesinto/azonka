@@ -1,0 +1,82 @@
+.action-order{
+    display: flex;
+    justify-content: space-around;
+    width: 25%;
+}
+.action-order-fonts{
+    font-size: 17px !important;
+    font-weight: 700 !important;
+}
+
+.order-icons{
+    font-size: 20px;
+}
+.order-product-image{
+    border: none !important;
+}
+
+.table th, .table td, .table.table-cart tr td , .table.table-cart tr td {
+    
+    border-top: none !important;
+}
+.tr-head{
+    /* display: none; */
+}
+
+
+
+.item-row{
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.05);
+}
+.item-orderId{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 600;
+}
+.item-name-img-div{
+    
+}
+.item-img{
+    width: 25%;
+    height: 90px;
+}
+.item-name-wrapper{
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+}
+.item-name{
+    align-self: center;
+    font-size: 17px;
+    font-weight: 800;
+}
+.item-actions{
+    font-size: 15px;
+    font-weight: 600;
+    justify-content: center;
+}
+.item-actions > div:nth-child(1){
+
+}
+
+.item-actions > div:nth-child(2){
+    
+}
+.item-qty{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 600;
+}
+.item-price, .item-subtotal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 600;
+}

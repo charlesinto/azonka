@@ -3,7 +3,7 @@ import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
-import swal from 'sweetalert2'
+// import swal from 'sweetalert2'
 
 
 
@@ -35,7 +35,8 @@ class FlashSales extends Component {
             if (data.success) {
                 this.setState({ cartData: data.cart.products })
                 this.handleSetOnlineData()
-                return swal.fire("Response", "Item added to cart", "success")
+                // return swal.fire("Response", "Item added to cart", "success")
+                return this.props.showSuccessALert("Item has already been added")
             } else {
                 alert("An error occured")
             }
@@ -56,14 +57,16 @@ class FlashSales extends Component {
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
-                    return swal.fire("Response", "Item added to cart", "success")
+                    return this.props.showSuccessALert("Item has already been added")
+                    // return swal.fire("Response", "Item added to cart", "success")
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetLocalData()
-                return swal.fire("Response", "Item added to cart", "success")
+                // return swal.fire("Response", "Item added to cart", "success")
+                return this.props.showSuccessALert("Item has already been added")
             }
         }
 

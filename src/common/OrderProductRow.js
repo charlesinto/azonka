@@ -81,10 +81,14 @@ class OrderProductRow extends Component {
                             </div>
                             <div className="d-flex item-actions hide-mobile">
                                 <div className="wishlist-wrap">
-                                    <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                                    <Link to="#" className="btn-move action-order-fonts">
+                                        <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                                    </Link>
                                 </div>
                                 <div>
-                                    <span> <i className="fas fa-shopping-bag px-2"></i> Remove</span>
+                                    <Link to="#" className="btn-move action-order-fonts text-danger">
+                                        <span className="text-danger"> <i className="fas fa-shopping-bag px-2 text-danger"></i> Remove</span>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between mobile-status-price">

@@ -191,12 +191,8 @@ class ShopItems extends Component {
         return this.setState({ itemDetails })
     }
 
-
-
-
     render() {
         const { products } = this.state;
-        console.log(products)
         return (
             <div>
                 <main className="main">

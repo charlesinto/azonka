@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
+
 class ShopItemAside extends Component {
     state = { priceRange: 1000 }
     handleRange = (e) => {
@@ -11,7 +12,7 @@ class ShopItemAside extends Component {
         this.setState({ priceRange: e.target.value })
     }
     handleSearchSubmit = async () => {
-        let {   priceRange } = this.state
+        let { priceRange } = this.state
         // let category = categoryValue
         let finalPrice = priceRange;
         this.props.history.push(`/shop?price=${finalPrice}`);
@@ -21,6 +22,9 @@ class ShopItemAside extends Component {
         e.preventDefault();
         this.handleSearchSubmit()
     }
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
     render() {
         let { priceRange } = this.state
         return (
@@ -29,7 +33,7 @@ class ShopItemAside extends Component {
                     <div className="widget">
                         <h3 className="widget-title">
                             <Link data-toggle="collapse" to="#widget-body-1" role="button" aria-expanded="true"
-                                    aria-controls="widget-body-1">{this.props.searchCategory}</Link>
+                                aria-controls="widget-body-1">{this.props.searchCategory}</Link>
                         </h3>
 
                         <div className="collapse show" id="widget-body-1">
@@ -50,7 +54,7 @@ class ShopItemAside extends Component {
                     <div className="widget">
                         <h3 className="widget-title">
                             <Link data-toggle="collapse" to="#widget-body-2" role="button" aria-expanded="true"
-                                aria-controls="widget-body-2">Price- ₦{priceRange ? priceRange : 1000}</Link>
+                                aria-controls="widget-body-2">Price: 0- ₦{priceRange ? priceRange : 1000}</Link>
                         </h3><br />
 
                         <input type="range" class="form-control-range"
@@ -78,8 +82,8 @@ class ShopItemAside extends Component {
 }
 
 const mapStateToProps = state => {
-    const {search:{searchCategory}} = state;
-    return {searchCategory}
+    const { search: { searchCategory } } = state;
+    return { searchCategory }
 }
 
 

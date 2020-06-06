@@ -294,120 +294,54 @@ class Cart extends Component {
                     </nav>
                     <div className="container" style={{ background: "#cac2c233" }}>
                         <div className="row">
-                            <div className="col-lg-10 mx-auto  my-5">
+
+                            <div className="col-lg-11 mx-auto  my-5">
                                 <div className="cart-table-container container">
-                                    <div className="row">
+                                    <div className="row item-header">
                                         <div className="header-item-orderId col-md-1 ">
                                             ORDER
                                         </div>
-                                        <div className="header-item-name col-md-5 ">
+                                        <div className="header-item-name col-md-4 ">
                                             ITEM
-                                            </div>
-                                        <div className="header-item-quantity col-md-2  text-center">
-                                            QUANTITY
                                             </div>
                                         <div className="header-item-price col-md-2  text-center">
                                             UNIT PRICE
                                             </div>
+                                        <div className="header-item-quantity col-md-1  text-center">
+                                            QUANTITY
+                                            </div>
+
                                         <div className="header-item-subtotal col-md-2  text-center">
                                             SUBTOTAL
                                             </div>
+                                        <div className="header-item-subtotal col-md-2  text-center">
+                                            STATUS
+                                            </div>
                                     </div>
 
+                                    {/* TABLE DETAILS START */}
 
-                                    <div className="row item-row py-3 my-4 bg-white">
-                                        <div className="item-orderId col-md-1 ">
-                                            1
-                                            </div>
-                                        <div className=" col-md-5 border-right">
-                                            <div className="d-flex item-name-wrapper">
-                                                <img className="item-img"
-                                                    src="https://res.cloudinary.com/data-infosec-consult-limited/image/upload/v1591353533/Nonso_Daniel_5e7aaf1ba56b930016de0de3.jpg"
-                                                    alt=".../"
+                                    {
+                                        this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
+                                            return (
+                                                <OrderProductRow
+                                                    calSums={(sum, productId, qty) =>
+                                                        this.calSums(sum, productId, qty)}
+                                                    calSum={this.calSum}
+                                                    // quantity={this.state.quantity[data.id]}
+                                                    handleItemDelete={this.handleItemDelete}
+                                                    data={data}
+
                                                 />
-                                                <p className="pl-4 item-name text-dark"> 55''Curved Smart UHD 4K TV+Netflix&Youtube APP- 55A7600</p>
-                                            </div>
+                                            )
+                                        }) : (
+                                                <div className="row">
+                                                    No data to load
+                                                    </div>
+                                            )
+                                    }
 
-                                            <div className="d-flex item-actions">
-
-                                                <div>Move to wishlist</div>
-                                                <div>REMOVE</div>
-                                            </div>
-                                        </div>
-                                        <div className="item-qty col-md-2 border-right text-center">
-                                            1
-                                            </div>
-                                        <div className="item-price col-md-2 border-right text-center">
-                                            ₦ 235,000
-                                            </div>
-                                        <div className="item-subtotal col-md-2 border-right text-center">
-                                            ₦ 235,000
-                                            </div>
-                                    </div>
-
-
-                                    <div className="row item-row py-3 my-4 bg-white">
-                                        <div className="item-orderId col-md-1 ">
-                                            1
-                                            </div>
-                                        <div className=" col-md-5 border-right">
-                                            <div className="d-flex item-name-wrapper">
-                                                <img className="item-img"
-                                                    src="https://res.cloudinary.com/data-infosec-consult-limited/image/upload/v1591353533/Nonso_Daniel_5e7aaf1ba56b930016de0de3.jpg"
-                                                    alt=".../"
-                                                />
-                                                <p className="pl-4 item-name text-dark"> 55''Curved Smart UHD 4K TV+Netflix&Youtube APP- 55A7600</p>
-                                            </div>
-
-                                            <div className="d-flex item-actions">
-
-                                                <div>Move to wishlist</div>
-                                                <div>REMOVE</div>
-                                            </div>
-                                        </div>
-                                        <div className="item-qty col-md-2 border-right text-center">
-                                            1
-                                            </div>
-                                        <div className="item-price col-md-2 border-right text-center">
-                                            ₦ 235,000
-                                            </div>
-                                        <div className="item-subtotal col-md-2 border-right text-center">
-                                            ₦ 235,000
-                                            </div>
-                                    </div>
-
-
-                                    <div className="row item-row py-3 my-4 bg-white">
-                                        <div className="item-orderId col-md-1 ">
-                                            1
-                                            </div>
-                                        <div className=" col-md-5 border-right">
-                                            <div className="d-flex item-name-wrapper">
-                                                <img className="item-img"
-                                                    src="https://res.cloudinary.com/data-infosec-consult-limited/image/upload/v1591353533/Nonso_Daniel_5e7aaf1ba56b930016de0de3.jpg"
-                                                    alt=".../"
-                                                />
-                                                <p className="pl-4 item-name text-dark"> 55''Curved Smart UHD 4K TV+Netflix&Youtube APP- 55A7600</p>
-                                            </div>
-
-                                            <div className="d-flex item-actions">
-
-                                                <div>Move to wishlist</div>
-                                                <div>REMOVE</div>
-                                            </div>
-                                        </div>
-                                        <div className="item-qty col-md-2 border-right text-center">
-                                            1
-                                            </div>
-                                        <div className="item-price col-md-2 border-right text-center">
-                                            ₦ 235,000
-                                            </div>
-                                        <div className="item-subtotal col-md-2 border-right text-center">
-                                            ₦ 235,000
-                                            </div>
-                                    </div>
-
-
+                                    {/* TABLE DETAILS END */}
 
                                 </div>
 
@@ -423,6 +357,8 @@ class Cart extends Component {
                                     </form>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
 

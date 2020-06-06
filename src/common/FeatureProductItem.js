@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom'
+import swal from 'sweetalert2'
 
 class FeatureProductItem extends Component {
     state = { products: [], cartItems: {} }
@@ -31,9 +32,13 @@ class FeatureProductItem extends Component {
             // if (data.success) {
             //     this.setState({ cartData: data.cart.products })
 
-            // } else {
-
-            // }
+            if (data.success) {
+                this.setState({ cartData: data.cart.products })
+                return swal("Response", "Item added to cart", "success")
+                this.handleSetOnlineData()
+            } else {
+                alert("An error occured")
+            }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -51,12 +56,15 @@ class FeatureProductItem extends Component {
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
+                    return swal.fire("Response", "Item added to cart", "success")
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetLocalData()
+
+                return swal.fire("Response", "Item added to cart", "success")
             }
         }
 
@@ -87,7 +95,7 @@ class FeatureProductItem extends Component {
         // console.log("joro", this.props)
         const { id, name, sellingPrice, mainImageUrl } = this.props
         return (
-            <div class="product" key={id} style={{marginRight: 8}}>
+            <div class="product" key={id} style={{ marginRight: 8 }}>
                 {/* <ItemModal /> */}
                 <figure class="product-image-container">
                     <span className="product-image" id={id} onClick={this.handleItemDetails}>
@@ -114,7 +122,7 @@ class FeatureProductItem extends Component {
                             <span>Add to Wishlist</span>
                         </Link>
                         <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-mobile add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
-                            
+
                         </span>
                         <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-desktop add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart

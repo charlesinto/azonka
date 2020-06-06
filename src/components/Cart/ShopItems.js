@@ -98,7 +98,7 @@ class ShopItems extends Component {
         console.log('called', postObj)
         await this.props.SearchItem(postObj)
         if (this.props.search == null) return null
-        let {  products } = this.props.search;
+        let { products } = this.props.search;
         console.log('products', products)
         if (this.props.search) {
             this.setState({ products })
@@ -143,6 +143,7 @@ class ShopItems extends Component {
             let { success, cart } = this.props.cartResponse;
             if (success) {
                 this.setState({ cartData: cart.products })
+                return swal.fire("Response", "Item added to cart", "success")
             } else {
                 this.props.renderError("An error occurred")
             }
@@ -162,12 +163,14 @@ class ShopItems extends Component {
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetData()
+                    return swal.fire("Response", "Item added to cart", "success")
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetData()
+                return swal.fire("Response", "Item added to cart", "success")
             }
         }
 

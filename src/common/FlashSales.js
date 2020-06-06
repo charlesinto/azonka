@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import {  withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
+import swal from 'sweetalert2'
 
 
 
@@ -30,6 +31,14 @@ class FlashSales extends Component {
             // console.log('data', data)
             //     this.setState({ cartData: data.cart.products })
             //     this.handleSetOnlineData()
+            let { data } = this.props.cartItems;
+            if (data.success) {
+                this.setState({ cartData: data.cart.products })
+                this.handleSetOnlineData()
+                return swal.fire("Response", "Item added to cart", "success")
+            } else {
+                alert("An error occured")
+            }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -47,12 +56,14 @@ class FlashSales extends Component {
                 } else {
                     localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
                     this.handleSetLocalData()
+                    return swal.fire("Response", "Item added to cart", "success")
                 }
 
             } else {
                 //if cart is empty
                 localStorage.setItem("cart", JSON.stringify([obj]))
                 this.handleSetLocalData()
+                return swal.fire("Response", "Item added to cart", "success")
             }
         }
 

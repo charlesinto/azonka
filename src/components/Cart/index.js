@@ -197,8 +197,8 @@ class Cart extends Component {
         const cartData = this.state.cartData;
         const index = cartData.findIndex(element => element.id === id)
         const deletedItems = this.state.deletedCartItems;
-        if(index !== -1){
-            if(!deletedItems.includes(id)){
+        if (index !== -1) {
+            if (!deletedItems.includes(id)) {
                 deletedItems.push(id)
             }
             cartData.splice(index, 1)
@@ -298,16 +298,34 @@ class Cart extends Component {
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="cart-table-container">
-                                    <table className="table table-cart">
-                                        <thead>
-                                            <tr>
-                                                <th className="product-col">Product</th>
-                                                <th className="price-col">Price</th>
-                                                <th className="qty-col">Qty</th>
-                                                <th>Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+
+
+                                    <div className="col-lg-11 mx-auto  my-5">
+                                        <div className="cart-table-container container">
+                                            <div className="row item-header">
+                                                <div className="header-item-orderId col-md-1 ">
+                                                    ORDER
+                                        </div>
+                                                <div className="header-item-name col-md-4 ">
+                                                    ITEM
+                                            </div>
+                                                <div className="header-item-price col-md-2  text-center">
+                                                    UNIT PRICE
+                                            </div>
+                                                <div className="header-item-quantity col-md-1  text-center">
+                                                    QUANTITY
+                                            </div>
+
+                                                <div className="header-item-subtotal col-md-2  text-center">
+                                                    SUBTOTAL
+                                            </div>
+                                                <div className="header-item-subtotal col-md-2  text-center">
+                                                    STATUS
+                                            </div>
+                                            </div>
+
+                                            {/* TABLE DETAILS START */}
+
                                             {
                                                 this.state.cartData && this.state.cartData.length > 0 ? this.state.cartData.map(data => {
                                                     return (
@@ -322,42 +340,30 @@ class Cart extends Component {
                                                         />
                                                     )
                                                 }) : (
-                                                        <tr className="product-row" >
-                                                            <td className="product-col" style={{ backgroundColor: 'transparent' }}>
-                                                                <figure style={{ border: '0', backgroundColor: 'transparent' }}
-                                                                    className="product-image-container">
-                                                                    <span style={{ fontSize: '4rem', color: '#000' }}>
-                                                                        <i className="fas fa-shopping-bag"></i>
-                                                                    </span>
-                                                                </figure>
-                                                                <h2 className="product-title" style={{ width: '14em' }}>
-                                                                    Your cart is empty
-                                                            </h2>
-                                                            </td>
-                                                            <td></td>
-                                                            <td>
-
-                                                            </td>
-                                                        </tr>
+                                                        <div className="row">
+                                                            No data to load
+                                                    </div>
                                                     )
                                             }
-                                        </tbody>
 
-                                        <tfoot>
-                                            <tr>
-                                                <td colSpan="4" className="clearfix">
-                                                    <div className="float-left">
-                                                        <Link to="/" className="btn btn-outline-secondary">Continue Shopping</Link>
-                                                    </div>
+                                            {/* TABLE DETAILS END */}
 
-                                                    <div className="float-right">
-                                                        <a href="#n" className="btn btn-outline-secondary btn-clear-cart">Clear Shopping Cart</a>
-                                                        <a href="#n" className="btn btn-outline-secondary btn-update-cart">Update Shopping Cart</a>
+                                        </div>
+
+                                        <div className="cart-discount">
+                                            <h4>Apply Discount Code</h4>
+                                            <form action="#">
+                                                <div className="input-group">
+                                                    <input type="text" className="form-control form-control-sm" placeholder="Enter discount code" />
+                                                    <div className="input-group-append">
+                                                        <button className="btn btn-sm btn-primary" type="submit">Apply Discount</button>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
                                 </div>
 
                                 <div className="cart-discount">
@@ -372,6 +378,7 @@ class Cart extends Component {
                                     </form>
                                 </div>
                             </div>
+
 
                             <div className="col-lg-4">
                                 <div className="cart-summary">

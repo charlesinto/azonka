@@ -152,5 +152,15 @@
     font-weight: 600;
     color: #2196f3;
 }
+.item-row {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.17);
+}
+.item-name {
+    align-self: center;
+    font-size: 21px;
+    font-weight: 800;
+}
 
 }

@@ -298,30 +298,22 @@ class Cart extends Component {
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="cart-table-container">
-
-
-                                    <div className="col-lg-11 mx-auto  my-5">
+                                    <div className="col-lg-12 mx-auto  my-5">
                                         <div className="cart-table-container container">
                                             <div className="row item-header">
-                                                <div className="header-item-orderId col-md-1 ">
-                                                    ORDER
-                                        </div>
-                                                <div className="header-item-name col-md-4 ">
+                                                <div className="header-item-name col-md-6 ">
                                                     ITEM
                                             </div>
                                                 <div className="header-item-price col-md-2  text-center">
                                                     UNIT PRICE
                                             </div>
-                                                <div className="header-item-quantity col-md-1  text-center">
+                                                <div className="header-item-quantity col-md-2  text-center">
                                                     QUANTITY
                                             </div>
 
                                                 <div className="header-item-subtotal col-md-2  text-center">
                                                     SUBTOTAL
-                                            </div>
-                                                <div className="header-item-subtotal col-md-2  text-center">
-                                                    STATUS
-                                            </div>
+                                                 </div>
                                             </div>
 
                                             {/* TABLE DETAILS START */}
@@ -362,20 +354,6 @@ class Cart extends Component {
                                             </form>
                                         </div>
                                     </div>
-
-
-                                </div>
-
-                                <div className="cart-discount">
-                                    <h4>Apply Discount Code</h4>
-                                    <form action="#">
-                                        <div className="input-group">
-                                            <input type="text" className="form-control form-control-sm" placeholder="Enter discount code" />
-                                            <div className="input-group-append">
-                                                <button className="btn btn-sm btn-primary" type="submit">Apply Discount</button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
 
@@ -383,11 +361,9 @@ class Cart extends Component {
                             <div className="col-lg-4">
                                 <div className="cart-summary">
                                     <h3>Summary</h3>
-
                                     <h4>
                                         <a data-toggle="collapse" href="#total-estimate-section" className="collapsed" role="button" aria-expanded="false" aria-controls="total-estimate-section">Estimate Shipping and Tax</a>
                                     </h4>
-
                                     <div className="collapse" id="total-estimate-section">
                                         <form action="#">
                                             <div className="form-group form-group-sm">

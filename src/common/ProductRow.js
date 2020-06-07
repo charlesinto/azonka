@@ -56,23 +56,12 @@ class ProductRow extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     render() {
-
         let { id, name, finalPrice, mainImageUrl } = this.props
-        console.log("fuck", id, name, finalPrice, mainImageUrl)
         return (
             <>
 
                 <div className="row item-row py-3 my-4 bg-white" key={id}>
-                    <div className="item-orderId col-md-1 mobile-hide">
-                        {/* {this.props.data.id} */}
-                    </div>
-                    <div class="mobile-order-no my-3 container-fluid">
-                        <span>Order No:</span>
-                        <span className="">
-                            {/* {this.props.data.id} */}
-                        </span>
-                    </div>
-                    <div className=" col-md-4 border-right">
+                    <div className=" col-md-6 border-right">
                         <div className="d-flex item-name-wrapper">
                             <img className="item-img"
                                 src={mainImageUrl}
@@ -87,12 +76,17 @@ class ProductRow extends Component {
                                 </Link>
                             </div>
                             <div>
-                                <Link to="#" className="btn-move action-order-fonts text-danger">
+                                <Link to="#" className="btn-move action-order-fonts text-danger"
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        this.handleItemDelete(id)
+                                    }}
+                                >
                                     <span className="text-danger"> <i className="fas fa-shopping-bag px-2 text-danger"></i> Remove</span>
                                 </Link>
                             </div>
                         </div>
-                        <div className="d-flex justify-content-between mobile-status-price">
+                        <div className="d-flex justify-content-between mobile-status-price my-4">
                             <span class="text-success">Created</span>
                             <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {finalPrice}</p>
                         </div>
@@ -100,30 +94,38 @@ class ProductRow extends Component {
                     <div className="item-price col-md-2 border-right text-center hide-mobile">
                         ₦ {finalPrice}
                     </div>
-                    <div className="item-qty col-md-1 border-right text-center hide-mobile">
-                        <input type="number" class="form-control"
-                            value={this.state.qty}
-                            disabled={true}
-                            id="" placeholder="Qty" />
+                    <div className="item-qty col-md-2 border-right text-center hide-mobile">
+                        <div className="qty-div d-flex">
+                            <div class="input-group-prepend" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}
+                                style={{ height: "40px", cursor: "pointer" }}
+                            >
+                                <span class="input-group-text qty-sub">-</span>
+                            </div>
+                            <input type="number" class="form-control p-0 text-center"
+                                value={this.state.qty}
+                                aria-label="Amount (to the nearest dollar)" />
+                            <div class="input-group-append" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}
+                                style={{ height: "40px", cursor: "pointer" }}
+                            >
+                                <span class="input-group-text qty-add">+</span>
+                            </div>
+                        </div>
                     </div>
                     <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
                         ₦ {finalPrice}
                     </div>
-                    <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
-                        Created
-                                            </div>
 
                     <div className="mobile-item-details-wrapper">
-                        <div className="container-fluid border-top py-3">
+                        <div className="container-fluid border-top py-5">
                             <div className="d-flex">
                                 <div className="qty-div">
-                                    <div class="input-group-prepend">
+                                    <div class="input-group-prepend" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}>
                                         <span class="input-group-text qty-sub">-</span>
                                     </div>
-                                    <input type="number" class="form-control"
+                                    <input type="number" class="form-control p-0 text-center"
                                         value={this.state.qty}
                                         aria-label="Amount (to the nearest dollar)" />
-                                    <div class="input-group-append">
+                                    <div class="input-group-append" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}>
                                         <span class="input-group-text qty-add">+</span>
                                     </div>
                                 </div>
@@ -140,7 +142,12 @@ class ProductRow extends Component {
                                 <div className="wishlist-mobile-wrap">
                                     <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                 </div>
-                                <div>
+                                <div
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        this.handleItemDelete(id)
+                                    }}
+                                >
                                     <span> <i className="fas fa-shopping-bag px-2"></i> Remove</span>
                                 </div>
                             </div>

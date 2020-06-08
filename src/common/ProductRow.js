@@ -59,11 +59,10 @@ class ProductRow extends Component {
         let { id, name, finalPrice, mainImageUrl } = this.props
         return (
             <>
-
                 <div className="row item-row py-3 my-4 bg-white" key={id}>
                     <div className=" col-md-6 border-right">
                         <div className="d-flex item-name-wrapper">
-                            <img className="item-img"
+                            <img className="item-img rounded-circle"
                                 src={mainImageUrl}
                                 alt=".../"
                             />
@@ -112,7 +111,8 @@ class ProductRow extends Component {
                         </div>
                     </div>
                     <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                        ₦ {finalPrice}
+                        {console.log("fuck", finalPrice * this.state.qty)}
+                        ₦ {finalPrice * this.state.qty}
                     </div>
 
                     <div className="mobile-item-details-wrapper">
@@ -130,13 +130,13 @@ class ProductRow extends Component {
                                     </div>
                                 </div>
                                 <div className="d-flex calc-div">
-                                    <div> ₦ 235,000</div>
+                                    <div>   ₦ {finalPrice}</div>
                                     <span className="px-3">X</span>
-                                    <div> 1</div>
+                                    <div> {this.state.qty}</div>
                                 </div>
                             </div>
                             <div className="d-flex my-5 justify-content-end">
-                                <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary">₦ {finalPrice}</span>
+                                <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
                             </div>
                             <div className="d-flex item-actions justify-content-between">
                                 <div className="wishlist-mobile-wrap">

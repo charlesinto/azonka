@@ -46,6 +46,10 @@ class OrderProductRow extends Component {
     handleItemDelete = id => {
         this.props.handleItemDelete(id)
     }
+    handleMoveWishList = id => {
+        this.props.handleMoveWishList(id)
+    }
+
     handleItemEdit = id => {
 
     }
@@ -86,7 +90,12 @@ class OrderProductRow extends Component {
                                     </Link>
                                 </div>
                                 <div>
-                                    <Link to="#" className="btn-move action-order-fonts text-danger">
+                                    <Link to="#" className="btn-move action-order-fonts text-danger"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            this.handleItemDelete(id)
+                                        }}
+                                    >
                                         <span className="text-danger"> <i className="fas fa-shopping-bag px-2 text-danger"></i> Remove</span>
                                     </Link>
                                 </div>
@@ -100,13 +109,13 @@ class OrderProductRow extends Component {
                             ₦ {finalPrice}
                         </div>
                         <div className="item-qty col-md-1 border-right text-center hide-mobile">
-                            <input type="number" class="form-control"
+                            <input type="number" class="form-control p-0 text-center"
                                 value={this.state.qty}
                                 disabled={true}
                                 id="" placeholder="Qty" />
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                            ₦ {finalPrice}
+                            ₦ {finalPrice * this.state.qty}
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
                             Created
@@ -119,7 +128,7 @@ class OrderProductRow extends Component {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text qty-sub">-</span>
                                         </div>
-                                        <input type="number" class="form-control"
+                                        <input type="number" class="form-control p-0 text-center"
                                             value={this.state.qty}
                                             aria-label="Amount (to the nearest dollar)" />
                                         <div class="input-group-append">
@@ -127,19 +136,24 @@ class OrderProductRow extends Component {
                                         </div>
                                     </div>
                                     <div className="d-flex calc-div">
-                                        <div> ₦ 235,000</div>
+                                        <div> ₦ {finalPrice}</div>
                                         <span className="px-3">X</span>
-                                        <div> 1</div>
+                                        <div> {this.state.qty}</div>
                                     </div>
                                 </div>
                                 <div className="d-flex my-5 justify-content-end">
-                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary">₦ {finalPrice}</span>
+                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
                                 </div>
                                 <div className="d-flex item-actions justify-content-between">
                                     <div className="wishlist-mobile-wrap">
                                         <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                     </div>
-                                    <div>
+                                    <div
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            this.handleItemDelete(id)
+                                        }}
+                                    >
                                         <span> <i className="fas fa-shopping-bag px-2"></i> Remove</span>
                                     </div>
                                 </div>

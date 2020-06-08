@@ -3,13 +3,13 @@ import {
     STOP_LOADING, SUCCESS_ALERT, ITEM_CHANGE_ACTION,
     DISPLAY_ERROR, EDIT_ITEM, INIT_FORM, CART_FETCHED_SUCCESSFULLY,
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
-    LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY,ORDER_FETCHED_SUCCESSFULLY, 
+    LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY, ORDER_FETCHED_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, FILES_SELECTED, CART_UPDATED_SUCCESSFULLY,
     RESET_MANAGE_ITEMS_STATE, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
     ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
-    HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY,PRODUCT_NOT_FOUND,
-    ITEM_MODAL, HEADER_SEARCH_SUCCESS, GET_SELLER_DELIVERIES, ITEM_SELECTED_ORDER_DETAIL_MODAL,PRODUCT_FOUND,
+    HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY, PRODUCT_NOT_FOUND,
+    ITEM_MODAL, HEADER_SEARCH_SUCCESS, GET_SELLER_DELIVERIES, ITEM_SELECTED_ORDER_DETAIL_MODAL, PRODUCT_FOUND,
     HEADER_SEARCH_SUCCESS_ADVERT
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
@@ -236,12 +236,12 @@ export const fetchCart = () => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            if(error.response &&  error.response.data.message ){
+            if (error.response && error.response.data.message) {
                 dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
-            }else{
+            } else {
                 // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             }
-            
+
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -372,15 +372,15 @@ export const SearchItem = (details) => {
 
 export const searchAdvertCategory = (details) => {
     return async (dispatch) => {
-        try{
-            const response = await axios.get(`/api/v1/admin/ad-category/get/${details.id}` );
+        try {
+            const response = await axios.get(`/api/v1/admin/ad-category/get/${details.id}`);
             if (response.data.success) {
-                const {adCategory: {products}} = response.data
+                const { adCategory: { products } } = response.data
                 dispatch({ type: HEADER_SEARCH_SUCCESS_ADVERT, payload: products })
                 dispatch({ type: STOP_LOADING, payload: '' })
                 // dispatch({ type: SUCCESS_ALERT, payload: "Item added to cart successfully" })
             }
-        }catch(error){
+        } catch (error) {
             console.log(error.response)
             if (error.response && error.response.data.message)
                 return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
@@ -916,9 +916,9 @@ export const createAddress = (data, id = 0, numberOfPage = 100) => {
     }
 }
 
-export const fetchOrders = (id=0,numberOfPage = 100) => {
+export const fetchOrders = (id = 0, numberOfPage = 100) => {
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.get(`/api/v1/user/order/get-orders/${id}/${numberOfPage}`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
@@ -927,9 +927,9 @@ export const fetchOrders = (id=0,numberOfPage = 100) => {
             console.log(response)
 
             const { order } = response.data
-            dispatch({type: ORDER_FETCHED_SUCCESSFULLY, payload: order})
-            dispatch({type: STOP_LOADING, payload:''})
-        }catch(error){
+            dispatch({ type: ORDER_FETCHED_SUCCESSFULLY, payload: order })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
             console.log('er', error)
             if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
@@ -944,20 +944,20 @@ export const fetchOrders = (id=0,numberOfPage = 100) => {
 }
 
 export const resetManageItemsState = () => {
-    return {type: RESET_MANAGE_ITEMS_STATE, payload: ''}
+    return { type: RESET_MANAGE_ITEMS_STATE, payload: '' }
 }
 
-export const getSellerDeliveries = (id= 0, numberOfPage=100) => {
+export const getSellerDeliveries = (id = 0, numberOfPage = 100) => {
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.get(`/api/v1/seller/delivery/get-delivery/${id}/${numberOfPage}`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             })
-            dispatch({type: GET_SELLER_DELIVERIES, payload: response.data.delivery})
-            dispatch({type: STOP_LOADING, payload: ''})
-        }catch(error){
+            dispatch({ type: GET_SELLER_DELIVERIES, payload: response.data.delivery })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
@@ -973,12 +973,12 @@ export const getSellerDeliveries = (id= 0, numberOfPage=100) => {
 
 
 export const itemSelectedOrderDetailModal = selectedItems => {
-    return {type: ITEM_SELECTED_ORDER_DETAIL_MODAL, payload: selectedItems}
+    return { type: ITEM_SELECTED_ORDER_DETAIL_MODAL, payload: selectedItems }
 }
 
 export const rejectProducts = (deliveryId = null, selectedItem = []) => {
     return async (dispatch) => {
-        try{
+        try {
             // selectedItem.forEach(async (id) => {
             //     await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
             //         productId: id
@@ -994,10 +994,10 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
-            } )
-            dispatch({type: STOP_LOADING, payload: ''})
-            dispatch({type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully'})
-        }catch(error){
+            })
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({ type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully' })
+        } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
@@ -1013,37 +1013,37 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
 
 export const getProductById = (id = '') => {
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.get(`/api/v1/seller/product/get/${id}`)
-            const {product} = response.data;
-            dispatch({type: STOP_LOADING, payload: ''})
-            dispatch({type: PRODUCT_FOUND, payload: product})
-        }catch(error){
+            const { product } = response.data;
+            dispatch({ type: STOP_LOADING, payload: '' })
+            dispatch({ type: PRODUCT_FOUND, payload: product })
+        } catch (error) {
             if (error.response.status === 404) {
                 return dispatch({ type: PRODUCT_NOT_FOUND, payload: '' })
             }
             dispatch({ type: STOP_LOADING, payload: '' })
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
-            
+
         }
     }
 }
 
 export const markOrderAsAccepted = (orderNumber = null) => {
     return async (dispatch) => {
-        try{
-           const response = await axios.post(`/api/v1/seller/delivery/accept-delivery/${orderNumber}`,{
+        try {
+            const response = await axios.post(`/api/v1/seller/delivery/accept-delivery/${orderNumber}`, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
-            } )
-            dispatch({type: STOP_LOADING, payload: ''})
-            const { message} = response.data
-            dispatch({type: SUCCESS_ALERT, payload: message})
+            })
+            dispatch({ type: STOP_LOADING, payload: '' })
+            const { message } = response.data
+            dispatch({ type: SUCCESS_ALERT, payload: message })
             setTimeout(() => {
                 window.location.reload()
-            },1500)
-        }catch(error){
+            }, 1500)
+        } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498 || error.response.status === 401) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
@@ -1060,3 +1060,4 @@ export const markOrderAsAccepted = (orderNumber = null) => {
         }
     }
 }
+

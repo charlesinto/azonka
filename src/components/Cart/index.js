@@ -197,8 +197,8 @@ class Cart extends Component {
         const cartData = this.state.cartData;
         const index = cartData.findIndex(element => element.id === id)
         const deletedItems = this.state.deletedCartItems;
-        if(index !== -1){
-            if(!deletedItems.includes(id)){
+        if (index !== -1) {
+            if (!deletedItems.includes(id)) {
                 deletedItems.push(id)
             }
             cartData.splice(index, 1)
@@ -207,6 +207,26 @@ class Cart extends Component {
             cartData: [...cartData],
             deletedCartItems: [...deletedItems]
         }, () => this.calSum())
+    }
+    handleMoveWishList = async (id) => {
+        let localData = JSON.parse(localStorage.getItem("wishList"))
+        if (localStorage.getItem('x-access-token')) {
+            const filt = this.state.cartData.filter(o => o.id === id)[0]
+            if (!localData) {
+                localData = [filt]
+                localStorage.setItem("wishList", JSON.stringify(localData))
+                return this.props.successAlert('Item added successfully')
+            } else {
+                let _id = localData.some(o => o.id === id)
+                if (_id) {
+                    return this.props.successAlert('Item has already been moved to WishList')
+                } else {
+                    localData.push(filt)
+                    localStorage.setItem("wishList", JSON.stringify(localData))
+                    return this.props.successAlert('Item added successfully')
+                }
+            }
+        }
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -298,16 +318,26 @@ class Cart extends Component {
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="cart-table-container">
-                                    <table className="table table-cart">
-                                        <thead>
-                                            <tr>
-                                                <th className="product-col">Product</th>
-                                                <th className="price-col">Price</th>
-                                                <th className="qty-col">Qty</th>
-                                                <th>Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                    <div className="col-lg-12 mx-auto  my-5">
+                                        <div className="cart-table-container container">
+                                            <div className="row item-header">
+                                                <div className="header-item-name col-md-6 ">
+                                                    ITEM
+                                            </div>
+                                                <div className="header-item-price col-md-2  text-center">
+                                                    UNIT PRICE
+                                            </div>
+                                                <div className="header-item-quantity col-md-2  text-center">
+                                                    QUANTITY
+                                            </div>
+
+                                                <div className="header-item-subtotal col-md-2  text-center">
+                                                    SUBTOTAL
+                                                 </div>
+                                            </div>
+
+                                            {/* TABLE DETAILS START */}
+
                                             {
                                                 this.state.cartData && this.state.cartData.length > 0 ? this.state.cartData.map(data => {
                                                     return (
@@ -317,70 +347,44 @@ class Cart extends Component {
                                                             calSum={this.calSum}
                                                             quantity={this.state.quantity[data.id]}
                                                             handleItemDelete={this.handleItemDelete}
+                                                            handleMoveWishList={this.handleMoveWishList}
                                                             {...data}
 
                                                         />
                                                     )
                                                 }) : (
-                                                        <tr className="product-row" >
-                                                            <td className="product-col" style={{ backgroundColor: 'transparent' }}>
-                                                                <figure style={{ border: '0', backgroundColor: 'transparent' }}
-                                                                    className="product-image-container">
-                                                                    <span style={{ fontSize: '4rem', color: '#000' }}>
-                                                                        <i className="fas fa-shopping-bag"></i>
-                                                                    </span>
-                                                                </figure>
-                                                                <h2 className="product-title" style={{ width: '14em' }}>
-                                                                    Your cart is empty
-                                                            </h2>
-                                                            </td>
-                                                            <td></td>
-                                                            <td>
-
-                                                            </td>
-                                                        </tr>
+                                                        <div className="row">
+                                                            No data to load
+                                                    </div>
                                                     )
                                             }
-                                        </tbody>
 
-                                        <tfoot>
-                                            <tr>
-                                                <td colSpan="4" className="clearfix">
-                                                    <div className="float-left">
-                                                        <Link to="/" className="btn btn-outline-secondary">Continue Shopping</Link>
-                                                    </div>
+                                            {/* TABLE DETAILS END */}
 
-                                                    <div className="float-right">
-                                                        <a href="#n" className="btn btn-outline-secondary btn-clear-cart">Clear Shopping Cart</a>
-                                                        <a href="#n" className="btn btn-outline-secondary btn-update-cart">Update Shopping Cart</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-
-                                <div className="cart-discount">
-                                    <h4>Apply Discount Code</h4>
-                                    <form action="#">
-                                        <div className="input-group">
-                                            <input type="text" className="form-control form-control-sm" placeholder="Enter discount code" />
-                                            <div className="input-group-append">
-                                                <button className="btn btn-sm btn-primary" type="submit">Apply Discount</button>
-                                            </div>
                                         </div>
-                                    </form>
+
+                                        <div className="cart-discount">
+                                            <h4>Apply Discount Code</h4>
+                                            <form action="#">
+                                                <div className="input-group">
+                                                    <input type="text" className="form-control form-control-sm" placeholder="Enter discount code" />
+                                                    <div className="input-group-append">
+                                                        <button className="btn btn-sm btn-primary" type="submit">Apply Discount</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
 
                             <div className="col-lg-4">
                                 <div className="cart-summary">
                                     <h3>Summary</h3>
-
                                     <h4>
                                         <a data-toggle="collapse" href="#total-estimate-section" className="collapsed" role="button" aria-expanded="false" aria-controls="total-estimate-section">Estimate Shipping and Tax</a>
                                     </h4>
-
                                     <div className="collapse" id="total-estimate-section">
                                         <form action="#">
                                             <div className="form-group form-group-sm">

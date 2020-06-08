@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as actions from "../actions";
 import '../assets/Order.css'
 
 class OrderProductRow extends Component {
@@ -46,6 +48,10 @@ class OrderProductRow extends Component {
     handleItemDelete = id => {
         this.props.handleItemDelete(id)
     }
+    handleMoveWishList = id => {
+        this.props.handleMoveWishList(id)
+    }
+
     handleItemEdit = id => {
 
     }
@@ -80,32 +86,34 @@ class OrderProductRow extends Component {
                             </div>
                             <div className="d-flex item-actions hide-mobile">
                                 <div className="wishlist-wrap">
-                                    <Link to="#" className="btn-move action-order-fonts">
-                                        <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
-                                    </Link>
+                                    <span className="pointer" onClick={(e) => { this.handleMoveWishList(id) }}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                 </div>
                                 <div>
-                                    <Link to="#" className="btn-move action-order-fonts text-danger">
-                                        <span className="text-danger"> <i className="fas fa-shopping-bag px-2 text-danger"></i> Remove</span>
+                                    <Link to="#" className="btn-move action-order-fonts text-danger"
+
+                                    >
+                                        <span className="text-primary" > <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                        <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
                                     </Link>
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between mobile-status-price">
                                 <span class="text-success">Created</span>
-                                <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {finalPrice}</p>
+                                <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
                             </div>
                         </div>
                         <div className="item-price col-md-2 border-right text-center hide-mobile">
-                            ₦ {finalPrice}
+                            {console.log("fuck", this.props)}
+                            ₦ {this.numberWithCommas(finalPrice)}
                         </div>
                         <div className="item-qty col-md-1 border-right text-center hide-mobile">
-                            <input type="number" class="form-control"
+                            <input type="number" class="form-control p-0 text-center"
                                 value={this.state.qty}
                                 disabled={true}
                                 id="" placeholder="Qty" />
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                            ₦ {finalPrice}
+                            ₦ {this.numberWithCommas(finalPrice * this.state.qty)}
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
                            {this.props.data.status.toUpperCase()}
@@ -118,7 +126,7 @@ class OrderProductRow extends Component {
                                         <div class="input-group-prepend">
                                             <span class="input-group-text qty-sub">-</span>
                                         </div>
-                                        <input type="number" class="form-control"
+                                        <input type="number" class="form-control p-0 text-center"
                                             value={this.state.qty}
                                             aria-label="Amount (to the nearest dollar)" />
                                         <div class="input-group-append">
@@ -126,83 +134,28 @@ class OrderProductRow extends Component {
                                         </div>
                                     </div>
                                     <div className="d-flex calc-div">
-                                        <div> ₦ 235,000</div>
+                                        <div> ₦ {this.numberWithCommas(finalPrice)}</div>
                                         <span className="px-3">X</span>
-                                        <div> 1</div>
+                                        <div> {this.state.qty}</div>
                                     </div>
                                 </div>
                                 <div className="d-flex my-5 justify-content-end">
-                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary">₦ {finalPrice}</span>
+                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
                                 </div>
                                 <div className="d-flex item-actions justify-content-between">
                                     <div className="wishlist-mobile-wrap">
                                         <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                     </div>
                                     <div>
-                                        <span> <i className="fas fa-shopping-bag px-2"></i> Remove</span>
+                                        <span className="text-danger"> <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                        <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
-
                 </>
-
-                // <tr className="tr-head" style={{ display: "contents", margin: "30px 0" }} key={id}>
-                //     <tr className="product-row shadow bg-white border-none">
-                //         <td >
-                //             <Link to="/product" className="action-order-fonts">{this.props.data.id}</Link>
-                //         </td>
-                //         <td className="product-col" colSpan={4}>
-                //             <figure className="product-image-container order-product-image">
-                //                 <Link to="/products" className="product-image ">
-                //                     <img src={mainImageUrl} alt="product" />
-                //                 </Link>
-                //             </figure>
-                //             <h2 className="product-title" >
-                //                 <Link to="/product" className="action-order-fonts">{name}</Link>
-                //             </h2>
-                //         </td>
-                //         <td className="action-order-fonts text-primary">&#8358; {finalPrice}</td>
-                //         <td>
-                //             <div className="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
-                //                 <input disabled className="vertical-quantity form-control" value={this.state.qty} type="number" onChange={(e) => this.handleChange(e, finalPrice, id)} />
-                //             </div>
-
-                //         </td>
-                //         <td>
-                //             <span className="my-order-status text-success">
-                //                 {this.props.data.status}
-                //             </span>
-                //         </td>
-                //         {/* <td></td> */}
-                //         <td className="action-order-fonts text-primary">&#8358; {this.calculateSum(finalPrice, this.state.qty, id)}</td>
-                //     </tr>
-                //     <tr className="product-action-row  bg-white border-none">
-                //         <td colspan="7" className="clearfix">
-                //             <div className="action-order mx-auto">
-                //                 <div className="">
-                //                     <Link to="#" className="btn-move action-order-fonts">Move to Wishlist</Link>
-                //                 </div>
-
-                //                 <div className="">
-                //                     <span onClick={() => this.handleItemEdit(id)} style={{ cursor: 'pointer' }} title="Edit product" className="btn-edit action-order-fonts">
-                //                         <span className="sr-only">Edit</span><i className="icon-pencil"></i>
-                //                     </span>
-                //                     <span onClick={() => this.handleItemDelete(id)} style={{ cursor: 'pointer' }} title="Remove product" className="btn-remove action-order-fonts">
-                //                         <span className="sr-only">Remove</span><i className="icon-trash"></i>
-                //                     </span>
-                //                 </div>
-                //             </div>
-
-                //         </td>
-                //     </tr>
-
-                // </tr>
-
-
             )
         })
     }
@@ -213,4 +166,15 @@ class OrderProductRow extends Component {
 }
 
 
-export default OrderProductRow;
+const mapStateToProps = state => {
+
+    let { categories, cartItems, cartData, orders } = state.inventory
+    console.log('cartData', cartData, orders)
+    return {
+        categories, cartItems, cartData, orders
+    }
+}
+
+
+
+export default connect(mapStateToProps, actions)(OrderProductRow)

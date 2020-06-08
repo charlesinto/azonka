@@ -4,36 +4,41 @@ import { Link } from "react-router-dom";
 class ProductRow extends Component {
     state = { qty: 0, sum: 0 }
     componentDidMount() {
-        this.setState({ sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ? 
-                this.props.quantity : 1 })
-        
+
+        this.setState({
+            sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ?
+                this.props.quantity : 1
+        })
+
     }
-    static getDerivedStateFromProps(nextProps, state){
-        if(state.qty !== nextProps.quantity){
-            
-            return {...state, sum: nextProps.finalPrice * (nextProps.quantity || 1), qty: nextProps.quantity ? 
-                nextProps.quantity : 1 }
+    static getDerivedStateFromProps(nextProps, state) {
+        if (state.qty !== nextProps.quantity) {
+
+            return {
+                ...state, sum: nextProps.finalPrice * (nextProps.quantity || 1), qty: nextProps.quantity ?
+                    nextProps.quantity : 1
+            }
         }
-        return {...state}
+        return { ...state }
     }
     handleChange = (e, finalPrice, id) => {
         const newQuantity = e.target.value < 0 ? -1 * e.target.value : e.target.value === 0
-             ? 1 : e.target.value ;
-        this.props.calSums(finalPrice * this.state.qty, id, newQuantity )
+            ? 1 : e.target.value;
+        this.props.calSums(finalPrice * this.state.qty, id, newQuantity)
         this.setState({ qty: e.target.value < 0 ? -1 * e.target.value : e.target.value },
             () => this.props.calSums(finalPrice * this.state.qty, id, this.state.qty))
-        
+
     }
     handleIncreaseQty = (e, finalPrice, id) => {
         let { qty } = this.state;
         this.props.calSums(finalPrice * (qty + 1), id, qty + 1)
-        
+
     }
     handleDecreaseQty = (e, finalPrice, id) => {
         let { qty } = this.state;
-        let newQuantity =  qty > 1 ? qty - 1 : 1;
+        let newQuantity = qty > 1 ? qty - 1 : 1;
         this.props.calSums(finalPrice * newQuantity, id, newQuantity)
-        
+
     }
     handleCheckout = () => {
 
@@ -41,61 +46,118 @@ class ProductRow extends Component {
     handleItemDelete = id => {
         this.props.handleItemDelete(id)
     }
+    handleMoveWishList = (id) => {
+        this.props.handleMoveWishList(id)
+    }
     handleItemEdit = id => {
 
     }
     calculateSum = (finalPrice, qty, id) => {
-        
+
         return this.numberWithCommas(finalPrice * qty);
     }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     render() {
-        console.log(this.state)
         let { id, name, finalPrice, mainImageUrl } = this.props
         return (
-                <tr style={{display:"contents"}} key={id}>
-
-                
-                <tr  className="product-row" >
-                    <td className="product-col" colSpan={4}>
-                        <figure className="product-image-container">
-                            <Link to="/products" className="product-image">
-                                <img src={mainImageUrl} alt="product" />
-                            </Link>
-                        </figure>
-                        <h2 className="product-title" >
-                            <Link to="/product">{name}</Link>
-                        </h2>
-                    </td>
-                    <td>&#8358; {finalPrice}</td>
-                    <td>
-                        <div className="input-group  bootstrap-touchspin bootstrap-touchspin-injected">
-                            <input className="vertical-quantity form-control" value={this.state.qty} type="number" onChange={(e) => this.handleChange(e, finalPrice, id)} />
-                            <span className="input-group-btn-vertical">
-                                <button className="btn btn-outline bootstrap-touchspin-up icon-up-dir" type="button" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}></button>
-                                <button className="btn btn-outline bootstrap-touchspin-down icon-down-dir" type="button" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}></button></span>
+            <>
+                <div className="row item-row py-3 my-4 bg-white" key={id}>
+                    <div className=" col-md-6 border-right">
+                        <div className="d-flex item-name-wrapper">
+                            <img className="item-img rounded-circle"
+                                src={mainImageUrl}
+                                alt=".../"
+                            />
+                            <p className="pl-4 item-name text-dark"> {name}</p>
                         </div>
-
-                    </td>
-                    <td>&#8358; {this.calculateSum(finalPrice, this.state.qty, id)}</td>
-                </tr>
-                 <tr className="product-action-row">
-                <td colspan="4" className="clearfix">
-                    <div className="float-left">
-                        <Link to="#" className="btn-move">Move to Wishlist</Link>
+                        <div className="d-flex item-actions hide-mobile">
+                            <div className="wishlist-wrap">
+                                <span className="pointer" onClick={(e) => { this.handleMoveWishList(id) }}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                            </div>
+                            <div>
+                                <Link to="#" className="btn-move action-order-fonts text-danger">
+                                    <span className="text-danger"  > <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-between mobile-status-price my-4">
+                            <span class="text-success">Created</span>
+                            <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
+                        </div>
+                    </div>
+                    <div className="item-price col-md-2 border-right text-center hide-mobile">
+                        ₦ {this.numberWithCommas(finalPrice)}
+                    </div>
+                    <div className="item-qty col-md-2 border-right text-center hide-mobile">
+                        <div className="qty-div d-flex">
+                            <div class="input-group-prepend" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}
+                                style={{ height: "40px", cursor: "pointer" }}
+                            >
+                                <span class="input-group-text qty-sub font-20 text-dark">-</span>
+                            </div>
+                            <input type="number" class="form-control p-0 text-center"
+                                value={this.state.qty}
+                                aria-label="Amount (to the nearest dollar)" />
+                            <div class="input-group-append" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}
+                                style={{ height: "40px", cursor: "pointer" }}
+                            >
+                                <span class="input-group-text qty-add font-20 text-dark">+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
+                        ₦ {this.numberWithCommas(finalPrice * this.state.qty)}
                     </div>
 
-                    <div className="float-right">
-                        <span onClick={() => this.handleItemEdit(id)} style={{cursor:'pointer'}} title="Edit product" className="btn-edit"><span className="sr-only">Edit</span><i className="icon-pencil"></i></span>
-                        <span onClick={() => this.handleItemDelete(id)} style={{cursor:'pointer'}} title="Remove product" className="btn-remove"><span className="sr-only">Remove</span></span>
+                    <div className="mobile-item-details-wrapper">
+                        <div className="container-fluid border-top py-5">
+                            <div className="d-flex">
+                                <div className="qty-div">
+                                    <div class="input-group-prepend" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}>
+                                        <span class="input-group-text qty-sub font-20 text-dark">-</span>
+                                    </div>
+                                    <input type="number" class="form-control p-0 text-center"
+                                        value={this.state.qty}
+                                        aria-label="Amount (to the nearest dollar)" />
+                                    <div class="input-group-append" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}>
+                                        <span class="input-group-text qty-add font-20 text-dark">+</span>
+                                    </div>
+                                </div>
+                                <div className="d-flex calc-div">
+                                    <div>   ₦ {this.numberWithCommas(finalPrice)}</div>
+                                    <span className="px-3">X</span>
+                                    <div> {this.state.qty}</div>
+                                </div>
+                            </div>
+                            <div className="d-flex my-5 justify-content-end">
+                                <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
+                            </div>
+                            <div className="d-flex item-actions justify-content-between">
+                                <div className="wishlist-mobile-wrap" key={id}>
+                                    <span> <i className="fas fa-shopping-bag px-2" onClick={(e) => { this.handleMoveWishList(id) }}></i> Move to wishlist</span>
+                                </div>
+                                <div>
+                                    <span className="text-danger"> <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
-                </td>
-            </tr>
-            </tr>
-             
-            
+                </div>
+
+            </>
+
+
+
+
+
+
+
         );
     }
 }

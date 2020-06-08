@@ -59,7 +59,6 @@ class OrderProductRow extends Component {
     renderRow = () => {
 
         return this.props.data.products && this.props.data.products.map((data) => {
-            console.log('datata', data)
             const { id, name, finalPrice, mainImageUrl } = data
             return (
                 <>
@@ -109,7 +108,7 @@ class OrderProductRow extends Component {
                             ₦ {finalPrice}
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
-                            Created
+                           {this.props.data.status.toUpperCase()}
                                             </div>
 
                         <div className="mobile-item-details-wrapper">

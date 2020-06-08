@@ -937,7 +937,7 @@ export const fetchOrders = (id=0,numberOfPage = 100) => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            // dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -1050,6 +1050,10 @@ export const markOrderAsAccepted = (orderNumber = null) => {
                 return setTimeout(function () {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
+            }
+            if(error.response && error.response.data && error.response.data.message){
+                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+                return dispatch({ type: STOP_LOADING, payload: '' })
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })

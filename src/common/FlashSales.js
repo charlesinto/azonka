@@ -32,14 +32,13 @@ class FlashSales extends Component {
             //     this.setState({ cartData: data.cart.products })
             //     this.handleSetOnlineData()
             let { data } = this.props.cartItems;
-            if (data.success) {
+            console.log('data: '+data);
+            if (data && data.success) {
                 this.setState({ cartData: data.cart.products })
                 this.handleSetOnlineData()
                 // return swal.fire("Response", "Item added to cart", "success")
                 return this.props.showSuccessALert("Item has already been added")
-            } else {
-                alert("An error occured")
-            }
+            } 
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));

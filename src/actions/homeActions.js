@@ -157,6 +157,7 @@ export const completeOrder = ({orderId, deliveryCode}) => {
 
             // dispatch({type: SUCCESS_ALERT, payload: ''})
         }catch(error){
+            console.log(error.response)
             dispatch({type: STOP_LOADING, payload: ''})
             if(error.response && error.response.data.message){
                 dispatch({type: DISPLAY_ERROR, payload: error.response.data.message})

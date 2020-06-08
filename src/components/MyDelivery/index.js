@@ -21,6 +21,8 @@ class MyDelivery extends Component{
         switch(action){
             case 'view':
                 // console.log(this.props.delivery);
+                console.log(selectedId)
+                console.log('Delivery: ', this.props.delivery);
                 const index = this.props.delivery.findIndex(element => element.id === parseInt(selectedId));
                 // console.log('product', this.props.delivery[index]['products'], index)
                 this.props.initiateRegistration()

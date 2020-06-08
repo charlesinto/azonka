@@ -96,7 +96,7 @@ class ProductRow extends Component {
                             <div class="input-group-prepend" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}
                                 style={{ height: "40px", cursor: "pointer" }}
                             >
-                                <span class="input-group-text qty-sub">-</span>
+                                <span class="input-group-text qty-sub font-20 text-dark">-</span>
                             </div>
                             <input type="number" class="form-control p-0 text-center"
                                 value={this.state.qty}
@@ -104,7 +104,7 @@ class ProductRow extends Component {
                             <div class="input-group-append" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}
                                 style={{ height: "40px", cursor: "pointer" }}
                             >
-                                <span class="input-group-text qty-add">+</span>
+                                <span class="input-group-text qty-add font-20 text-dark">+</span>
                             </div>
                         </div>
                     </div>
@@ -117,13 +117,13 @@ class ProductRow extends Component {
                             <div className="d-flex">
                                 <div className="qty-div">
                                     <div class="input-group-prepend" onClick={(e) => this.handleDecreaseQty(e, finalPrice, id)}>
-                                        <span class="input-group-text qty-sub">-</span>
+                                        <span class="input-group-text qty-sub font-20 text-dark">-</span>
                                     </div>
                                     <input type="number" class="form-control p-0 text-center"
                                         value={this.state.qty}
                                         aria-label="Amount (to the nearest dollar)" />
                                     <div class="input-group-append" onClick={(e) => this.handleIncreaseQty(e, finalPrice, id)}>
-                                        <span class="input-group-text qty-add">+</span>
+                                        <span class="input-group-text qty-add font-20 text-dark">+</span>
                                     </div>
                                 </div>
                                 <div className="d-flex calc-div">

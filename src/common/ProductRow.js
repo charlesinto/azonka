@@ -85,11 +85,11 @@ class ProductRow extends Component {
                         </div>
                         <div className="d-flex justify-content-between mobile-status-price my-4">
                             <span class="text-success">Created</span>
-                            <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {finalPrice}</p>
+                            <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
                         </div>
                     </div>
                     <div className="item-price col-md-2 border-right text-center hide-mobile">
-                        ₦ {finalPrice}
+                        ₦ {this.numberWithCommas(finalPrice)}
                     </div>
                     <div className="item-qty col-md-2 border-right text-center hide-mobile">
                         <div className="qty-div d-flex">
@@ -109,7 +109,7 @@ class ProductRow extends Component {
                         </div>
                     </div>
                     <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                        ₦ {finalPrice * this.state.qty}
+                        ₦ {this.numberWithCommas(finalPrice * this.state.qty)}
                     </div>
 
                     <div className="mobile-item-details-wrapper">
@@ -127,7 +127,7 @@ class ProductRow extends Component {
                                     </div>
                                 </div>
                                 <div className="d-flex calc-div">
-                                    <div>   ₦ {finalPrice}</div>
+                                    <div>   ₦ {this.numberWithCommas(finalPrice)}</div>
                                     <span className="px-3">X</span>
                                     <div> {this.state.qty}</div>
                                 </div>

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as actions from "../actions";
 import '../assets/Order.css'
 
 class OrderProductRow extends Component {
@@ -98,11 +100,12 @@ class OrderProductRow extends Component {
                             </div>
                             <div className="d-flex justify-content-between mobile-status-price">
                                 <span class="text-success">Created</span>
-                                <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {finalPrice}</p>
+                                <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
                             </div>
                         </div>
                         <div className="item-price col-md-2 border-right text-center hide-mobile">
-                            ₦ {finalPrice}
+                            {console.log("fuck", this.props)}
+                            ₦ {this.numberWithCommas(finalPrice)}
                         </div>
                         <div className="item-qty col-md-1 border-right text-center hide-mobile">
                             <input type="number" class="form-control p-0 text-center"
@@ -111,7 +114,7 @@ class OrderProductRow extends Component {
                                 id="" placeholder="Qty" />
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                            ₦ {finalPrice * this.state.qty}
+                            ₦ {this.numberWithCommas(finalPrice * this.state.qty)}
                         </div>
                         <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
                             Created
@@ -132,7 +135,7 @@ class OrderProductRow extends Component {
                                         </div>
                                     </div>
                                     <div className="d-flex calc-div">
-                                        <div> ₦ {finalPrice}</div>
+                                        <div> ₦ {this.numberWithCommas(finalPrice)}</div>
                                         <span className="px-3">X</span>
                                         <div> {this.state.qty}</div>
                                     </div>
@@ -164,4 +167,15 @@ class OrderProductRow extends Component {
 }
 
 
-export default OrderProductRow;
+const mapStateToProps = state => {
+
+    let { categories, cartItems, cartData, orders } = state.inventory
+    console.log('cartData', cartData, orders)
+    return {
+        categories, cartItems, cartData, orders
+    }
+}
+
+
+
+export default connect(mapStateToProps, actions)(OrderProductRow)

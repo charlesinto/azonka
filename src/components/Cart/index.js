@@ -226,7 +226,6 @@ class Cart extends Component {
                     return this.props.successAlert('Item added successfully')
                 }
             }
-            return console.log('vvv', this.props.cartItems.products)
         }
     }
     numberWithCommas = (number = '') => {

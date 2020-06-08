@@ -208,6 +208,27 @@ class Cart extends Component {
             deletedCartItems: [...deletedItems]
         }, () => this.calSum())
     }
+    handleMoveWishList = async (id) => {
+        let localData = JSON.parse(localStorage.getItem("wishList"))
+        if (localStorage.getItem('x-access-token')) {
+            const filt = this.state.cartData.filter(o => o.id === id)[0]
+            if (!localData) {
+                localData = [filt]
+                localStorage.setItem("wishList", JSON.stringify(localData))
+                return this.props.successAlert('Item added successfully')
+            } else {
+                let _id = localData.some(o => o.id === id)
+                if (_id) {
+                    return this.props.successAlert('Item has already been moved to WishList')
+                } else {
+                    localData.push(filt)
+                    localStorage.setItem("wishList", JSON.stringify(localData))
+                    return this.props.successAlert('Item added successfully')
+                }
+            }
+            return console.log('vvv', this.props.cartItems.products)
+        }
+    }
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -327,6 +348,7 @@ class Cart extends Component {
                                                             calSum={this.calSum}
                                                             quantity={this.state.quantity[data.id]}
                                                             handleItemDelete={this.handleItemDelete}
+                                                            handleMoveWishList={this.handleMoveWishList}
                                                             {...data}
 
                                                         />

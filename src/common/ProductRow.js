@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 class ProductRow extends Component {
     state = { qty: 0, sum: 0 }
     componentDidMount() {
+
         this.setState({
             sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ?
                 this.props.quantity : 1
@@ -45,6 +46,9 @@ class ProductRow extends Component {
     handleItemDelete = id => {
         this.props.handleItemDelete(id)
     }
+    handleMoveWishList = (id) => {
+        this.props.handleMoveWishList(id)
+    }
     handleItemEdit = id => {
 
     }
@@ -70,18 +74,12 @@ class ProductRow extends Component {
                         </div>
                         <div className="d-flex item-actions hide-mobile">
                             <div className="wishlist-wrap">
-                                <Link to="#" className="btn-move action-order-fonts">
-                                    <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
-                                </Link>
+                                <span className="pointer" onClick={(e) => { this.handleMoveWishList(id) }}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                             </div>
                             <div>
-                                <Link to="#" className="btn-move action-order-fonts text-danger"
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        this.handleItemDelete(id)
-                                    }}
-                                >
-                                    <span className="text-danger"> <i className="fas fa-shopping-bag px-2 text-danger"></i> Remove</span>
+                                <Link to="#" className="btn-move action-order-fonts text-danger">
+                                    <span className="text-danger"  > <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
                                 </Link>
                             </div>
                         </div>
@@ -111,7 +109,6 @@ class ProductRow extends Component {
                         </div>
                     </div>
                     <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                        {console.log("fuck", finalPrice * this.state.qty)}
                         ₦ {finalPrice * this.state.qty}
                     </div>
 
@@ -139,16 +136,12 @@ class ProductRow extends Component {
                                 <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
                             </div>
                             <div className="d-flex item-actions justify-content-between">
-                                <div className="wishlist-mobile-wrap">
-                                    <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                                <div className="wishlist-mobile-wrap" key={id}>
+                                    <span> <i className="fas fa-shopping-bag px-2" onClick={(e) => { this.handleMoveWishList(id) }}></i> Move to wishlist</span>
                                 </div>
-                                <div
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        this.handleItemDelete(id)
-                                    }}
-                                >
-                                    <span> <i className="fas fa-shopping-bag px-2"></i> Remove</span>
+                                <div>
+                                    <span className="text-danger"> <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
                                 </div>
                             </div>
 

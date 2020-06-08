@@ -205,14 +205,7 @@ class Cart extends Component {
         //     deletedCartItems: [...deletedItems]
         // }, () => this.calSum())
     }
-    handleMoveWishList = (id) => {
-        console.log("fuck", id)
-        // if (localStorage.getItem('x-access-token')) {
-        //     this.props.initiateRegistration()
-        //     await this.props.removeCartItem(id)
-        //     return console.log('vvv', this.props.cartItems.products)
-        // }
-    }
+
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

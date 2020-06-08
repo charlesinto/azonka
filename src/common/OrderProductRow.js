@@ -85,18 +85,14 @@ class OrderProductRow extends Component {
                             </div>
                             <div className="d-flex item-actions hide-mobile">
                                 <div className="wishlist-wrap">
-                                    <Link to="#" className="btn-move action-order-fonts">
-                                        <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
-                                    </Link>
+                                    <span className="pointer" onClick={(e) => { this.handleMoveWishList(id) }}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                 </div>
                                 <div>
                                     <Link to="#" className="btn-move action-order-fonts text-danger"
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            this.handleItemDelete(id)
-                                        }}
+
                                     >
-                                        <span className="text-danger"> <i className="fas fa-shopping-bag px-2 text-danger"></i> Remove</span>
+                                        <span className="text-primary" > <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                        <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
                                     </Link>
                                 </div>
                             </div>
@@ -148,13 +144,10 @@ class OrderProductRow extends Component {
                                     <div className="wishlist-mobile-wrap">
                                         <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                     </div>
-                                    <div
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            this.handleItemDelete(id)
-                                        }}
-                                    >
-                                        <span> <i className="fas fa-shopping-bag px-2"></i> Remove</span>
+                                    <div>
+                                        <span className="text-danger"> <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                        <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+
                                     </div>
                                 </div>
                             </div>

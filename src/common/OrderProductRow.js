@@ -48,9 +48,33 @@ class OrderProductRow extends Component {
     handleItemDelete = id => {
         this.props.handleItemDelete(id)
     }
-    handleMoveWishList = id => {
-        this.props.handleMoveWishList(id)
+
+
+    handleMoveWishList = async ({ target }) => {
+        let id = target.id
+        let localData = JSON.parse(localStorage.getItem("wishList"))
+        if (localStorage.getItem('x-access-token')) {
+            let data = this.props.data && this.props.data.products
+            let filt = data.filter(o => +o.id === +target.id)[0]
+
+            if (!localData) {
+                localData = [filt]
+                localStorage.setItem("wishList", JSON.stringify(localData))
+                return this.props.successAlert('Item added successfully')
+            } else {
+                let _id = localData.some(o => +o.id === +id)
+                if (_id) {
+                    return this.props.successAlert('Item has already been moved to WishList')
+                } else {
+                    localData.push(filt)
+                    localStorage.setItem("wishList", JSON.stringify(localData))
+                    return this.props.successAlert('Item added successfully')
+                }
+            }
+        }
     }
+
+
 
     handleItemEdit = id => {
 
@@ -63,13 +87,14 @@ class OrderProductRow extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     renderRow = () => {
-        // let productHead = [];
-        // const productHead = this.props.data.products ? [this.props.data.products] : []
-        // console.log('called in here o', +this.props.data.products)
+        console.log('test', this.props.data && this.props.data)
         return this.props.data.products && this.props.data.products.map((data) => {
+
             const { id, name, finalPrice, mainImageUrl } = data
             return (
                 <>
+
+
                     <div className="row item-row py-3 my-4 bg-white" key={id}>
                         <div className="item-orderId col-md-1 mobile-hide">
                             {this.props.data.id}
@@ -88,7 +113,7 @@ class OrderProductRow extends Component {
                             </div>
                             <div className="d-flex item-actions hide-mobile">
                                 <div className="wishlist-wrap">
-                                    <span className="pointer" onClick={(e) => { this.handleMoveWishList(id) }}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                                    <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                 </div>
                                 <div>
                                     <Link to="#" className="btn-move action-order-fonts text-danger"
@@ -110,7 +135,6 @@ class OrderProductRow extends Component {
                             </div>
                         </div>
                         <div className="item-price col-md-2 border-right text-center hide-mobile">
-                            {/* {console.log("fuck", this.props)} */}
                             ₦ {this.numberWithCommas(finalPrice)}
                         </div>
                         <div className="item-qty col-md-1 border-right text-center hide-mobile">

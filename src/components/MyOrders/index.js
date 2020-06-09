@@ -325,7 +325,7 @@ class Cart extends Component {
                                     {
 
                                         this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
-                                            
+                                            console.log("john")
                                             return (
                                                 <OrderProductRow
                                                     calSums={(sum, productId, qty) =>
@@ -334,7 +334,7 @@ class Cart extends Component {
                                                     // quantity={this.state.quantity[data.id]}
                                                     handleItemDelete={this.handleItemDelete}
                                                     data={data}
-
+                                                    fullData={data}
                                                 />
                                             )
                                         }) : (

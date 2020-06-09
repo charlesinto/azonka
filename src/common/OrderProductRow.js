@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import '../assets/Order.css'
+import MoreOrder from './MoreOrder';
 
 class OrderProductRow extends Component {
     state = { qty: 0, sum: 0 }
@@ -15,7 +16,6 @@ class OrderProductRow extends Component {
     }
     static getDerivedStateFromProps(nextProps, state) {
         if (state.qty !== nextProps.quantity) {
-
             return {
                 ...state, sum: nextProps.finalPrice * (nextProps.quantity || 1), qty: nextProps.quantity ?
                     nextProps.quantity : 1
@@ -48,8 +48,6 @@ class OrderProductRow extends Component {
     handleItemDelete = id => {
         this.props.handleItemDelete(id)
     }
-
-
     handleMoveWishList = async ({ target }) => {
         let id = target.id
         let localData = JSON.parse(localStorage.getItem("wishList"))
@@ -74,7 +72,11 @@ class OrderProductRow extends Component {
         }
     }
 
-
+    handleViewMore = ({ target }) => {
+        // console.log("john", this.props.data.products)
+        let _products = this.props.data.products
+        this.setState({ _products })
+    }
 
     handleItemEdit = id => {
 
@@ -87,147 +89,134 @@ class OrderProductRow extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     renderRow = () => {
-        console.log('test', this.props.data && this.props.data)
-        return this.props.data.products && this.props.data.products.map((data) => {
-
-            const { id, name, finalPrice, mainImageUrl } = data
-            return (
-                <>
-
-
-                    <div className="row item-row py-3 my-4 bg-white" key={id}>
-                        <div className="item-orderId col-md-1 mobile-hide">
-                            {this.props.data.id}
+        //console.log("john", this.props.data.products && this.props.data.products[0])
+    }
+    handleModal = (id) => {
+        this.setState({ _products: this.props.data.products })
+    }
+    render() {
+        if (!this.props.data.products[0]) return <div>no products</div>;
+        const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
+        return (
+            <>
+                <div className="row item-row py-3 my-4 bg-white" key={id}>
+                    <div className="item-orderId col-md-1 mobile-hide">
+                        {this.props.data.id}
+                    </div>
+                    <div class="mobile-order-no my-3 container-fluid">
+                        <span>Order No:</span>
+                        <span className="">{this.props.data.id}</span>
+                    </div>
+                    <div className=" col-md-4 border-right">
+                        <div className="d-flex item-name-wrapper">
+                            <img className="item-img"
+                                src={mainImageUrl}
+                                alt=".../"
+                            />
+                            <p className="pl-4 item-name text-dark"> {name}</p>
                         </div>
-                        <div class="mobile-order-no my-3 container-fluid">
-                            <span>Order No:</span>
-                            <span className="">{this.props.data.id}</span>
-                        </div>
-                        <div className=" col-md-4 border-right">
-                            <div className="d-flex item-name-wrapper">
-                                <img className="item-img"
-                                    src={mainImageUrl}
-                                    alt=".../"
-                                />
-                                <p className="pl-4 item-name text-dark"> {name}</p>
+                        <div className="d-flex item-actions hide-mobile" style={{ fontSize: "12px" }}>
+                            <div className="wishlist-wrap">
+                                <span className="pointer" data-toggle="modal"
+                                    data-target={`#exampleModalCenter${this.props.data.id}`}
+                                    id={this.props.data.id}
+                                    style={{ fontSize: "11px" }}
+                                >
+                                    <i className="fas fa-shopping-bag px-2"></i>
+                                    View <b>{this.props.data.products && this.props.data.products.length}</b>  More
+                                    </span>
                             </div>
-                            <div className="d-flex item-actions hide-mobile">
-                                <div className="wishlist-wrap">
-                                    <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
-                                </div>
-                                <div>
-                                    <Link to="#" className="btn-move action-order-fonts text-danger"
+                            <div className="wishlist-wrap">
+                                <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                            </div>
+                            <div>
+                                <Link to="#" className="btn-move action-order-fonts text-danger"
 
-                                    >
-                                        {/* <div className="tooltip" style={{display:'inline-block'}}>
+                                >
+                                    {/* <div className="tooltip" style={{display:'inline-block'}}>
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>
                                         </div> */}
-                                        <span className="text-danger" data-toggle="modal" data-target="#raiseDispute"  title="Raise a dispute"><i className=" far fa-flag"></i></span>
-                                        {/* <i className="fas fa-pencil-alt px-2 text-primary"></i> </span> */}
-                                        <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="d-flex justify-content-between mobile-status-price">
-                                <span class="text-success">Created</span>
-                                <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
+                                    <span className="text-danger" data-toggle="modal"
+                                        data-target="#raiseDispute"
+                                        title="Raise a dispute"><i className=" far fa-flag"></i></span>
+                                    {/* <i className="fas fa-pencil-alt px-2 text-primary"></i> </span> */}
+                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+                                </Link>
                             </div>
                         </div>
-                        <div className="item-price col-md-2 border-right text-center hide-mobile">
-                            ₦ {this.numberWithCommas(finalPrice)}
+                        <div className="d-flex justify-content-between mobile-status-price">
+                            <span class="text-success">Created</span>
+                            <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
                         </div>
-                        <div className="item-qty col-md-1 border-right text-center hide-mobile">
-                            <input type="number" class="form-control p-0 text-center"
-                                value={this.state.qty}
-                                disabled={true}
-                                id="" placeholder="Qty" />
-                        </div>
-                        <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                            ₦ {this.numberWithCommas(finalPrice * this.state.qty)}
-                        </div>
-                        <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
-                           {this.props.data.status.toUpperCase()}
-                                            </div>
+                    </div>
+                    <div className="item-price col-md-2 border-right text-center hide-mobile">
+                        ₦ {this.numberWithCommas(finalPrice)}
+                    </div>
+                    <div className="item-qty col-md-1 border-right text-center hide-mobile">
+                        <input type="number" class="form-control p-0 text-center"
+                            value={this.state.qty}
+                            disabled={true}
+                            id="" placeholder="Qty" />
+                    </div>
+                    <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
+                        ₦ {this.numberWithCommas(finalPrice * this.state.qty)}
+                    </div>
+                    <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
+                        {this.props.data.status.toUpperCase()}
+                    </div>
 
-                        <div className="mobile-item-details-wrapper">
-                            <div className="container-fluid border-top py-3">
-                                <div className="d-flex">
-                                    <div className="qty-div">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text qty-sub">-</span>
-                                        </div>
-                                        <input type="number" class="form-control p-0 text-center"
-                                            value={this.state.qty}
-                                            aria-label="Amount (to the nearest dollar)" />
-                                        <div class="input-group-append">
-                                            <span class="input-group-text qty-add">+</span>
-                                        </div>
+                    <div className="mobile-item-details-wrapper">
+                        <div className="container-fluid border-top py-3">
+                            <div className="d-flex">
+                                <div className="qty-div">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text qty-sub">-</span>
                                     </div>
-                                    <div className="d-flex calc-div">
-                                        <div> ₦ {this.numberWithCommas(finalPrice)}</div>
-                                        <span className="px-3">X</span>
-                                        <div> {this.state.qty}</div>
+                                    <input type="number" class="form-control p-0 text-center"
+                                        value={this.state.qty}
+                                        aria-label="Amount (to the nearest dollar)" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text qty-add">+</span>
                                     </div>
                                 </div>
-                                <div className="d-flex my-5 justify-content-end">
-                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
+                                <div className="d-flex calc-div">
+                                    <div> ₦ {this.numberWithCommas(finalPrice)}</div>
+                                    <span className="px-3">X</span>
+                                    <div> {this.state.qty}</div>
                                 </div>
-                                <div className="d-flex item-actions justify-content-between">
-                                    <div className="wishlist-mobile-wrap">
-                                        <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-danger" data-toggle="modal" data-target="#raiseDispute"  title="Raise a dispute"> <i className="far fa-flag"></i> </span>
-                                        {/* <i className="fas fa-pencil-alt px-2 text-primary"></i>  */}
-                                        <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+                            </div>
+                            <div className="d-flex my-5 justify-content-end">
+                                <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span>
+                            </div>
+                            <div className="d-flex item-actions justify-content-between">
+                                <div className="wishlist-mobile-wrap">
+                                    <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                                </div>
+                                <div>
+                                    <span className="text-danger" data-toggle="modal" data-target="#raiseDispute" title="Raise a dispute"
+                                        onClick={this.handleModal}
+                                    > <i className="far fa-flag"></i> </span>
+                                    {/* <i className="fas fa-pencil-alt px-2 text-primary"></i>  */}
+                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
 
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="modal fade" id="raiseDispute" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog modal-dialog-centered modal-sm" role="document">
-                            <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">Raise Dispute</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect2">Raise Dispute For</label>
-                                        <select class="custom-select custom-select-lg mb-3" id="inputGroupSelect04">
-                                            <option selected>Choose...</option>
-                                            <option value="1">Wrong Package</option>
-                                            <option value="2">Tampered Package</option>
-                                            <option value="3">Broken Package</option>
-                                            <option value="4">Misplaced Package</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <label for="exampleFormControlSelect2">Enter Custom Response</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                    </div>
-                                </form>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-outline-danger" data-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary">Send</button>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                </>
-            )
-        })
-    }
-    render() {
-        // console.log('here o', this.props.data)
-        return this.renderRow()
+                </div>
+
+
+                <MoreOrder
+                    qty={this.state.qty}
+                    id={this.props.data.id}
+                    orderData={this.props.data.products}
+                    status={this.props.data.status.toUpperCase()}
+                />
+
+            </>
+        )
+
     }
 }
 

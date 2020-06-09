@@ -41,7 +41,7 @@ import * as actions from "./actions";
 import LoginSignup from "./components/Auth/LoginSignup";
 import ShopItems from './components/Cart/ShopItems';
 import ShopItemDetails from './components/Cart/ShopItemDetails';
-import SpecialItemDetail  from "./components/SpecialItemDetail";
+import SpecialItemDetail from "./components/SpecialItemDetail";
 import Header from './components/HeaderFooter/Header';
 import ItemModal from './components/Cart/ItemModal';
 import Checkout from "./components/Checkout";
@@ -75,6 +75,7 @@ class Root extends Component {
                                 <Route exact path="/" component={Home} />
                                 <Route exact path="/shop" component={ShopItems} />
                                 <Route exact path="/shop-details/:id" component={ShopItemDetails} />
+                                <Route exact path="/wishlist" component={WishList} />
                                 <Route exact path="/modal" component={ItemModal} />
                                 <Route exact path="/cartest" component={CartTest} />
                                 <Route exact path="/specials/:id" component={SpecialItemDetail} />
@@ -95,7 +96,7 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/wallet/fund" component={Wallet} />
                                 <AuthRoute exact path="/users/wallet/withdraw" component={WithDrawal} />
                                 <AuthRoute exact path="/users/wallet/wallet-transfer" component={WalletToWalletTransfer} />
-                                <AuthRoute exact path="product/review/:id"  component={ProductReview} />
+                                <AuthRoute exact path="product/review/:id" component={ProductReview} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
                                 <AuthRoute exact path="/users/azonka-credits" component={MyAzonkaCredits} />
                                 <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />

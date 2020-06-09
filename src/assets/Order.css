@@ -11,6 +11,12 @@
 .order-icons{
     font-size: 20px;
 }
+.font-13{
+    font-size: 13px;
+}
+.font-17{
+    font-size: 17px;
+}
 .font-20{
     font-size: 20px;
 }
@@ -104,6 +110,17 @@
     display: none !important;
 }
 
+.btn-buy-now{
+    min-width: 60% !important;
+    height: 40px !important;
+    font-size: 12px;
+    padding: 0 !important;
+    border-radius: 5px !important;
+}
+
+.img-empty-state{
+    
+}
 
 @media (max-width: 767px){
     .mobile-item-details-wrapper{

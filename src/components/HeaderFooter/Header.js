@@ -10,23 +10,25 @@ import CartDropdown from '../Cart/CartDropdown';
 import queryString from "query-string";
 
 class Header extends Component {
-    
-    constructor(props){
+
+    constructor(props) {
         super(props);
-        this.state = {mobileMenu: false,
+        this.state = {
+            mobileMenu: false,
             showSearchBar: false,
             currentUser: null,
             cartData: [],
             name: "",
             selectedValue: "",
-            categoryValue: ""}
-            
+            categoryValue: ""
+        }
+
     }
     async componentDidMount() {
         let params = queryString.parse(this.props.location.search)
         const { category } = params;
-        await this.setState({selectedValue: category})
-        document.querySelector('#category').addEventListener('change', function(e){
+        await this.setState({ selectedValue: category })
+        document.querySelector('#category').addEventListener('change', function (e) {
             alert()
             console.log(this.dataset.search)
         })
@@ -38,10 +40,10 @@ class Header extends Component {
         })
         this.loadSearchCategory()
         this.loadCart()
-        
+
     }
-    componentWillUnmount(){
-        document.querySelector('#category').removeEventListener('change', () => {})
+    componentWillUnmount() {
+        document.querySelector('#category').removeEventListener('change', () => { })
     }
     _toggleMenu = () => {
         this.setState({
@@ -86,7 +88,7 @@ class Header extends Component {
         this.setState({ name: e.target.value })
         this.setState({ category: this.props.categories })
     }
-    handleSelectChange(e, $this){
+    handleSelectChange(e, $this) {
         $this.setState({ categoryValue: e.target.value, selectedValue: e.target.value })
     }
     handleSearchSubmit = async () => {
@@ -171,7 +173,7 @@ class Header extends Component {
                                         <div className="header-menu">
                                             <ul>
                                                 <li><Link to="/users/profile">MY ACCOUNT </Link></li>
-                                                <li><Link to="#">MY WISHLIST </Link></li>
+                                                <li><Link to="/wishlist">MY WISHLIST </Link></li>
                                                 <li><Link to="#">Contact</Link></li>
                                                 {
                                                     currentUser ?

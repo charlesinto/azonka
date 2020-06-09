@@ -147,12 +147,10 @@ class Cart extends Component {
         let token = localStorage.getItem("x-access-token");
         if (token) {
             await this.props.fetchOrders();
-            console.log("aza o", this.props.cartItems)
             this.setState({
                 cartData: this.props.cartItems.products,
                 quantity: this.props.cartItems.quantity
             })
-            // console.log("aza", this.state.cartData)
         }
 
     }
@@ -206,26 +204,6 @@ class Cart extends Component {
         // }, () => this.calSum())
     }
 
-    handleMoveWishList = async (id) => {
-        let localData = JSON.parse(localStorage.getItem("wishList"))
-        if (localStorage.getItem('x-access-token')) {
-            const filt = this.props.orders.filter(o => o.id === id)[0]
-            if (!localData) {
-                localData = [filt]
-                localStorage.setItem("wishList", JSON.stringify(localData))
-                return this.props.successAlert('Item added successfully')
-            } else {
-                let _id = localData.some(o => o.id === id)
-                if (_id) {
-                    return this.props.successAlert('Item has already been moved to WishList')
-                } else {
-                    localData.push(filt)
-                    localStorage.setItem("wishList", JSON.stringify(localData))
-                    return this.props.successAlert('Item added successfully')
-                }
-            }
-        }
-    }
 
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -345,6 +323,7 @@ class Cart extends Component {
 
                                     {
                                         this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
+                                            // console.log("davido fat", data.products)
                                             return (
                                                 <OrderProductRow
                                                     calSums={(sum, productId, qty) =>
@@ -352,7 +331,6 @@ class Cart extends Component {
                                                     calSum={this.calSum}
                                                     // quantity={this.state.quantity[data.id]}
                                                     handleItemDelete={this.handleItemDelete}
-                                                    handleMoveWishList={this.handleMoveWishList}
                                                     data={data}
 
                                                 />

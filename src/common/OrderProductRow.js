@@ -117,14 +117,20 @@ class OrderProductRow extends Component {
                         </div>
                         <div className="d-flex item-actions hide-mobile" style={{ fontSize: "12px" }}>
                             <div className="wishlist-wrap">
-                                <span className="pointer" data-toggle="modal"
-                                    data-target={`#exampleModalCenter${this.props.data.id}`}
-                                    id={this.props.data.id}
-                                    style={{ fontSize: "11px" }}
-                                >
-                                    <i className="fas fa-shopping-bag px-2"></i>
-                                    View <b>{this.props.data.products && this.props.data.products.length}</b>  More
-                                    </span>
+                                {
+                                    this.props.data.products && this.props.data.products.length > 1 ?
+                                        (
+                                            <span className="pointer" data-toggle="modal"
+                                                data-target={`#exampleModalCenter${this.props.data.id}`}
+                                                id={this.props.data.id}
+                                                style={{ fontSize: "11px" }}
+                                            >
+                                                <i className="fas fa-shopping-bag px-2"></i>
+                                                View <b>{this.props.data.products && this.props.data.products.length}</b>  More
+                                             </span>
+                                        ) : null
+                                }
+
                             </div>
                             <div className="wishlist-wrap">
                                 <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>

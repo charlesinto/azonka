@@ -214,7 +214,7 @@ class WishList extends Component {
             const filt = wishData.filter(o => o.id !== id)
             await localStorage.setItem("wishList", JSON.stringify(filt))
             await this.loadWishList()
-            console.log("fuck", wishData, id, filt)
+            console.log("test", wishData, id, filt)
         }
 
     }

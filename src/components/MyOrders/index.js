@@ -8,6 +8,7 @@ import CartActions from "../../common/CartActions";
 import Drawer from '@material-ui/core/Drawer';
 import OrderProductRow from '../../common/OrderProductRow';
 import Footer from '../HeaderFooter/Footer';
+import nodataImg from '../../assets/nodatafound.png'
 
 class Cart extends Component {
     state = {
@@ -322,8 +323,8 @@ class Cart extends Component {
                                     {/* TABLE DETAILS START */}
 
                                     {
+
                                         this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
-                                            // console.log("davido fat", data.products)
                                             return (
                                                 <OrderProductRow
                                                     calSums={(sum, productId, qty) =>
@@ -336,9 +337,9 @@ class Cart extends Component {
                                                 />
                                             )
                                         }) : (
-                                                <div className="row">
-                                                    No data to load
-                                                    </div>
+                                                <div className="row d-flex justify-content-center my-5">
+                                                    <img src={nodataImg} alt="Empty state" className="img-empty-state" />
+                                                </div>
                                             )
                                     }
 

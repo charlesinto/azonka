@@ -87,12 +87,14 @@ class OrderProductRow extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     renderRow = () => {
-
+        console.log('test', this.props.data && this.props.data)
         return this.props.data.products && this.props.data.products.map((data) => {
-            console.log('datata', data)
+
             const { id, name, finalPrice, mainImageUrl } = data
             return (
                 <>
+
+
                     <div className="row item-row py-3 my-4 bg-white" key={id}>
                         <div className="item-orderId col-md-1 mobile-hide">
                             {this.props.data.id}

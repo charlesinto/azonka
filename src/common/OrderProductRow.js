@@ -63,7 +63,9 @@ class OrderProductRow extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     renderRow = () => {
-
+        // let productHead = [];
+        // const productHead = this.props.data.products ? [this.props.data.products] : []
+        // console.log('called in here o', +this.props.data.products)
         return this.props.data.products && this.props.data.products.map((data) => {
             const { id, name, finalPrice, mainImageUrl } = data
             return (
@@ -92,7 +94,12 @@ class OrderProductRow extends Component {
                                     <Link to="#" className="btn-move action-order-fonts text-danger"
 
                                     >
-                                        <span className="text-primary" > <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                        {/* <div className="tooltip" style={{display:'inline-block'}}>
+                                            <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
+                                            <span className="tooltiptext" > Raise a dispute </span>
+                                        </div> */}
+                                        <span className="text-danger" data-toggle="modal" data-target="#raiseDispute"  title="Raise a dispute"><i className=" far fa-flag"></i></span>
+                                        {/* <i className="fas fa-pencil-alt px-2 text-primary"></i> </span> */}
                                         <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
                                     </Link>
                                 </div>
@@ -103,7 +110,7 @@ class OrderProductRow extends Component {
                             </div>
                         </div>
                         <div className="item-price col-md-2 border-right text-center hide-mobile">
-                            {console.log("fuck", this.props)}
+                            {/* {console.log("fuck", this.props)} */}
                             ₦ {this.numberWithCommas(finalPrice)}
                         </div>
                         <div className="item-qty col-md-1 border-right text-center hide-mobile">
@@ -147,7 +154,8 @@ class OrderProductRow extends Component {
                                         <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                     </div>
                                     <div>
-                                        <span className="text-danger"> <i className="fas fa-pencil-alt px-2 text-primary"></i> </span>
+                                        <span className="text-danger" data-toggle="modal" data-target="#raiseDispute"  title="Raise a dispute"> <i className="far fa-flag"></i> </span>
+                                        {/* <i className="fas fa-pencil-alt px-2 text-primary"></i>  */}
                                         <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
 
                                     </div>
@@ -155,12 +163,46 @@ class OrderProductRow extends Component {
                             </div>
                         </div>
                     </div>
+                    <div className="modal fade" id="raiseDispute" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog modal-dialog-centered modal-sm" role="document">
+                            <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Raise Dispute</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect2">Raise Dispute For</label>
+                                        <select class="custom-select custom-select-lg mb-3" id="inputGroupSelect04">
+                                            <option selected>Choose...</option>
+                                            <option value="1">Wrong Package</option>
+                                            <option value="2">Tampered Package</option>
+                                            <option value="3">Broken Package</option>
+                                            <option value="4">Misplaced Package</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label for="exampleFormControlSelect2">Enter Custom Response</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary">Send</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
                 </>
             )
         })
     }
     render() {
-        console.log('here o', this.props.data)
+        // console.log('here o', this.props.data)
         return this.renderRow()
     }
 }
@@ -169,7 +211,7 @@ class OrderProductRow extends Component {
 const mapStateToProps = state => {
 
     let { categories, cartItems, cartData, orders } = state.inventory
-    console.log('cartData', cartData, orders)
+    // console.log('cartData', cartData, orders)
     return {
         categories, cartItems, cartData, orders
     }

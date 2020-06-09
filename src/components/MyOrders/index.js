@@ -400,7 +400,7 @@ class Cart extends Component {
 const mapStateToProps = state => {
 
     let { categories, cartItems, cartData, orders } = state.inventory
-    console.log('cartData', cartData, orders)
+    // console.log('cartData', cartData, orders)
     return {
         categories, cartItems, cartData, orders
     }

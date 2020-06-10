@@ -136,9 +136,7 @@ class OrderProductRow extends Component {
                                 <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                             </div>
                             <div>
-                                <Link to="#" className="btn-move action-order-fonts text-danger"
-
-                                >
+                                <Link to="#" className="btn-move action-order-fonts text-danger"   >
                                     {/* <div className="tooltip" style={{display:'inline-block'}}>
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>

@@ -88,7 +88,7 @@ class Dashboard extends Component {
                                                 </ul>
                                             </li>
                                             <li className={this.props.dashboardActiveLink === 'My Azonka Credits' ? 'active' : ''}><Link to="/users/azonka-credits">My Azonka Credit</Link></li>
-                                            <li className={this.props.dashboardActiveLink === 'Azonka Pay' ? 'active' : ''}><Link to="#">Azonka Pay</Link></li>
+                                            {/* <li className={this.props.dashboardActiveLink === 'Azonka Pay' ? 'active' : ''}><Link to="#">Azonka Pay</Link></li> */}
                                             <li className={this.props.dashboardActiveLink === 'My Address Book' ? 'active' : ''}><Link to="/users/address">Address Book</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Referral' ? 'active' : ''}><Link to="/users/referrals">Referral</Link></li>
                                             {

@@ -12,17 +12,34 @@ import * as actions from '../../actions';
 import Footer from '../HeaderFooter/Footer';
 
 import FeatureProductItem from "../../common/FeatureProductItem";
-import HotProduct from "../../common/HotProduct";
+// import HotProduct from "../../common/HotProduct";
 import Banner from '../../common/Banner';
 import Trending from '../../common/Trending';
 
-import slide1 from "../../css/images/products/product-8-white.jpg";//product-2-white
-import slide2 from "../../css/images/products/home-featured-3.jpg";
-import HomeSlide from '../../common/HomeSlide';
+// import slide1 from "../../css/images/products/product-8-white.jpg";//product-2-white
+// import slide2 from "../../css/images/products/home-featured-3.jpg";
+// import HomeSlide from '../../common/HomeSlide';
 import FlashSales from '../../common/FlashSales';
 
 class Home extends Component {
-    state = { showPopUp: true }
+    state = { showPopUp: true,
+        topBanner: [
+            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
+            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
+            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
+            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
+        ],
+        lowerBanner: [
+            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
+            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
+            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg'
+        ],
+        leftBanner:[
+            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
+            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
+            
+        ]
+    }
     closePopup = (event) => {
         event.preventDefault();
         this.setState({
@@ -129,14 +146,14 @@ class Home extends Component {
                     <main className="main">
                         <div className="info-boxes-container">
                             <div className="container">
-                                <div className="info-box">
+                                {/* <div className="info-box">
                                     <i className="icon-shipping"></i>
 
                                     <div className="info-box-content">
                                         <h4>FREE SHIPPING &amp; RETURN</h4>
                                         <p>Free shipping on all orders over $99.</p>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div className="info-box">
                                     <i className="icon-us-dollar"></i>
@@ -152,7 +169,7 @@ class Home extends Component {
 
                                     <div className="info-box-content">
                                         <h4>ONLINE SUPPORT 24/7</h4>
-                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
@@ -161,26 +178,63 @@ class Home extends Component {
                         <div className="container">
                             <div className="row">
                                 <div className="col-lg-9">
-                                    <div className="home-slider">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
-                                        <Slider
-                                            {...{ ...settings, slidesToShow: 1, arrows: true }}
-                                        >
-
-                                            <HomeSlide
-                                                image={slide1}
-                                            />
-                                            <HomeSlide
-                                                image={slide2}
-                                            />
-                                        </Slider>
-
-
-                                    </div>
-
                                     <div className="row">
-                                        <Trending />
-                                        <Trending />
-                                        <Trending />
+                                        <div className="col-md-12">
+                                            <div className="bnk">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
+                                            <div id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
+                                                <ol className="carousel-indicators">
+                                                    {
+                                                        this.state.topBanner.map((image, i) => {
+                                                            return (
+                                                                <li data-target="#carouselExampleIndicators" data-slide-to={i} className={`${i === 0 ? 'active': ''}`}></li>
+                                                            )
+                                                        })
+                                                    }
+                                                    
+                                                </ol>
+                                                <div className="carousel-inner">
+                                                    {/* <div class="carousel-item active">
+                                                    <img class="d-block w-100" src={this.state.topBanner[0]} alt="First slide" />
+                                                    </div> */}
+                                                    {
+                                                        this.state.topBanner.map((image, i) => {
+                                                            return (
+                                                                <div className={`carousel-item ${i === 0 ? 'active' : ''}`}>
+                                                                <img className="d-block w-100" src={image} alt="Second slide" />
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                    {/* <div class="carousel-item">
+                                                    <img class="d-block w-100" src={this.state.topBanner[0]} alt="Third slide" />
+                                                    </div> */}
+                                                </div>
+                                                </div>
+                                                
+                                                {/* <Slider
+                                                    {...{ ...settings, slidesToShow: 1, arrows: true }}
+                                                >
+                                                    {
+                                                        this.state.topBanner.map(image => {
+                                                            return <HomeSlide
+                                                                    image={image}
+                                                                />
+                                                        } )
+                                                    }
+                                                    
+                                                </Slider> */}
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-3"></div>
+                                    <div className="row">
+                                        {
+                                            this.state.lowerBanner.map((image) => {
+                                                return <Trending image={image} />
+                                            })
+                                        }
                                     </div>
 
                                     <div className="mb-3"></div>
@@ -244,7 +298,7 @@ class Home extends Component {
 
 
                                     <div className="row">
-                                        <div className="col-sm-12 col-md-4">
+                                        {/* <div className="col-sm-12 col-md-4">
                                             <div className="product-column">
                                                 <h3 className="title">New</h3>
 
@@ -252,9 +306,9 @@ class Home extends Component {
                                                 <HotProduct />
                                                 <HotProduct />
                                             </div>
-                                        </div>
+                                        </div> */}
 
-                                        <div className="col-sm-12 col-md-4">
+                                        {/* <div className="col-sm-12 col-md-4">
                                             <div className="product-column">
                                                 <h3 className="title">Hot</h3>
 
@@ -264,9 +318,9 @@ class Home extends Component {
 
                                                 <HotProduct />
                                             </div>
-                                        </div>
+                                        </div> */}
 
-                                        <div className="col-sm-12 col-md-4 ">
+                                        {/* <div className="col-sm-12 col-md-4 ">
                                             <div className="product-column">
                                                 <h3 className="title">Sale</h3>
 
@@ -275,25 +329,25 @@ class Home extends Component {
                                                 <HotProduct />
                                                 <HotProduct />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className="mb-3"></div>
 
                                     <div className="row">
-                                        <div className="col-sm-6 col-md-4">
+                                        <div className="col-sm-6 col-md-6">
                                             <div className="feature-box feature-box-simple text-center">
                                                 <i className="icon-star"></i>
 
                                                 <div className="feature-box-content">
                                                     <h3>Dedicated Service</h3>
-                                                    <p>Consult our specialists for help with an order, customization, or design advice</p>
+                                                    <p>Consult our specialists for help with an order</p>
                                                     <a href="#n" className="btn btn-outline-dark">Get in touch</a>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="col-sm-6 col-md-4">
+                                        <div className="col-sm-6 col-md-6">
                                             <div className="feature-box feature-box-simple text-center">
                                                 <i className="icon-reply"></i>
 
@@ -305,7 +359,7 @@ class Home extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-sm-6 col-md-4">
+                                        {/* <div className="col-sm-6 col-md-4">
                                             <div className="feature-box feature-box-simple text-center">
                                                 <i className="icon-paper-plane"></i>
 
@@ -315,7 +369,7 @@ class Home extends Component {
                                                     <a href="#m" className="btn btn-outline-dark">Lear More</a>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
 
@@ -325,9 +379,9 @@ class Home extends Component {
 
                                         <nav className="side-nav">
                                             <ul className="menu menu-vertical sf-arrows">
-                                                <li className="active"><a href="index.html"><i className="icon-home"></i>Home</a></li>
+                                                <li className="active"><Link to="/"><i className="icon-home"></i>Home</Link></li>
                                                 <li>
-                                                    <a href="category.html" className="sf-with-ul"><i className="icon-briefcase"></i>
+                                                    <a href="#n" className="sf-with-ul"><i className="icon-briefcase"></i>
                                                         Categories</a>
                                                     <div className="megamenu megamenu-fixed-width">
                                                         <div className="row">
@@ -335,100 +389,97 @@ class Home extends Component {
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
                                                                         <div className="menu-title">
-                                                                            <a href="#n">Variations 1<span className="tip tip-new">New!</span></a>
+                                                                            
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="category.html">Fullwidth Banner<span className="tip tip-hot">Hot!</span></a></li>
-                                                                            <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a></li>
-                                                                            <li><a href="category-banner-boxed-image.html">Boxed Image Banner</a></li>
-                                                                            <li><a href="category.html">Left Sidebar</a></li>
-                                                                            <li><a href="category-sidebar-right.html">Right Sidebar</a></li>
-                                                                            <li><a href="category-flex-grid.html">Product Flex Grid</a></li>
-                                                                            <li><a href="category-horizontal-filter1.html">Horizontal Filter1</a></li>
-                                                                            <li><a href="category-horizontal-filter2.html">Horizontal Filter2</a></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
                                                                         </ul>
                                                                     </div>
                                                                     <div className="col-lg-6">
                                                                         <div className="menu-title">
-                                                                            <a href="#n">Variations 2</a>
+                                                                            
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="#n">Product List Item Types</a></li>
-                                                                            <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a></li>
-                                                                            <li><a href="category.html">3 Columns Products</a></li>
-                                                                            <li><a href="category-4col.html">4 Columns Products <span className="tip tip-new">New</span></a></li>
-                                                                            <li><a href="category-5col.html">5 Columns Products</a></li>
-                                                                            <li><a href="category-6col.html">6 Columns Products</a></li>
-                                                                            <li><a href="category-7col.html">7 Columns Products</a></li>
-                                                                            <li><a href="category-8col.html">8 Columns Products</a></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="banner">
-                                                                    <a href="#n">
-                                                                        <img src="assets\images\menu-banner-2.jpg" alt="Menu banner" />
-                                                                    </a>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </li>
                                                 <li className="megamenu-container">
-                                                    <a href="product.html" className="sf-with-ul"><i className="icon-video"></i>Products</a>
+                                                <a href="#n" className="sf-with-ul"><i className="icon-briefcase"></i>
+                                                        Products</a>
                                                     <div className="megamenu">
                                                         <div className="row">
                                                             <div className="col-lg-8">
                                                                 <div className="row">
                                                                     <div className="col-lg-4">
                                                                         <div className="menu-title">
-                                                                            <a href="#n">Variations</a>
+                                                                            
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="product.html">Horizontal Thumbnails</a></li>
-                                                                            <li><a href="product-full-width.html">Vertical Thumbnails<span className="tip tip-hot">Hot!</span></a></li>
-                                                                            <li><a href="product.html">Inner Zoom</a></li>
-                                                                            <li><a href="product-addcart-sticky.html">Addtocart Sticky</a></li>
-                                                                            <li><a href="product-sidebar-left.html">Accordion Tabs</a></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
                                                                         </ul>
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="menu-title">
-                                                                            <a href="#n">Variations</a>
+                                                                            
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
-                                                                            <li><a href="product-simple.html">Simple Product</a></li>
-                                                                            <li><a href="product-sidebar-left.html">With Left Sidebar</a></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
                                                                         </ul>
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="menu-title">
-                                                                            <a href="#n">Product Layout Types</a>
+                                                                            
                                                                         </div>
                                                                         <ul>
-                                                                            <li><a href="product.html">Default Layout</a></li>
-                                                                            <li><a href="product-extended-layout.html">Extended Layout</a></li>
-                                                                            <li><a href="product-full-width.html">Full Width Layout</a></li>
-                                                                            <li><a href="product-grid-layout.html">Grid Images Layout</a></li>
-                                                                            <li><a href="product-sticky-both.html">Sticky Both Side Info<span className="tip tip-hot">Hot!</span></a></li>
-                                                                            <li><a href="product-sticky-info.html">Sticky Right Side Info</a></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
+                                                                            <li></li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div className="col-lg-4">
                                                                 <div className="banner">
-                                                                    <a href="#n">
-                                                                        <img src="assets\images\menu-banner.jpg" alt="Menu banner" className="product-promo" />
-                                                                    </a>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li>
+                                                {/* <li>
                                                     <a href="#n" className="sf-with-ul"><i className="icon-docs-inv"></i>Pages</a>
 
                                                     <ul>
@@ -457,15 +508,15 @@ class Home extends Component {
                                                         <li><a href="#n" className="login-link">Login</a></li>
                                                         <li><a href="forgot-password.html">Forgot Password</a></li>
                                                     </ul>
-                                                </li>
-                                                <li><a href="#n" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
+                                                </li> */}
+                                                {/* <li><a href="#n" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
                                                     <ul>
                                                         <li><a href="#n">Header Types</a></li>
                                                         <li><a href="#n">Footer Types</a></li>
                                                     </ul>
-                                                </li>
-                                                <li><a href="#n"><i className="icon-cat-gift"></i>Special Offer!</a></li>
-                                                <li><a href="#n"><i className="icon-star-empty"></i>Buy Porto!</a></li>
+                                                </li> */}
+                                                {/* <li><a href="#n"><i className="icon-cat-gift"></i>Special Offer!</a></li>
+                                                <li><a href="#n"><i className="icon-star-empty"></i>Buy Porto!</a></li> */}
                                             </ul>
                                         </nav>
                                     </div>
@@ -475,15 +526,17 @@ class Home extends Component {
                                                 {...{ settings, slidesToShow: 1 }}
                                             >
 
-                                                <Banner />
-                                                <Banner />
-                                                <Banner />
+                                               {
+                                                   this.state.leftBanner.map(image => {
+                                                       return  <Banner image={image} />
+                                                   })
+                                               }
                                             </Slider>
 
                                         </div>
                                     </div>
 
-                                    <div className="widget widget-newsletters">
+                                    {/* <div className="widget widget-newsletters">
                                         <h3 className="widget-title">Newsletter</h3>
                                         <p>Get all the latest information on Events, Sales and Offers. </p>
                                         <form action="#">
@@ -493,7 +546,7 @@ class Home extends Component {
                                             </div>
                                             <input type="submit" className="btn btn-block" value="Subscribe Now" />
                                         </form>
-                                    </div>
+                                    </div> */}
 
                                     {/* <div className="widget widget-testimonials">
                                         <div className="widget-testimonials-slider">

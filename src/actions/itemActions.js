@@ -10,7 +10,7 @@ import {
     ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
     HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY, PRODUCT_NOT_FOUND,
     ITEM_MODAL, HEADER_SEARCH_SUCCESS, GET_SELLER_DELIVERIES, ITEM_SELECTED_ORDER_DETAIL_MODAL, PRODUCT_FOUND,
-    HEADER_SEARCH_SUCCESS_ADVERT
+    HEADER_SEARCH_SUCCESS_ADVERT, CREDITS_OBTAINED_SUCCESSFULLY
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
@@ -972,6 +972,33 @@ export const getSellerDeliveries = (id = 0, numberOfPage = 100) => {
 }
 
 
+export const getSellerDelieryById = (id = 0) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`/api/v1/seller/delivery/get/${id}`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            const delivery = [];
+            delivery.push(response.data.delivery)
+            dispatch({ type: GET_SELLER_DELIVERIES, payload: delivery})
+            dispatch({ type: STOP_LOADING, payload: '' })
+        } catch (error) {
+            console.log('er', error.response)
+            if (error.response.status === 498) {
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
+                }, 1500)
+            }
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+    }
+}
+
+
 export const itemSelectedOrderDetailModal = selectedItems => {
     return { type: ITEM_SELECTED_ORDER_DETAIL_MODAL, payload: selectedItems }
 }
@@ -988,22 +1015,28 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
             //         }
             //     } )
             // })
-            await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
-                productId: selectedItem
-            }, {
-                headers: {
-                    'x-access-token': localStorage.getItem('x-access-token')
-                }
+            selectedItem.forEach(async(id) => {
+                await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
+                    productId: id
+                }, {
+                    headers: {
+                        'x-access-token': localStorage.getItem('x-access-token')
+                    }
+                })
             })
             dispatch({ type: STOP_LOADING, payload: '' })
             dispatch({ type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully' })
         } catch (error) {
             console.log('er', error.response)
-            if (error.response.status === 498) {
+            if (error.response.status === 498 || error.response.status === 401) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
                 return setTimeout(function () {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
+            }
+            if(error.response && error.response.data && error.response.data.message){
+                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+                return dispatch({ type: STOP_LOADING, payload: '' })
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -1016,6 +1049,7 @@ export const getProductById = (id = '') => {
         try {
             const response = await axios.get(`/api/v1/seller/product/get/${id}`)
             const { product } = response.data;
+            console.log(product)
             dispatch({ type: STOP_LOADING, payload: '' })
             dispatch({ type: PRODUCT_FOUND, payload: product })
         } catch (error) {
@@ -1058,6 +1092,36 @@ export const markOrderAsAccepted = (orderNumber = null) => {
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
+    }
+}
+
+export const getUserCredits = () => {
+    return async (dispatch) => {
+        try{
+            const response = await axios.get('/api/v1/user/credit/get', {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            });
+            const {data: {credit}} = response;
+            dispatch({type: STOP_LOADING, payload:''})
+            return dispatch({type: CREDITS_OBTAINED_SUCCESSFULLY, payload: credit});
+        }catch(error){
+            console.log('er', error.response)
+            if (error.response.status === 498 || error.response.status === 401) {
+                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                return setTimeout(function () {
+                    dispatch({ type: LOGOUT_USER, payload: '' })
+                }, 1500)
+            }
+            if(error.response && error.response.data && error.response.data.message){
+                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+                return dispatch({ type: STOP_LOADING, payload: '' })
+            }
+            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            dispatch({ type: STOP_LOADING, payload: '' })
+        }
+
     }
 }
 

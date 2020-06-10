@@ -17,27 +17,36 @@ class AzonkaCreditDataTable extends Component {
                 {title:'Transaction Type',
                  render: (data, type, row, meta ) => {
                     if ( type === 'display' ) {
-                        return row.type
+                        return row.type.toUpperCase()
                     }
-                     return row.type
+                     return row.type.toUpperCase()
+                 },
+                 responsivePriority: 2
+                },
+                {title:'Transaction Reason',
+                 render: (data, type, row, meta ) => {
+                    if ( type === 'display' ) {
+                        return row.reason.toUpperCase()
+                    }
+                     return row.reason.toUpperCase()
                  },
                  responsivePriority: 2
                 },
                 {title: 'Credit Value', 
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
-                            return row.value
+                            return row.amount
                         }
-                        return row.value   
+                        return row.amount   
                     },
                     responsivePriority: 1
                 },
                 {title: 'Date Created',
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
-                            return this.converToDate(row.createdAt)
+                            return new Date(row.createdAt).toLocaleString()
                         } 
-                        return this.converToDate(row.createdAt)
+                        return new Date(row.createdAt).toLocaleString()
                     },
                     responsivePriority: 3
                 },

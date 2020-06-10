@@ -191,29 +191,28 @@ class ShopItemDetails extends Component {
                                             <div className="product-single-details">
                                                 <h1 className="product-title">{detailsData && detailsData.name} ({detailsData && detailsData.model})</h1>
 
-                                                <div className="ratings-container">
+                                                {/* <div className="ratings-container">
                                                     <div className="product-ratings">
                                                         <span className="ratings" style={{ width: "60%" }}></span>
-                                                        {/* <!-- End .ratings --> */}
+                                                     
                                                     </div>
-                                                    {/* <!-- End .product-ratings --> */}
-
-                                                    {/* <Link to="#" className="rating-link">( 6 Reviews )</Link> */}
-                                                </div>
+                                                </div> */}
                                                 {/* <!-- End .product-container --> */}
 
                                                 <div className="price-box">
                                                     <span className="old-price">&#8358;{detailsData && detailsData.sellingPrice}</span>
                                                     <span className="product-price">&#8358;{detailsData && detailsData.finalPrice}</span>
                                                 </div>
-                                                <div className="delivery-timeline-wrapper">
-                                                    <i style={{color:"rgb(0, 136, 204)", fontSize:'20px'}} className="icon-shipping"></i>
-                                                    {/* <h4>FREE<br />SHIPPING</h4> */}
-                                                    Expected Delivery Day(s)
-                                                    <div className="delivery-timeline">
-                                                        {deliveryDays} Day(s)
-                                                    </div>
-                                                </div>
+                                                {
+                                                    deliveryDays ? <div className="delivery-timeline-wrapper">
+                                                        <i style={{color:"rgb(0, 136, 204)", fontSize:'20px'}} className="icon-shipping"></i>
+                                                        {/* <h4>FREE<br />SHIPPING</h4> */}
+                                                        <span>Expected Delivery Day(s)</span>
+                                                        <div className="delivery-timeline">
+                                                            <span>{deliveryDays} Day(s)</span>
+                                                        </div>
+                                                    </div> : null
+                                                }
                                                 {/* <!-- End .price-box --> */}
 
                                                 {/* <div className="product-desc">

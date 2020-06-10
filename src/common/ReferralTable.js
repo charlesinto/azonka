@@ -8,7 +8,6 @@ require( 'datatables.net-responsive' )
 class ReferralTable extends Component {
     componentDidMount(){
         this.$el = $(this.el)
-        console.log('this props', this.props.data)
         this.$el.DataTable({
             responsive: true,
             data:this.props.data,

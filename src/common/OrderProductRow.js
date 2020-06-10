@@ -152,7 +152,7 @@ class OrderProductRow extends Component {
                             </div>
                         </div>
                         <div className="d-flex justify-content-between mobile-status-price">
-                            <span class="text-success">Created</span>
+                                    <span class="text-success">{this.props.data.status}</span>
                             <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
                         </div>
                     </div>

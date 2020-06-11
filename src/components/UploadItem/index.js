@@ -457,7 +457,7 @@ class index extends Component {
             <StoreDashboard>
                 <h2>Create Item</h2>
                 <div style={{display:'flex', justifyContent:'flex-start', margin: '20px 10px'}}>
-                    <button onClick={this.goToManageItems} type="button" class="btn btn-outline-success">
+                    <button onClick={this.goToManageItems} type="button" class="btn-cm btn-outline-success">
                         <span style={{marginRight: 10}}>
                         <i className="fas fa-window-restore"></i></span>Manage Items</button>
                 </div>
@@ -474,20 +474,20 @@ class index extends Component {
                                         marginTop: 20, marginBottom: 40,
                                         display: 'flex', justifyContent: 'center', width: '100%', alignItems: 'center'
                                     }}>
-                                        <input accept="image/*" onChange={this.handleFileSelect} type="file" ref={this.uploadFileButton} className="real-file btn btn-warning" hidden="hidden" />
+                                        <input accept="image/*" onChange={this.handleFileSelect} type="file" ref={this.uploadFileButton} className="real-file btn-cm btn-warning" hidden="hidden" />
                                         {
                                             !this.props.previewImage ?
                                                 (
-                                                    <button onClick={this.uploadButton} type="button" style={{fontSize: '0.78em'}} className="btn btn-primary">Upload Main Photo</button>
+                                                    <button onClick={this.uploadButton} type="button" style={{fontSize: '0.78em'}} className="btn-cm btn-primary">Upload Main Photo</button>
                                                 ) :
                                                 <div className="container" >
                                                     <div className="row">
                                                             <div className="col-md-12 col-sm-12">
-                                                                <button onClick={this.uploadButton} style={{marginBottom: 10, fontSize: '0.78em'}} type="button" className="btn btn-sm btn-block btn-outline-success">Change Photo</button>
+                                                                <button onClick={this.uploadButton} style={{marginBottom: 10, fontSize: '0.78em'}} type="button" className="btn-cm btn-sm btn-block btn-outline-success">Change Photo</button>
                                                     
                                                             </div>
                                                             <div className="col-md-12 col-sm-12">
-                                                                <button type="button" className="btn btn-sm btn-block btn-danger">Remove</button>
+                                                                <button type="button" className="btn-cm btn-sm btn-block btn-danger">Remove</button>
                                                             </div>
                                                     </div>
                                                 </div>
@@ -514,10 +514,10 @@ class index extends Component {
                                                     this.props.subImage1.trim() !== '' ? 
                                                     (
                                                         <div>
-                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,1)} type="button" className="btn btn-sm btn-outline-primary action-btn btn-xs dt-edit">
+                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,1)} type="button" className="btn-cm btn-sm btn-outline-primary action-btn btn-xs dt-edit">
                                                             <i className="fas fa-pen"></i>
                                                             </button>
-                                                            <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 1)}  type="button" className="btn btn-sm btn-outline-danger action-btn btn-xs dt-edit">
+                                                            <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 1)}  type="button" className="btn-cm btn-sm btn-outline-danger action-btn btn-xs dt-edit">
                                                                 <i className="fas fa-trash"></i>
                                                             </button>
                                                         </div>
@@ -595,7 +595,7 @@ class index extends Component {
                                                     this.props.subImage4.trim() !== '' ? 
                                                     (
                                                         <div>
-                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn btn-sm btn-outline-primary action-btn btn-xs dt-edit">
+                                                            <button style={{maxHeight: '4rem', marginRight:8}} onClick={(e) => this.handleOnClickSubImage(e,4)} type="button" className="btn-cm btn-sm btn-outline-primary action-btn btn-xs dt-edit">
                                                             <i className="fas fa-pen"></i>
                                                             </button>
                                                             <button style={{maxHeight: '4rem'}} onClick={(e) => this.removeSubImage(e, 4)}  type="button" className="btn btn-sm btn-outline-danger action-btn btn-xs dt-edit">
@@ -967,13 +967,13 @@ class index extends Component {
                                                 this.props.action === 'save' ?
                                                     (
                                                         <div style={{ textAlign: "center" }}>
-                                                            <button onClick={this.handleFormSubmit} className="btn btn-primary">Submit for Review</button>
+                                                            <button onClick={this.handleFormSubmit} className="btn-cm btn-primary">Submit for Review</button>
                                                         </div>
 
                                                     ) :
                                                     (
                                                         <div style={{ textAlign: 'center' }}>
-                                                            <button onClick={this.hanldeFormUpdate} className="btn btn-success">Update Item</button>
+                                                            <button onClick={this.hanldeFormUpdate} className="btn-cm btn-success">Update Item</button>
                                                         </div>
                                                     )
                                             }

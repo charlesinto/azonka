@@ -12,7 +12,6 @@ import CartPrice from "../../common/CartPrice";
 import CartItem from "../../common/CartItem";
 import CartActions from "../../common/CartActions";
 import Drawer from '@material-ui/core/Drawer';
-import OrderProductRow from '../../common/OrderProductRow';
 import Footer from '../HeaderFooter/Footer';
 import WishListRow from './WishListRow';
 

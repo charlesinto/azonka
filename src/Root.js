@@ -24,7 +24,7 @@ import Bank from "./components/Bank";
 import WishList from "./components/WishList";
 import AgentSignUp from "./components/AgentSignUp";
 import SellerSignUp from "./components/SellerSignUp";
-import AzonkaPay from "./components/AzonkaPay";
+// import AzonkaPay from "./components/AzonkaPay";
 import AddressBook from "./components/AddressBook";
 import ChangePassword from "./components/Auth/changePassword";
 import Store from "./components/Store";
@@ -93,6 +93,7 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/buycredit" component={BuyCredit} />
                                 <AuthRoute exact path="/users/change-pincode" component={ChangePincode} />
                                 <AuthRoute exact path="/users/transactions/delivery" component={MyDelivery} />
+                                <AuthRoute exact path="/users/transactions/delivery/:id" component={MyDelivery} />
                                 <AuthRoute exact path="/users/wallet/fund" component={Wallet} />
                                 <AuthRoute exact path="/users/wallet/withdraw" component={WithDrawal} />
                                 <AuthRoute exact path="/users/wallet/wallet-transfer" component={WalletToWalletTransfer} />
@@ -107,7 +108,7 @@ class Root extends Component {
                                 <AuthRoute redirectIfUser exact path="/users/referrals" component={Referral} />
                                 <AuthRoute exact path="/users/banks" component={Bank} />
                                 <Route exact path="/users/checkout" component={Checkout} />
-                                <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} />
+                                {/* <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} /> */}
                                 <AuthRoute exact path="/users/agent/signup" component={AgentSignUp} />
                                 <AuthRoute exact path="/users/seller/signup" component={SellerSignUp} />
                                 <AuthRoute noAuthRequired path="/users/wishlist" component={WishList} />

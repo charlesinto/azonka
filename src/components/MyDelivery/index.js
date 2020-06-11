@@ -1,119 +1,197 @@
-import React, { Component} from 'react';
-import StoreDashboard from "../HOC/StoreDashboard";
+import React, { Component} from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import nodataImg from '../../assets/nodatafound.png'
+import StoreDashboard from "../HOC/StoreDashboard";
+import DeliveryRow from "../../common/DeliveryRow";
 
-import DeliveryDataTable  from "../../common/DeliveryDataTable";
-import ProductDetailModal from '../../common/ProductDetailModal';
-
-class MyDelivery extends Component{
-    INITIAL_STATE = {product: [], quantity: 0, updateDt: false, selectedId: null, deliveryCode: ''}
-    constructor(props){
-        super(props);
-        this.state = {...this.INITIAL_STATE}
+class MyDelivery extends Component {
+    state = {
+        pageCount: 10,
+        totalRecords: 1000,
+        currentPage: 0,
+        records: [],
+        currentIndex: 0
     }
     componentDidMount(){
-        this.props.initiateRegistration()
         this.props.setActiveLink('My Deliveries')
-        this.props.getSellerDeliveries()
-    }
-    _handleRowClick = (selectedId, action) => {
-        switch(action){
-            case 'view':
-                // console.log(this.props.delivery);
-                console.log(selectedId)
-                console.log('Delivery: ', this.props.delivery);
-                const index = this.props.delivery.findIndex(element => element.id === parseInt(selectedId));
-                // console.log('product', this.props.delivery[index]['products'], index)
-                this.props.initiateRegistration()
-                return this.setState({
-                    selectedId,
-                    product: this.props.delivery[index]['products'],
-                    quantity: this.props.delivery[index]['quantity'],
-                    updateDt: false,
-                }, () => setTimeout(() => { 
-                    this.setState({updateDt: true}, () => {
-                        this.props.stopLoading()
-                        setTimeout(() => {
-                            this.setState({updateDt: false})
-                        }, 1500)
-                    })
-
-                }, 2000))
-            case 'approve': 
-                this.setState({
-                    selectedId
-                })
-            break;
-            default:
-                return;
-        }
-    }
-    removeItemsFromTable = () => {
-        this.setState({...this.INITIAL_STATE, updateDt: true})
-    }
-    handleInputChange = (event) => {
-        const {target: {name, value}} = event;
-
-        this.setState({
-            [name]: value
-        });
-    }
-    completeOrder = async () => {
-        if(this.state.deliveryCode.trim() === ''){
-           return  this.props.renderError('Please enter delivery code')
-        }
+        const id = this.props.match.params.id;
         this.props.initiateRegistration()
-        await this.props.completeOrder({orderId: this.state.selectedId, deliveryCode: this.state.deliveryCode})
-        this.setState({
-            selectedId: '', deliverCode: ''
+        if(id == null){
+           return this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
+        }
+
+        return this.props.getSellerDelieryById(id)
+        
+        
+    }
+    static getDerivedStateFromProps(nextProps, state){
+        if(nextProps.delivery !== state.records){
+            return {...state, records: nextProps.delivery}
+        }
+        return null
+    }
+    renderRows(){
+       return  this.state.records.map(data => {
+             return <DeliveryRow 
+                    handleItemDelete={this.handleItemDelete}
+                    data={data}
+                    fullData={data}
+                    />
         })
     }
-    render(){
-        return (<StoreDashboard>
-                <h4 className="popup-title verify-email" style={{
-                            fontWeight: 'bold',
-                            fontFamily: 'Titillium web, sans-serif',
-                            marginLeft: 20
-                }}>My Deliveries</h4>
-                <hr className="line-separator"/>
-                <div className="container">
-                    <DeliveryDataTable data={this.props.delivery}
-                        handleRowClick={(id, action) => this._handleRowClick(id, action)}
-                        
-                    />
+    renderHeader = () => {
+        return (
+            <div className="row item-header mx-4">
+                <div className="header-item-orderId col-md-1 ">
+                    ORDER
                 </div>
-                <ProductDetailModal selectedId={this.state.selectedId} removeItemsFromTable={this.removeItemsFromTable} updateDt={this.state.updateDt} quantity={this.state.quantity} product={this.state.product} />
+                <div className="header-item-name col-md-4 ">
+                    ITEM
+                    </div>
+                <div className="header-item-price col-md-2  text-center">
+                    STATUS
+                    </div>
 
-                <div class="modal fade" id="deliverycode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Complete Delivery</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <label>Delivery Code</label>
-                                <input type="text"
-                                 id="deliveryCode" value={this.state.deliverCode} onChange={this.handleInputChange} 
-                                 name="deliveryCode" placeholder="Enter Delivery Code" />
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button onClick={this.completeOrder} type="button" class="btn btn-primary">Complete</button>
-                        </div>
-                        </div>
+                <div className="header-item-subtotal col-md-2  text-center">
+                    ACTION
                     </div>
-                    </div>
-        </StoreDashboard>)
+                
+            </div>
+        )
+    }
+    renderPagination(){
+        let links = [];
+        for(let i = 0; i < this.state.totalRecords; i++){
+            if(i % 100 === 0){
+                links.push(
+                    <li className={`page-item ${(this.state.currentPage / 100) === (i / 100) ? ' active': ''}`}>
+                        <a onClick={() => this.moveToNextPage(i / 100)} className="page-link" id={`${i/100}`} href={`#${i/100}`}>{i / 100}</a>
+                    </li>
+                )
+            }
+        }
+        
+        return (
+            <nav aria-label="Page navigation example my-6">
+                <ul className="pagination justify-content-end">
+                    {
+                        
+                    }
+                    <li className="page-item" onClick={() => this.moveToPrevious()}>
+                    <a className="page-link" href="#2" tabindex="-1">Previous</a>
+                    </li>
+                    {
+                        links.map(element => element)
+                    }
+                    <li className="page-item" onClick={() => this.next()}>
+                    <a className="page-link" href="#1">Next</a>
+                    </li>
+                </ul>
+                </nav>
+        )
+    }
+    moveToPrevious = async () => {
+        if(this.state.currentPage - 100 === 0) return ;
+        await this.props.getSellerDeliveries(this.state.currentPage, this.state.currentPage - 100);
+        this.setState({
+            currentPage: this.state.currentPage - 100
+        })
+    }
+    next = async () => {
+        await this.props.getSellerDeliveries(this.state.currentPage, this.state.currentPage + 100);
+        this.setState({
+            currentPage: this.state.currentPage + 100
+        })
+    }
+    moveToNextPage = async (pageNumber) => {
+        this.props.initiateRegistration();
+        await this.props.getSellerDeliveries(pageNumber * 100, (pageNumber * 100) + 100);
+        this.setState({
+            currentPage: pageNumber * 100
+        })
+    }
+    dropDownButton = () => {
+        return (
+            <div className="dropdown">
+            <button className="btn-cm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a className="dropdown-item" href="#n">Action</a>
+                <a className="dropdown-item" href="#n">Another action</a>
+                <a className="dropdown-item" href="#n">Something else here</a>
+            </div>
+            </div>
+        )
+    }
+    render(){
+        return (
+           <StoreDashboard>
+                <div className="container custom-container" >
+                {
+                    this.state.records.length > 0 ?
+                    <>
+                        
+                        {this.renderHeader()}
+
+                        {this.renderRows()}
+
+                        <div className="my-8 hide-mobile">
+                            {this.renderPagination()}
+                        </div>
+                        <div className="mobile-item-details-wrapper">
+                        <nav aria-label="Page navigation example my-6">
+                            <ul className="pagination justify-content-end">
+                                {
+                                    
+                                }
+                                <li className="page-item" onClick={() => this.moveToPrevious()}>
+                                <a className="page-link" href="#2" tabindex="-1">Previous</a>
+                                </li>
+                                <li className="page-item" onClick={() => this.next()}>
+                                <a className="page-link" href="#1">Next</a>
+                                </li>
+                            </ul>
+                            </nav>
+                        </div>
+                    </>
+                     :
+                    (
+                        <div>
+                            
+                            {this.renderHeader()}
+                            <div className="row d-flex justify-content-center my-5">
+                                <img style={{width: '350px', height: '200px'}} src={nodataImg} alt="Empty state" className="img-empty-state" />
+                            </div>
+                            <div className="my-8 hide-mobile">
+                            {this.renderPagination()}
+                            </div>
+                            <div className="mobile-item-details-wrapper">
+                            <nav aria-label="Page navigation example my-6">
+                                <ul className="pagination justify-content-end">
+                                    
+                                    <li className="page-item" onClick={() => this.moveToPrevious()}>
+                                    <a className="page-link" href="#2" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li className="page-item" onClick={() => this.next()}>
+                                    <a className="page-link" href="#1">Next</a>
+                                    </li>
+                                </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+           </StoreDashboard>
+        )
     }
 }
+
 const mapStateToProps = state => {
     const {inventory: {delivery}} = state;
     return {delivery}
 }
+
 export default connect(mapStateToProps, actions)(MyDelivery);

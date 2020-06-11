@@ -97,6 +97,7 @@ class OrderProductRow extends Component {
     render() {
         if (!this.props.data.products[0]) return <div>no products</div>;
         const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
+        console.log("fuck", this.props.data.products[0])
         return (
             <>
                 <div className="row item-row py-3 my-4 bg-white" key={id}>
@@ -150,7 +151,7 @@ class OrderProductRow extends Component {
                             </div>
                         </div>
                         <div className="d-flex justify-content-between mobile-status-price">
-                                    <span class="text-success">{this.props.data.status}</span>
+                            <span class="text-success">{this.props.data.status}</span>
                             <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p>
                         </div>
                     </div>

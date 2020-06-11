@@ -7,7 +7,9 @@ import Referral from "./components/Referrals";
 import SecurityQuestion from "./components/Auth/SecurityQuestion";
 
 import AuthRoute from "./components/Auth/AuthRoute";
-import NotFoundRoute from "./components/Auth/NotFoundRoute";
+// import NotFoundRoute from "./components/Auth/NotFoundRoute";
+
+import NotFound from "./components/NotFound";
 
 import Profile from "./components/Profile";
 import AccountSetting from "./components/AccountSetting";
@@ -78,8 +80,10 @@ class Root extends Component {
                                 <Route exact path="/wishlist" component={WishList} />
                                 <Route exact path="/modal" component={ItemModal} />
                                 <Route exact path="/cartest" component={CartTest} />
+                                <AuthRoute redirectIfUsernoAuthRequired  path="/password/new" component={ResetPassword} />
                                 <Route exact path="/specials/:id" component={SpecialItemDetail} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register" component={Register} />
+                                <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register/:id" component={Register} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />
                                 <AuthRoute exact path="/users/securityquestions" component={SecurityQuestion} />
@@ -97,10 +101,10 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/wallet/fund" component={Wallet} />
                                 <AuthRoute exact path="/users/wallet/withdraw" component={WithDrawal} />
                                 <AuthRoute exact path="/users/wallet/wallet-transfer" component={WalletToWalletTransfer} />
-                                <AuthRoute exact path="product/review/:id" component={ProductReview} />
+                                <AuthRoute exact path="/product/review/:id" component={ProductReview} />
                                 <AuthRoute redirectIfUser exact path="/users/sales" component={Sales} />
                                 <AuthRoute exact path="/users/azonka-credits" component={MyAzonkaCredits} />
-                                <AuthRoute redirectIfUser exact path="/users/commissions" component={Commission} />
+                                <AuthRoute  redirectIfUser exact path="/users/commissions" component={Commission} />
                                 <AuthRoute redirectIfUser exact path="/users/withdrawal" component={WithDrawal} />
                                 <AuthRoute redirectIfUser exact path="/users/items/upload" component={UploadItem} />
                                 <AuthRoute redirectIfUser exact path="/users/store" component={StoreDetail} />
@@ -108,15 +112,18 @@ class Root extends Component {
                                 <AuthRoute redirectIfUser exact path="/users/referrals" component={Referral} />
                                 <AuthRoute exact path="/users/banks" component={Bank} />
                                 <Route exact path="/users/checkout" component={Checkout} />
-                                {/* <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} /> */}
+                                {/*---- <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} /> */}
                                 <AuthRoute exact path="/users/agent/signup" component={AgentSignUp} />
                                 <AuthRoute exact path="/users/seller/signup" component={SellerSignUp} />
-                                <AuthRoute noAuthRequired path="/users/wishlist" component={WishList} />
+                                <AuthRoute exact noAuthRequired path="/users/wishlist" component={WishList} />
                                 <AuthRoute exact path="/users/reset-password" component={ChangePassword} />
-                                <AuthRoute redirectIfUser exact path="/users/create/shop" component={Store} />
-                                <AuthRoute redirectIfAuth noAuthRequired exact="/password/new" component={ResetPassword} />
-
-                                <NotFoundRoute redirectIfUser path="*" component={Home} />
+                                <AuthRoute  redirectIfUser exact path="/users/create/shop" component={Store} />
+                                
+                                
+                                <Route component={NotFound} />
+                                
+                                {/* <Route component={NotFound} /> */}
+                                {/* <NotFoundRoute path="*" component={Home} /> */}
 
                             </AnimatedSwitch>
                         </Layout>

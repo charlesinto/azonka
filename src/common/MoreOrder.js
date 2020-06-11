@@ -111,12 +111,13 @@ export class MoreOrder extends Component {
                                                         </div>
                                                         <div className="item-qty col-md-1 border-right text-center hide-mobile">
                                                             <input type="number" class="form-control p-0 text-center"
-                                                                value={this.props.qty}
+                                                                // value={this.props.qty}
+                                                                value={this.props.data.quantity[id]}
                                                                 disabled={true}
                                                                 id="" placeholder="Qty" />
                                                         </div>
                                                         <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                                                            ₦ {this.numberWithCommas(finalPrice * this.props.qty)}
+                                                            ₦ {this.numberWithCommas(finalPrice * this.props.data.quantity[id])}
                                                         </div>
                                                         <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
                                                             {this.props.status.toUpperCase()}
@@ -130,7 +131,7 @@ export class MoreOrder extends Component {
                                                                             <span class="input-group-text qty-sub">-</span>
                                                                         </div>
                                                                         <input type="number" class="form-control p-0 text-center"
-                                                                            value={this.props.qty}
+                                                                            value={this.props.data.quantity[id]}
                                                                             aria-label="Amount (to the nearest dollar)" />
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text qty-add">+</span>
@@ -139,7 +140,7 @@ export class MoreOrder extends Component {
                                                                     <div className="d-flex calc-div">
                                                                         <div> ₦ {this.numberWithCommas(finalPrice)}</div>
                                                                         <span className="px-3">X</span>
-                                                                        <div> {this.props.qty}</div>
+                                                                        <div>{this.props.data.quantity[id]}</div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="d-flex my-5 justify-content-end">

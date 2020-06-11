@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Header from "../HeaderFooter/Header";
+// import Header from "../HeaderFooter/Header";
 import Footer from "../HeaderFooter/Footer";
 import queryString from "query-string";
 import { withStyles } from '@material-ui/core/styles';
@@ -326,7 +326,7 @@ class LoginSignup extends Component {
         const {classes} = this.props
         return (
             <div>
-                <Header />
+                {/* <Header /> */}
                 <div className="router-container mfp-content" style={{
                     display: 'block',
                     zIndex: 1

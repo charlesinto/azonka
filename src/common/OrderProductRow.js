@@ -214,6 +214,7 @@ class OrderProductRow extends Component {
                 <MoreOrder
                     qty={this.state.qty}
                     id={this.props.data.id}
+                    data={this.props.data}
                     orderData={this.props.data.products}
                     status={this.props.data.status.toUpperCase()}
                 />

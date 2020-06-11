@@ -9,6 +9,7 @@ import defaultTheme from './theme/theme'
 import  "@fortawesome/fontawesome-free/css/all.css";
 import  "./css/style.css";
 import  "./css/css/app.css";
+import { HashRouter } from "react-router-dom";
 import 'react-awesome-slider/dist/styles.css';
 import { ToastProvider} from 'react-toast-notifications'
 //Banners
@@ -29,17 +30,20 @@ class App extends Component {
   }
   render(){
     return (
-      <ToastProvider>
-        <div className="">
-          <Provider store={createStoreWithMiddleware(Reducer,
-            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
-              <MuiThemeProvider theme={theme}>
-                <Root />
-              </MuiThemeProvider>
-          </Provider>
 
-        </div>
-      </ToastProvider>
+      <HashRouter>
+        <ToastProvider>
+          <div className="">
+            <Provider store={createStoreWithMiddleware(Reducer,
+              window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+                <MuiThemeProvider theme={theme}>
+                  <Root />
+                </MuiThemeProvider>
+            </Provider>
+
+          </div>
+        </ToastProvider>
+      </HashRouter>
     );
   }
 }

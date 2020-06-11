@@ -2,7 +2,7 @@ import React, {  Component } from 'react';
 import {  withToastManager } from 'react-toast-notifications';
 import Validator from 'validator';
 import { connect } from 'react-redux';
-import queryString from "query-string";
+// import queryString from "query-string";
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import { amber } from '@material-ui/core/colors';
@@ -47,12 +47,13 @@ class Register extends Component {
         showSpinner: false
     }
     componentDidMount(){
-        const query = queryString.parse(this.props.location.search)
-        if (query['referral']) {
+        console.log(this.props.match.params.id)
+        // const query = queryString.parse(this.props.location.search)
+       
             this.setState({
-                referredBy: query['referral']
+                referredBy: this.props.match.params && this.props.match.params.id ? this.props.match.params.id : ''
             })
-        } 
+        
     }
     extendedUserTypeChange = (event, value) => {
         this.setState({

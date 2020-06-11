@@ -26,6 +26,7 @@ class MyDelivery extends Component {
         
     }
     static getDerivedStateFromProps(nextProps, state){
+        console.log(nextProps.delivery)
         if(nextProps.delivery !== state.records){
             return {...state, records: nextProps.delivery}
         }
@@ -34,6 +35,7 @@ class MyDelivery extends Component {
     renderRows(){
        return  this.state.records.map(data => {
              return <DeliveryRow 
+                    id={data.id}
                     handleItemDelete={this.handleItemDelete}
                     data={data}
                     fullData={data}
@@ -65,7 +67,7 @@ class MyDelivery extends Component {
         for(let i = 0; i < this.state.totalRecords; i++){
             if(i % 100 === 0){
                 links.push(
-                    <li className={`page-item ${(this.state.currentPage / 100) === (i / 100) ? ' active': ''}`}>
+                    <li key={i} className={`page-item ${(this.state.currentPage / 100) === (i / 100) ? ' active': ''}`}>
                         <a onClick={() => this.moveToNextPage(i / 100)} className="page-link" id={`${i/100}`} href={`#${i/100}`}>{i / 100}</a>
                     </li>
                 )

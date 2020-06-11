@@ -6,7 +6,7 @@ import logoHeader from "../../images/logo_header.png";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Header from "../HeaderFooter/Header";
+// import Header from "../HeaderFooter/Header";
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import Footer from '../HeaderFooter/Footer';
@@ -141,7 +141,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <Header />
+                {/* <Header /> */}
                 <div style={{ minHeight: '100vh', paddingTop: '11.3rem' }}>
                     <main className="main">
                         <div className="info-boxes-container">

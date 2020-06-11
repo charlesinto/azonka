@@ -140,7 +140,8 @@ export class DeliveryMore extends Component {
                                                         </div>
                                                         <div className="item-qty col-md-1 border-right text-center hide-mobile">
                                                             <input type="number" class="form-control p-0 text-center"
-                                                                value={this.props.qty}
+                                                                // value={this.props.qty}
+                                                                value={this.props.data.quantity[id]}
                                                                 disabled={true}
                                                                 id="" placeholder="Qty" />
                                                         </div>
@@ -168,7 +169,7 @@ export class DeliveryMore extends Component {
                                                                     <div className="d-flex calc-div">
                                                                         <div> ₦ {this.numberWithCommas(finalPrice)}</div>
                                                                         <span className="px-3">X</span>
-                                                                        <div> {this.props.qty}</div>
+                                                                        <div> value={this.props.data.quantity[id]}</div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="d-flex my-5 justify-content-end">

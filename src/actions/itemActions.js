@@ -1074,9 +1074,7 @@ export const markOrderAsAccepted = (orderNumber = null) => {
             dispatch({ type: STOP_LOADING, payload: '' })
             const { message } = response.data
             dispatch({ type: SUCCESS_ALERT, payload: message })
-            setTimeout(() => {
-                window.location.reload()
-            }, 1500)
+            
         } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498 || error.response.status === 401) {

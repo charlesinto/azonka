@@ -11723,7 +11723,6 @@ label {
     width: 100%;
     background: #fff;
     padding: 10px 20px;
-    margin-right: 10px;
     display: flex;
     align-items: safe;
     /* height: 100px; */
@@ -12678,3 +12677,19 @@ label.custom{
   right: 10px;
   left: auto;
 }
+
+textarea.select-area{
+    min-height: 40px !important;
+    height: 40px !important;
+    overflow-y: hidden;
+}
+
+.not-found-page{
+    padding-top: 11rem !important;
+  }
+
+  .bnt-m-continue{
+      position: absolute;
+      bottom: 10%;
+      left: calc(50% - 60px);
+  }

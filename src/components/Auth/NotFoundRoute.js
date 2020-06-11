@@ -1,8 +1,11 @@
 import React from 'react';
-import { Redirect,  } from "react-router-dom";
+import { Route,  } from "react-router-dom";
+import NotFound from "../NotFound";
 
 const NotFoundRoute = ({component: Component, ...rest}) => {
-    return <Redirect to="/" component={Component} {...rest} />
+    console.log('called ehere')
+    // return <Redirect to="/" component={NotFound} {...rest} />
+    return <Route {...rest} component={NotFound} />
 };
 
 export default NotFoundRoute;

@@ -5,7 +5,7 @@ import { ToastProvider } from 'react-toast-notifications'
 import * as actions from "../../actions";
 import Spinner from "../../assets/spinner.svg";
 import SweetAlert from "react-bootstrap-sweetalert";
-import Header from '../HeaderFooter/Header';
+// import Header from '../HeaderFooter/Header';
 
 class Layout extends Component {
     logout = () => {
@@ -34,10 +34,10 @@ class Layout extends Component {
         this.props.closeSnackBar()
     }
     render() {
-        console.log(this.props.redirectToProfile, this.props.redirectToCart)
+        console.log(this.props.redirectToLogin)
         return (
             <ToastProvider>
-                <Header />
+                {/* <Header /> */}
                 {this.props.children}
 
                 {

@@ -3,6 +3,8 @@ import { Redirect, Route } from "react-router-dom";
 
 const AuthRoute = ({component: Component, noAuthRequired,redirectIfUser, redirectIfAuth, ...rest}) => {
     const user = localStorage.getItem('azonta-user')
+    console.log(rest)
+    console.log('fetchUser')
     if(user){
         if(redirectIfUser && user.type === 'user'){
             return <Redirect {...rest} to="/"/>
@@ -10,9 +12,10 @@ const AuthRoute = ({component: Component, noAuthRequired,redirectIfUser, redirec
         // if(redirectIfAuth){
         //     return <Redirect {...rest} to="/users/profile"/>
         // }
-        return <Route {...rest} component={Component} />
+        return <Route {...rest} exact component={Component} />
     }
-    return noAuthRequired ? <Route {...rest} component={Component} /> : 
+    // console.log('excaped here now')
+    return noAuthRequired ? <Route exact {...rest} component={Component} /> : 
     <Redirect to="/users/login" {...rest} />
 };
 

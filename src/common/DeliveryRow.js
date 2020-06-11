@@ -86,7 +86,9 @@ class DeiveryRow extends Component {
     acceptAllOrder = async (data) => {
         console.log(data.id)
         this.props.initiateRegistration()
-        this.props.markOrderAsAccepted(data.id)
+        await this.props.markOrderAsAccepted(data.id)
+        this.props.initiateRegistration()
+        this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
     }
     selectedOrder = (data) => {
         this.setState({
@@ -101,6 +103,8 @@ class DeiveryRow extends Component {
         this.setState({
             deliveryCode: ''
         })
+        this.props.initiateRegistration()
+        this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
     }
     rejectAllOrder = (data) => {
         const deliveryId = data.id;
@@ -126,6 +130,8 @@ class DeiveryRow extends Component {
             deliveryId: null,
             showConfirmDialog: false
         })
+        this.props.initiateRegistration()
+        this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
     }
     onCancel = () => {
         this.setState({
@@ -202,9 +208,9 @@ class DeiveryRow extends Component {
                             disabled={true}
                             id="" placeholder="Qty" /> */}
                             <div className="d-flex justify-content-center">
-                            <button onClick={() => this.acceptAllOrder(this.props.data)} className="btn-cm mx-2 btn-primary" type="submit">Accept Order</button>
-                            <button onClick={() => this.rejectAllOrder(this.props.data)} className="btn-cm mx-2 btn-danger" type="submit">Reject All</button>
-                            <button onClick={() => this.selectedOrder(this.props.data)} className="btn-cm mx-2 btn-success" type="submit" data-toggle="modal" data-target="#exampleModalCenterDelivery">Complete Order</button>
+                            <button disabled={this.props.data.status !== 'created'} onClick={() => this.acceptAllOrder(this.props.data)} className="btn-cm mx-2 btn-primary" type="submit">Accept Order</button>
+                            <button disabled={this.props.data.status !== 'created'} onClick={() => this.rejectAllOrder(this.props.data)} className="btn-cm mx-2 btn-danger" type="submit">Reject All</button>
+                            <button  onClick={() => this.selectedOrder(this.props.data)} className="btn-cm mx-2 btn-success" type="submit" data-toggle="modal" data-target="#exampleModalCenterDelivery">Complete Order</button>
                         </div>
                         
                     </div>
@@ -236,6 +242,7 @@ class DeiveryRow extends Component {
                 <DeliveryMore
                     qty={this.state.qty}
                     id={this.props.data.id}
+                    data={this.props.data}
                     orderData={this.props.data.products}
                     status={this.props.data.status.toUpperCase()}
                 />

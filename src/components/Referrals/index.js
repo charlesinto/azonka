@@ -42,31 +42,40 @@ class index extends Component {
         return (
             <Dashboard>
                 <h2>Referrals</h2>
-                <div className="rerral-block">
-                    <div className="ref-div card">
-                        <div className="ref-heading">
-                            <span>Referral Code</span>
-                            <div className="ref-icon" ref={this.refCode} onClick={(e) => this.copyToClipBoard('refCode', 'referralCode')}>
-                                <span><i className="far fa-clipboard"></i></span>
-                            </div>
-                        </div>
-                        <div className="ref-text">
-                            <textarea style={{ minHeight: '5rem', overflowY: 'hidden' }} className="select-area" readOnly ref={this.referralCode} value={`${referralCode}`}></textarea>
-                        </div>
-                    </div>
-                    <div className="ref-div card">
-                        <div>
-                            <div className="ref-heading ">
-                                <span>Referral Link</span>
-                                <div className="ref-icon" ref={this.refLink} onClick={(e) => this.copyToClipBoard('refLink', 'referralLink')}>
-                                    <span><i className="far fa-clipboard"></i></span>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-6 ref-div">
+                            <div className="card mx-3 py-4 px-4" style={{height: '14rem'}}>
+                                <div className="ref-heading">
+                                    <span>Referral Code</span>
+                                    <div className="ref-icon" ref={this.refCode} onClick={(e) => this.copyToClipBoard('refCode', 'referralCode')}>
+                                        <span><i className="far fa-clipboard"></i></span>
+                                    </div>
                                 </div>
-
+                                <div className="ref-text py-4">
+                                    <textarea style={{minHeight: '40px !important', height:'40px'}}  className="select-area text-success" readOnly ref={this.referralCode} value={`${referralCode}`}></textarea>
+                                </div>
                             </div>
                         </div>
-                        <div className="ref-text ">
-                            <textarea style={{ minHeight: '7rem', overflowY: 'hidden' }} className="select-area referralLink" readOnly ref={this.referralLink}
-                                value={`http://167.99.154.149:1337/users/register?referral=${referralCode}`}></textarea>
+                        <div className="col-6 ref-div ">
+                            <div className="card py-4 px-4" style={{height: '14rem'}}>
+                                <div className="ref-heading ">
+                                    <span>Referral Link</span>
+                                    <div className="ref-icon" ref={this.refLink} onClick={(e) => this.copyToClipBoard('refLink', 'referralLink')}>
+                                        <span><i className="far fa-clipboard"></i></span>
+                                    </div>
+
+                                </div>
+                            <div className="ref-text py-4">
+                                <div >
+                                    <a className="text-success" href={`localhost:3000/users/register/${referralCode}`} rel="noopener noreferrer" target="_blank">
+                                        http://167.99.154.149:1337/users/register/{referralCode}
+                                    </a>
+                                </div>
+                                {/* <textarea style={{ minHeight: '7rem', overflowY: 'hidden' }} className="select-area referralLink" readOnly ref={this.referralLink}
+                                    value={`http://167.99.154.149:1337/users/register?referral=${referralCode}`}></textarea> */}
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>

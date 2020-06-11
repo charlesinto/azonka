@@ -97,7 +97,6 @@ class OrderProductRow extends Component {
     render() {
         if (!this.props.data.products[0]) return <div>no products</div>;
         const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
-        console.log("fuck", this.props.data.products[0])
         return (
             <>
                 <div className="row item-row py-3 my-4 bg-white" key={id}>

@@ -89,8 +89,8 @@ class Home extends Component {
         return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
     renderAdverts = () => {
-       return this.props.adverts.map(item => (
-           item.products.length >= 3 ? <div className="border mb-2" key={item.id}>
+        return this.props.adverts.map(item => (
+            item.products.length >= 3 ? <div className="border mb-2" key={item.id}>
                 <div className="d-flex justify-content-between py-4 px-4">
                     <h3>{item.name}</h3>
                     <Link to={`/specials/${item.id}`}><span> see all > </span></Link>
@@ -102,21 +102,21 @@ class Home extends Component {
                             {
                                 item.products.map(product => {
                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = product
-                                    return <FeatureProductItem id={id} name={name} 
-                                    brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} 
-                                    model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                    return <FeatureProductItem id={id} name={name}
+                                        brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)}
+                                        model={model} mainImageUrl={mainImageUrl} featArray={this.state.products}
+                                        handleMoveWishList={this.handleMoveWishList}
+                                    />
                                 })
                             }
                         </Slider>
                     </div>
                 </div>
             </div>
-            : null
+                : null
         ))
-        
+
     }
-
-
     renderPopup() {
         return (
             <Zoom right>
@@ -138,6 +138,29 @@ class Home extends Component {
             </Zoom>
         )
     }
+    handleMoveWishList = async (id) => {
+        let localData = JSON.parse(localStorage.getItem("wishList"))
+        if (localStorage.getItem('x-access-token')) {
+            let data = this.state.products && this.state.products
+            let filt = data.filter(o => +o.id === +id)[0]
+
+            if (!localData) {
+                localData = [filt]
+                localStorage.setItem("wishList", JSON.stringify(localData))
+                return this.props.successAlert('Item added successfully')
+            } else {
+                let _id = localData.some(o => +o.id === +id)
+                if (_id) {
+                    return this.props.successAlert('Item has already been moved to WishList')
+                } else {
+                    localData.push(filt)
+                    localStorage.setItem("wishList", JSON.stringify(localData))
+                    return this.props.successAlert('Item added successfully')
+                }
+            }
+        }
+    }
+
     render() {
         return (
             <div>
@@ -251,7 +274,11 @@ class Home extends Component {
                                                 this.state.products ? (
                                                     this.state.products.map(res => {
                                                         let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
-                                                        return <FeatureProductItem id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        return <FeatureProductItem id={id} name={name} brandName={brandName}
+                                                            sellingPrice={this.formatMoney(sellingPrice)} model={model}
+                                                            mainImageUrl={mainImageUrl} featArray={this.state.products}
+                                                            handleMoveWishList={this.handleMoveWishList}
+                                                        />
                                                     })
                                                 ) : null
                                             }
@@ -274,7 +301,13 @@ class Home extends Component {
                                                     let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
-                                                        <FlashSales key={i} id={id} name={name} brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)} model={model} mainImageUrl={mainImageUrl} featArray={this.state.products} />
+                                                        <FlashSales key={i} id={id} name={name}
+                                                            brandName={brandName}
+                                                            sellingPrice={this.formatMoney(sellingPrice)}
+                                                            model={model} mainImageUrl={mainImageUrl}
+                                                            featArray={this.state.products}
+                                                            handleMoveWishList={this.handleMoveWishList}
+                                                        />
 
                                                     )
                                                 })

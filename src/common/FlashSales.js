@@ -3,7 +3,6 @@ import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
-// import swal from 'sweetalert2'
 
 
 
@@ -32,13 +31,13 @@ class FlashSales extends Component {
             //     this.setState({ cartData: data.cart.products })
             //     this.handleSetOnlineData()
             let { data } = this.props.cartItems;
-            console.log('data: '+data);
+            console.log('data: ' + data);
             if (data && data.success) {
                 this.setState({ cartData: data.cart.products })
                 this.handleSetOnlineData()
                 // return swal.fire("Response", "Item added to cart", "success")
                 return this.props.showSuccessALert("Item has already been added")
-            } 
+            }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -89,6 +88,9 @@ class FlashSales extends Component {
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
     }
+    handleMoveWishList = (id) => {
+        this.props.handleMoveWishList(id)
+    }
 
     render() {
         // console.log("nonso", this.state.imgLoaded)
@@ -117,7 +119,12 @@ class FlashSales extends Component {
                     </div>
 
                     <div className="product-action">
-                        <a href="#N" className="paction add-wishlist" title="Add to Wishlist">
+                        <a href="#" className="paction add-wishlist" title="Add to Wishlist"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                this.handleMoveWishList(id)
+                            }}
+                        >
                             <span>Add to Wishlist</span>
                         </a>
 

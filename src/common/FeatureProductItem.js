@@ -89,6 +89,9 @@ class FeatureProductItem extends Component {
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
     }
+    handleMoveWishList = (id) => {
+        this.props.handleMoveWishList(id)
+    }
     render() {
         // console.log("joro", this.props)
         const { id, name, sellingPrice, mainImageUrl } = this.props
@@ -116,7 +119,12 @@ class FeatureProductItem extends Component {
                     </div>
 
                     <div class="product-action">
-                        <Link to="#" class="paction add-wishlist" title="Add to Wishlist">
+                        <Link to="#" class="paction add-wishlist" title="Add to Wishlist" id={id}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                this.handleMoveWishList(id)
+                            }}
+                        >
                             <span>Add to Wishlist</span>
                         </Link>
                         <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-mobile add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>

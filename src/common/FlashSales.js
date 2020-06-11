@@ -3,7 +3,6 @@ import * as actions from './../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
-// import swal from 'sweetalert2'
 
 
 

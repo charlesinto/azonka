@@ -169,7 +169,7 @@ export const topUpUserWalllet = (transactionReference, amount, lastCount=0, numO
         try{
             await axios.post('/api/v1/user/wallet/topup', {
                                     transactionReference,
-                                    amount: `${amount}`
+                                    amount: `${amount * 100}`
                                 }, {
                                     headers:{
                                         'x-access-token': localStorage.getItem('x-access-token')
@@ -198,6 +198,7 @@ export const topUpUserWalllet = (transactionReference, amount, lastCount=0, numO
                     dispatch({type: LOGOUT_USER, payload: ''})
                 }, 1500)
             }
+            console.log(error.response)
             dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
         }

@@ -151,8 +151,13 @@ export const completeOrder = ({orderId, deliveryCode}) => {
         try{
             const response = await axios.post(`/api/v1/seller/delivery/update/${orderId}`, {
                 deliveryCode
+            }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
             })
             dispatch({type: STOP_LOADING, payload: ''})
+            swal.fire('Transaction successfully completed')
             console.log(response.data);
 
             // dispatch({type: SUCCESS_ALERT, payload: ''})

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import {  withRouter } from 'react-router-dom'
+import {  withRouter, Link } from 'react-router-dom'
 // import swal from 'sweetalert2'
 
 class FeatureProductItem extends Component {
@@ -112,7 +112,7 @@ class FeatureProductItem extends Component {
                     </div>
 
                     <h2 className="product-title">
-                        <a href="product.html" className="wordbreak">{name} </a>
+                        <Link to="#" className="wordbreak">{name} </Link>
                     </h2>
                     <div className="row">
                         <div className="col-12">

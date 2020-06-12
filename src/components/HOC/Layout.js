@@ -34,7 +34,7 @@ class Layout extends Component {
         this.props.closeSnackBar()
     }
     render() {
-        console.log(this.props.redirectToLogin)
+        console.log(this.props.redirectToVerify)
         return (
             <ToastProvider>
                 {/* <Header /> */}

@@ -160,7 +160,7 @@ class WishList extends Component {
 
     }
     render() {
-        console.log('here o', this.props.data)
+        // console.log('here o', this.props.data)
         return this.renderRow()
     }
 }
@@ -169,7 +169,7 @@ class WishList extends Component {
 const mapStateToProps = state => {
 
     let { categories, cartItems, cartData, orders, products } = state.inventory
-    console.log('cartData', cartData, orders)
+    // console.log('cartData', cartData, orders)
     return {
         categories, cartItems, cartData, orders, products
     }

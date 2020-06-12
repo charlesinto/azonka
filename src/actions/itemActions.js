@@ -15,6 +15,7 @@ import {
 import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
 import axios from 'axios';
+import swal from 'sweetalert2';
 
 export const _initUploadPage = () => {
     return (dispatch) => {
@@ -1025,20 +1026,24 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
                 })
             })
             dispatch({ type: STOP_LOADING, payload: '' })
-            dispatch({ type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully' })
+            // dispatch({ type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully' })
+            swal.fire('Product(s) rejected successfull')
         } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498 || error.response.status === 401) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                swal.fire('Login session timed out, please login to continue')
+                // dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
                 return setTimeout(function () {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
             if(error.response && error.response.data && error.response.data.message){
-                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+                // dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+                swal.fire(error.response.data.message)
                 return dispatch({ type: STOP_LOADING, payload: '' })
             }
-            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            swal.fire('Some error were encounered,please refresh your browser')
+            // dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }
@@ -1074,20 +1079,22 @@ export const markOrderAsAccepted = (orderNumber = null) => {
             dispatch({ type: STOP_LOADING, payload: '' })
             const { message } = response.data
             dispatch({ type: SUCCESS_ALERT, payload: message })
-            
+            swal.fire(message);
         } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498 || error.response.status === 401) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
+                swal.fire('Login session timed out, please login to continue')
+                // dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
                 return setTimeout(function () {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
             if(error.response && error.response.data && error.response.data.message){
-                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+                swal.fire(error.response.data.message);
                 return dispatch({ type: STOP_LOADING, payload: '' })
             }
-            dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
+            swal.fire('Some error were encounered,please refresh your browser')
+            // dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
         }
     }

@@ -42,10 +42,10 @@ class ShopItemAside extends Component {
                                     {/* {
 
                                     } */}
-                                    <li><Link to="#">Smart TVs</Link></li>
+                                    {/* <li><Link to="#">Smart TVs</Link></li>
                                     <li><Link to="#">Cameras</Link></li>
                                     <li><Link to="#">Head Phones</Link></li>
-                                    <li><Link to="#">Games</Link></li>
+                                    <li><Link to="#">Games</Link></li> */}
                                 </ul>
                             </div>
                         </div>

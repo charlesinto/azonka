@@ -65,7 +65,7 @@ export class DeliveryMore extends Component {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <div className="d-flex">
-                                    <h5 class="modal-title mx-4" id="exampleModalLongTitle">ORDER: <span>#{this.props.id}</span></h5>
+                                    <h5 class="modal-title mx-4" id="exampleModalLongTitle">ORDER: <span>#{this.props.order}</span></h5>
                                     <button onClick={() => this.rejectItem()} className="btn-cm btn-danger mx-4">Reject Item</button>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

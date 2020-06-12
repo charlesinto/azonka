@@ -1,7 +1,7 @@
 import { FETCH_USER, SWITCH_ACTIVE_LINK, TOGGLE_VIEW_TYPE, LOGOUT_USER,
      CLOSE_SNACKBAR, UPDATE_ACCOUNT, UNAUTHORIZED_USER,SUCCESS_ALERT,
       DISPLAY_ERROR, INITIAL_REGISTRATION, FILE_UPLOADED_SUCCESSFULL, 
-      FILE_UPLOADED_FALIED, ITEMS_FETCHED_SUCCESSFULLY, ERROR_FETCHING_ITEMS, SET_ACTIVE_LINK, SET_AMOUNT, ADVERT_CATEGORIES_FETCHED } from "../actions/types";
+      FILE_UPLOADED_FALIED, ITEMS_FETCHED_SUCCESSFULLY, ERROR_FETCHING_ITEMS, SET_ACTIVE_LINK, SET_AMOUNT, ADVERT_CATEGORIES_FETCHED, LOGIN_SUCCESS } from "../actions/types";
 const INITIATL_STATE = {currentUser: null, 
     cart: 0, likes: 0, homeActiveLink:'profile',
     amount: 0,
@@ -29,6 +29,9 @@ export default (state=INITIATL_STATE , actions) => {
             }
             
             return {...state, currentUser: userData, likes, cart}
+        case LOGIN_SUCCESS:
+           const user = JSON.parse(localStorage.getItem('azonta-user'))
+            return {...state, currentUser: user}
         case UPDATE_ACCOUNT:
             return {...state, currentUser: actions.payload.userData,
                  likes: actions.payload.likes, cart:actions.payload.cart, showSuccessBar: true }

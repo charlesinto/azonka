@@ -29,7 +29,7 @@ class Header extends Component {
         const { category } = params;
         await this.setState({ selectedValue: category })
         document.querySelector('#category').addEventListener('change', function (e) {
-            alert()
+            
             console.log(this.dataset.search)
         })
         const user = JSON.parse(localStorage.getItem('azonta-user'))
@@ -69,6 +69,16 @@ class Header extends Component {
     loadSearchCategory = async () => {
         await this.props.fetchSearchCategory()
         this.setState({ category: this.props.categories })
+    }
+
+    static getDerivedStateFromProps(nextProps, state){
+        if(nextProps.currentUser !== state.currentUser){
+           
+            return {...state, currentUser: nextProps.currentUser}
+        }
+
+        return null;
+        
     }
 
     loadCart = async () => {
@@ -233,7 +243,7 @@ class Header extends Component {
                                     </button>
                                     <div className="header-contact">
                                         <span>Call us now</span>
-                                        <a href="tel:#"><strong></strong></a>
+                                        <a href="tel:#+234"><strong>+234</strong></a>
                                     </div>
                                     <CartDropdown />
                                 </div>
@@ -321,7 +331,6 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-
     let { categories, cartItems, cartData, products } = state.inventory
 
     const { home: { currentUser } } = state;

@@ -332,19 +332,21 @@ class WishList extends Component {
 
                                     {
                                         wishData && wishData.length > 0 ? wishData.map(data => {
+                                            if(data == null)
+                                                return null
                                             return (
-                                                <div>
-                                                </div>
-                                                // <WishListRow
-                                                //     // calSums={(sum, productId, qty) =>
-                                                //     //     this.calSums(sum, productId, qty)}
-                                                //     // calSum={this.calSum}
-                                                //     // // quantity={this.state.quantity[data.id]}
-                                                //     handleItemDelete={this.handleItemDelete}
-                                                //     // handleMoveWishList={this.handleMoveWishList}
-                                                //     data={data}
+                                                // <div>
+                                                // </div>
+                                                <WishListRow
+                                                    calSums={(sum, productId, qty) =>
+                                                        this.calSums(sum, productId, qty)}
+                                                    calSum={this.calSum}
+                                                    quantity={this.state.quantity[data.id]}
+                                                    handleItemDelete={this.handleItemDelete}
+                                                    handleMoveWishList={this.handleMoveWishList}
+                                                    data={data}
 
-                                                // />
+                                                />
                                             )
                                         }) : (
                                                 <div className="row d-flex justify-content-center my-5">

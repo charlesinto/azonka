@@ -4,7 +4,7 @@ import { FETCH_USER, SWITCH_ACTIVE_LINK,TOGGLE_VIEW_TYPE,INITIAL_REGISTRATION,CL
      ADVERT_CATEGORIES_FETCHED
  } from "./types";
 import axios from "axios";
-
+import swal from 'sweetalert2';
 import async from "async";
 
 export const fetchUser = () => {
@@ -160,12 +160,11 @@ export const completeOrder = ({orderId, deliveryCode}) => {
             console.log(error.response)
             dispatch({type: STOP_LOADING, payload: ''})
             if(error.response && error.response.data.message){
-                dispatch({type: DISPLAY_ERROR, payload: error.response.data.message})
+                return swal.fire(error.response.data.message)
             }else{
-                dispatch({type: DISPLAY_ERROR, payload: 'Could not fulfill request, please try again later'})
+                return dispatch({type: DISPLAY_ERROR, payload: 'Could not fulfill request, please try again later'})
             }
             
-            console.error(error.response.data);
         }
     }
 }

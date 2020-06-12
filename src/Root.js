@@ -84,7 +84,7 @@ class Root extends Component {
                                 <Route exact path="/specials/:id" component={SpecialItemDetail} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register" component={Register} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/register/:id" component={Register} />
-                                <AuthRoute redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
+                                <Route redirectIfAuth noAuthRequired exact path="/users/verify" component={ConfirmAccount} />
                                 <AuthRoute redirectIfAuth noAuthRequired exact path="/users/login" component={LoginSignup} />
                                 <AuthRoute exact path="/users/securityquestions" component={SecurityQuestion} />
                                 <AuthRoute exact path="/users/profile" component={Profile} />

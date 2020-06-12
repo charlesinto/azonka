@@ -3,8 +3,7 @@ import { Redirect, Route } from "react-router-dom";
 
 const AuthRoute = ({component: Component, noAuthRequired,redirectIfUser, redirectIfAuth, ...rest}) => {
     const user = localStorage.getItem('azonta-user')
-    console.log(rest)
-    console.log('fetchUser')
+    
     if(user){
         if(redirectIfUser && user.type === 'user'){
             return <Redirect {...rest} to="/"/>

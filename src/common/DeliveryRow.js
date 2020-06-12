@@ -7,27 +7,33 @@ import DeliveryMore from './DeliveryMoreOrder';
 import SweetAlert from "react-bootstrap-sweetalert";
 
 class DeiveryRow extends Component {
-    state = { qty: 0, sum: 0,selectedOrder: null, showConfirmDialog: false,deliveryCode: '', products: [], deliveryId: null }
+    
+    constructor(props){
+        super(props);
+        this.state = { qty: 0, sum: 0,selectedOrder: null,order: null, showConfirmDialog: false,deliveryCode: '', products: [], deliveryId: null }
+    }
     componentDidMount() {
-        this.setState({
-            sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ?
-                this.props.quantity : 1
-        })
+        // this.setState({
+        //     sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ?
+        //         this.props.quantity : 1,selectedOrder: null
+        // })
 
     }
     static getDerivedStateFromProps(nextProps, state) {
+        console.log('called here no')
         if (state.qty !== nextProps.quantity) {
             return {
                 ...state, sum: nextProps.finalPrice * (nextProps.quantity || 1), qty: nextProps.quantity ?
                     nextProps.quantity : 1
             }
         }
-        return { ...state }
+        return null;
     }
     handleCheckout = () => {
 
     }
     handleItemChange = (e) => {
+        
         const {target: {name, value}} = e;
 
         this.setState({
@@ -80,9 +86,9 @@ class DeiveryRow extends Component {
     renderRow = () => {
         //console.log("john", this.props.data.products && this.props.data.products[0])
     }
-    handleModal = (id) => {
-        this.setState({ _products: this.props.data.products })
-    }
+    // handleModal = (id) => {
+    //     this.setState({ _products: this.props.data.products })
+    // }
     acceptAllOrder = async (data) => {
         console.log(data.id)
         this.props.initiateRegistration()
@@ -90,21 +96,25 @@ class DeiveryRow extends Component {
         this.props.initiateRegistration()
         this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
     }
-    selectedOrder = (data) => {
-        this.setState({
-            selectedOrder: data
-        })
+    selectCompleteOrder = async (data) => {
+        console.log(data)
+        window.orderMade = data
+       await  this.setState({
+            selectedOrder: {...data}
+        },)
     }
     completeDelivery = async () => {
+        console.log(window.orderMade)
         if(this.state.deliveryCode.trim() === '') return ;
-
-        this.props.initiateRegistration()
-       await  this.props.completeOrder({orderId: this.state.selectedOrder.id, deliveryCode: this.state.deliveryCode})
-        this.setState({
-            deliveryCode: ''
-        })
-        this.props.initiateRegistration()
-        this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
+        // console.log(this.order)
+            this.props.initiateRegistration()
+            await  this.props.completeOrder({orderId: window.orderMade.id, deliveryCode: this.state.deliveryCode})
+            this.setState({
+                deliveryCode: ''
+            })
+            this.props.initiateRegistration()
+            this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
+            window.orderMade = null
     }
     rejectAllOrder = (data) => {
         const deliveryId = data.id;
@@ -145,11 +155,11 @@ class DeiveryRow extends Component {
             <>
                 <div className="row item-row py-3 my-4 mx-4 bg-white effect5" key={id}>
                     <div className="item-orderId col-md-1 mobile-hide">
-                        {this.props.data.id}
+                        {this.props.data.order}
                     </div>
                     <div class="mobile-order-no my-3 container-fluid">
                         <span>Order No:</span>
-                        <span className="">{this.props.data.id}</span>
+                        <span className="">{this.props.data.order}</span>
                     </div>
                     <div className=" col-md-4 border-right">
                         <div className="d-flex item-name-wrapper">
@@ -210,7 +220,7 @@ class DeiveryRow extends Component {
                             <div className="d-flex justify-content-center">
                             <button disabled={this.props.data.status !== 'created'} onClick={() => this.acceptAllOrder(this.props.data)} className="btn-cm mx-2 btn-primary" type="submit">Accept Order</button>
                             <button disabled={this.props.data.status !== 'created'} onClick={() => this.rejectAllOrder(this.props.data)} className="btn-cm mx-2 btn-danger" type="submit">Reject All</button>
-                            <button  onClick={() => this.selectedOrder(this.props.data)} className="btn-cm mx-2 btn-success" type="submit" data-toggle="modal" data-target="#exampleModalCenterDelivery">Complete Order</button>
+                            <button  onClick={() => this.selectCompleteOrder(this.props.data)} className="btn-cm mx-2 btn-success" data-toggle="modal" data-target="#exampleModalCenterDelivery">Complete Order</button>
                         </div>
                         
                     </div>
@@ -241,6 +251,7 @@ class DeiveryRow extends Component {
 
                 <DeliveryMore
                     qty={this.state.qty}
+                    order={this.props.data.order}
                     id={this.props.data.id}
                     data={this.props.data}
                     orderData={this.props.data.products}
@@ -271,11 +282,11 @@ class DeiveryRow extends Component {
                         </div>
                         <div class="modal-body">
                             <label>Delivery Code</label>
-                            <input name="deliveryCode" class="form-control" value={this.state.deliveryCode} onChange={this.handleItemChange} />
+                            <input name="deliveryCode" className="form-control" value={this.state.deliveryCode} onChange={this.handleItemChange} />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn-cm btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" onClick={() => this.completeDelivery()} class="btn-cm btn-primary">Complete</button>
+                            <button type="button" data-dismiss="modal" onClick={() => this.completeDelivery()} className="btn-cm btn-primary">Complete</button>
                         </div>
                         </div>
                     </div>

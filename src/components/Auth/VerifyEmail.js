@@ -18,9 +18,9 @@ class VerifyEmail extends Component {
         if (query['passcode']) {
             localStorage.setItem('passcode', query['passcode'])
         }        
-        if(!userRegDetails)  {
-            return this.props.history.push('/users/login')
-        }
+        // if(!userRegDetails)  {
+        //     return this.props.history.push('/users/login')
+        // }
         this.setState({
             passcode: localStorage.getItem('passcode') ? localStorage.getItem('passcode'): '' ,
             userDetails: userRegDetails

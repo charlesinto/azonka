@@ -134,16 +134,16 @@ export const login = user => {
                 return dispatch({type: LOGIN_SUCCESS, payload:''})
             }
         }catch(error){
-            if(error.response.data.message && error.response.data.message.toLowerCase() === 'please verify your email address'){
+            if(error && error.response &&  error.response.data.message && error.response.data.message.toLowerCase() === 'please verify your email address'){
                 localStorage.setItem('userRegDetails', JSON.stringify(user))
                  dispatch({type: LOGIN_UNSUCCESSFUL, payload: '' })
                  return dispatch({type: UNSUCCESSFUL_VERIFICATION, payload: error.response.data.message.substr(0,100)})
             }
             // console.log(error.response)
             // dispatch({type: UNSUCCESSFUL_VERIFICATION, payload: error.response.data.message.substr(0,100)})
-            if(error.response.data.message)
+            if(error && error.response && error.response.data &&  error.response.data.message)
                 return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
-            
+            console.log(error);
             return dispatch({type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
         }
     }

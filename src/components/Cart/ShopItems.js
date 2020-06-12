@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Footer from '../HeaderFooter/Footer'
 import './Shop.css'
 import { ShopItemHeader } from './ShopItemHeader'
-import { ShopItemPaginate } from './ShopItemPaginate'
+// import { ShopItemPaginate } from './ShopItemPaginate'
 import { Link, withRouter } from 'react-router-dom'
 
 import { connect } from "react-redux";
@@ -231,9 +231,9 @@ class ShopItems extends Component {
                                         </div>
                                     </div> */}
 
-                                    <div className="toolbox-item toolbox-show">
+                                    {/* <div className="toolbox-item toolbox-show">
                                         <label>Showing 1–9 of 60 results</label>
-                                    </div>
+                                    </div> */}
                                     {/* <!-- End .toolbox-item --> */}
 
                                     {/* <div className="layout-modes">
@@ -254,7 +254,7 @@ class ShopItems extends Component {
                                     {
                                         products && products.length > 0 ? (
                                             products.map(data => {
-                                                let { id, name, finalPrice, createdAt, mainImageUrl } = data
+                                                let { id, name, finalPrice,sellingPrice, createdAt, mainImageUrl } = data
                                                 return (
 
                                                     <div className="col-6 col-md-4 col-xl-3" key={id}>
@@ -275,7 +275,8 @@ class ShopItems extends Component {
                                                                     <Link to="#">{name}</Link>
                                                                 </h2>
                                                                 <div className="price-box">
-                                                                    <span className="product-price"> ₦ {finalPrice}</span>
+                                                                    <span className="product-price mx-2"> ₦ {finalPrice}</span>
+                                                                    <span className="old-price product-price"> ₦ {sellingPrice}</span>
                                                                     <h2 className="product-title">
                                                                         <Link to="#">{new Date(createdAt).toLocaleString()}</Link>
                                                                     </h2>
@@ -310,7 +311,7 @@ class ShopItems extends Component {
                                 </div>
                                 {/* <!-- End .row --> */}
 
-                                <ShopItemPaginate />
+                                {/* <ShopItemPaginate /> */}
                             </div>
                             {/* <!-- End .col-lg-9 --> */}
 

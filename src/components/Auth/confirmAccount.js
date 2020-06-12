@@ -48,15 +48,13 @@ class confirmAccount extends Component {
             showForm: false
         })
         //this.props.resetVerifyForm()
-        const userRegDetails = JSON.parse(localStorage.getItem('userRegDetails'))
-        if(!userRegDetails)  {
-            this.props.history.push('/users/login')
-        }else{
+        // const userRegDetails = JSON.parse(localStorage.getItem('userRegDetails'))
+        
             this.setState({
                 emailAddress: JSON.parse(localStorage.getItem('userRegDetails')).emailAddress,
                 password: JSON.parse(localStorage.getItem('userRegDetails')).password
             }, () => this.verifyEmail())
-        }
+        
         
     }
     componentWillUnmount(){

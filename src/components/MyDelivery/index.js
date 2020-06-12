@@ -68,7 +68,7 @@ class MyDelivery extends Component {
             if(i % 100 === 0){
                 links.push(
                     <li key={i} className={`page-item ${(this.state.currentPage / 100) === (i / 100) ? ' active': ''}`}>
-                        <a onClick={() => this.moveToNextPage(i / 100)} className="page-link" id={`${i/100}`} href={`#${i/100}`}>{i / 100}</a>
+                        <span onClick={() => this.moveToNextPage(i / 100)} className="page-link" id={`${i/100}`} to={`#${i/100}`}>{i / 100}</span>
                     </li>
                 )
             }
@@ -81,13 +81,13 @@ class MyDelivery extends Component {
                         
                     }
                     <li className="page-item" onClick={() => this.moveToPrevious()}>
-                    <a className="page-link" href="#2" tabindex="-1">Previous</a>
+                    <span className="page-link" tabindex="-1">Previous</span>
                     </li>
                     {
                         links.map(element => element)
                     }
                     <li className="page-item" onClick={() => this.next()}>
-                    <a className="page-link" href="#1">Next</a>
+                    <span className="page-link" >Next</span>
                     </li>
                 </ul>
                 </nav>
@@ -149,10 +149,10 @@ class MyDelivery extends Component {
                                     
                                 }
                                 <li className="page-item" onClick={() => this.moveToPrevious()}>
-                                <a className="page-link" href="#2" tabindex="-1">Previous</a>
+                                <span className="page-link" tabindex="-1">Previous</span>
                                 </li>
                                 <li className="page-item" onClick={() => this.next()}>
-                                <a className="page-link" href="#1">Next</a>
+                                <span className="page-link" >Next</span>
                                 </li>
                             </ul>
                             </nav>
@@ -174,10 +174,10 @@ class MyDelivery extends Component {
                                 <ul className="pagination justify-content-end">
                                     
                                     <li className="page-item" onClick={() => this.moveToPrevious()}>
-                                    <a className="page-link" href="#2" tabindex="-1">Previous</a>
+                                    <span className="page-link" href="#2" tabindex="-1">Previous</span>
                                     </li>
                                     <li className="page-item" onClick={() => this.next()}>
-                                    <a className="page-link" href="#1">Next</a>
+                                    <span className="page-link" href="#1">Next</span>
                                     </li>
                                 </ul>
                                 </nav>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import { withRouter, } from 'react-router-dom'
+import { withRouter,Link } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
 
 
@@ -112,7 +112,7 @@ class FlashSales extends Component {
                     </div>
 
                     <h2 className="product-title">
-                        <a href="product.html">{name} </a>
+                        <Link to="#">{name} </Link>
                     </h2>
                     <div className="row">
                         <div className="col-12">

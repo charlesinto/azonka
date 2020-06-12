@@ -134,7 +134,7 @@ class Header extends Component {
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="dropdown compare-dropdown" style={{ border: 'none', zIndex: '900', backgroundColor: 'transparent', position: 'relative' }}>
+                                    {/* <div className="dropdown compare-dropdown" style={{ border: 'none', zIndex: '900', backgroundColor: 'transparent', position: 'relative' }}>
                                         <a href="#N" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                             <i className="icon-retweet"></i> Compare (2)
                                         </a>
@@ -158,7 +158,7 @@ class Header extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="header-right">
                                     <p className="welcome-msg" style={{ color: '#bce1f4', fontSize: '1.1rem' }}>{
@@ -233,7 +233,7 @@ class Header extends Component {
                                     </button>
                                     <div className="header-contact">
                                         <span>Call us now</span>
-                                        <a href="tel:#"><strong>+123 5678 890</strong></a>
+                                        <a href="tel:#"><strong></strong></a>
                                     </div>
                                     <CartDropdown />
                                 </div>
@@ -256,32 +256,32 @@ class Header extends Component {
                                         <ul>
                                             <li>
                                                 <Link to="/users/cart">Cart</Link>
-                                                <ul>
+                                                {/* <ul>
                                                     <li><a href="product.html">Horizontal Thumbnails</a></li>
                                                     <li><a href="product-full-width.html">Vertical Thumbnails<span className="tip tip-hot">Hot!</span></a></li>
                                                     <li><a href="product.html">Inner Zoom</a></li>
                                                     <li><a href="product-addcart-sticky.html">Addtocart Sticky</a></li>
                                                     <li><a href="product-sidebar-left.html">Accordion Tabs</a></li>
-                                                </ul>
+                                                </ul> */}
                                             </li>
                                             <li onClick={() => this._toggleMenu()}>
                                                 <Link to="/users/wishlist">WishList</Link>
-                                                <ul>
+                                                {/* <ul>
                                                     <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
                                                     <li><a href="product-simple.html">Simple Product</a></li>
                                                     <li><a href="product-sidebar-left.html">With Left Sidebar</a></li>
-                                                </ul>
+                                                </ul> */}
                                             </li>
                                             <li onClick={() => this._toggleMenu()}>
                                                 <Link to="/users/placed-orders">Your Orders</Link>
-                                                <ul>
+                                                {/* <ul>
                                                     <li><a href="product.html">Default Layout</a></li>
                                                     <li><a href="product-extended-layout.html">Extended Layout</a></li>
                                                     <li><a href="product-full-width.html">Full Width Layout</a></li>
                                                     <li><a href="product-grid-layout.html">Grid Images Layout</a></li>
                                                     <li><a href="product-sticky-both.html">Sticky Both Side Info<span className="tip tip-hot">Hot!</span></a></li>
                                                     <li><a href="product-sticky-info.html">Sticky Right Side Info</a></li>
-                                                </ul>
+                                                </ul> */}
                                             </li>
                                         </ul>
                                     </li>

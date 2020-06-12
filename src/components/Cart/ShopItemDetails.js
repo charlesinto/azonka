@@ -260,12 +260,12 @@ class ShopItemDetails extends Component {
                                                     <span id={id} onClick={(e) => this.handleAddCart(e, detailsData, id)} className="paction add-cart" title="Add to Cart">
                                                         <span>Add to Cart</span>
                                                     </span>
-                                                    <span className="paction add-wishlist" title="Add to Wishlist">
+                                                    {/* <span className="paction add-wishlist" title="Add to Wishlist">
                                                         <span>Add to Wishlist</span>
-                                                    </span>
-                                                    <span className="paction add-compare" title="Add to Compare">
+                                                    </span> */}
+                                                    {/* <span className="paction add-compare" title="Add to Compare">
                                                         <span>Add to Compare</span>
-                                                    </span>
+                                                    </span> */}
                                                 </div>
                                                 {/* <!-- End .product-action --> */}
 
@@ -298,10 +298,10 @@ class ShopItemDetails extends Component {
                                                 href="#product-desc-content" role="tab" aria-controls="product-desc-content"
                                                 aria-selected="true">Description</Link>
                                         </li>
-                                        <li className="nav-item">
+                                        {/* <li className="nav-item">
                                             <Link onClick={() => this.setActiveSubLink('Tag')} className="nav-link" id="product-tab-tags" data-toggle="tab" href="#product-tags-content"
                                                 role="tab" aria-controls="product-tags-content" aria-selected="false">Tags</Link>
-                                        </li>
+                                        </li> */}
                                         <li className="nav-item">
                                             <Link onClick={() => this.setActiveSubLink('Review')} className="nav-link" id="product-tab-reviews" data-toggle="tab"
                                                 href="#product-reviews-content" role="tab" aria-controls="product-reviews-content"
@@ -328,7 +328,7 @@ class ShopItemDetails extends Component {
                                         </div>
                                         {/* <!-- End .tab-pane --> */}
 
-                                        <div className={`tab-pane fade show ${this.state.activeSubLink === 'Tag' ? 'active' : ''}`} id="product-tags-content" role="tabpanel"
+                                        {/* <div className={`tab-pane fade show ${this.state.activeSubLink === 'Tag' ? 'active' : ''}`} id="product-tags-content" role="tabpanel"
                                             aria-labelledby="product-tab-tags">
                                             <div className="product-tags-content">
                                                 <form action="#">
@@ -337,12 +337,10 @@ class ShopItemDetails extends Component {
                                                         <input type="text" className="form-control form-control-sm" required={true} />
                                                         <input type="submit" className="btn btn-primary" value="Add Tags" />
                                                     </div>
-                                                    {/* <!-- End .form-group --> */}
                                                 </form>
                                                 <p className="note">Use spaces to separate tags. Use single quotes (') for phrases.</p>
                                             </div>
-                                            {/* <!-- End .product-tags-content --> */}
-                                        </div>
+                                        </div> */}
                                         {/* <!-- End .tab-pane --> */}
 
                                         <div className={`tab-pane fade show ${this.state.activeSubLink === 'Review' ? 'active' : ''}`} id="product-reviews-content" role="tabpanel"

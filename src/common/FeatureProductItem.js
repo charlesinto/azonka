@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom'
+import {  withRouter } from 'react-router-dom'
 // import swal from 'sweetalert2'
 
 class FeatureProductItem extends Component {
@@ -94,49 +94,58 @@ class FeatureProductItem extends Component {
     }
     render() {
         // console.log("joro", this.props)
-        const { id, name, sellingPrice, mainImageUrl } = this.props
+        const { id, name, sellingPrice,finalPrice, mainImageUrl } = this.props
         return (
-            <div class="product" key={id} style={{ marginRight: 8 }}>
+            <div className="product" key={id} style={{ marginRight: 8 }}>
                 {/* <ItemModal /> */}
-                <figure class="product-image-container">
+                <figure className="product-image-container">
                     <span className="product-image" id={id} onClick={this.handleItemDetails}>
                         <img src={mainImageUrl} alt="product" className="image-view" loading="lazy" />
                     </span>
                     <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
                 </figure>
-                <div class="product-details">
-                    <div class="ratings-container">
-                        <div class="product-ratings">
-                            <span class="ratings" style={{ width: "80%" }}></span>
+                <div className="product-details">
+                    <div className="ratings-container">
+                        <div className="product-ratings">
+                            <span className="ratings" style={{ width: "80%" }}></span>
                         </div>
                     </div>
 
-                    <h2 class="product-title">
+                    <h2 className="product-title">
                         <a href="product.html" className="wordbreak">{name} </a>
                     </h2>
-                    <div class="price-box">
-                        <span class="product-price">&#8358; {sellingPrice}</span>
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="row">
+                                <div className="col-sm-6 price-box">
+                                    <span className="product-price">&#8358; {finalPrice && finalPrice > 0 ? finalPrice : sellingPrice}</span>
+                                </div>
+                                <div className="col-sm-6 price-box">
+                                    <span className="old-price product-price">&#8358; {sellingPrice}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="product-action">
-                        <Link to="#" class="paction add-wishlist" title="Add to Wishlist" id={id}
+                    <div className="product-action">
+                        {/* <Link to="#" class="paction add-wishlist" title="Add to Wishlist" id={id}
                             onClick={(e) => {
                                 e.preventDefault()
                                 this.handleMoveWishList(id)
                             }}
                         >
                             <span>Add to Wishlist</span>
-                        </Link>
-                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-mobile add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                        </Link> */}
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} className="paction add-to-cart-mobile add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
 
                         </span>
-                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-to-cart-desktop add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} className="paction add-to-cart-desktop add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart
                         </span>
 
-                        <Link href="#" class="paction add-compare" title="Add to Compare">
+                        {/* <Link href="#" class="paction add-compare" title="Add to Compare">
                             <span>Add to Compare</span>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
 

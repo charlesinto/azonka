@@ -363,7 +363,7 @@ class Cart extends Component {
 
                                         </div>
 
-                                        <div className="cart-discount">
+                                        {/* <div className="cart-discount">
                                             <h4>Apply Discount Code</h4>
                                             <form action="#">
                                                 <div className="input-group">
@@ -373,7 +373,7 @@ class Cart extends Component {
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>

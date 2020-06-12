@@ -333,16 +333,18 @@ class WishList extends Component {
                                     {
                                         wishData && wishData.length > 0 ? wishData.map(data => {
                                             return (
-                                                <WishListRow
-                                                    // calSums={(sum, productId, qty) =>
-                                                    //     this.calSums(sum, productId, qty)}
-                                                    // calSum={this.calSum}
-                                                    // // quantity={this.state.quantity[data.id]}
-                                                    handleItemDelete={this.handleItemDelete}
-                                                    // handleMoveWishList={this.handleMoveWishList}
-                                                    data={data}
+                                                <div>
+                                                </div>
+                                                // <WishListRow
+                                                //     // calSums={(sum, productId, qty) =>
+                                                //     //     this.calSums(sum, productId, qty)}
+                                                //     // calSum={this.calSum}
+                                                //     // // quantity={this.state.quantity[data.id]}
+                                                //     handleItemDelete={this.handleItemDelete}
+                                                //     // handleMoveWishList={this.handleMoveWishList}
+                                                //     data={data}
 
-                                                />
+                                                // />
                                             )
                                         }) : (
                                                 <div className="row d-flex justify-content-center my-5">
@@ -355,7 +357,7 @@ class WishList extends Component {
 
                                 </div>
 
-                                <div className="cart-discount">
+                                {/* <div className="cart-discount">
                                     <h4>Apply Discount Code</h4>
                                     <form action="#">
                                         <div className="input-group">
@@ -365,7 +367,7 @@ class WishList extends Component {
                                             </div>
                                         </div>
                                     </form>
-                                </div>
+                                </div> */}
                             </div>
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as actions from './../actions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { withRouter, } from 'react-router-dom'
 import ItemModal from '../components/Cart/ItemModal';
 
 
@@ -94,7 +94,7 @@ class FlashSales extends Component {
 
     render() {
         // console.log("nonso", this.state.imgLoaded)
-        const { id, name, sellingPrice, mainImageUrl } = this.props
+        const { id, name, sellingPrice, mainImageUrl,finalPrice } = this.props
         return (
 
             <div className="product col-md-4" key={id}>
@@ -114,27 +114,36 @@ class FlashSales extends Component {
                     <h2 className="product-title">
                         <a href="product.html">{name} </a>
                     </h2>
-                    <div className="price-box">
-                        <span className="product-price">&#8358; {sellingPrice}</span>
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="row">
+                                <div className="col-sm-6 price-box">
+                                    <span className="product-price">&#8358; {finalPrice && finalPrice > 0 ? finalPrice : sellingPrice}</span>
+                                </div>
+                                <div className="col-sm-6 price-box">
+                                    <span className="old-price product-price">&#8358; {sellingPrice}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="product-action">
-                        <a href="#" className="paction add-wishlist" title="Add to Wishlist"
+                        {/* <Link to="#" className="paction add-wishlist" title="Add to Wishlist"
                             onClick={(e) => {
                                 e.preventDefault()
                                 this.handleMoveWishList(id)
                             }}
                         >
                             <span>Add to Wishlist</span>
-                        </a>
+                        </Link> */}
 
                         <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart
                         </span>
 
-                        <a href="#N" className="paction add-compare" title="Add to Compare">
+                        {/* <a href="#N" className="paction add-compare" title="Add to Compare">
                             <span>Add to Compare</span>
-                        </a>
+                        </a> */}
                     </div>
                 </div>
                 <ItemModal />

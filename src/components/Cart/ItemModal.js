@@ -120,19 +120,18 @@ class ItemModal extends Component {
                                         <div className="product-single-details">
                                             <h1 className="product-title">{name} ({brandName})</h1>
 
-                                            <div className="ratings-container">
+                                            {/* <div className="ratings-container">
                                                 <div className="product-ratings">
-                                                    {/* <span className="ratings" style="width:60%"></span><!-- End .ratings --> */}
+                                                    <span className="ratings" style={{width:"60%"}}></span>
                                                 </div>
-                                                {/* <!-- End .product-ratings --> */}
 
                                                 <span href="#" className="rating-link">( 6 Reviews )</span>
-                                            </div>
+                                            </div> */}
                                             {/* <!-- End .product-container --> */}
 
                                             <div className="price-box">
-                                                <span className="old-price">₦{this.formatMoney(finalPrice ? finalPrice : 0)}</span>
-                                                <span className="product-price">₦{this.formatMoney(sellingPrice ? sellingPrice : 0)}</span>
+                                                <span className="product-price">₦{this.formatMoney(finalPrice ? finalPrice : 0)}</span>
+                                                <span className="old-price">₦{this.formatMoney(sellingPrice ? sellingPrice : 0)}</span>
                                             </div>
                                             {/* <!-- End .price-box --> */}
 
@@ -172,12 +171,12 @@ class ItemModal extends Component {
                                                 <span className="paction add-cart" id={id} onClick={this.handleAddCart}>
                                                     Add to Cart
                                                 </span>
-                                                <span  className="paction add-wishlist" title="Add to Wishlist">
+                                                {/* <span  className="paction add-wishlist" title="Add to Wishlist">
                                                     <span>Add to Wishlist</span>
-                                                </span>
-                                                <span href="#" className="paction add-compare" title="Add to Compare">
+                                                </span> */}
+                                                {/* <span href="#" className="paction add-compare" title="Add to Compare">
                                                     <span>Add to Compare</span>
-                                                </span>
+                                                </span> */}
                                             </div>
                                             {/* <!-- End .product-action --> */}
 

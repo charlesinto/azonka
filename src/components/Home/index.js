@@ -200,64 +200,73 @@ class Home extends Component {
 
                         <div className="container">
                             <div className="row">
-                                <div className="col-lg-9">
+                                <div className="col-md-8">
                                     <div className="row">
                                         <div className="col-md-12">
-                                            <div className="bnk">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
-                                            <div id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
-                                                <ol className="carousel-indicators">
-                                                    {
-                                                        this.state.topBanner.map((image, i) => {
-                                                            return (
-                                                                <li data-target="#carouselExampleIndicators" data-slide-to={i} className={`${i === 0 ? 'active': ''}`}></li>
-                                                            )
-                                                        })
-                                                    }
-                                                    
-                                                </ol>
-                                                <div className="carousel-inner">
-                                                    {/* <div class="carousel-item active">
-                                                    <img class="d-block w-100" src={this.state.topBanner[0]} alt="First slide" />
-                                                    </div> */}
-                                                    {
-                                                        this.state.topBanner.map((image, i) => {
-                                                            return (
-                                                                <div className={`carousel-item ${i === 0 ? 'active' : ''}`}>
-                                                                <img className="d-block w-100" src={image} alt="Second slide" />
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                    {/* <div class="carousel-item">
-                                                    <img class="d-block w-100" src={this.state.topBanner[0]} alt="Third slide" />
-                                                    </div> */}
-                                                </div>
-                                                </div>
-                                                
-                                                {/* <Slider
-                                                    {...{ ...settings, slidesToShow: 1, arrows: true }}
-                                                >
-                                                    {
-                                                        this.state.topBanner.map(image => {
-                                                            return <HomeSlide
-                                                                    image={image}
-                                                                />
-                                                        } )
-                                                    }
-                                                    
-                                                </Slider> */}
+                                            <div className="row d-flex justify-content-center">
+                                                <div className="col-lg-8">
+                                                    <div className="bnk">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
+                                                        <div id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
+                                                            <ol className="carousel-indicators">
+                                                                {
+                                                                    this.state.topBanner.map((image, i) => {
+                                                                        return (
+                                                                            <li data-target="#carouselExampleIndicators" key={i} data-slide-to={i} className={`${i === 0 ? 'active': ''}`}></li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                                
+                                                            </ol>
+                                                            <div className="carousel-inner">
+                                                                {/* <div class="carousel-item active">
+                                                                <img class="d-block w-100" src={this.state.topBanner[0]} alt="First slide" />
+                                                                </div> */}
+                                                                {
+                                                                    this.state.topBanner.map((image, i) => {
+                                                                        return (
+                                                                            <div key={i} className={`carousel-item ${i === 0 ? 'active' : ''}`}>
+                                                                                <img className="d-block w-100" src={image} alt="Second slide" />
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
+                                                                {/* <div class="carousel-item">
+                                                                <img class="d-block w-100" src={this.state.topBanner[0]} alt="Third slide" />
+                                                                </div> */}
+                                                            </div>
+                                                            </div>
+                                                            
+                                                            {/* <Slider
+                                                                {...{ ...settings, slidesToShow: 1, arrows: true }}
+                                                            >
+                                                                {
+                                                                    this.state.topBanner.map(image => {
+                                                                        return <HomeSlide
+                                                                                image={image}
+                                                                            />
+                                                                    } )
+                                                                }
+                                                                
+                                                            </Slider> */}
 
 
+                                                        </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="mb-3"></div>
-                                    <div className="row">
-                                        {
-                                            this.state.lowerBanner.map((image) => {
-                                                return <Trending image={image} />
-                                            })
-                                        }
+                                    <div className="row d-flex justify-content-center">
+                                        <div className="col-lg-10">
+                                            <div className="row d-flex justify-content-center">
+                                            {
+                                                this.state.lowerBanner.map((image, i) => {
+                                                    return <Trending index={i} image={image} />
+                                                })
+                                            }
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div className="mb-3"></div>
@@ -273,8 +282,8 @@ class Home extends Component {
                                             {
                                                 this.state.products ? (
                                                     this.state.products.map(res => {
-                                                        let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
-                                                        return <FeatureProductItem id={id} name={name} brandName={brandName}
+                                                        let { id, name, brandName, model,finalPrice, sellingPrice, mainImageUrl } = res
+                                                        return <FeatureProductItem finalPrice={finalPrice} id={id} name={name} brandName={brandName}
                                                             sellingPrice={this.formatMoney(sellingPrice)} model={model}
                                                             mainImageUrl={mainImageUrl} featArray={this.state.products}
                                                             handleMoveWishList={this.handleMoveWishList}
@@ -298,13 +307,14 @@ class Home extends Component {
                                         {
                                             this.state.products ? (
                                                 this.state.products.map((res, i) => {
-                                                    let { id, name, brandName, model, sellingPrice, mainImageUrl } = res
+                                                    let { id, name,finalPrice, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
                                                         <FlashSales key={i} id={id} name={name}
                                                             brandName={brandName}
                                                             sellingPrice={this.formatMoney(sellingPrice)}
                                                             model={model} mainImageUrl={mainImageUrl}
+                                                            finalPrice={finalPrice}
                                                             featArray={this.state.products}
                                                             handleMoveWishList={this.handleMoveWishList}
                                                         />
@@ -406,7 +416,7 @@ class Home extends Component {
                                     </div>
                                 </div>
 
-                                <aside className="sidebar-home col-lg-3 order-lg-first">
+                                <aside className="sidebar-home col-md-4 order-lg-first">
                                     <div className="side-menu-container">
                                         <h2>CATEGORIES</h2>
 

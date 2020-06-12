@@ -94,7 +94,7 @@ class DeiveryRow extends Component {
         this.props.initiateRegistration()
         await this.props.markOrderAsAccepted(data.id)
         this.props.initiateRegistration()
-        this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
+        this.props.getSellerDeliveries(0, 1000)
     }
     selectCompleteOrder = async (data) => {
         console.log(data)
@@ -113,7 +113,7 @@ class DeiveryRow extends Component {
                 deliveryCode: ''
             })
             this.props.initiateRegistration()
-            this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
+            this.props.getSellerDeliveries(0, 1000)
             window.orderMade = null
     }
     rejectAllOrder = (data) => {
@@ -141,7 +141,7 @@ class DeiveryRow extends Component {
             showConfirmDialog: false
         })
         this.props.initiateRegistration()
-        this.props.getSellerDeliveries(this.state.currentPage, this.state.totalRecords)
+        this.props.getSellerDeliveries(0, 1000)
     }
     onCancel = () => {
         this.setState({

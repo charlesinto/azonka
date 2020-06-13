@@ -146,7 +146,7 @@ export class DeliveryMore extends Component {
                                                                 id="" placeholder="Qty" />
                                                         </div>
                                                         <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
-                                                            ₦ {this.numberWithCommas(finalPrice * this.props.qty)}
+                                                            ₦ {this.numberWithCommas(finalPrice * this.props.data.quantity[id])}
                                                         </div>
                                                         <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
                                                             {this.props.status.toUpperCase()}

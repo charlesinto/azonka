@@ -93,7 +93,7 @@ class Home extends Component {
             item.products.length >= 3 ? <div className="border mb-2" key={item.id}>
                 <div className="d-flex justify-content-between py-4 px-4">
                     <h3>{item.name}</h3>
-                    <Link to={`/specials/${item.id}`}><span> see all > </span></Link>
+                    <Link to={`/specials/${item.id}`}><span> see all  </span></Link>
                 </div>
                 <hr />
                 <div className="container">
@@ -168,7 +168,7 @@ class Home extends Component {
                 <div style={{ minHeight: '100vh', paddingTop: '11.3rem' }}>
                     <main className="main">
                         <div className="info-boxes-container">
-                            <div className="container">
+                            <div className="container justify-flex-start">
                                 {/* <div className="info-box">
                                     <i className="icon-shipping"></i>
 

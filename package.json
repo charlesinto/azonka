@@ -17,6 +17,7 @@
     "query-string": "5",
     "react": "^16.10.2",
     "react-awesome-slider": "^2.2.1",
+    "react-bootstrap": "^1.0.1",
     "react-bootstrap-sweetalert": "^5.1.7",
     "react-dom": "^16.10.2",
     "react-flags-select": "^1.1.10",

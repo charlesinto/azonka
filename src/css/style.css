@@ -12693,3 +12693,13 @@ textarea.select-area{
       bottom: 10%;
       left: calc(50% - 60px);
   }
+
+  .justify-flex-start{
+      justify-content: flex-start !important;
+  }
+
+  @media screen and (max-width: 780px){
+      .p-price{
+          justify-content: center !important;
+      }
+  }

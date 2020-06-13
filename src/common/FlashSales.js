@@ -118,10 +118,10 @@ class FlashSales extends Component {
                         <div className="col-12">
                             <div className="row">
                                 <div className="col-sm-6 price-box">
-                                    <span className="product-price">&#8358; {finalPrice && finalPrice > 0 ? finalPrice : sellingPrice}</span>
+                                    <span className="product-price  p-price  d-flex justify-content-end">&#8358; {finalPrice && finalPrice > 0 ? finalPrice : sellingPrice}</span>
                                 </div>
-                                <div className="col-sm-6 price-box">
-                                    <span className="old-price product-price">&#8358; {sellingPrice}</span>
+                                <div className="col-sm-6 price-box ">
+                                    <span className="old-price p-price product-price d-flex justify-content-start">&#8358; {sellingPrice}</span>
                                 </div>
                             </div>
                         </div>

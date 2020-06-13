@@ -16,12 +16,205 @@ class Bank extends Component {
     state = {
         inValidElments: [],
         validationMessage: [],
-        banks: [],
+        // banks: [],
         showAlert: false,
         actionMode: 'save',
         pin: '', 
         showInfo: false,
-        id: ''
+        id: '',
+        banks: [
+ {           
+active: true,
+code: "044",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 1,
+is_deleted: null,
+longcode: "044150149",
+name: "Access Bank",
+pay_with_bank: false,
+slug: "access-bank",
+type: "nuban",
+updatedAt: "2020-02-18T08:06:44.000Z",
+        },
+{
+active: true,
+code: "063",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 3,
+is_deleted: null,
+longcode: "063150162",
+name: "Access Bank (Diamond)",
+pay_with_bank: false,
+slug: "access-bank-diamond",
+type: "nuban",
+updatedAt: "2020-02-18T08:06:48.000Z",
+        },
+{
+active: true,
+code: "035A",
+country: "Nigeria",
+createdAt: "2017-11-15T12:21:31.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 27,
+is_deleted: null,
+longcode: "035150103",
+name: "ALAT by WEMA",
+pay_with_bank: true,
+slug: "alat-by-wema",
+type: "nuban",
+updatedAt: "2020-02-18T06:46:46.000Z",
+        },
+{
+active: true,
+code: "070",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 6,
+is_deleted: null,
+longcode: "070150003",
+name: "Fidelity Bank",
+pay_with_bank: false,
+slug: "fidelity-bank",
+type: "nuban",
+updatedAt: "2020-02-18T07:25:19.000Z",
+        },
+{
+active: true,
+code: "011",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "ibank",
+id: 7,
+is_deleted: null,
+longcode: "011151003",
+name: "First Bank of Nigeria",
+pay_with_bank: true,
+slug: "first-bank-of-nigeria",
+type: "nuban",
+updatedAt: "2019-11-21T05:09:47.000Z",
+        },
+{
+active: true,
+code: "214",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 8,
+is_deleted: null,
+longcode: "214150018",
+name: "First City Monument Bank",
+pay_with_bank: false,
+slug: "first-city-monument-bank",
+type: "nuban",
+updatedAt: "2020-02-18T08:06:46.000Z",
+        },
+{
+active: true,
+code: "058",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "ibank",
+id: 9,
+is_deleted: null,
+longcode: "058152036",
+name: "Guaranty Trust Bank",
+pay_with_bank: true,
+slug: "guaranty-trust-bank",
+type: "nuban",
+updatedAt: "2020-06-04T14:14:06.000Z",
+        },
+{
+active: true,
+code: "232",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 16,
+is_deleted: null,
+longcode: "232150016",
+name: "Sterling Bank",
+pay_with_bank: false,
+slug: "sterling-bank",
+type: "nuban",
+updatedAt: "2020-05-27T08:38:56.000Z",
+        },
+{
+active: true,
+code: "032",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 17,
+is_deleted: null,
+longcode: "032080474",
+name: "Union Bank of Nigeria",
+pay_with_bank: false,
+slug: "union-bank-of-nigeria",
+type: "nuban",
+updatedAt: "2020-02-18T20:22:54.000Z",
+        },
+{
+active: true,
+code: "033",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 18,
+is_deleted: null,
+longcode: "033153513",
+name: "United Bank For Africa",
+pay_with_bank: true,
+slug: "united-bank-for-africa",
+type: "nuban",
+updatedAt: "2019-05-20T21:23:20.000Z",
+        },
+{
+active: true,
+code: "215",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 19,
+is_deleted: null,
+longcode: "215154097",
+name: "Unity Bank",
+pay_with_bank: false,
+slug: "unity-bank",
+type: "nuban",
+updatedAt: "2019-07-22T12:44:02.000Z",
+        },
+{
+active: true,
+code: "057",
+country: "Nigeria",
+createdAt: "2016-07-14T10:04:29.000Z",
+currency: "NGN",
+gateway: "emandate",
+id: 21,
+is_deleted: null,
+longcode: "057150013",
+name: "Zenith Bank",
+pay_with_bank: true,
+slug: "zenith-bank",
+type: "nuban",
+updatedAt: "2016-07-14T10:04:29.000Z"}
+        ]
     }
 
     validateFormData = (formdata) => {
@@ -83,7 +276,7 @@ class Bank extends Component {
     async componentDidMount() {
         
         this.props.setActiveLink('Bank')
-        await this.props.getBanks()
+        // await this.props.getBanks()
         
         this.props.getSavedBanks();
     }
@@ -91,11 +284,11 @@ class Bank extends Component {
         if (nextProps.banks.length > 0) {
             if (nextProps.resetForm) {
                 return {
-                    ...state, banks: nextProps.banks, pin: '',
+                    ...state, pin: '',
                     actionMode: 'save', longcode: '', accountNumber: '', accountName: ''
                 }
             }
-            return { ...state, banks: nextProps.banks }
+            return { ...state,}
         }
         if (nextProps.resetForm) {
             return { ...state, actionMode: 'save', longcode: '', accountNumber: '', accountName: '' }
@@ -271,7 +464,7 @@ class Bank extends Component {
                                                 value={this.state.longcode} onChange={this.handleInputChange}>
                                                 <option value="">Select Bank</option>
                                                 {
-                                                    this.props.banks.map(({ name, longcode }, i) => (
+                                                    this.state.banks.map(({ name, longcode }, i) => (
                                                         <option key={i} value={longcode}>{name}</option>
                                                     ))
                                                 }

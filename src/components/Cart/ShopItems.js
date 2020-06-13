@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-dom'
 
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import ShopItemAside from './ShopItemAside'
+// import ShopItemAside from './ShopItemAside'
 import queryString from 'query-string';
 import swal from 'sweetalert2'
 
@@ -263,7 +263,7 @@ class ShopItems extends Component {
                                                                 <span id={id} className="product-image shop-product-image" onClick={(e) => this.handleItemDetails(e, id)}>
                                                                     <img src={mainImageUrl} loading="lazy" alt="product" />
                                                                 </span>
-                                                                <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>
+                                                                {/* <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span> */}
                                                             </figure>
                                                             <div className="product-details">
                                                                 <div className="ratings-container">
@@ -283,16 +283,16 @@ class ShopItems extends Component {
                                                                 </div>
 
                                                                 <div className="product-action">
-                                                                    <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
+                                                                    {/* <Link to="#" className="paction add-wishlist" title="Add to Wishlist">
                                                                         <span>Add to Wishlist</span>
-                                                                    </Link>
+                                                                    </Link> */}
 
                                                                     <span className="paction add-cart" style={{ fontSize: "13px" }} id={id} onClick={this.handleAddCart}>
                                                                         Add to Cart
                                                                     </span>
-                                                                    <Link to="#" className="paction add-compare" title="Add to Compare">
+                                                                    {/* <Link to="#" className="paction add-compare" title="Add to Compare">
                                                                         <span>Add to Compare</span>
-                                                                    </Link>
+                                                                    </Link> */}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -315,7 +315,7 @@ class ShopItems extends Component {
                             </div>
                             {/* <!-- End .col-lg-9 --> */}
 
-                            < ShopItemAside />
+                            {/* < ShopItemAside /> */}
                             {/* <!-- End .col-lg-3 --> */}
                         </div>
                         {/* <!-- End .row --> */}

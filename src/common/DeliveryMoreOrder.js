@@ -173,7 +173,7 @@ export class DeliveryMore extends Component {
                                                                     </div>
                                                                 </div>
                                                                 <div className="d-flex my-5 justify-content-end">
-                                                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.props.qty}</span>
+                                                                    <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.props.data.quantity[id]}</span>
                                                                 </div>
                                                                 <div className="d-flex item-actions justify-content-between">
                                                                     {/* <div className="wishlist-mobile-wrap">

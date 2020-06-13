@@ -10,9 +10,10 @@ export const getBanks = () => {
             (element.gateway && element.gateway.trim() !== '' ) && (element.code && element.code.trim() !== '' )
             && (element.slug && element.slug.trim() !== '' ) )
             // console.log(banks);
+            console.log(banks)
             dispatch({type: GET_BANKS, payload: banks})
         }catch(error){
-            console.log('error in: => ', error.response)
+            console.log('error in: => ', error)
         }
     }
 }

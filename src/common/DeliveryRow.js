@@ -154,7 +154,7 @@ class DeiveryRow extends Component {
         const {  id, } = this.props.data.products[0];
         return (
             <>
-                <div className="row item-row py-3 my-4 mx-4 bg-white effect5" key={id}>
+                <div className="row item-row shadow p-3 mb-3 bg-white rounded" key={id}>
                     <div className="item-orderId col-md-1 mobile-hide">
                         {this.props.data.order}
                     </div>

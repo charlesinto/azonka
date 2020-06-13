@@ -20,7 +20,7 @@ class ReviewModal extends Component {
                                     <div className="card-body">
                                         <div className="row">
                                             <div className="col-md-2 photo-time">
-                                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
+                                                <img alt="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
                                                 <p className="text-secondary text-center">15 Minutes Ago</p>
                                             </div>
                                             <div className="col-md-10">
@@ -48,12 +48,12 @@ class ReviewModal extends Component {
                                     <div className="card-body">
                                         <div className="row">
                                             <div className="col-md-2 photo-time">
-                                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
+                                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" alt="avatar" className="img img-rounded img-fluid" />
                                                 <p className="text-secondary text-center">15 Minutes Ago</p>
                                             </div>
                                             <div className="col-md-10">
                                                 <p>
-                                                    <a className="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
+                                                    <a className="float-left"  href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
                                                         <strong>Charles Odogwu</strong></a>
                                                     <span className="float-right"><i className="text-warning fa fa-star"></i></span>
                                                     <span className="float-right"><i className="text-warning fa fa-star"></i></span>

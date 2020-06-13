@@ -190,4 +190,19 @@
     font-weight: 800;
 }
 
+
+
+/* REVIEW MODAL */
+.photo-time{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.photo-time > img{
+    max-width: 100px;
+    height: 100px;
+    align-items: center;
+}
+
 }

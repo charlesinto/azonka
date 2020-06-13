@@ -19,7 +19,7 @@ class ReviewModal extends Component {
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="row">
-                                            <div className="col-md-2">
+                                            <div className="col-md-2 photo-time">
                                                 <img src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
                                                 <p className="text-secondary text-center">15 Minutes Ago</p>
                                             </div>
@@ -47,7 +47,7 @@ class ReviewModal extends Component {
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="row">
-                                            <div className="col-md-2">
+                                            <div className="col-md-2 photo-time">
                                                 <img src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
                                                 <p className="text-secondary text-center">15 Minutes Ago</p>
                                             </div>
@@ -76,7 +76,7 @@ class ReviewModal extends Component {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
+                            {/* <button type="button" className="btn btn-primary">Save changes</button> */}
                         </div>
                     </div>
                 </div>

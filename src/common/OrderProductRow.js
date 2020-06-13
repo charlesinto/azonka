@@ -211,9 +211,14 @@ class OrderProductRow extends Component {
                                     <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                 </div>
                                 <div>
-                                    <span className="text-danger" data-toggle="modal" data-target="#raiseDispute" title="Raise a dispute"
-                                        onClick={this.handleModal}
-                                    > <i className="far fa-flag"></i> </span>
+                                    <span className="text-yellow font-15"
+                                        data-toggle="modal" data-target="#reviewModal"
+                                        onClick={(e) => {
+                                            //  this.handleItemDelete(id) 
+                                            // alert("hello")
+                                        }} >
+                                        <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
+                                    </span>
                                     <span className="text-danger" data-toggle="modal" data-target="#raiseDispute" title="Raise a dispute"
                                         onClick={this.handleModal}
                                     > <i className="far fa-flag"></i> </span>

@@ -231,7 +231,7 @@ class DeiveryRow extends Component {
                             <div className="d-flex justify-content-center">
                             <button disabled={this.props.data.status !== 'created'} onClick={() => this.acceptAllOrder(this.props.data)} className="btn-cm mx-2 btn-primary" type="submit">Accept Order</button>
                             <button disabled={this.props.data.status !== 'created'} onClick={() => this.rejectAllOrder(this.props.data)} className="btn-cm mx-2 btn-danger" type="submit">Reject All</button>
-                            <button  onClick={() => this.selectCompleteOrder(this.props.data)} className="btn-cm mx-2 btn-success" data-toggle="modal" data-target="#exampleModalCenterDelivery">Complete Order</button>
+                            <button  onClick={() => this.selectCompleteOrder(this.props.data)} className="btn-cm mx-2 btn-success" data-toggle="modal" data-target="#exampleModalCenterCompleteDelivery">Complete Order</button>
                         </div>
                         
                     </div>
@@ -256,7 +256,7 @@ class DeiveryRow extends Component {
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={() => this.acceptAllOrder(this.props.data)}>Accept Order</Dropdown.Item>
                                     <Dropdown.Item onClick={() => this.rejectAllOrder(this.props.data)}>Reject Order</Dropdown.Item>
-                                    <Dropdown.Item  data-toggle="modal" data-target="#exampleModalCenterDelivery" onClick={() => this.selectCompleteOrder(this.props.data)}>Complete Order</Dropdown.Item>
+                                    <Dropdown.Item  data-toggle="modal" data-target="#exampleModalCenterCompleteDelivery" onClick={() => this.selectCompleteOrder(this.props.data)}>Complete Order</Dropdown.Item>
                                 </Dropdown.Menu>
                                 </Dropdown>
                                 {/* <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span> */}
@@ -294,7 +294,7 @@ class DeiveryRow extends Component {
                     You are about to reject the product(s), do you want to continue
                   </SweetAlert> : null
                 }
-                <div class="modal fade" id="exampleModalCenterDelivery" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal fade" id="exampleModalCenterCompleteDelivery" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                         <div class="modal-content">
                         <div class="modal-header">

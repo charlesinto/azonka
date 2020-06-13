@@ -700,17 +700,16 @@ export const setAmount = amount => {
 }
 
 export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress) => {
-
+    console.log('called here', userAddress)
+    const data = userAddress.trim() === '' ? {transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
+            useWallet: paymentType === 'pay with debit' ? false : true, addressId: `${addressId}`, }
+            : {transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
+            useWallet: paymentType === 'pay with debit' ? false : true, addressString: userAddress, }
     return async (dispatch) => {
         try {
             await axios.post('/api/v1/user/order/create',
                 {
-                    amount: '' + amount,
-                    transactionReference: txRef,
-                    transactionNo,
-                    addressId: `${addressId}`,
-                    addressString: userAddress,
-                    useWallet: paymentType === 'pay with debit' ? false : true
+                    ...data
                 }, {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')

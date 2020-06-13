@@ -169,7 +169,7 @@ export const fetchItems = () => {
 export const fetchFeaturedItems = () => {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)
+            const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${1000}`)
             console.log('response', response)
             const { data: { products } } = response;
             localStorage.setItem("shop", JSON.stringify(products))
@@ -185,7 +185,7 @@ export const fetchFeaturedItems = () => {
 export const homeItems = () => {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${20}`)
+            const response = await axios.get(`/api/v1/user/product/get-featured-products/${0}/${100}`)
             console.log('response', response)
             const { data: { products } } = response;
             localStorage.setItem("shop", JSON.stringify(products))
@@ -202,7 +202,7 @@ export const fetchSearchCategory = () => {
 
     return async (dispatch) => {
         try {
-            const response = await axios.get(`/api/v1/category/get-categories/${0}/${20}`)
+            const response = await axios.get(`/api/v1/category/get-categories/${0}/${1000}`)
             //     headers: {
             //         'x-access-token': localStorage.getItem('x-access-token')
             //     }

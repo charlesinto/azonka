@@ -98,7 +98,7 @@ export class DeliveryMore extends Component {
                                             let { name, id, mainImageUrl, finalPrice } = o
                                             return (
                                                 <>
-                                                    <div className="row item-row py-3 my-4 bg-white" key={id}>
+                                                    <div className="row item-row py-3 my-4 bg-white px-4" key={id}>
 
                                                         <div className=" col-md-5 border-right">
                                                             <div className="d-flex item-name-wrapper">

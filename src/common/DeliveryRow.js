@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import '../assets/Order.css'
 import DeliveryMore from './DeliveryMoreOrder';
+import { Dropdown } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 
 class DeiveryRow extends Component {
@@ -158,8 +159,18 @@ class DeiveryRow extends Component {
                         {this.props.data.order}
                     </div>
                     <div class="mobile-order-no my-3 container-fluid">
-                        <span>Order No:</span>
-                        <span className="">{this.props.data.order}</span>
+                        <div className="row d-flex justify-content-between w-100">
+                            <div className="mx-3">
+                                <span>Order No:</span>
+                                <span className="">{this.props.data.order}</span>
+                            </div>
+                            <div>
+                                <span
+                                    className="pointer" data-toggle="modal"
+                                    data-target={`#exampleModalCenter${this.props.data.id}`}
+                                >View All</span>
+                            </div>
+                        </div>
                     </div>
                     <div className=" col-md-4 border-right">
                         <div className="d-flex item-name-wrapper">
@@ -204,8 +215,8 @@ class DeiveryRow extends Component {
                             </div> */}
                         </div>
                         <div className="d-flex justify-content-between mobile-status-price">
-                            {/* <span class="text-success">{this.props.data.status}</span>
-                            <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p> */}
+                            <span class="badge badge-pill badge-primary float-right">{this.props.data.status}</span>
+                           {/* <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p> */}
                         </div>
                     </div>
                     <div className="text-success item-price col-md-2 border-right text-center hide-mobile">
@@ -233,9 +244,21 @@ class DeiveryRow extends Component {
                     <div className="mobile-item-details-wrapper">
                         <div className="container-fluid py-3">
                             <div className="d-flex">
-                                
+                                <span>{new Date(this.props.data.createdAt).toLocaleString()}</span>
                             </div>
-                            <div className="d-flex my-5 justify-content-end">
+                            <div className="d-flex">
+                                <span>Hi</span>
+                                <Dropdown>
+                                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                    Action
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => this.acceptAllOrder(this.props.data)}>Accept Order</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => this.rejectAllOrder(this.props.data)}>Reject Order</Dropdown.Item>
+                                    <Dropdown.Item  data-toggle="modal" data-target="#exampleModalCenterDelivery" onClick={() => this.selectCompleteOrder(this.props.data)}>Complete Order</Dropdown.Item>
+                                </Dropdown.Menu>
+                                </Dropdown>
                                 {/* <span className='px-3'>Total = </span>  <span className="mobile-item-subtotal text-primary"> ₦ {finalPrice * this.state.qty}</span> */}
                             </div>
                             <div className="d-flex item-actions justify-content-between">

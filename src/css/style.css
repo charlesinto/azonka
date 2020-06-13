@@ -12702,4 +12702,20 @@ textarea.select-area{
       .p-price{
           justify-content: center !important;
       }
+      .mobile-order-no{
+          display: flex !important;
+      }
+  }
+
+  .dropdown{
+      border: none !important;
+      background-color: transparent !important;
+      z-index: 100 !important;
+  }
+
+  .dropdown button{
+      padding: 3px !important;
+      border-radius: 4px;
+      z-index:100 !important;
+      font-size: 0.9rem;
   }

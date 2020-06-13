@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import '../assets/Order.css'
 import MoreOrder from './MoreOrder';
+import ReviewModal from './ReviewModal';
 
 class OrderProductRow extends Component {
     state = { qty: 0, sum: 0 }
@@ -115,7 +116,7 @@ class OrderProductRow extends Component {
                             />
                             <p className="pl-4 item-name text-dark"> {name}</p>
                         </div>
-                        <div className="d-flex item-actions hide-mobile" style={{ fontSize: "12px" }}>
+                        <div className="d-flex item-actions hide-mobile justify-content-between" style={{ fontSize: "12px" }}>
                             <div className="wishlist-wrap">
                                 {
                                     this.props.data.products && this.props.data.products.length > 1 ?
@@ -125,7 +126,7 @@ class OrderProductRow extends Component {
                                                 id={this.props.data.id}
                                                 style={{ fontSize: "11px" }}
                                             >
-                                                <i className="fas fa-shopping-bag px-2"></i>
+                                                <i className="fas fa-eye px-2"></i>
                                                 View <b>{this.props.data.products && this.props.data.products.length}</b>  More
                                              </span>
                                         ) : null
@@ -133,7 +134,8 @@ class OrderProductRow extends Component {
 
                             </div>
                             <div className="wishlist-wrap">
-                                <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
+                                <span className="pointer" id={id} onClick={this.handleMoveWishList}>
+                                    <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                             </div>
                             <div>
                                 <Link to="#" className="btn-move action-order-fonts text-danger"   >
@@ -141,11 +143,22 @@ class OrderProductRow extends Component {
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>
                                         </div> */}
-                                    <span className="text-danger" data-toggle="modal"
+                                    <span className="text-yellow font-15"
+                                        data-toggle="modal" data-target="#reviewModal"
+                                        onClick={(e) => {
+                                            //  this.handleItemDelete(id) 
+                                            // alert("hello")
+                                        }} >
+                                        <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
+                                    </span>
+
+                                    <span className="text-danger font-15" data-toggle="modal"
                                         data-target="#raiseDispute"
-                                        title="Raise a dispute"><i className=" far fa-flag"></i></span>
-                                    {/* <i className="fas fa-pencil-alt px-2 text-primary"></i> </span> */}
-                                    <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
+                                        title="Raise a dispute"><i className=" far fa-flag"></i>
+                                    </span>
+
+
+                                    <span className="text-danger font-15" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
                                 </Link>
                             </div>
                         </div>
@@ -201,6 +214,9 @@ class OrderProductRow extends Component {
                                     <span className="text-danger" data-toggle="modal" data-target="#raiseDispute" title="Raise a dispute"
                                         onClick={this.handleModal}
                                     > <i className="far fa-flag"></i> </span>
+                                    <span className="text-danger" data-toggle="modal" data-target="#raiseDispute" title="Raise a dispute"
+                                        onClick={this.handleModal}
+                                    > <i className="far fa-flag"></i> </span>
                                     {/* <i className="fas fa-pencil-alt px-2 text-primary"></i>  */}
                                     <span className="text-danger" onClick={(e) => { this.handleItemDelete(id) }}> <i className="fas fa-trash px-2 text-danger"></i></span>
 
@@ -218,6 +234,7 @@ class OrderProductRow extends Component {
                     orderData={this.props.data.products}
                     status={this.props.data.status.toUpperCase()}
                 />
+                <ReviewModal />
 
             </>
         )

@@ -14,6 +14,9 @@
 .font-13{
     font-size: 13px;
 }
+.font-15{
+    font-size: 15px;
+}
 .font-17{
     font-size: 17px;
 }
@@ -74,9 +77,9 @@
     font-weight: 600;
     justify-content: flex-end;
 }
-.wishlist-wrap{
+/* .wishlist-wrap{
     padding: 0px 25px;
-}
+} */
 .item-actions > div:nth-child(1){
 
 }
@@ -185,6 +188,21 @@
     align-self: center;
     font-size: 21px;
     font-weight: 800;
+}
+
+
+
+/* REVIEW MODAL */
+.photo-time{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.photo-time > img{
+    max-width: 100px;
+    height: 100px;
+    align-items: center;
 }
 
 }

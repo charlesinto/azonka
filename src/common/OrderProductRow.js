@@ -7,7 +7,7 @@ import MoreOrder from './MoreOrder';
 import ReviewModal from './ReviewModal';
 
 class OrderProductRow extends Component {
-    state = { qty: 0, sum: 0 }
+    state = { qty: 0, sum: 0, rating: 0, reviews: [], isReviewLoading: false }
     componentDidMount() {
         this.setState({
             sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ?
@@ -74,7 +74,6 @@ class OrderProductRow extends Component {
     }
 
     handleViewMore = ({ target }) => {
-        // console.log("john", this.props.data.products)
         let _products = this.props.data.products
         this.setState({ _products })
     }
@@ -89,15 +88,26 @@ class OrderProductRow extends Component {
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    renderRow = () => {
-        //console.log("john", this.props.data.products && this.props.data.products[0])
-    }
     handleModal = (id) => {
         this.setState({ _products: this.props.data.products })
+    }
+    handleReview = async (e) => {
+        e.preventDefault()
+        let id = e.target.id
+        const openModal = document.querySelector(".open-review-modal")
+        this.setState({ isReviewLoading: true })
+        await this.props.getProductById(id)
+        if (this.props.productFound) {
+            let { rating, reviews } = this.props.productFound
+            return this.setState({ rating, reviews, isReviewLoading: false })
+        }
+
+
     }
     render() {
         if (!this.props.data.products[0]) return <div>no products</div>;
         const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
+        let { rating, reviews, isReviewLoading } = this.state
         return (
             <>
                 <div className="row item-row py-3 my-4 bg-white" key={id}>
@@ -143,13 +153,12 @@ class OrderProductRow extends Component {
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>
                                         </div> */}
-                                    <span className="text-yellow font-15"
-                                        data-toggle="modal" data-target="#reviewModal"
-                                        onClick={(e) => {
-                                            //  this.handleItemDelete(id) 
-                                            // alert("hello")
-                                        }} >
-                                        <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
+                                    <span className="text-yellow font-15 open-review-modal"
+                                        data-toggle="modal" data-target={`#reviewModal${id}`}
+                                    // onClick={this.handleReview}
+                                    >
+                                        <i className="fas fa-star px-2 text-yellow" id={id} onClick={this.handleReview}
+                                            style={{ color: "#e0c325" }}></i>
                                     </span>
 
                                     <span className="text-danger font-15" data-toggle="modal"
@@ -211,12 +220,9 @@ class OrderProductRow extends Component {
                                     <span> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
                                 </div>
                                 <div>
-                                    <span className="text-yellow font-15"
+                                    <span className="text-yellow font-15" id={id}
                                         data-toggle="modal" data-target="#reviewModal"
-                                        onClick={(e) => {
-                                            //  this.handleItemDelete(id) 
-                                            // alert("hello")
-                                        }} >
+                                        onClick={this.handleReview}>
                                         <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
                                     </span>
                                     <span className="text-danger" data-toggle="modal" data-target="#raiseDispute" title="Raise a dispute"
@@ -239,7 +245,9 @@ class OrderProductRow extends Component {
                     orderData={this.props.data.products}
                     status={this.props.data.status.toUpperCase()}
                 />
-                <ReviewModal />
+                <ReviewModal id={id}
+                    rating={rating} reviews={reviews} isReviewLoading={isReviewLoading}
+                />
 
             </>
         )
@@ -250,10 +258,9 @@ class OrderProductRow extends Component {
 
 const mapStateToProps = state => {
 
-    let { categories, cartItems, cartData, orders } = state.inventory
-    // console.log('cartData', cartData, orders)
+    let { categories, cartItems, cartData, orders, productFound } = state.inventory
     return {
-        categories, cartItems, cartData, orders
+        categories, cartItems, cartData, orders, productFound
     }
 }
 

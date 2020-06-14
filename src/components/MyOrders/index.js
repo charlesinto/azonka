@@ -325,7 +325,7 @@ class Cart extends Component {
                                     {
 
                                         this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
-                                           
+
                                             return (
                                                 <OrderProductRow
                                                     calSums={(sum, productId, qty) =>

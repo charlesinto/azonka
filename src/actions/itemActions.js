@@ -701,10 +701,14 @@ export const setAmount = amount => {
 
 export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress) => {
     console.log('called here', userAddress)
-    const data = userAddress.trim() === '' ? {transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
-            useWallet: paymentType === 'pay with debit' ? false : true, addressId: `${addressId}`, }
-            : {transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
-            useWallet: paymentType === 'pay with debit' ? false : true, addressString: userAddress, }
+    const data = userAddress.trim() === '' ? {
+        transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
+        useWallet: paymentType === 'pay with debit' ? false : true, addressId: `${addressId}`,
+    }
+        : {
+            transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
+            useWallet: paymentType === 'pay with debit' ? false : true, addressString: userAddress,
+        }
     return async (dispatch) => {
         try {
             await axios.post('/api/v1/user/order/create',
@@ -982,7 +986,7 @@ export const getSellerDelieryById = (id = 0) => {
             })
             const delivery = [];
             delivery.push(response.data.delivery)
-            dispatch({ type: GET_SELLER_DELIVERIES, payload: delivery})
+            dispatch({ type: GET_SELLER_DELIVERIES, payload: delivery })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             console.log('er', error.response)
@@ -1015,7 +1019,7 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
             //         }
             //     } )
             // })
-            selectedItem.forEach(async(id) => {
+            selectedItem.forEach(async (id) => {
                 await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
                     productId: id
                 }, {
@@ -1036,7 +1040,7 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            if(error.response && error.response.data && error.response.data.message){
+            if (error.response && error.response.data && error.response.data.message) {
                 // dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
                 swal.fire(error.response.data.message)
                 return dispatch({ type: STOP_LOADING, payload: '' })
@@ -1088,7 +1092,7 @@ export const markOrderAsAccepted = (orderNumber = null) => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            if(error.response && error.response.data && error.response.data.message){
+            if (error.response && error.response.data && error.response.data.message) {
                 swal.fire(error.response.data.message);
                 return dispatch({ type: STOP_LOADING, payload: '' })
             }
@@ -1101,16 +1105,16 @@ export const markOrderAsAccepted = (orderNumber = null) => {
 
 export const getUserCredits = () => {
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.get('/api/v1/user/credit/get', {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             });
-            const {data: {credit}} = response;
-            dispatch({type: STOP_LOADING, payload:''})
-            return dispatch({type: CREDITS_OBTAINED_SUCCESSFULLY, payload: credit});
-        }catch(error){
+            const { data: { credit } } = response;
+            dispatch({ type: STOP_LOADING, payload: '' })
+            return dispatch({ type: CREDITS_OBTAINED_SUCCESSFULLY, payload: credit });
+        } catch (error) {
             console.log('er', error.response)
             if (error.response.status === 498 || error.response.status === 401) {
                 dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
@@ -1118,8 +1122,8 @@ export const getUserCredits = () => {
                     dispatch({ type: LOGOUT_USER, payload: '' })
                 }, 1500)
             }
-            if(error.response && error.response.data && error.response.data.message){
-                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+            if (error.response && error.response.data && error.response.data.message) {
+                dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
                 return dispatch({ type: STOP_LOADING, payload: '' })
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })

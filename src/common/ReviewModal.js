@@ -1,13 +1,68 @@
 import React, { Component } from 'react'
-
+import Axios from 'axios'
+import {connect} from 'react-redux'
+import * as actions from '../actions'
+import swal from 'sweetalert2';
+// import * as $ from 'jquery';
 class ReviewModal extends Component {
+    constructor(props){
+        super(props)
+        this.state  = {
+            productReview: '3',
+            sellerReview: '3',
+            comment: ''
+        }
+        this.addReviewModal = React.createRef()
+    }
+    
+    handleChange = (e) => {
+        const {target: {name, value}} = e;
+        this.setState({
+            [name]: value
+        })
+    }
+    createReview = async () => {
+        try{
+            const rating = (parseInt(this.state.sellerReview) + parseInt(this.state.productReview)) / 2;
+            // this.$el = $(this.addReviewModal)
+            this.props.initiateRegistration()
+             await Axios.post('/api/v1/user/review/create', {
+                            "product": `${this.props.productId}`,
+                            "rating": `${rating}`,
+                            "comment": this.state.comment
+                            }, {
+                                headers:{
+                            'x-access-token': localStorage.getItem('x-access-token')
+                        }})
+            this.props.stopLoading()
+            window.$('#addReviewModal').modal('hide')
+            swal.fire('Review added successfully, thank you for your feedback')
+        }catch(error){
+            this.props.stopLoading()
+            window.$('#addReviewModal').modal('hide')
+            swal.fire('Some error were encountered, please try again')
+            console.log(error)
+        }
+    }
+    componentDidMount(){
+
+        console.log(this.props.productId)
+    }
     render() {
         return (
-            <div className="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <>
+            <div className="modal fade" id={this.props.name ? this.props.name :"reviewModal"} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLongTitle">Reviews</h5>
+                            <h5 className="modal-title d-flex" id="exampleModalLongTitle">
+                                <div>Reviews</div>
+                                <div className="mx-4">
+                                    <button data-toggle="modal" data-target="#addReviewModal" className="btn-cm btn-primary shadow rounded p-3">
+                                        Add Review
+                                    </button>
+                                </div>
+                            </h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -16,7 +71,7 @@ class ReviewModal extends Component {
 
                             <div className="container">
                                 {/* <h2 className="text-center">Bootstrap 4 User Rating Form / Comment Form</h2> */}
-                                <div className="card">
+                                <div className="card shadow p-3 mb-2 bg-white rounded">
                                     <div className="card-body">
                                         <div className="row">
                                             <div className="col-md-2 photo-time">
@@ -44,7 +99,7 @@ class ReviewModal extends Component {
                                     </div>
                                 </div>
 
-                                <div className="card">
+                                <div className="card shadow p-3 mb-2 bg-white rounded">
                                     <div className="card-body">
                                         <div className="row">
                                             <div className="col-md-2 photo-time">
@@ -81,8 +136,69 @@ class ReviewModal extends Component {
                     </div>
                 </div>
             </div>
+            <div ref={(ref) => this.addReviewModal = ref} className="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterReviewTitle" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title d-flex" id="exampleModalLongTitle">
+                                <div>Add Review</div>
+                            </h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body" style={{ background: "rgba(202, 194, 194, 0.2)" }}>
+
+                            <div className="container-fluid">
+                                <div className="shadow rounded bg-white mb-3 justify-contents-center py-5 px-3 row w-100">
+                                    <div className="col-md-6 d-flex justify-contents-center">
+                                        <h5>
+                                            Product Acceptability
+                                        </h5>
+                                    </div>
+                                    
+                                    <div className="col-md-6 d-flex justify-contents-center">
+                                       <span className="mx-2">1</span> <input value={this.state.productReview} type="range" step="1" class="form-control-range"
+                                            name="productReview" onChange={this.handleChange} min="1" max="5"/>
+                                            <span className="mx-2">5</span>
+                                    </div>
+                                </div>
+                                <div className="shadow rounded mb-3 bg-white justify-contents-center py-5 px-3 row w-100">
+                                    <div className="col-md-6 d-flex justify-contents-center">
+                                        <h5>
+                                            Seller Performance
+                                        </h5>
+                                    </div>
+                                    
+                                    <div className="col-md-6 d-flex justify-contents-center">
+                                       <span className="mx-2">1</span> <input value={this.state.sellerReview} type="range" step="1" class="form-control-range"
+                                            name="sellerReview" onChange={this.handleChange} min="1" max="5"/>
+                                            <span className="mx-2">5</span>
+                                    </div>
+                                </div>
+                                <div className="shadow rounded mb-3 bg-white justify-contents-center py-5 px-3 row w-100">
+                                    <div className="col-md-6 d-flex justify-contents-center">
+                                        <h5>
+                                            Comments
+                                        </h5>
+                                    </div>
+                                    
+                                    <div className="col-md-6 d-flex justify-contents-center">
+                                        <textarea value={this.state.comment} name="comment" onChange={this.handleChange}></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={this.createReview}>Submit</button>
+                            {/* <button type="button" className="btn btn-primary">Save changes</button> */}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </>
         )
     }
 }
 
-export default ReviewModal
+export default connect(null, actions)(ReviewModal)

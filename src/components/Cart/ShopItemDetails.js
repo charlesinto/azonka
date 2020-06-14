@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../HeaderFooter/Header'
 import imgLoader from '../../common/tenor.gif'
-
+import dayjs from "dayjs";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 class ShopItemDetails extends Component {
     state = { id: "", qty: 1, products: [], detailsData: {}, arr: [], imgLoaded: false, activeSubLink:'Description' }
@@ -28,6 +29,14 @@ class ShopItemDetails extends Component {
         // console.log('det', detailsData)
         // this.setState({ detailsData })
     }
+    converToDate = (dateData) => {
+        dayjs.extend(relativeTime);
+        const date = new Date(dateData);
+        
+        const day = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+        return dayjs(day).fromNow()
+    
+      }
     loadShopData = async () => {
 
         let token = localStorage.getItem("x-access-token");
@@ -124,6 +133,49 @@ class ShopItemDetails extends Component {
             activeSubLink:link
         })
     }
+    renderRating = (data) => {
+        console.log(data)
+       return data && data.reviews ?   data.reviews.map(review => {
+            return (
+                <div className="card shadow p-3 mb-5 bg-white rounded">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-md-2 photo-time">
+                                <img alt="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
+                            <p className="text-secondary text-center">{this.converToDate(review.createdAt)}</p>
+                            </div>
+                            <div className="col-md-10">
+                                <p>
+                                    <a className="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
+                                        <strong>Anonymous</strong></a>
+                                    {
+                                        this.renderRatingStar(review)
+                                    }
+                                    
+                                </p>
+                                <div className="clearfix"></div>
+                                <p>{review.comment}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }) 
+        : null
+        // return null;
+    }
+
+    renderRatingStar = (data) => {
+        const ratings = [];
+
+        for(let i = 1; i < Math.floor(data.rating); i++){
+            ratings.push(<i className="text-warning fa fa-star"></i>)
+        }
+        return ratings.map(star => {
+            return <span className="float-right">{star}</span>
+            })
+    }
+
     render() {
         let { detailsData, imgLoaded } = this.state;
         // console.log(detailsData)
@@ -346,11 +398,44 @@ class ShopItemDetails extends Component {
                                         <div className={`tab-pane fade show ${this.state.activeSubLink === 'Review' ? 'active' : ''}`} id="product-reviews-content" role="tabpanel"
                                             aria-labelledby="product-tab-reviews">
                                             <div className="product-reviews-content">
-                                                
-                                                {/* <!-- End .collateral-box --> */}
+                                            <div>
 
-                                                
-                                                {/* <!-- End .add-product-review --> */}
+                                                <div className="container">
+                                                    {/* <h2 className="text-center">Bootstrap 4 User Rating Form / Comment Form</h2> */}
+                                                    {
+                                                        this.renderRating(detailsData)
+                                                    }
+
+                                                    {/* <div className="card shadow p-3 mb-5 bg-white rounded">
+                                                        <div className="card-body">
+                                                            <div className="row">
+                                                                <div className="col-md-2 photo-time">
+                                                                    <img src="https://image.ibb.co/jw55Ex/def_face.jpg" alt="avatar" className="img img-rounded img-fluid" />
+                                                                    <p className="text-secondary text-center">15 Minutes Ago</p>
+                                                                </div>
+                                                                <div className="col-md-10">
+                                                                    <p>
+                                                                        <a className="float-left"  href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
+                                                                            <strong>Charles Odogwu</strong></a>
+                                                                        <span className="float-right"><i className="text-warning fa fa-star"></i></span>
+                                                                        <span className="float-right"><i className="text-warning fa fa-star"></i></span>
+                                                                        <span className="float-right"><i className="text-warning fa fa-star"></i></span>
+                                                                        <span className="float-right"><i className="text-warning fa fa-star"></i></span>
+                                                                    </p>
+                                                                    <div className="clearfix"></div>
+                                                                    <p>Lorem Ipsum is simply dummy text of the pr make
+                                                                        but also the leap into electronic typesetting,
+                                                                        remaining essentially unchanged. It was popularised
+                                                                        in the 1960s with the release of Letraset sheets
+                                                                            containing Lorem Ipsum passages, and more recently
+                                                                        with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> */}
+
+                                                </div>
+                                                </div>
                                             </div>
                                             {/* <!-- End .product-reviews-content --> */}
                                         </div>

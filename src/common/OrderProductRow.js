@@ -143,14 +143,18 @@ class OrderProductRow extends Component {
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>
                                         </div> */}
-                                    <span className="text-yellow font-15"
-                                        data-toggle="modal" data-target="#reviewModal"
-                                        onClick={(e) => {
-                                            //  this.handleItemDelete(id) 
-                                            // alert("hello")
-                                        }} >
-                                        <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
-                                    </span>
+                                    {
+                                        this.props.data.products.length === 1  ? (
+                                            <span className="text-yellow font-15"
+                                                data-toggle="modal" data-target="#reviewModal"
+                                                onClick={(e) => {
+                                                    //  this.handleItemDelete(id) 
+                                                    // alert("hello")
+                                                }} >
+                                                <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
+                                            </span>
+                                        ) : null
+                                    }
 
                                     <span className="text-danger font-15" data-toggle="modal"
                                         data-target="#raiseDispute"
@@ -239,7 +243,7 @@ class OrderProductRow extends Component {
                     orderData={this.props.data.products}
                     status={this.props.data.status.toUpperCase()}
                 />
-                <ReviewModal />
+                <ReviewModal productId={id} />
 
             </>
         )

@@ -158,7 +158,7 @@ class DeiveryRow extends Component {
                     <div className="item-orderId col-md-1 mobile-hide">
                         {this.props.data.order}
                     </div>
-                    <div class="mobile-order-no my-3 container-fluid">
+                    <div className="mobile-order-no my-3 container-fluid">
                         <div className="row d-flex justify-content-between w-100">
                             <div className="mx-3">
                                 <span>Order No:</span>

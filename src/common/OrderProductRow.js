@@ -221,7 +221,7 @@ class OrderProductRow extends Component {
                                 </div>
                                 <div>
                                     <span className="text-yellow font-15" id={id}
-                                        data-toggle="modal" data-target="#reviewModal"
+                                        data-toggle="modal" data-target={`#reviewModal${id}`}
                                         onClick={this.handleReview}>
                                         <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
                                     </span>

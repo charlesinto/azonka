@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import ReviewModal from './ReviewModal'
 
 export class MoreOrder extends Component {
     state = {}
@@ -92,7 +93,14 @@ export class MoreOrder extends Component {
                                                                         {/* <div className="tooltip" style={{display:'inline-block'}}>
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>
-                                        </div> */}
+                                        </div> */}                       <span className="text-yellow font-15"
+                                                                            data-toggle="modal" data-target="#moreReview"
+                                                                            onClick={(e) => {
+                                                                                //  this.handleItemDelete(id) 
+                                                                                // alert("hello")
+                                                                            }} >
+                                                                            <i className="fas fa-star px-2 text-yellow" style={{ color: "#e0c325" }}></i>
+                                                                        </span>
                                                                         <span className="text-danger" data-toggle="modal"
                                                                             data-target="#raiseDispute"
                                                                             title="Raise a dispute"><i className=" far fa-flag"></i></span>
@@ -162,7 +170,7 @@ export class MoreOrder extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    <ReviewModal name={"moreReview"} productId={o.id} />
                                                 </>
                                             )
                                         }) : null
@@ -171,7 +179,8 @@ export class MoreOrder extends Component {
                         </div>
                     </div>
                 </div>
-
+                
+                
 
             </>
         )

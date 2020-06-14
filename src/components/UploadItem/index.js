@@ -82,6 +82,9 @@ class index extends Component {
         if (this.props.deliveryLocation.trim() === '') {
             return this.props.renderError('Please select delivery location')
         }
+        if(this.props.store.trim() === '' ){
+            return this.props.renderError('Please choose a store')
+        }
         console.log({...this.props, discounts })
         this.props.initiateRegistration()
         this.props.updateItem(this.props.productId, { ...this.props, discounts })
@@ -365,6 +368,9 @@ class index extends Component {
         }
         if (this.props.deliveryLocation.trim() === '') {
             return this.props.renderError('Please select delivery location')
+        }
+        if(this.props.store.trim() === ''){
+            return this.props.renderError('Please choose a store')
         }
         this.props.initiateRegistration()
         await this.props.createItem({ ...this.state, discounts })
@@ -721,7 +727,7 @@ class index extends Component {
                                         <div className="row add-margin-item">
                                             <div className="col-md-6 col-sm-12 add-margin-sm-device">
                                                 <div className="form-group">
-                                                    <label htmlFor="store" className="rl-label">Select Store</label>
+                                                    <label htmlFor="store" className="rl-label required">Select Store *</label>
                                                     <select name="store"
                                                         className={`form-control ${this.props.inValidElments.includes('store') ? 'invalid' : ''}`}
                                                         value={this.props.store} onChange={this.handleInputChange}>

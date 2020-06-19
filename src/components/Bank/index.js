@@ -8,7 +8,7 @@ import BankListItem from "../../common/BankListItem";
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Dashboard from '../HOC/Dashboard';
 import BankDataTable from "../../common/BankDataTable";
-
+import axios from "axios";
 
 
 
@@ -274,11 +274,18 @@ updatedAt: "2016-07-14T10:04:29.000Z"}
         return lookupdata
     }
     async componentDidMount() {
-        
+        this.props.initiateRegistration()
         this.props.setActiveLink('Bank')
         // await this.props.getBanks()
+        const response = await axios.get('https://api.paystack.co/bank' )
+        const banks = response.data.data
+        this.setState({
+            banks
+        }, () => {
+            this.props.stopLoading();
+            this.props.getSavedBanks();
+        })
         
-        this.props.getSavedBanks();
         
     }
     static getDerivedStateFromProps(nextProps, state) {

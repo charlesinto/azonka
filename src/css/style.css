@@ -11636,6 +11636,8 @@ label {
     position: absolute;
     top: calc(50vh - 30%);
     left: 40%;
+
+    background: rgba(0,0,0,0.5) !important;
 }
 
 .account-upgrade{

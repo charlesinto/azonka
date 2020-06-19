@@ -5,7 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import * as actions from "../../actions";
-import PaystackButton from 'react-paystack';
 import Validator from 'validator';
 import { PAY_STACK_PUBLIC_KEY } from '../../config/config';
 import Swal from 'sweetalert2';
@@ -498,8 +497,27 @@ class Checkout extends Component {
         }
     }
     payWithPayStack = () => {
-        this.setState({ paystack: true })
-        console.log('called paystack')
+        // this.setState({ paystack: true })
+        // console.log('called paystack')
+        var handler = window.PaystackPop.setup({
+            key: PAY_STACK_PUBLIC_KEY,
+            email:this.state.emailAddress,
+            amount:this.state.sum * 100,
+            currency: "NGN",
+            ref: this.getReference, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            metadata: {
+              custom_fields: [
+                {
+                  display_name: "Mobile Number",
+                  variable_name: "mobile_number",
+                  value: "+2348012345678",
+                },
+              ],
+            },
+            callback: this.callback,
+            onClose: this.close,
+          });
+          handler.openIframe();
     }
     getTransactionNumber = () => {
         const txnRef = this.getReference()
@@ -582,35 +600,7 @@ class Checkout extends Component {
                                     </table>
 
                                     <div className="checkout-methods">
-                                        {
-                                            this.state.paystack ? (
-                                                <div>
-                                                    <p>
-                                                        <PaystackButton
-                                                            text="Make Payment"
-                                                            className="btn btn-lg w-100 btn-primary"
-                                                            callback={this.callback}
-                                                            close={this.close}
-                                                            disabled={!this.state.paystack}
-                                                            embed={false}
-                                                            reference={this.getReference()}
-                                                            email={this.state.emailAddress}
-                                                            amount={this.state.sum * 100}
-                                                            paystackkey={PAY_STACK_PUBLIC_KEY}
-                                                            tag="button"
-                                                        />
-                                                    </p>
-                                                </div>
-                                            ) : null
-                                        }
-
-                                        {
-                                            this.state.paystack ? null :
-                                                (
-                                                    <span onClick={this.payNow}
-                                                        className="btn  btn-lg w-100 btn-primary">Make Payment</span>
-                                                )
-                                        }
+                                        <span onClick={this.payNow}className="btn  btn-lg w-100 btn-primary">Make Payment</span>
 
                                     </div>
                                 </div>

@@ -252,8 +252,8 @@ class ShopItemDetails extends Component {
                                                 {/* <!-- End .product-container --> */}
 
                                                 <div className="price-box">
-                                                    <span className="old-price">&#8358;{detailsData && detailsData.sellingPrice}</span>
-                                                    <span className="product-price">&#8358;{detailsData && detailsData.finalPrice}</span>
+                                                    <span className="old-price">&#8358;{detailsData && (detailsData.sellingPrice / 100)}</span>
+                                                    <span className="product-price">&#8358;{detailsData && (detailsData.finalPrice / 100)}</span>
                                                 </div>
                                                 {
                                                     deliveryDays ? <div className="delivery-timeline-wrapper">

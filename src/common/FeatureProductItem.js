@@ -121,10 +121,10 @@ class FeatureProductItem extends Component {
                         <div className="col-12">
                             <div className="row">
                                 <div className="col-sm-6 price-box">
-                                    <span className="p-price product-price d-flex justify-content-end">&#8358; {finalPrice && finalPrice > 0 ? finalPrice : sellingPrice}</span>
+                                    <span className="p-price product-price d-flex justify-content-end">&#8358; {finalPrice && finalPrice > 0 ? finalPrice / 100 : sellingPrice / 100}</span>
                                 </div>
                                 <div className="col-sm-6 price-box">
-                                    <span className="old-price p-price product-price d-flex justify-content-start">&#8358; {sellingPrice}</span>
+                                    <span className="old-price p-price product-price d-flex justify-content-start">&#8358; {sellingPrice / 100}</span>
                                 </div>
                             </div>
                         </div>

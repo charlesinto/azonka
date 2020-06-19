@@ -373,7 +373,7 @@ class index extends Component {
             return this.props.renderError('Please choose a store')
         }
         this.props.initiateRegistration()
-        await this.props.createItem({ ...this.state, discounts })
+        await this.props.createItem({ ...this.state, finalPrice: (parseInt(this.state.finalPrice) * 100),sellingPrice: (parseInt(this.state.sellingPrice) * 100), discounts })
         await this.props._initUploadPage();
 
     }
@@ -976,13 +976,13 @@ class index extends Component {
                                                 this.props.action === 'save' ?
                                                     (
                                                         <div style={{ textAlign: "center" }}>
-                                                            <button onClick={this.handleFormSubmit} className="btn-cm btn-primary">Submit for Review</button>
+                                                            <button onClick={this.handleFormSubmit} className="btn-cm btn-lg btn-primary">Submit for Review</button>
                                                         </div>
 
                                                     ) :
                                                     (
                                                         <div style={{ textAlign: 'center' }}>
-                                                            <button onClick={this.hanldeFormUpdate} className="btn-cm btn-success">Update Item</button>
+                                                            <button onClick={this.hanldeFormUpdate} className="btn-cm btn-lg btn-success">Update Item</button>
                                                         </div>
                                                     )
                                             }

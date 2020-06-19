@@ -321,10 +321,10 @@ class ShopItemDetails extends Component {
                                                 </div>
                                                 {/* <!-- End .product-action --> */}
 
-                                                <div className="product-single-share">
-                                                    <label>Description:</label>
+                                                <div className="product-single-share d-block">
+                                                    <h4>Description:</h4>
                                                     {/* <!-- www.addthis.com share plugin--> */}
-                                                    <div className="text-sm-left">
+                                                    <div className="text-sm-left mt-2">
                                                         {detailsData && detailsData.description}
                                                     </div>
                                                 </div>

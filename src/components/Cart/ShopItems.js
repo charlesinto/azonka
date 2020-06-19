@@ -279,8 +279,8 @@ class ShopItems extends Component {
                                                                     <Link to="#">{name}</Link>
                                                                 </h2>
                                                                 <div className="price-box">
-                                                                    <span className="product-price mx-2"> ₦ {finalPrice / 100}</span>
-                                                                    <span className="old-price product-price"> ₦ {sellingPrice / 100}</span>
+                                                                    <span className="product-price mx-2"> ₦ {finalPrice}</span>
+                                                                    <span className="old-price product-price"> ₦ {sellingPrice }</span>
                                                                     <h2 className="product-title">
                                                                         <Link to="#">{new Date(createdAt).toLocaleString()}</Link>
                                                                     </h2>

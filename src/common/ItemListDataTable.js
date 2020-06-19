@@ -54,9 +54,9 @@ class ItemListDataTable extends Component {
                 {title: 'Selling Price',
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
-                            return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.sellingPrice / 100)}</span>`
+                            return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.sellingPrice)}</span>`
                         }  
-                         return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.sellingPrice / 100)}</span>`
+                         return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.sellingPrice)}</span>`
                         
                     },
                     
@@ -64,9 +64,9 @@ class ItemListDataTable extends Component {
                 {title: 'Discounted Price',
                     render: (data, type, row, meta ) => {
                         if ( type === 'display' ) {
-                            return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.finalPrice / 100)}</span>`
+                            return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.finalPrice)}</span>`
                         }  
-                         return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.finalPrice / 100)}</span>`
+                         return `<span class="dt-item">&#8358; ${this.numberWithCommas(row.finalPrice)}</span>`
                         
                     },
                     

@@ -154,13 +154,12 @@ export const fetchItems = () => {
             dispatch({ type: STOP_LOADING, payload: '' })
             if (error.response) {
                 if (error.response.status === 401) {
-
-                    dispatch({ type: DISPLAY_ERROR, payload: 'Unauthorized access, please log in to continue' })
-                    return setTimeout(() => {
-                        dispatch({ type: LOGOUT_USER, payload: '' })
-                    }, 1500)
+                    console.log(error.response)
+                    swal.fire('Some errors encountered, refresh your browser')
+                    
                 }
-                dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+                swal.fire(error.response.data.message.substr(0, 100))
+                // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
             }
         }
     }

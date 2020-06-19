@@ -20,7 +20,8 @@ class Header extends Component {
             cartData: [],
             name: "",
             selectedValue: "",
-            categoryValue: ""
+            categoryValue: "",
+            categoryName: ''
         }
 
     }
@@ -48,7 +49,9 @@ class Header extends Component {
     componentWillUnmount() {
         if(document.querySelector('#category')){
             document.querySelector('#category').removeEventListener('change', () => { })
+            
         }
+       
     }
     _toggleMenu = () => {
         this.setState({
@@ -104,13 +107,14 @@ class Header extends Component {
         this.setState({ category: this.props.categories })
     }
     handleSelectChange(e, $this) {
-        $this.setState({ categoryValue: e.target.value, selectedValue: e.target.value })
+        
+        $this.setState({ categoryValue: e.target.value, selectedValue: e.target.value, categoryName: window.$("#category option:selected").text().split(' ')[1] })
     }
     handleSearchSubmit = async () => {
-        let { name, categoryValue } = this.state
+        let { name, categoryValue, categoryName } = this.state
         let category = categoryValue;
         category = category === "Select category" || category === "" ? "0" : category;
-        this.props.history.push(`/shop?name=${name}&category=${category}`);
+        this.props.history.push(`/shop?name=${name}&category=${category}&categoryName=${categoryName}`);
     }
     handleEnterSubmit = async (e) => {
         if (e.key === 'Enter') {

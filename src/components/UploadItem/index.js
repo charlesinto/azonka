@@ -373,7 +373,7 @@ class index extends Component {
             return this.props.renderError('Please choose a store')
         }
         this.props.initiateRegistration()
-        await this.props.createItem({ ...this.state, finalPrice: (parseInt(this.state.finalPrice) * 100),sellingPrice: (parseInt(this.state.sellingPrice) * 100), discounts })
+        await this.props.createItem({ ...this.state, discounts })
         await this.props._initUploadPage();
 
     }

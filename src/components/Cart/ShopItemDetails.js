@@ -322,9 +322,11 @@ class ShopItemDetails extends Component {
                                                 {/* <!-- End .product-action --> */}
 
                                                 <div className="product-single-share">
-                                                    <label>Share:</label>
+                                                    <label>Description:</label>
                                                     {/* <!-- www.addthis.com share plugin--> */}
-                                                    <div className="addthis_inline_share_toolbox"></div>
+                                                    <div className="text-sm-left">
+                                                        {detailsData && detailsData.description}
+                                                    </div>
                                                 </div>
                                                 {/* <!-- End .product single-share --> */}
                                             </div>

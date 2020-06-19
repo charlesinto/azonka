@@ -114,13 +114,14 @@ class ChangePinConde extends Component{
                             </div>
                         </div>
                     </div>
+                    <div className="row">
                     <div className="col-md-12 col-sm-12">
-                        <div className="col-md-8 col-sm-12"></div>
-                        <div classNam="col-md-4 col-sm-4" style={{textAlign:'right'}}>
-                            <button onClick={this.handleFormSubmit} type="submit" className="btn btn-sm btn-primary">
+                        <div classNam="col-md-4 col-sm-4 my-4">
+                            <button onClick={this.handleFormSubmit} type="submit" className="btn btn-primary">
                                 Reset Pin
                             </button>
                         </div>
+                    </div>
                     </div>
                 </form>
             </Dashboard>

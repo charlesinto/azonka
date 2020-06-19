@@ -47,7 +47,7 @@ class index extends Component {
                         }}>Your Store Items</h4>
                         <hr className="line-separator"/>
                 <div style={{display:'flex', justifyContent:'flex-end', margin: '20px 10px'}}>
-                    <button onClick={this.goToCreateItems} type="button" class="btn-cm btn-outline-success">
+                    <button onClick={this.goToCreateItems} type="button" class="btn px-4 py-2 btn-success">
                         <span style={{marginRight: 10}}>
                             <i className="fas fa-plus"></i></span> Add Item</button>
                 </div>

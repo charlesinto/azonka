@@ -4,9 +4,10 @@ import {
     ERROR_RESENDING_PASSCODE, GET_SEC_QUESTIONS, LOGOUT_USER, EMAIL_FORGOT_PASSWORD_SENT,LOGIN_SUCCESS,
     LOGIN_UNSUCCESSFUL, PASSWORD_REST_SUCCESSFUL, STOP_LOADING,FILE_UPLOADED_FALIED, FILE_UPLOADED_SUCCESSFULL,
     USER_ROLE_UPDATED_SUCCESSFUL,RESET_VERIFY_FORM,REDIRECT_SELLER_TO_STORE,
-    UNSUCCESSFUL_VERIFICATION,SUCCESS_ALERT,RESET_VERIFICATION_FORM_STATE, UNAUTHORIZED_USER, DISPLAY_ERROR, FETCH_USER,RESET_VERIFICATION_FORM
+    UNSUCCESSFUL_VERIFICATION,SUCCESS_ALERT,RESET_VERIFICATION_FORM_STATE, UNAUTHORIZED_USER, DISPLAY_ERROR, FETCH_USER,RESET_VERIFICATION_FORM, CART_FETCHED_SUCCESSFULLY
  } from "./types";
 import axios from "axios";
+import swal from 'sweetalert2'
 import { fileUpload } from "../components/util/FileUploader";
 
 export const registerUser = (userData) => {
@@ -76,12 +77,14 @@ export const verifyEmail = (userData) => {
                 
                 axios.defaults.headers.common["x-access-token"] = response.data.token;
                 localStorage.removeItem('userRegDetails')
+
                 //dispatch({type: SUCCESS_ALERT, payload: 'Account Verified successfully'})
                 return dispatch({type: EMAIL_VERIFICATION_SUCCESFFUL, payload: ''})
                 //return window.location.href = window.origin + '/users/profile'
            }
         }catch(error) {
-            dispatch({type: DISPLAY_ERROR, payload:'Some errors were encountered, please try to login'})
+            swal.fire(error.response.data.message)
+            // dispatch({type: DISPLAY_ERROR, payload:'Some errors were encountered, please try to login'})
             dispatch({type: UNSUCCESSFUL_VERIFICATION, payload: error.response.data.message})
            // return dispatch({type: DISPLAY_ERROR, payload: error.response.data.message })
             //dispatch({type: UNSUCCESSFUL_REGISTRATION, payload: 'Some errors where encountered'})
@@ -131,6 +134,15 @@ export const login = user => {
                 axios.defaults.headers.common["x-access-token"] = response.data.token;
                 localStorage.removeItem('userRegDetails')
                 localStorage.removeItem('passcode')
+                if(localStorage.getItem('cart')){
+                    const cart = JSON.parse(localStorage.getItem('cart'))
+                    const items = []
+                    console.log('called in here')
+                    cart.forEach(item => {
+                        items.push({productId: item.id, quantity: "1"})
+                    })
+                    await addToCart(items, dispatch)
+                }
                 return dispatch({type: LOGIN_SUCCESS, payload:''})
             }
         }catch(error){
@@ -148,6 +160,41 @@ export const login = user => {
         }
     }
 }
+
+const addToCart = (details, dispatch) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log('called here')
+            details.forEach(async(item) => {
+                 await axios.post('/api/v1/user/cart/add',
+                { productId: item.productId, quantity: item.quantity }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+            })
+            const response2 = await axios.get(`/api/v1/user/cart/get`, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
+            })
+
+            const { cart } = response2.data;
+            dispatch({ type: CART_FETCHED_SUCCESSFULLY, payload: cart })
+            console.log('called done')
+            resolve();
+
+            
+        } catch (error) {
+            reject(error)
+            //return dispatch({ type: DISPLAY_ERROR, payload: error.response.data.substr(0, 100) })
+        }
+    
+    })
+  
+}
+
 
 export const getSecurityQuestions = () => {
     return async (dispatch)=> {

@@ -59,7 +59,7 @@ class Layout extends Component {
                     this.props.redirectToStore ? <Redirect to="/users/store" /> : null
                 }
                 {
-                    this.props.redirectToCart ? <Redirect to="/users/cart" /> : null
+                    this.props.redirectToCart ? <Redirect to="/users/placed-orders" /> : null
                 }
                 {this.renderLoadingSpinner()}
                 {

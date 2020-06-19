@@ -15,6 +15,7 @@ import FeatureProductItem from "../../common/FeatureProductItem";
 // import HotProduct from "../../common/HotProduct";
 import Banner from '../../common/Banner';
 import Trending from '../../common/Trending';
+import axios from "axios";
 
 // import slide1 from "../../css/images/products/product-8-white.jpg";//product-2-white
 // import slide2 from "../../css/images/products/home-featured-3.jpg";
@@ -24,21 +25,22 @@ import FlashSales from '../../common/FlashSales';
 class Home extends Component {
     state = { showPopUp: true,
         topBanner: [
-            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
-            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
-            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
-            'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg',
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'}
         ],
-        lowerBanner: [
-            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
-            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
-            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg'
+        lowerBanner:[
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'}
         ],
         leftBanner:[
-            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
-            'https://image.freepik.com/free-vector/christmas-new-year-s-day-red-gift-box-white-background-illustration_164911-157.jpg',
-            
-        ]
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
+            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'}
+        ],
+        categories: [],
+        
     }
     closePopup = (event) => {
         event.preventDefault();
@@ -46,18 +48,41 @@ class Home extends Component {
             showPopUp: false
         })
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.props.initiateRegistration()
         this.props.getProductCategorySubcategory()
         this.loadFeaturedItems()
         console.log('called ')
         this.props.getAdvertCategory()
+        const response = await axios.get('/api/v1/category/get-categories/0/12')
+        const responseAds = await axios.get('/api/v1/ad/get-ads/0/1000')
+
+        const ads = responseAds.data.ads.filter(item => item.page === 'Home Page')
+        const topBanner = ads.filter(item => item.position === 'Top Banner')
+        const lowerBanner = ads.filter(item => item.position === 'Lower Banner')
+        const leftBanner = ads.filter(item => item.position === 'Left Banner')
+        if(lowerBanner.length > 3){
+            lowerBanner.splice(3, lowerBanner.length)
+        }
+        else if(lowerBanner.length > 0 && lowerBanner.length < 3){
+            const remainingItem = 3 - lowerBanner.length;
+            for(let i = 0; i < remainingItem; i++){
+                lowerBanner.push(lowerBanner[0])
+            }
+        }
+        this.setState({
+            categories: response.data.categories,
+            topBanner,
+            lowerBanner,
+            leftBanner
+        })
         //remove popup after 5secs
         setTimeout(() => {
             this.setState({
                 showPopUp: false
             })
         }, 5000)
+        
     }
     loadFeaturedItems = async () => {
         let token = localStorage.getItem("x-access-token");
@@ -161,6 +186,60 @@ class Home extends Component {
         }
     }
 
+    renderCategories = () => {
+        return this.state.categories.map(item => {
+            return (
+                <li>
+                    <a href={`${window.origin}/shop?name=&category=${item.id}&categoryName=${item.name}`} rel="noopener noreferrer" target="_blank" className="sf-with-ul"><i className="icon-briefcase"></i>
+                        {item.name}</a>
+                    {/* <div className="megamenu megamenu-fixed-width">
+                        <div className="row">
+                            <div className="col-lg-8">
+                                <div className="row">
+                                    <div className="col-lg-6">
+                                        <div className="menu-title">
+                                            
+                                        </div>
+                                        <ul>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <div className="menu-title">
+                                            
+                                        </div>
+                                        <ul>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="banner">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
+                </li>
+            )
+        })
+    }
+
     render() {
         return (
             <div>
@@ -209,7 +288,7 @@ class Home extends Component {
                                                         <div id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
                                                             <ol className="carousel-indicators">
                                                                 {
-                                                                    this.state.topBanner.map((image, i) => {
+                                                                    this.state.topBanner.map((item, i) => {
                                                                         return (
                                                                             <li data-target="#carouselExampleIndicators" key={i} data-slide-to={i} className={`${i === 0 ? 'active': ''}`}></li>
                                                                         )
@@ -222,10 +301,10 @@ class Home extends Component {
                                                                 <img class="d-block w-100" src={this.state.topBanner[0]} alt="First slide" />
                                                                 </div> */}
                                                                 {
-                                                                    this.state.topBanner.map((image, i) => {
+                                                                    this.state.topBanner.map((item, i) => {
                                                                         return (
                                                                             <div key={i} className={`carousel-item ${i === 0 ? 'active' : ''}`}>
-                                                                                <img className="d-block w-100" src={image} alt="Second slide" />
+                                                                                <img className="d-block w-100" src={item.url} alt="Second slide" />
                                                                             </div>
                                                                         )
                                                                     })
@@ -260,8 +339,8 @@ class Home extends Component {
                                         <div className="col-lg-10">
                                             <div className="row d-flex justify-content-center">
                                             {
-                                                this.state.lowerBanner.map((image, i) => {
-                                                    return <Trending index={i} image={image} />
+                                                this.state.lowerBanner.map((item, i) => {
+                                                    return <Trending index={i} image={item.url} />
                                                 })
                                             }
                                             </div>
@@ -417,60 +496,19 @@ class Home extends Component {
                                 </div>
 
                                 <aside className="sidebar-home col-md-4 order-lg-first">
-                                    <div className="side-menu-container">
+                                    <div className="row d-flex justify-content-center">
+                                        <div className="col-md-10">
+                                        <div className="side-menu-container">
                                         <h2>CATEGORIES</h2>
 
                                         <nav className="side-nav">
                                             <ul className="menu menu-vertical sf-arrows">
-                                                <li className="active"><Link to="/"><i className="icon-home"></i>Home</Link></li>
-                                                <li>
-                                                    <a href="#n" className="sf-with-ul"><i className="icon-briefcase"></i>
-                                                        Categories</a>
-                                                    <div className="megamenu megamenu-fixed-width">
-                                                        <div className="row">
-                                                            <div className="col-lg-8">
-                                                                <div className="row">
-                                                                    <div className="col-lg-6">
-                                                                        <div className="menu-title">
-                                                                            
-                                                                        </div>
-                                                                        <ul>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <div className="col-lg-6">
-                                                                        <div className="menu-title">
-                                                                            
-                                                                        </div>
-                                                                        <ul>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                            <li></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-4">
-                                                                <div className="banner">
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="megamenu-container">
+                                                {/* <li className="active"><Link to="/"><i className="icon-home"></i>Home</Link></li> */}
+                                                {
+                                                    this.renderCategories()
+                                                }
+                                                
+                                                {/* <li className="megamenu-container">
                                                 <a href="#n" className="sf-with-ul"><i className="icon-briefcase"></i>
                                                         Products</a>
                                                     <div className="megamenu">
@@ -521,7 +559,7 @@ class Home extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </li>
+                                                </li> */}
                                                 {/* <li>
                                                     <a href="#n" className="sf-with-ul"><i className="icon-docs-inv"></i>Pages</a>
 
@@ -563,20 +601,28 @@ class Home extends Component {
                                             </ul>
                                         </nav>
                                     </div>
-                                    <div className="widget widget-banners">
-                                        <div className="widget-banners-slider">
-                                            <Slider
-                                                {...{ settings, slidesToShow: 1 }}
-                                            >
-
-                                               {
-                                                   this.state.leftBanner.map(image => {
-                                                       return  <Banner image={image} />
-                                                   })
-                                               }
-                                            </Slider>
-
+                                    
                                         </div>
+                                    </div>
+                                    <div className="row d-flex justify-content-center">
+                                        <div className="col-md-10">
+                                                <div className="widget widget-banners">
+                                                <div className="widget-banners-slider">
+                                                    <Slider
+                                                        {...{ settings, slidesToShow: 1 }}
+                                                    >
+
+                                                    {
+                                                        this.state.leftBanner.map((item) => {
+                                                            return  <Banner image={item.url} />
+                                                        })
+                                                    }
+                                                    </Slider>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     {/* <div className="widget widget-newsletters">

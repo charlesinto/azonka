@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 
-export const ShopItemHeader = () => {
+export const ShopItemHeader = ({categoryName, productName}) => {
     return (
         <>
             <div className="banner banner-cat" >
@@ -18,9 +19,9 @@ export const ShopItemHeader = () => {
             <nav aria-label="breadcrumb" className="breadcrumb-nav">
                 <div className="container">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="index.html"><i className="icon-home"></i></a></li>
-                        <li className="breadcrumb-item"><a href="#n">Electronics</a></li>
-                        <li className="breadcrumb-item active" aria-current="page">Headsets</li>
+                        <li className="breadcrumb-item"><Link to="/"><i className="icon-home"></i></Link></li>
+                        <li className="breadcrumb-item"><Link to="#n">{categoryName}</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">{productName}</li>
                     </ol>
                 </div>
                 {/* <!-- End .container --> */}

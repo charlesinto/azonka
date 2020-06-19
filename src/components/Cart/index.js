@@ -215,15 +215,24 @@ class Cart extends Component {
             if (!localData) {
                 localData = [filt]
                 localStorage.setItem("wishList", JSON.stringify(localData))
+                await this.props.removeCartItem(id)
+                this.calSum()
                 return this.props.successAlert('Item added successfully')
+                
             } else {
                 let _id = localData.some(o => o.id === id)
                 if (_id) {
+                    this.props.successAlert('Item added successfully')
+                    await this.props.removeCartItem(id)
+                    this.calSum()
                     return this.props.successAlert('Item has already been moved to WishList')
                 } else {
                     localData.push(filt)
                     localStorage.setItem("wishList", JSON.stringify(localData))
-                    return this.props.successAlert('Item added successfully')
+                    await this.props.removeCartItem(id)
+                    this.calSum()
+                    return  this.props.successAlert('Item added successfully')
+                     
                 }
             }
         }
@@ -454,7 +463,7 @@ class Cart extends Component {
 
                                     <div className="checkout-methods">
                                         <span onClick={this.payNowClickHandler}
-                                            className="btn btn-block btn-sm btn-primary">Pay Now</span>
+                                            className="btn btn-lg w-100 btn-primary">Pay Now</span>
                                     </div>
                                 </div>
                             </div>

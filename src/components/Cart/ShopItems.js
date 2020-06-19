@@ -16,6 +16,7 @@ class ShopItems extends Component {
     state = {
         products: [], sortState: "", cartData: [],
         name: "", category: "", finalPrice: 0,
+        categoryName: '',
         cartLength: 0
     }
     // componentWillMount() {
@@ -26,10 +27,10 @@ class ShopItems extends Component {
     async componentDidMount() {
         this.loadShopData()
         let params = queryString.parse(this.props.location.search)
-        const { name, category, price } = params;
+        const { name, category, price, categoryName } = params;
+        
 
-
-        await this.setState({ name, category, finalPrice: price })
+        await this.setState({ name, category, finalPrice: price, categoryName })
         console.log('called here o')
         this.searchItem()
         this.listen()
@@ -39,7 +40,7 @@ class ShopItems extends Component {
             let params = queryString.parse(location.search)
             let { name } = this.state
             if (params.name !== name) {
-                this.setState({ name: params.name, category: params.category })
+                this.setState({ name: params.name, category: params.category, categoryName: params.categoryName })
                 // return console.log("one change", this.state, params);
                 //this.searchItem()
             }
@@ -69,9 +70,9 @@ class ShopItems extends Component {
     async componentDidUpdate(prevProps, prevState) {
         // console.log("happened", prevState)
         let params = queryString.parse(this.props.location.search)
-        const { name, category, price } = params;
+        const { name, category, price, categoryName } = params;
         // console.log(params, prevState)
-        if (name !== prevState.name || category !== prevState.category || price !== prevState.finalPrice) {
+        if (name !== prevState.name || category !== prevState.category || price !== prevState.finalPrice || categoryName !== prevState.categoryName) {
             console.log('calle here twice')
             await this.setState({ name, category, finalPrice: price }, () => console.log(this.state))
             return this.searchItem()
@@ -139,13 +140,16 @@ class ShopItems extends Component {
         // return console.log(id)
         let token = (localStorage.getItem("x-access-token"));
         if (token) {
-            let postObj = { productId: id, quanity: "1" };
+            let postObj = { productId: id, quantity: "1" };
+            this.props.initiateRegistration()
             await this.props.addToCart(postObj)
             let { success, cart } = this.props.cartResponse;
             if (success) {
+                this.props.stopLoading()
                 this.setState({ cartData: cart.products })
-                return swal.fire("Response", "Item added to cart", "success")
+                // return swal.fire("Response", "Item added to cart", "success")
             } else {
+                this.props.stopLoading()
                 this.props.renderError("An error occurred")
             }
         } else {
@@ -196,9 +200,9 @@ class ShopItems extends Component {
         return (
             <div>
                 <main className="main">
-                    <ShopItemHeader />
+                    <ShopItemHeader categoryName={this.state.categoryName} productName={this.state.name} />
                     <div className="container">
-                        <div className="row">
+                        <div className="row d-flex justify-content-center">
                             <div className="col-lg-9">
                                 <nav className="toolbox">
                                     <div className="toolbox-left">

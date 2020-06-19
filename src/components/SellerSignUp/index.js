@@ -4,6 +4,7 @@ import * as actions from "../../actions";
 import { withToastManager } from 'react-toast-notifications';
 import { Link } from "react-router-dom";
 import Header from "../HeaderFooter/Header";
+import Swal from 'sweetalert2';
 
 class SellerSignUp extends Component {
     state = {
@@ -15,7 +16,8 @@ class SellerSignUp extends Component {
         companyName:'',
         headOfficeAddress:'',
         contactLine: '',
-        showSpinner: false
+        showSpinner: false,
+        agreeToTerms: false,
     }
     componentDidMount(){
         this.props.getSecurityQuestions()
@@ -97,6 +99,9 @@ class SellerSignUp extends Component {
             const headOfficeAddress = this.state.headOfficeAddress;
             const contactLine = this.state.contactLine;
             const sellerIdentification = ''
+            if(!this.state.agreeToTerms){
+                return Swal.fire('You Must Agree to terms and Conditions')
+            }
             this.props.updateUserType({ referredBy, companyName, 
                 headOfficeAddress, contactLine, sellerIdentification
             }, 'seller')
@@ -172,6 +177,21 @@ class SellerSignUp extends Component {
                                     </div>
                                 </div>
 
+                            </div>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="terms-condition-container">
+                                    <input type="checkbox" id="agreeToTerms"
+                                        name="i agree" value="sellers" checked={this.state.agreeToTerms} />
+                                    <label className="label-check" onClick={(event) => this.agreeTotermsChange(event)}>
+                                        <span className="checkbox primary primary"><span></span></span>
+                                        I agree to
+                                    </label>
+                                    <span className="terms">
+                                        terms, condition and privacy policy
+                                    </span>
+                                </div>
+                                </div>
                             </div>
 
                             <div className="mb-2"></div>

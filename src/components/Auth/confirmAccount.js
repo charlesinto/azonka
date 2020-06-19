@@ -51,9 +51,9 @@ class confirmAccount extends Component {
         // const userRegDetails = JSON.parse(localStorage.getItem('userRegDetails'))
         
             this.setState({
-                emailAddress: JSON.parse(localStorage.getItem('userRegDetails')).emailAddress,
-                password: JSON.parse(localStorage.getItem('userRegDetails')).password
-            }, () => this.verifyEmail())
+                emailAddress: JSON.parse(localStorage.getItem('userRegDetails')) ? JSON.parse(localStorage.getItem('userRegDetails')).emailAddress : '',
+                password: JSON.parse(localStorage.getItem('userRegDetails')) ? JSON.parse(localStorage.getItem('userRegDetails')).password : ''
+            },)
         
         
     }

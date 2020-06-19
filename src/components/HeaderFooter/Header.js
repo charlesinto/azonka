@@ -28,10 +28,13 @@ class Header extends Component {
         let params = queryString.parse(this.props.location.search)
         const { category } = params;
         await this.setState({ selectedValue: category })
-        document.querySelector('#category').addEventListener('change', function (e) {
+        if(document.querySelector('#category')){
+            document.querySelector('#category').addEventListener('change', function (e) {
             
-            console.log(this.dataset.search)
-        })
+                console.log(this.dataset.search)
+            })
+        }
+        
         const user = JSON.parse(localStorage.getItem('azonta-user'))
         let cartData = JSON.parse(localStorage.getItem("cart"));
         this.$select = React.createRef()
@@ -43,7 +46,9 @@ class Header extends Component {
 
     }
     componentWillUnmount() {
-        document.querySelector('#category').removeEventListener('change', () => { })
+        if(document.querySelector('#category')){
+            document.querySelector('#category').removeEventListener('change', () => { })
+        }
     }
     _toggleMenu = () => {
         this.setState({

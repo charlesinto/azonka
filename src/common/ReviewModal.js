@@ -3,6 +3,7 @@ import Axios from 'axios'
 import {connect} from 'react-redux'
 import * as actions from '../actions'
 import swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
 // import * as $ from 'jquery';
 class ReviewModal extends Component {
     constructor(props){
@@ -21,7 +22,7 @@ class ReviewModal extends Component {
             [name]: value
         })
     }
-    createReview = async () => {
+    createReview = async (randomId) => {
         try{
             const rating = (parseInt(this.state.sellerReview) + parseInt(this.state.productReview)) / 2;
             // this.$el = $(this.addReviewModal)
@@ -35,11 +36,11 @@ class ReviewModal extends Component {
                             'x-access-token': localStorage.getItem('x-access-token')
                         }})
             this.props.stopLoading()
-            window.$('#addReviewModal').modal('hide')
+            window.$(`#addReviewModal${randomId}`).modal('hide')
             swal.fire('Review added successfully, thank you for your feedback')
         }catch(error){
             this.props.stopLoading()
-            window.$('#addReviewModal').modal('hide')
+            window.$(`#addReviewModal${randomId}`).modal('hide')
             swal.fire('Some error were encountered, please try again')
             console.log(error)
         }
@@ -49,16 +50,17 @@ class ReviewModal extends Component {
         console.log(this.props.productId)
     }
     render() {
+        let randomId = uuidv4()
         return (
             <>
-            <div className="modal fade" id={this.props.name ? this.props.name :"reviewModal"} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div className="modal fade" id={this.props.name ? `${this.props.name}` : `reviewModal${this.props.productId}`} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title d-flex" id="exampleModalLongTitle">
                                 <div>Reviews</div>
                                 <div className="mx-4">
-                                    <button data-toggle="modal" data-target="#addReviewModal" className="btn-cm btn-primary shadow rounded p-3">
+                                    <button data-backdrop="static" data-keyboard="false" ref={(ref) => this.buttonClick = ref} onClick={() => {window.$(`#addReviewModal${randomId}`).modal('show')}}  className="btn-cm btn-primary shadow rounded p-3">
                                         Add Review
                                     </button>
                                 </div>
@@ -136,14 +138,14 @@ class ReviewModal extends Component {
                     </div>
                 </div>
             </div>
-            <div ref={(ref) => this.addReviewModal = ref} className="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterReviewTitle" aria-hidden="true">
+            <div ref={(ref) => this.addReviewModal = ref} className="modal fade" id={`addReviewModal${randomId}`}tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterReviewTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title d-flex" id="exampleModalLongTitle">
                                 <div>Add Review</div>
                             </h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" className="close" onClick={() => {window.$(`#addReviewModal${randomId}`).modal('hide')}} aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -190,7 +192,7 @@ class ReviewModal extends Component {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" onClick={this.createReview}>Submit</button>
+                            <button type="button" className="btn btn-secondary" onClick={() => this.createReview(randomId)}>Submit</button>
                             {/* <button type="button" className="btn btn-primary">Save changes</button> */}
                         </div>
                     </div>

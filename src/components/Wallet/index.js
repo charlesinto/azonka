@@ -159,7 +159,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-1 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-1 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -183,7 +183,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-2 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-2 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -207,7 +207,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-3 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-3 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -232,7 +232,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-4 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-4 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -260,7 +260,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-5 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-5 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -284,7 +284,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-6 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-6 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -309,7 +309,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn pay-7 wallet-btn btn-block btn-sm btn-primary"
+                                        className="btn pay-7 wallet-btn btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -334,7 +334,7 @@ class Wallet extends Component {
                                     <p>
                                     <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn wallet-btn pay-8 btn-block btn-sm btn-primary"
+                                        className="btn wallet-btn pay-8 btn-block py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}
@@ -364,7 +364,7 @@ class Wallet extends Component {
                                 <p>
                                 <PaystackButton
                                         text="Fund Wallet"
-                                        className="btn btn-sm btn-primary"
+                                        className="btn py-4 btn-primary"
                                         callback={this.callback}
                                         close={this.close}
                                         disabled={false}

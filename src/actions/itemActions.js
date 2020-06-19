@@ -699,12 +699,12 @@ export const setAmount = amount => {
     return { type: SET_AMOUNT, payload: amount }
 }
 
-export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress) => {
+export const registerPayment = (transactionNo, txRef, amount, paymentType, cartData, addressId, userAddress, pin) => {
     console.log('called here', userAddress)
     const data = userAddress.trim() === '' ? {transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
-            useWallet: paymentType === 'pay with debit' ? false : true, addressId: `${addressId}`, }
+            useWallet: paymentType === 'pay with debit' ? false : true, addressId: `${addressId}`,pin }
             : {transactionNo, amount: `${amount}`, paymentType, transactionReference: txRef,
-            useWallet: paymentType === 'pay with debit' ? false : true, addressString: userAddress, }
+            useWallet: paymentType === 'pay with debit' ? false : true, addressString: userAddress, pin }
     return async (dispatch) => {
         try {
             await axios.post('/api/v1/user/order/create',
@@ -1015,15 +1015,22 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
             //         }
             //     } )
             // })
-            selectedItem.forEach(async(id) => {
-                await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
-                    productId: id
-                }, {
-                    headers: {
-                        'x-access-token': localStorage.getItem('x-access-token')
-                    }
-                })
+            await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
+                productId: selectedItem
+            }, {
+                headers: {
+                    'x-access-token': localStorage.getItem('x-access-token')
+                }
             })
+            // selectedItem.forEach(async(id) => {
+            //     await axios.post(`/api/v1/seller/delivery/reject-product/${deliveryId}`, {
+            //         productId: id
+            //     }, {
+            //         headers: {
+            //             'x-access-token': localStorage.getItem('x-access-token')
+            //         }
+            //     })
+            // })
             dispatch({ type: STOP_LOADING, payload: '' })
             // dispatch({ type: SUCCESS_ALERT, payload: 'Product(s) rejected successfully' })
             swal.fire('Product(s) rejected successfull')

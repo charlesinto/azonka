@@ -832,6 +832,7 @@ class index extends Component {
                                                 <div className="form-group">
                                                     <label htmlFor="description" className="rl-label">Item Description</label>
                                                     <textarea name="description"
+                                                        maxLength="1000"
                                                         className={`form-control ${this.props.inValidElments.includes('description') ? 'invalid' : ''}`}
                                                         value={this.props.description} onChange={this.handleInputChange}
                                                     ></textarea>
@@ -899,6 +900,7 @@ class index extends Component {
                                                         className={`${this.props.inValidElments.includes('weight') ? 'invalid' : ''}`}
                                                         value={this.props.weight} onChange={this.handleInputChange}>
                                                         <option value="">Select Weight</option>
+                                                        <option value="0 - 100">0 - 100</option>
                                                         <option value="100 - 200">100 - 200</option>
                                                         <option value="200 - 500">200 - 500</option>
                                                         <option value="500 - 1000">500 - 1000</option>
@@ -910,6 +912,7 @@ class index extends Component {
                                                         className={`${this.props.inValidElments.includes('weightUnit') ? 'invalid' : ''}`}
                                                         value={this.props.weightUnit} onChange={this.handleInputChange}>
                                                         <option value="">Select Unit</option>
+                                                        <option value="g">Gram</option>
                                                         <option value="KG">KG</option>
                                                         <option value="POUND">POUNDS</option>
                                                     </select>
@@ -952,8 +955,8 @@ class index extends Component {
                                             <div className="delivery-location-container">
                                                 <div className="delivery-location">
                                                     <input type="checkbox" id="agreeToTer"
-                                                        name="iagree" value="sellers" onChange={this.sellerPreference} checked={this.props.deliveryType === 'pick-up'} />
-                                                    <label className="label-check color-black" onClick={(event) => this.sellerPreference({ target: { name: 'deliveryType', value: 'pick-up' } })}>
+                                                        name="iagree" disabled value="sellers" onChange={this.sellerPreference} checked={this.props.deliveryType === 'pick-up'} />
+                                                    <label className="label-check color-black">
                                                         <span className="checkbox primary"><span></span></span>
                                                         Pick Up
                                                 </label>

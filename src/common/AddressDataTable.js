@@ -9,6 +9,7 @@ class StoreDataTable extends Component {
     componentDidMount(){
         this.$el = $(this.el)
         console.log('this props', this.props.data)
+        // this.$el.dataTable()
         this.$el.DataTable({
             responsive: true,
             data:this.props.data,//country, state, address,name, createdAt

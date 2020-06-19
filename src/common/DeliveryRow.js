@@ -21,7 +21,7 @@ class DeiveryRow extends Component {
 
     }
     static getDerivedStateFromProps(nextProps, state) {
-        console.log('called here no')
+        
         if (state.qty !== nextProps.quantity) {
             return {
                 ...state, sum: nextProps.finalPrice * (nextProps.quantity || 1), qty: nextProps.quantity ?
@@ -149,6 +149,12 @@ class DeiveryRow extends Component {
             showConfirmDialog: false
         })
     }
+    renderAddress = (data) => {
+        if(data.address){
+            return `${data.address1}, ${data.city}, ${data.country}`
+        }
+        return `${data.addressString}`
+    }
     render() {
         if (!this.props.data.products[0]) return null;
         const {  id, } = this.props.data.products[0];
@@ -160,9 +166,9 @@ class DeiveryRow extends Component {
                     </div>
                     <div className="mobile-order-no my-3 container-fluid">
                         <div className="row d-flex justify-content-between w-100">
-                            <div className="mx-3">
-                                <span>Order No:</span>
-                                <span className="">{this.props.data.order}</span>
+                            <div className="d-flex mx-3">
+                                <h4>Order No:</h4>
+                                <h4 className="text-bold mx-4"># {this.props.data.order}</h4>
                             </div>
                             <div>
                                 <span
@@ -172,7 +178,7 @@ class DeiveryRow extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className=" col-md-4 border-right">
+                    <div className=" col-md-4 border-right hide-mobile">
                         <div className="d-flex item-name-wrapper">
                             
                         </div>
@@ -194,10 +200,32 @@ class DeiveryRow extends Component {
                                 }
 
                             </div>
-                            <div className=" d-flex py-2">
-                                <span style={{fontSize: '12px'}}>
-                                    {new Date(this.props.data.createdAt).toLocaleString()}
-                                </span>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className=" d-flex py-2">
+                                        <span style={{fontSize: '12px'}}>
+                                            {new Date(this.props.data.createdAt).toLocaleString()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="py-2">
+                                        <div className="">Deliver To: </div>
+                                        <div className=""> {this.renderAddress(this.props.data)} </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="py-2">
+                                        <div className="">Buyer Contact Line: </div>
+                                        <div className="">
+                                            <a href={`tel:+234${this.props.data.owner.phoneNumber}`}>+234 {this.props.data.owner.phoneNumber} </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             {/* <div className="wishlist-wrap">
                                 <span className="pointer" id={id} onClick={this.handleMoveWishList}> <i className="fas fa-shopping-bag px-2"></i> Move to wishlist</span>
@@ -214,10 +242,9 @@ class DeiveryRow extends Component {
                                 </Link>
                             </div> */}
                         </div>
-                        <div className="d-flex justify-content-between mobile-status-price">
+                        {/* <div className="d-flex justify-content-between mobile-status-price hide-mobile">
                             <span class="badge badge-pill badge-primary float-right">{this.props.data.status}</span>
-                           {/* <p className="mobile-price badge badge-pill badge-primary float-right"> ₦ {this.numberWithCommas(finalPrice)}</p> */}
-                        </div>
+                        </div> */}
                     </div>
                     <div className="text-success item-price col-md-2 border-right text-center hide-mobile">
                         {/* ₦ {this.numberWithCommas(finalPrice)} */}
@@ -246,8 +273,30 @@ class DeiveryRow extends Component {
                             <div className="d-flex">
                                 <span>{new Date(this.props.data.createdAt).toLocaleString()}</span>
                             </div>
-                            <div className="d-flex">
-                                <span>Hi</span>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="py-2">
+                                        <div className="">Deliver To: </div>
+                                        <div className=""> {this.renderAddress(this.props.data)} </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="py-2">
+                                        <div className="">Buyer Contact Line: </div>
+                                        <div className="">
+                                            <a href={`tel:+234${this.props.data.owner.phoneNumber}`}>+234 {this.props.data.owner.phoneNumber} </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-success col-md-2 px-0 mt-1">
+                                {/* ₦ {this.numberWithCommas(finalPrice)} */}
+                                {this.props.data.status.toUpperCase()}
+                            </div>
+                            <div className="d-flex my-3 mb-3">
+                                {/* <span>Hi</span> */}
                                 <Dropdown>
                                 <Dropdown.Toggle variant="success" id="dropdown-basic">
                                     Action

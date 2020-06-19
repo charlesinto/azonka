@@ -11,7 +11,10 @@ class MyDelivery extends Component {
         totalRecords: 1000,
         currentPage: 0,
         records: [],
-        currentIndex: 0
+        unfilteredList: [],
+        currentIndex: 0,
+        search: '',
+        filter: 'all'
     }
     componentDidMount(){
         this.props.setActiveLink('My Deliveries')
@@ -25,10 +28,28 @@ class MyDelivery extends Component {
         
         
     }
+    hanldeOnChange = (e) => {
+        const {target: {name, value}} = e;
+
+        this.setState({
+            [name]: value
+        }, () => {
+            if(this.state.search === ''){
+                this.setState({
+                    filter: 'all'
+                })
+            }
+        })
+    }
     static getDerivedStateFromProps(nextProps, state){
         console.log(nextProps.delivery)
-        if(nextProps.delivery !== state.records){
-            return {...state, records: nextProps.delivery}
+        if(nextProps.delivery !== state.records && state.filter === 'all'){
+            nextProps.delivery.sort(function(a,b){
+                // Turn your strings into dates, and then subtract them
+                // to get a value that is either negative, positive, or zero.
+                return new Date(b.createdAt) - new Date(a.createdAt);
+              });
+            return {...state, records: nextProps.delivery, unfilteredList: nextProps.delivery}
         }
         return null
     }
@@ -44,7 +65,7 @@ class MyDelivery extends Component {
     }
     renderHeader = () => {
         return (
-            <div className="row item-header mx-4">
+            <div className="row item-header mx-4 mb-4">
                 <div className="header-item-orderId col-md-1 ">
                     ORDER
                 </div>
@@ -64,10 +85,10 @@ class MyDelivery extends Component {
     }
     renderPagination(){
         let links = [];
-        for(let i = 0; i < this.state.totalRecords; i++){
+        for(let i = 1; i <= this.state.totalRecords; i++){
             if(i % 100 === 0){
                 links.push(
-                    <li key={i} className={`page-item ${(this.state.currentPage / 100) === (i / 100) ? ' active': ''}`}>
+                    <li key={i} className={`page-item d-flex justify-content-center ${(this.state.currentPage / 100) === (i / 100) ? ' active': ''}`}>
                         <span onClick={() => this.moveToNextPage(i / 100)} className="page-link" id={`${i/100}`} to={`#${i/100}`}>{i / 100}</span>
                     </li>
                 )
@@ -127,6 +148,19 @@ class MyDelivery extends Component {
             </div>
         )
     }
+    onSearch = e => {
+        e.preventDefault()
+        const result = this.state.unfilteredList.filter(item => {
+            if(item.order === parseInt(this.state.search)){
+                return true;
+            }
+            return false
+        })
+        this.setState({
+            records: result,
+            filter:'specific'
+        })
+    }
     render(){
         return (
            <StoreDashboard>
@@ -134,7 +168,14 @@ class MyDelivery extends Component {
                 {
                     this.state.records.length > 0 ?
                     <>
-                        
+                        <div className="row d-flex justify-content-end mb-4">
+                            <div className="">
+                                <form className="form-inline my-2 my-lg-0">
+                                    <input onChange={this.hanldeOnChange} value={this.state.search} name="search" className="form-control mr-sm-2" type="text" placeholder="Search" />
+                                    <button onClick={this.onSearch} className="btn btn-secondary my-2 my-sm-0" style={{height:'35px'}} type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
                         {this.renderHeader()}
 
                         {this.renderRows()}
@@ -161,9 +202,16 @@ class MyDelivery extends Component {
                      :
                     (
                         <div>
-                            
+                            <div className="row d-flex justify-content-end mb-4">
+                                <div className="">
+                                    <form className="form-inline my-2 my-lg-0">
+                                        <input onChange={this.hanldeOnChange} value={this.state.search} name="search" className="form-control mr-sm-2" type="text" placeholder="Search" />
+                                        <button onClick={this.onSearch} className="btn btn-secondary my-2 my-sm-0" style={{height:'35px'}} type="submit">Search</button>
+                                    </form>
+                                </div>
+                            </div>
                             {this.renderHeader()}
-                            <div className="row d-flex justify-content-center my-5">
+                            <div className="row d-flex justify-content-center mb-5">
                                 <img style={{width: '350px', height: '200px'}} src={nodataImg} alt="Empty state" className="img-empty-state" />
                             </div>
                             <div className="my-8 hide-mobile">

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import ReviewModal from './ReviewModal'
+import { v4 as uuidv4 } from 'uuid';
+
 
 export class MoreOrder extends Component {
     state = {}
@@ -34,7 +36,7 @@ export class MoreOrder extends Component {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     render() {
-
+        
         return (
             <>
                 <div class="modal fade" id={`exampleModalCenter${this.props.id}`} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -69,6 +71,7 @@ export class MoreOrder extends Component {
                                 {
                                     this.props.orderData ?
                                         this.props.orderData.map(o => {
+                                            let randomId = uuidv4()
                                             let { name, id, mainImageUrl, finalPrice } = o
                                             return (
                                                 <>
@@ -94,7 +97,8 @@ export class MoreOrder extends Component {
                                             <span title="Raise a dispute"><i className=" text-primary far fa-flag"></i></span>
                                             <span className="tooltiptext" > Raise a dispute </span>
                                         </div> */}                       <span className="text-yellow font-15"
-                                                                            data-toggle="modal" data-target="#moreReview"
+                                                                            data-toggle="modal" data-target={`#moreReview${randomId}`}
+                                                                            data-backdrop="static" data-keyboard="false"
                                                                             onClick={(e) => {
                                                                                 //  this.handleItemDelete(id) 
                                                                                 // alert("hello")
@@ -170,7 +174,7 @@ export class MoreOrder extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <ReviewModal name={"moreReview"} productId={o.id} />
+                                                    <ReviewModal name={`moreReview${randomId}`} productId={o.id} />
                                                 </>
                                             )
                                         }) : null

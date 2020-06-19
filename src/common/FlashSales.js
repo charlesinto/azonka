@@ -43,7 +43,7 @@ class FlashSales extends Component {
             let cartData = JSON.parse(localStorage.getItem("cart"));
             this.setState({ cartData })
             let { products } = this.state
-            let obj = products.filter(data => id === data.id)[0]
+            let obj = products ? products.filter(data => id === data.id)[0] : null
 
             //check if item is in cart
 
@@ -53,7 +53,10 @@ class FlashSales extends Component {
                 if (isAdded) {
                     return this.props.successAlert('Item has already been added')
                 } else {
-                    localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                    if(obj){
+                        localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                    }
+                    
                     this.handleSetLocalData()
                     return this.props.showSuccessALert("Item has already been added")
                     // return swal.fire("Response", "Item added to cart", "success")

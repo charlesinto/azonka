@@ -74,7 +74,7 @@ export default (state=INITIAL_STATE, actions) => {
             return {...state,loading: false,redirectToCart: false,unAuthorized:false,redirectToVerify:false,error:null,verification:'true',redirectToStore:false,
              redirectToProfile: false}
         case UNSUCCESSFUL_VERIFICATION:
-            return {...state, loading: false,error:true,verification:'false', errorMessage: actions.payload}
+            return {...state, loading: false,error:true,verification:'none', errorMessage: actions.payload}
         case RESET_VERIFICATION_FORM_STATE: 
                 return {...state, verification:'none'}
         case ORDER_CREATED_SUCCESSFULLY:

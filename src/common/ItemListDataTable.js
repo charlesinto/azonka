@@ -74,9 +74,14 @@ class ItemListDataTable extends Component {
                 {
                     title:' Action',
                     render: (data, type, row, meta) => {
-                        return `<button type="button" data-id=${row.id} class="btn btn-outline-primary action-btn btn-xs dt-edit" style="margin-right:16px;">
+                        return `
+                        <div class="d-flex justify-content-space-between">
+                        <a class="btn btn-success" title="Preview" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer" target="_blank"><span><i class="ion ion-eye"></i><span></a>
+                        <button type="button" data-id=${row.id} class="btn btn-outline-primary action-btn btn-xs dt-edit">
                         <i class="fas fa-pen"></i></button>
-                        <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>`
+                        <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                        `
                     },
                     responsivePriority: 2
                 }

@@ -8,6 +8,9 @@ require( 'datatables.net-responsive' )
 class BankDataTable extends Component {
     componentDidMount(){
         this.$el = $(this.el)
+        // window.$(document).ready(function() {
+        //     window.$('#example').DataTable();
+        // } );
         console.log('this props', this.props.data)
         this.$el.DataTable({
             responsive: true,

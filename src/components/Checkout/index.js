@@ -8,6 +8,7 @@ import * as actions from "../../actions";
 import PaystackButton from 'react-paystack';
 import Validator from 'validator';
 import { PAY_STACK_PUBLIC_KEY } from '../../config/config';
+import Swal from 'sweetalert2';
 
 class Checkout extends Component {
     INITIAL_STATE = {
@@ -426,7 +427,7 @@ class Checkout extends Component {
     handleCheckBoxClick = paymentType => {
         this.setState({ payType: paymentType })
     }
-    payNow = e => {
+    payNow = async (e) => {
         e.preventDefault()
         if (!this.state.auth) {
             const { firstName, lastName, emailAddress, userAddress,
@@ -472,13 +473,27 @@ class Checkout extends Component {
                 //this.props.successAlert('hello')
                 return this.payWithPayStack()
             } else {
-                if (parseInt(this.props.amount) > parseInt(this.props.balance / 100)) {
-                    return this.props.renderError('Insufficient funds, please fund your wallet')
+                const { value: pin } = await Swal.fire({
+                    title: 'Enter Your Wallet Pin',
+                    input: 'text',
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                      if (!(value && value.trim() !== '')) {
+                        return 'Wallet Pin Requred!'
+                      }
+                    }
+                  })
+                  
+                  
+                // if (parseInt(this.props.amount) > parseInt(this.props.balance / 100)) {
+                //     return this.props.renderError('Insufficient funds, please fund your wallet')
+                // }
+                if(pin && pin.trim() !== ''){
+                    this.props.initiateRegistration()
+                    this.props.registerPayment('', '',
+                        this.props.amount * 100, this.state.payType, this.state.cartData,
+                        this.state.addressId, this.state.userAddress, pin)
                 }
-                this.props.initiateRegistration()
-                this.props.registerPayment('', '',
-                    this.props.amount * 100, this.state.payType, this.state.cartData,
-                    this.state.addressId, this.state.userAddress)
             }
         }
     }
@@ -573,7 +588,7 @@ class Checkout extends Component {
                                                     <p>
                                                         <PaystackButton
                                                             text="Make Payment"
-                                                            className="btn btn-block btn-sm btn-primary"
+                                                            className="btn btn-lg w-100 btn-primary"
                                                             callback={this.callback}
                                                             close={this.close}
                                                             disabled={!this.state.paystack}
@@ -593,7 +608,7 @@ class Checkout extends Component {
                                             this.state.paystack ? null :
                                                 (
                                                     <span onClick={this.payNow}
-                                                        className="btn btn-block btn-sm btn-primary">Make Payment</span>
+                                                        className="btn  btn-lg w-100 btn-primary">Make Payment</span>
                                                 )
                                         }
 

@@ -278,7 +278,29 @@ class Cart extends Component {
             )
         }
     }
+    renderRows = () => {
+        let orders = this.props.orders;
+        orders.sort(function(a,b){
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+         return orders.map(data => {
+                                           
+            return (
+                <OrderProductRow
+                    calSums={(sum, productId, qty) =>
+                        this.calSums(sum, productId, qty)}
+                    calSum={this.calSum}
+                    // quantity={this.state.quantity[data.id]}
+                    handleItemDelete={this.handleItemDelete}
 
+                    data={data}
+                    fullData={data}
+                />
+            )
+        })
+    }
     render() {
         return (
             <div >
@@ -324,21 +346,7 @@ class Cart extends Component {
 
                                     {
 
-                                        this.props.orders && this.props.orders.length > 0 ? this.props.orders.map(data => {
-                                           
-                                            return (
-                                                <OrderProductRow
-                                                    calSums={(sum, productId, qty) =>
-                                                        this.calSums(sum, productId, qty)}
-                                                    calSum={this.calSum}
-                                                    // quantity={this.state.quantity[data.id]}
-                                                    handleItemDelete={this.handleItemDelete}
-
-                                                    data={data}
-                                                    fullData={data}
-                                                />
-                                            )
-                                        }) : (
+                                        this.props.orders && this.props.orders.length > 0 ? this.renderRows() : (
                                                 <div className="row d-flex justify-content-center my-5">
                                                     <img src={nodataImg} alt="Empty state" className="img-empty-state" />
                                                 </div>

@@ -22,7 +22,46 @@ class index extends Component {
         inValidElments: [],
         actionMode: 'save',
         isoCode: '234',
-        id: null
+        id: null,
+        states: [
+          'Abuja',
+          'Abia',
+          'Adamawa',
+          'Akwa Ibom',
+          'Anambra',
+          'Bauchi',
+          'Bayelsa',
+          'Benue',
+          'Borno',
+          'Cross River',
+          'Delta',
+          'Ebonyi',
+          'Edo',
+          'Ekiti',
+          'Enugu',
+          'Gombe',
+          'Imo',
+          'Jigawa',
+          'Kaduna',
+          'Kano',
+          'Katsina',
+          'Kebbi',
+          'Kogi',
+          'Kwara',
+          'Lagos',
+          'Nassarawa',
+          'Niger',
+          'Ogun',
+          'Ondo',
+          'Osun',
+          'Oyo',
+          'Plateau',
+          'Rivers',
+          'Sokoto',
+          'Taraba',
+          'Yobe',
+          'Zamfara'
+        ]
     }
     constructor(props){
       super(props);
@@ -204,7 +243,9 @@ class index extends Component {
                         onChange={this.handleInputChange}
                       >
                         <option value="">Select State</option>
-                        <option value="Lagos">Lagos</option>
+                        {
+                          this.state.states.map(state => <option value={state}>{state}</option>)
+                        }
                       </select>
                       {this.state.inValidElments.includes("state") ? (
                         <div className="error-message required">
@@ -243,7 +284,7 @@ class index extends Component {
                         <div className="col-md-4 col-sm-12">
                           <button
                             onClick={this.handleFormSubmit}
-                            className="btn btn-primary"
+                            className="btn px-5 btn-primary"
                             style={{ margin: "0 auto" }}
                           >
                             Save
@@ -255,14 +296,14 @@ class index extends Component {
                           <div className="col-md-8 col-sm-12"></div>
                           <div className="col-md-4 col-sm-12">
                               <div style={{ marginBottom: 10, marginLeft: 10 }}>
-                                  <button onClick={(e) => this.handleFormUpdate(e, 'update')} className="btn btn-sm btn-warning"
+                                  <button onClick={(e) => this.handleFormUpdate(e, 'update')} className="btn px-5 btn-warning"
                                       style={{
                                           margin: '0 auto', borderColor: '#ffc107',
                                           background: '#ffc107', width: '100%', color: "#fff"
                                       }}>Update</button>
                               </div>
                               <div style={{ marginBottom: 10, marginLeft: 10 }}>
-                                  <button onClick={(e) => this.handleFormDelete(e, 'delete')} className="btn btn-sm btn-danger"
+                                  <button onClick={(e) => this.handleFormDelete(e, 'delete')} className="btn px-5  btn-danger"
                                       style={{ margin: '0 auto', width: '100%' }}>Cancel</button>
                               </div>
                           </div>

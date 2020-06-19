@@ -6,8 +6,8 @@ import Dashboard from '../HOC/Dashboard';
 import * as actions from "../../actions";
 
 class index extends Component {
-     INITIAL_STATE = {emailAddress: '', amount: 0, pin: '', bank: '', 
-    customAmount:0, amountToWithdraw: 0}
+     INITIAL_STATE = {emailAddress: '', amount:'', pin: '', bank: '', 
+    customAmount:0, amountToWithdraw: ''}
     constructor(props){
         super(props)
         this.state = {...this.INITIAL_STATE}
@@ -76,10 +76,21 @@ class index extends Component {
         await this.props.withdrawlFromWallet(parseInt(amountToWithdraw) * 100, bank, pin)
         this.setState({...this.INITIAL_STATE})
     }
+    numberWithCommas = (number = '') => {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     render() {
         return (
             <Dashboard>
                 <div className="container">
+                <div className="container">
+                        <div className="row">
+                            <div className="current-balance mt-card">
+                                <span>Current Balance</span>
+                                <span className="text-success">&#8358; {this.numberWithCommas(this.props.balance / 100)}</span>
+                            </div>
+                        </div>
+                    </div>
                     <div className="row">
                         <div className="col-lg-12 col-md-12 col-sm-12 mt-card-shadow">
                             <div className="form-box-item rm-border" >
@@ -118,7 +129,7 @@ class index extends Component {
                                         </div>
                                     </div>
                                     <hr className="line-separator"/>
-                                    <button onClick={this.handleFormSubmit} style={{width:'100%'}} className="btn btn-sm btn-outline-success">Make Withdrawal</button>
+                                    <button onClick={this.handleFormSubmit}  className="btn  btn-success">Make Withdrawal</button>
                                 </form>
                             </div>
                         </div>

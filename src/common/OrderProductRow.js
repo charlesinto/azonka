@@ -5,6 +5,7 @@ import * as actions from "../actions";
 import '../assets/Order.css'
 import MoreOrder from './MoreOrder';
 import ReviewModal from './ReviewModal';
+import { v4 as uuidv4 } from 'uuid';
 
 class OrderProductRow extends Component {
     state = { qty: 0, sum: 0 }
@@ -98,6 +99,7 @@ class OrderProductRow extends Component {
     render() {
         if (!this.props.data.products[0]) return <div>no products</div>;
         const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
+        let randomId = uuidv4()
         return (
             <>
                 <div className="row item-row py-3 my-4 bg-white" key={id}>
@@ -124,6 +126,7 @@ class OrderProductRow extends Component {
                                             <span className="pointer" data-toggle="modal"
                                                 data-target={`#exampleModalCenter${this.props.data.id}`}
                                                 id={this.props.data.id}
+                                                data-backdrop="static" data-keyboard="false"
                                                 style={{ fontSize: "11px" }}
                                             >
                                                 <i className="fas fa-eye px-2"></i>
@@ -146,7 +149,7 @@ class OrderProductRow extends Component {
                                     {
                                         this.props.data.products.length === 1  ? (
                                             <span className="text-yellow font-15"
-                                                data-toggle="modal" data-target="#reviewModal"
+                                                data-toggle="modal" data-target={`#modal${randomId}`}
                                                 onClick={(e) => {
                                                     //  this.handleItemDelete(id) 
                                                     // alert("hello")
@@ -217,6 +220,7 @@ class OrderProductRow extends Component {
                                 <div>
                                     <span className="text-yellow font-15"
                                         data-toggle="modal" data-target="#reviewModal"
+                                        data-backdrop="static" data-keyboard="false"
                                         onClick={(e) => {
                                             //  this.handleItemDelete(id) 
                                             // alert("hello")
@@ -243,7 +247,7 @@ class OrderProductRow extends Component {
                     orderData={this.props.data.products}
                     status={this.props.data.status.toUpperCase()}
                 />
-                <ReviewModal productId={id} />
+                <ReviewModal name={`modal${randomId}`} productId={this.props.data.products[0].id} />
 
             </>
         )

@@ -12,6 +12,7 @@ class WalletToWalletTransfer extends Component{
     }
     componentDidMount(){
         this.props.setActiveLink('Wallet Transfer')
+        this.props.getUserWalletDetals()
     }
     handleInputChange = e =>{
         e.preventDefault();
@@ -77,6 +78,14 @@ class WalletToWalletTransfer extends Component{
     render(){
         return <Dashboard>
             <div className="container">
+            <div className="container">
+                        <div className="row">
+                            <div className="current-balance mt-card">
+                                <span>Current Balance</span>
+                                <span className="text-success">&#8358; {this.numberWithCommas(this.props.balance / 100)}</span>
+                            </div>
+                        </div>
+                    </div>
                 <h4 className="popup-title verify-email" style={{
                     fontWeight: 'normal',
                     fontFamily: 'Roboto, sans-serif',
@@ -109,7 +118,10 @@ class WalletToWalletTransfer extends Component{
                                      className="form-control" onChange={this.handleInputChange} />
                                 </div>
                             </div>
-                            <div className="col-md-6 col-sm-12">
+                            
+                        </div>
+                        <div className="row">
+                        <div className="col-md-6 col-sm-12">
                                 <div className="form-group">
                                     <button type="submit" onSubmit={this.onFormSubmit} className="transfer-btn btn btn-primary btn-small">
                                         Transfer
@@ -139,7 +151,10 @@ class WalletToWalletTransfer extends Component{
 }
 
 const mapStateToProps = state => {
-    return {}
+    const { bank: {  balance } } = state;
+    return {
+        balance
+    }
 }
 
 export default connect(mapStateToProps, actions)(WalletToWalletTransfer)

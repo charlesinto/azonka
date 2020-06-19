@@ -80,12 +80,15 @@ class changePassword extends Component {
 
                     <div className="mb-2"></div>
                     <div className="required text-right">* Required Field</div>
-                    <div className="form-footer">
-                        <Link to="/"><i className="icon-angle-double-left"></i>Back</Link>
-
+                    <div className="row">
                         <div className="form-footer-right">
                             <button onClick={this.handleFormSubmit} type="submit" className="btn btn-primary">Update</button>
                         </div>
+                    </div>
+                    <div className="form-footer">
+                        <Link to="/"><i className="icon-angle-double-left"></i>Back</Link>
+
+                        
                     </div>
                 </form>
             </Dashboard>

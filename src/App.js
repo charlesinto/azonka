@@ -9,7 +9,7 @@ import defaultTheme from './theme/theme'
 import  "@fortawesome/fontawesome-free/css/all.css";
 import  "./css/style.css";
 import  "./css/css/app.css";
-import { HashRouter } from "react-router-dom";
+// import { HashRouter } from "react-router-dom";
 import 'react-awesome-slider/dist/styles.css';
 import { ToastProvider} from 'react-toast-notifications'
 //Banners
@@ -18,6 +18,7 @@ import axios from "axios";
 import Reducer from './reducers';
 const createStoreWithMiddleware = applyMiddleware(ReduxThunk)(createStore)
 
+axios.defaults.baseURL = 'http://167.99.154.149:1337';
 
 const theme = createMuiTheme(defaultTheme)
 
@@ -27,11 +28,10 @@ class App extends Component {
     console.log('app mounted here now o')
     const token = localStorage.getItem('x-access-token');
     axios.defaults.headers.common["x-access-token"] = token;
+    
   }
   render(){
     return (
-
-      <HashRouter>
         <ToastProvider>
           <div className="">
             <Provider store={createStoreWithMiddleware(Reducer,
@@ -43,7 +43,6 @@ class App extends Component {
 
           </div>
         </ToastProvider>
-      </HashRouter>
     );
   }
 }

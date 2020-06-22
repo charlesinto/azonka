@@ -277,13 +277,14 @@ updatedAt: "2016-07-14T10:04:29.000Z"}
         this.props.initiateRegistration()
         this.props.setActiveLink('Bank')
         // await this.props.getBanks()
+        await this.props.getSavedBanks();
         const response = await axios.get('https://api.paystack.co/bank' )
         const banks = response.data.data
         this.setState({
             banks
         }, () => {
             this.props.stopLoading();
-            this.props.getSavedBanks();
+            
         })
         
         

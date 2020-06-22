@@ -3,14 +3,16 @@ import * as actions from './../../actions';
 import { connect } from 'react-redux';
 
 class ItemModal extends Component {
-    state = { modalData: {}, cartData: "" }
+    state = { modalData: {}, cartData: "", products:[] }
     componentDidMount() {
 
     }
     componentWillReceiveProps = props => {
         // console.log('props: ', props);zs
-        if (props.itemModalData !== this.props.itemModalData && props.itemModalData.length > 0) {
-            this.setState({ modalData: props && props.itemModalData[0] });
+        // console.log(props.itemModalData)
+        if (props.itemModalData.itemDetails !== this.props.itemModalData.itemDetails && props.itemModalData.itemDetails.length > 0) {
+            this.setState({ modalData: props && props.itemModalData.itemDetails[0], products: props.itemModalData.products  });
+            // console.log(props.itemModalData)
         }
     }
     handleSetLocalData = async () => {
@@ -18,23 +20,34 @@ class ItemModal extends Component {
         let { cartData } = this.props;
         this.setState({ cartData })
     }
-    handleAddCart = async (e) => {
-        let id = e.target.id;
-        // return console.log(id)
+    handleAddCart = async (e, id) => {
         let token = (localStorage.getItem("x-access-token"));
-        // console.log(token)
+        // return console.log(token)
         if (token) {
-            let postObj = { productId: id, quantity: "1" };
-            
+            // return console.log(token)
+            let postObj = { productId: `${id}`, quantity: "1" };
             this.props.initiateRegistration()
             this.props.addToCart(postObj)
-            // console.log("flash props", this.props)
+
+            //let { data } = this.props.cartItems
+            // console.log("needs", data)
+            // let {} 
+            //  this.handleSetOnlineData()
+            //this.props.("An error occured")
+            // if (data.success) {
+            //     this.setState({ cartData: data.cart.products })
+
+            // } else {
+
+            // }
 
         } else {
             let cartData = JSON.parse(localStorage.getItem("cart"));
-            let localShop = JSON.parse(localStorage.getItem("shop"));
             this.setState({ cartData })
-            let obj = localShop.filter(data => id === data.id)[0]
+            
+            let { products } = this.state
+            // console.log(this.state.products)
+            let obj = products ? products.filter(data => parseInt(id) === data.id)[0] : null;
 
             //check if item is in cart
 
@@ -42,21 +55,28 @@ class ItemModal extends Component {
                 // return console.log("data", cartData)
                 let isAdded = cartData.some(data => data.id === id); //check if clicked item exist in cart
                 if (isAdded) {
-                    return this.props.renderSuccessAlert("Item has already been added")
+                    return this.props.successAlert("Item has already been added")
                 } else {
-                    localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
-                    this.props.renderSuccessAlert('Item added to cart successfully')
+                    if(obj){
+                        localStorage.setItem("cart", JSON.stringify([...cartData, obj]))
+                    }
+                    
                     this.handleSetLocalData()
+                    // return swal.fire("Response", "Item added to cart", "success")
+                    return this.props.showSuccessALert("Item has already been added")
                 }
 
             } else {
+                // console.log('called here o')
                 //if cart is empty
+                // console.log('data is', obj)
                 localStorage.setItem("cart", JSON.stringify([obj]))
-                this.props.renderSuccessAlert('Item added to cart successfully')
                 this.handleSetLocalData()
+
+                // return swal.fire("Response", "Item added to cart", "success")
+                return this.props.showSuccessALert("Item has already been added")
             }
         }
-
     }
     handleSetOnlineData = async () => {
         await this.props.fetchCart()
@@ -168,7 +188,7 @@ class ItemModal extends Component {
                                                 </div> */}
                                                 {/* <!-- End .product-single-qty --> */}
 
-                                                <span className="paction add-cart" id={id} onClick={this.handleAddCart}>
+                                                <span className="paction add-cart" id={id} onClick={(e) => this.handleAddCart(e, id)}>
                                                     Add to Cart
                                                 </span>
                                                 {/* <span  className="paction add-wishlist" title="Add to Wishlist">

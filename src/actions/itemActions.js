@@ -5,7 +5,7 @@ import {
     PRODUCTS_FETCED_SUCCESSFULLY, CATEGORY_FETCHED_SUCCESSFULLY, ADD_CART_SUCCESSFULLY,
     LOCAL_CART_FETCHED_SUCCESSFULLY, ADD_LOCAL_CART_SUCCESSFULLY, ORDER_FETCHED_SUCCESSFULLY,
     INITIAL_REGISTRATION, INVALIDE_FORM_DATA, SET_ITEM_IMAGE, FILES_SELECTED, CART_UPDATED_SUCCESSFULLY,
-    RESET_MANAGE_ITEMS_STATE, LOGOUT_USER, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
+    RESET_MANAGE_ITEMS_STATE, ADD_SUB_IMAGES, CLEAR_PRODUCT_FORM, REMOVE_SUB_IMAGES,
     INVALID_ITEM_FORM_DATA, CLEAR_ITEM_FORM_INPUTS, STORE_ITEM_EDIT, SET_AMOUNT,
     ORDER_CREATED_SUCCESSFULLY, SET_CARTDROPDOW_QUANTITY, ADDRESSES_FETCHED, USER_WALLET_OBTAINED_SUCCESSFULLY,
     HANDLE_PREFERNCE_CHANGE, CALCULATE_PRODUCT_SUM, LOCAL_SHOP_FETCHED_SUCCESSFULLY, PRODUCT_NOT_FOUND,
@@ -152,8 +152,9 @@ export const fetchItems = () => {
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             dispatch({ type: STOP_LOADING, payload: '' })
+            console.error(error)
             if (error.response) {
-                if (error.response.status === 401) {
+                if (error && error.response && error.response.status === 401) {
                     console.log(error.response)
                     swal.fire('Some errors encountered, refresh your browser')
                     
@@ -230,11 +231,8 @@ export const fetchCart = () => {
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             console.log('er', error)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             if (error.response && error.response.data.message) {
                 dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
@@ -668,11 +666,8 @@ export const updateItem = (id, data) => {
                 dispatch({ type: CLEAR_PRODUCT_FORM, payload: '' })
             } catch (error) {
                 console.log('er', error)
-                if (error.response.status === 498) {
-                    dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                    return setTimeout(function () {
-                        dispatch({ type: LOGOUT_USER, payload: '' })
-                    }, 1500)
+                if (error && error.response && error.response.status === 498) {
+                   return swal.fire('Login session timed out, please login to continue')
                 }
                 dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
                 dispatch({ type: STOP_LOADING, payload: '' })
@@ -765,11 +760,8 @@ export const removeCartItem = id => {
 
         } catch (error) {
             dispatch({ type: STOP_LOADING, payload: '' })
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 80) })
         }
@@ -798,11 +790,8 @@ export const updateCartItems = (cart, quantity, changeItems) => {
             dispatch({ type: CART_UPDATED_SUCCESSFULLY, payload: '' })
         } catch (error) {
             dispatch({ type: STOP_LOADING, payload: '' })
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 80) })
 
@@ -837,11 +826,8 @@ export const fetchCheckoutCart = () => {
             dispatch({ type: ADDRESSES_FETCHED, payload: address })
         } catch (error) {
             console.log('er', error)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -868,11 +854,8 @@ export const getAddresses = (id = 0, numberOfPage = 100) => {
             dispatch({ type: ADDRESSES_FETCHED, payload: address })
         } catch (error) {
             console.log('er', error)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -903,11 +886,8 @@ export const createAddress = (data, id = 0, numberOfPage = 100) => {
             dispatch({ type: SUCCESS_ALERT, payload: 'Address created successfully' })
         } catch (error) {
             console.log('er', error)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -930,11 +910,8 @@ export const fetchOrders = (id = 0, numberOfPage = 100) => {
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             console.log('er', error)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             // dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -958,11 +935,8 @@ export const getSellerDeliveries = (id = 0, numberOfPage = 100) => {
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             console.log('er', error.response)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response &&  error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -984,12 +958,9 @@ export const getSellerDelieryById = (id = 0) => {
             dispatch({ type: GET_SELLER_DELIVERIES, payload: delivery})
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
-            console.log('er', error.response)
-            if (error.response.status === 498) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            console.log('er', error)
+            if (error && error.response && error.response.status === 498) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })
             dispatch({ type: STOP_LOADING, payload: '' })
@@ -1035,12 +1006,10 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
             swal.fire('Product(s) rejected successfull')
         } catch (error) {
             console.log('er', error.response)
-            if (error.response.status === 498 || error.response.status === 401) {
-                swal.fire('Login session timed out, please login to continue')
+            if (error && error.response && (error.response.status === 498 || error.response.status === 401)) {
+               return  swal.fire('Login session timed out, please login to continue')
                 // dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+                
             }
             if(error.response && error.response.data && error.response.data.message){
                 // dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
@@ -1087,12 +1056,10 @@ export const markOrderAsAccepted = (orderNumber = null) => {
             swal.fire(message);
         } catch (error) {
             console.log('er', error.response)
-            if (error.response.status === 498 || error.response.status === 401) {
-                swal.fire('Login session timed out, please login to continue')
+            if (error && error.response && (error.response.status === 498 || error.response.status === 401)) {
+               return  swal.fire('Login session timed out, please login to continue')
                 // dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+               
             }
             if(error.response && error.response.data && error.response.data.message){
                 swal.fire(error.response.data.message);
@@ -1118,11 +1085,8 @@ export const getUserCredits = () => {
             return dispatch({type: CREDITS_OBTAINED_SUCCESSFULLY, payload: credit});
         }catch(error){
             console.log('er', error.response)
-            if (error.response.status === 498 || error.response.status === 401) {
-                dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
-                return setTimeout(function () {
-                    dispatch({ type: LOGOUT_USER, payload: '' })
-                }, 1500)
+            if (error && error.response && (error.response.status === 498 || error.response.status === 401)) {
+                return swal.fire('Login session timed out, please login to continue')
             }
             if(error.response && error.response.data && error.response.data.message){
                 dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})

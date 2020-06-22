@@ -12205,7 +12205,7 @@ input[type=number] {
 }
 
 .image-view{
-    height: 20rem !important;
+    height: 300px !important;
 }
 
 .zoom-container{
@@ -12740,4 +12740,12 @@ button[disabled]{
   background-color: #cccccc !important;
   color: #666666 !important;
   cursor: not-allowed;
+}
+
+.banners-containers{
+    max-width: 800px;
+}
+
+.banner-small{
+    max-width: 400px;
 }

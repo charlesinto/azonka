@@ -85,7 +85,7 @@ class FlashSales extends Component {
     handleDetailModal = async (e) => {
         let { products } = this.state;
         let itemDetails = products.filter(data => data.id === parseInt(e.target.id));
-        await this.props.itemDetailModalAction(itemDetails)
+        await this.props.itemDetailModalAction({itemDetails, products: this.props.featArray})
         this.setState({ itemDetails })
     }
     handleItemDetails = (e) => {
@@ -140,7 +140,7 @@ class FlashSales extends Component {
                             <span>Add to Wishlist</span>
                         </Link> */}
 
-                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} class="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
+                        <span id={id} onClick={(e) => this.handleAddCart(e, id)} className="paction add-cart" title="Add to Cart" style={{ fontSize: "13px" }}>
                             Add to Cart
                         </span>
 

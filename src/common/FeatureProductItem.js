@@ -86,7 +86,7 @@ class FeatureProductItem extends Component {
         // console.log(e.target.id);
         let itemDetails = products.filter(data => data.id === parseInt(e.target.id));
         // console.log(itemDetails)
-        await this.props.itemDetailModalAction(itemDetails)
+        await this.props.itemDetailModalAction({itemDetails, products: this.props.featArray})
         // this.setState({ itemDetails })
     }
     handleItemDetails = (e) => {

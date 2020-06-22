@@ -955,7 +955,7 @@ export const getSellerDelieryById = (id = 0) => {
             })
             const delivery = [];
             delivery.push(response.data.delivery)
-            dispatch({ type: GET_SELLER_DELIVERIES, payload: delivery})
+            dispatch({ type: GET_SELLER_DELIVERIES, payload: delivery })
             dispatch({ type: STOP_LOADING, payload: '' })
         } catch (error) {
             console.log('er', error)
@@ -1011,7 +1011,7 @@ export const rejectProducts = (deliveryId = null, selectedItem = []) => {
                 // dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
                 
             }
-            if(error.response && error.response.data && error.response.data.message){
+            if (error.response && error.response.data && error.response.data.message) {
                 // dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
                 swal.fire(error.response.data.message)
                 return dispatch({ type: STOP_LOADING, payload: '' })
@@ -1061,7 +1061,7 @@ export const markOrderAsAccepted = (orderNumber = null) => {
                 // dispatch({ type: DISPLAY_ERROR, payload: 'Login session timed out, please login to continue' })
                
             }
-            if(error.response && error.response.data && error.response.data.message){
+            if (error.response && error.response.data && error.response.data.message) {
                 swal.fire(error.response.data.message);
                 return dispatch({ type: STOP_LOADING, payload: '' })
             }
@@ -1074,22 +1074,22 @@ export const markOrderAsAccepted = (orderNumber = null) => {
 
 export const getUserCredits = () => {
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.get('/api/v1/user/credit/get', {
                 headers: {
                     'x-access-token': localStorage.getItem('x-access-token')
                 }
             });
-            const {data: {credit}} = response;
-            dispatch({type: STOP_LOADING, payload:''})
-            return dispatch({type: CREDITS_OBTAINED_SUCCESSFULLY, payload: credit});
-        }catch(error){
+            const { data: { credit } } = response;
+            dispatch({ type: STOP_LOADING, payload: '' })
+            return dispatch({ type: CREDITS_OBTAINED_SUCCESSFULLY, payload: credit });
+        } catch (error) {
             console.log('er', error.response)
             if (error && error.response && (error.response.status === 498 || error.response.status === 401)) {
                 return swal.fire('Login session timed out, please login to continue')
             }
-            if(error.response && error.response.data && error.response.data.message){
-                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+            if (error.response && error.response.data && error.response.data.message) {
+                dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
                 return dispatch({ type: STOP_LOADING, payload: '' })
             }
             dispatch({ type: DISPLAY_ERROR, payload: 'Some error were encounered,please refresh your browser' })

@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import * as actions from '../actions'
 import swal from 'sweetalert2';
 import { v4 as uuidv4 } from 'uuid';
+import moment from "moment";
 // import * as $ from 'jquery';
 class ReviewModal extends Component {
     constructor(props){
@@ -45,14 +46,21 @@ class ReviewModal extends Component {
             console.log(error)
         }
     }
-    componentDidMount(){
+    componentDidMount(){}
 
-        console.log(this.props.productId)
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.rating !== this.props.rating || prevProps.reviews !== this.props.reviews) {
+            //Perform some operation here
+            this.setState({
+                rating: this.props.rating,
+                reviews: this.props.reviews,
+            });
+        }
     }
     render() {
         let randomId = uuidv4()
         return (
-            <>
+            <div>
             <div className="modal fade" id={this.props.name ? `${this.props.name}` : `reviewModal${this.props.productId}`} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
@@ -72,62 +80,48 @@ class ReviewModal extends Component {
                         <div className="modal-body" style={{ background: "rgba(202, 194, 194, 0.2)" }}>
 
                             <div className="container">
-                                {/* <h2 className="text-center">Bootstrap 4 User Rating Form / Comment Form</h2> */}
-                                <div className="card shadow p-3 mb-2 bg-white rounded">
-                                    <div className="card-body">
-                                        <div className="row">
-                                            <div className="col-md-2 photo-time">
-                                                <img alt="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
-                                                <p className="text-secondary text-center">15 Minutes Ago</p>
-                                            </div>
-                                            <div className="col-md-10">
-                                                <p>
-                                                    <a className="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
-                                                        <strong>Charles Odogwu</strong></a>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                </p>
-                                                <div className="clearfix"></div>
-                                                <p>Lorem Ipsum is simply dummy text of the pr make
-                                                      but also the leap into electronic typesetting,
-                                                       remaining essentially unchanged. It was popularised
-                                                       in the 1960s with the release of Letraset sheets
-                                                        containing Lorem Ipsum passages, and more recently
-                                                     with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {
+                                    this.state.reviews && this.state.reviews.length > 0 && !this.props.isReviewLoading ?
+                                        (
+                                            this.props.reviews.map(o => {
+                                                let { comment, id, rating, createdAt } = o
+                                                return (
+                                                    <div className="card" key={id}>
+                                                        <div className="card-body">
+                                                            <div className="row">
+                                                                <div className="col-md-2 photo-time">
+                                                                    <img alt="guyuss" src="https://image.ibb.co/jw55Ex/def_face.jpg" className="img img-rounded img-fluid" />
+                                                                    <p className="text-secondary text-center">{moment(createdAt).fromNow()}</p>
+                                                                </div>
+                                                                <div className="col-md-10">
+                                                                    <p>
+                                                                        <a className="float-left" href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
+                                                                            <strong>Anonymous</strong></a>
+                                                                        <span className="float-right">
+                                                                            {/* <StarRatingComponent
+                                                                                name="rate1"
+                                                                                starCount={5}
+                                                                                value={rating}
+                                                                                editing={false}
+                                                                            /> */}
+                                                                        </span>
 
-                                <div className="card shadow p-3 mb-2 bg-white rounded">
-                                    <div className="card-body">
-                                        <div className="row">
-                                            <div className="col-md-2 photo-time">
-                                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" alt="avatar" className="img img-rounded img-fluid" />
-                                                <p className="text-secondary text-center">15 Minutes Ago</p>
-                                            </div>
-                                            <div className="col-md-10">
-                                                <p>
-                                                    <a className="float-left"  href="https://maniruzzaman-akash.blogspot.com/p/contact.html">
-                                                        <strong>Charles Odogwu</strong></a>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                    <span className="float-right"><i className="text-warning fa fa-star"></i></span>
-                                                </p>
-                                                <div className="clearfix"></div>
-                                                <p>Lorem Ipsum is simply dummy text of the pr make
-                                                      but also the leap into electronic typesetting,
-                                                       remaining essentially unchanged. It was popularised
-                                                       in the 1960s with the release of Letraset sheets
-                                                        containing Lorem Ipsum passages, and more recently
-                                                     with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                                        {/* <span className="float-right"><i className="text-warning fa fa-star"></i></span> */}
+                                                                    </p>
+                                                                    <div className="clearfix"></div>
+                                                                    <p>{comment}.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                )
+                                            })
+                                        ) : this.props.isReviewLoading ? (
+                                            <p className="text-center">Loading Review Data...</p>
+                                        ) : !this.props.isReviewLoading && this.state.reviews && this.state.reviews.length === 0 ?
+                                                (<h2 className="text-center">No Review Data</h2>) : null
+                                }
 
                             </div>
                         </div>
@@ -151,44 +145,6 @@ class ReviewModal extends Component {
                         </div>
                         <div className="modal-body" style={{ background: "rgba(202, 194, 194, 0.2)" }}>
 
-                            <div className="container-fluid">
-                                <div className="shadow rounded bg-white mb-3 justify-contents-center py-5 px-3 row w-100">
-                                    <div className="col-md-6 d-flex justify-contents-center">
-                                        <h5>
-                                            Product Acceptability
-                                        </h5>
-                                    </div>
-                                    
-                                    <div className="col-md-6 d-flex justify-contents-center">
-                                       <span className="mx-2">1</span> <input value={this.state.productReview} type="range" step="1" class="form-control-range"
-                                            name="productReview" onChange={this.handleChange} min="1" max="5"/>
-                                            <span className="mx-2">5</span>
-                                    </div>
-                                </div>
-                                <div className="shadow rounded mb-3 bg-white justify-contents-center py-5 px-3 row w-100">
-                                    <div className="col-md-6 d-flex justify-contents-center">
-                                        <h5>
-                                            Seller Performance
-                                        </h5>
-                                    </div>
-                                    
-                                    <div className="col-md-6 d-flex justify-contents-center">
-                                       <span className="mx-2">1</span> <input value={this.state.sellerReview} type="range" step="1" class="form-control-range"
-                                            name="sellerReview" onChange={this.handleChange} min="1" max="5"/>
-                                            <span className="mx-2">5</span>
-                                    </div>
-                                </div>
-                                <div className="shadow rounded mb-3 bg-white justify-contents-center py-5 px-3 row w-100">
-                                    <div className="col-md-6 d-flex justify-contents-center">
-                                        <h5>
-                                            Comments
-                                        </h5>
-                                    </div>
-                                    
-                                    <div className="col-md-6 d-flex justify-contents-center">
-                                        <textarea value={this.state.comment} name="comment" onChange={this.handleChange}></textarea>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div className="modal-footer">
@@ -198,9 +154,8 @@ class ReviewModal extends Component {
                     </div>
                 </div>
             </div>
-            </>
         )
     }
 }
 
-export default connect(null, actions)(ReviewModal)
+export default ReviewModal

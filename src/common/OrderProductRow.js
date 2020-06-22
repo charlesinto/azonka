@@ -8,7 +8,7 @@ import ReviewModal from './ReviewModal';
 import { v4 as uuidv4 } from 'uuid';
 
 class OrderProductRow extends Component {
-    state = { qty: 0, sum: 0 }
+    state = { qty: 0, sum: 0, rating: 0, reviews: [], isReviewLoading: false }
     componentDidMount() {
         this.setState({
             sum: this.props.finalPrice * (this.props.quantity || 1), qty: this.props.quantity ?
@@ -75,7 +75,6 @@ class OrderProductRow extends Component {
     }
 
     handleViewMore = ({ target }) => {
-        // console.log("john", this.props.data.products)
         let _products = this.props.data.products
         this.setState({ _products })
     }
@@ -90,11 +89,21 @@ class OrderProductRow extends Component {
     numberWithCommas = (number = '') => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    renderRow = () => {
-        //console.log("john", this.props.data.products && this.props.data.products[0])
-    }
     handleModal = (id) => {
         this.setState({ _products: this.props.data.products })
+    }
+    handleReview = async (e) => {
+        e.preventDefault()
+        let id = e.target.id
+        const openModal = document.querySelector(".open-review-modal")
+        this.setState({ isReviewLoading: true })
+        await this.props.getProductById(id)
+        if (this.props.productFound) {
+            let { rating, reviews } = this.props.productFound
+            return this.setState({ rating, reviews, isReviewLoading: false })
+        }
+
+
     }
     render() {
         if (!this.props.data.products[0]) return <div>no products</div>;
@@ -258,10 +267,9 @@ class OrderProductRow extends Component {
 
 const mapStateToProps = state => {
 
-    let { categories, cartItems, cartData, orders } = state.inventory
-    // console.log('cartData', cartData, orders)
+    let { categories, cartItems, cartData, orders, productFound } = state.inventory
     return {
-        categories, cartItems, cartData, orders
+        categories, cartItems, cartData, orders, productFound
     }
 }
 

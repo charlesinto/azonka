@@ -12749,3 +12749,30 @@ button[disabled]{
 .banner-small{
     max-width: 400px;
 }
+
+.main{
+    /* background-color: #f4f4f4 !important; */
+}
+
+/* .slick-slide{
+    width: auto !important;
+}
+
+.product-image img{
+    width: 175px !important;
+    height: 175px !important;
+} */
+
+.product-image-special img{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.header-row-special{
+    background-color: #f50057;
+}
+
+.rounded {
+    border-radius: 3.25rem!important;
+}

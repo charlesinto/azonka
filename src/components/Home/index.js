@@ -24,6 +24,7 @@ import FlashSales from '../../common/FlashSales';
 
 class Home extends Component {
     state = { showPopUp: true,
+        slidesToShow: 4,
         topBanner: [
             {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
             {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
@@ -50,6 +51,40 @@ class Home extends Component {
         })
     }
     async componentDidMount() {
+        if(window.innerWidth < 768){
+            this.setState({
+                slidesToShow: 1
+            })
+        }
+        const $this = this;
+        if(window.attachEvent) {
+            window.attachEvent('onresize', function(e) {
+                if(window.innerWidth > 768){
+                    
+                    return $this.setState({
+                        slidesToShow: 4
+                    })
+                }else{
+                    return $this.setState({
+                        slidesToShow: 1
+                    })
+                }
+                
+            });
+        }
+        else if(window.addEventListener) {
+            window.addEventListener('resize', function() {
+                if(window.innerWidth > 768){
+                    // alert()
+                    return $this.setState({
+                        slidesToShow: 4
+                    })
+                }
+                return $this.setState({
+                    slidesToShow: 1
+                })
+            }, true);
+        }
         this.props.initiateRegistration()
         this.props.getProductCategorySubcategory()
         this.loadFeaturedItems()
@@ -120,26 +155,32 @@ class Home extends Component {
     }
     renderAdverts = () => {
         return this.props.adverts.map(item => (
-            item.products.length >= 3 ? <div className="border mb-2" key={item.id}>
-                <div className="d-flex justify-content-between py-4 px-4">
-                    <h3>{item.name}</h3>
-                    <Link to={`/specials/${item.id}`}><span> see all  </span></Link>
+            item.products.length >= 3 ? <div className="shadow rounded bg-white mb-4" key={item.id}>
+                <div className="d-flex justify-content-between px-4 py-3 header-row-special">
+                    <h3 className="text-light">{item.name}</h3>
+                    <Link to={`/specials/${item.id}`}><h3 className="text-light"> See all  </h3></Link>
                 </div>
                 <hr />
                 <div className="container">
-                    <div className="py-4 px-4">
-                        <Slider {...settingsAdvert}>
-                            {
-                                item.products.map(product => {
-                                    let { id, name, brandName, model, sellingPrice, mainImageUrl } = product
-                                    return <FeatureProductItem id={id} name={name}
-                                        brandName={brandName} sellingPrice={this.formatMoney(sellingPrice)}
-                                        model={model} mainImageUrl={mainImageUrl} featArray={this.state.products}
-                                        handleMoveWishList={this.handleMoveWishList}
-                                    />
+                    <div className="row p-4">
+                        {
+                                item.products.map((product, i) => {
+                                    let { id, name,finalPrice, brandName, model, sellingPrice, mainImageUrl } = product;
+                                    return (
+
+                                        <FlashSales key={i} id={id} name={name}
+                                            brandName={brandName}
+                                            sellingPrice={this.formatMoney(sellingPrice)}
+                                            model={model} mainImageUrl={mainImageUrl}
+                                            finalPrice={finalPrice}
+                                            featArray={this.state.products}
+                                            handleMoveWishList={this.handleMoveWishList}
+                                        />
+
+                                    )
+
                                 })
                             }
-                        </Slider>
                     </div>
                 </div>
             </div>
@@ -249,7 +290,7 @@ class Home extends Component {
         return (
             <div>
                 {/* <Header /> */}
-                <div style={{ minHeight: '100vh', paddingTop: '11.3rem' }}>
+                <div  style={{ minHeight: '100vh', paddingTop: '11.3rem', background:'#f4f4f4' }}>
                     <main className="main">
                         
 
@@ -259,8 +300,8 @@ class Home extends Component {
                                 <aside className="sidebar-home">
                                     <div className="row d-flex justify-content-center">
                                         <div className="col-md-12 col-lg-12">
-                                        <div className="side-menu-container">
-                                        <h2>CATEGORIES</h2>
+                                        <div className="side-menu-container bg-white shadow p-3">
+                                        <h2 className="bg-white rounded">CATEGORIES</h2>
 
                                         <nav className="side-nav">
                                             <ul className="menu menu-vertical sf-arrows">
@@ -442,7 +483,7 @@ class Home extends Component {
                                 <div className="row d-flex justify-content-center">
                                                 <div className="col-lg-10">
                                                     <div className="bnk">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
-                                                        <div id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
+                                                        <div id="carouselExampleSlidesOnly" className="carousel slide shadow bg-white" data-ride="carousel">
                                                             <ol className="carousel-indicators">
                                                                 {
                                                                     this.state.topBanner.map((item, i) => {
@@ -512,7 +553,7 @@ class Home extends Component {
                                     <div className="row my-4">
                                         <div className="col-md-12">
 
-                                        <div className="info-boxes-container">
+                                        <div className="info-boxes-container bg-white shadow">
                                             <div className="container justify-flex-start">
                                                 
 
@@ -544,10 +585,12 @@ class Home extends Component {
                                     <h2 className="carousel-title">Featured Products</h2>
 
 
+                                    <hr className="my-4"></hr>
 
-                                    <div className="home-featured-products">
+
+                                    <div className="bg-white rounded shadow px-5 p-5">
                                         <Slider
-                                            {...settings}
+                                            {...{...settings, slidesToShow: this.state.slidesToShow}}
                                         >
                                             {
                                                 this.state.products ? (
@@ -570,8 +613,10 @@ class Home extends Component {
 
 
                                     <h2 className="carousel-title">Flash sales</h2>
+
+                                    <hr className="my-4"></hr>
                                     {/* <h1 className="text-center font-weight-light">Flash sales</h1> */}
-                                    <div className="row border" style={{ margin: "4vh 0px" }}>
+                                    <div className="row rounded shadow p-5 bg-white" style={{ margin: "4vh 0px" }}>
 
                                         <br />
                                         {
@@ -607,7 +652,6 @@ class Home extends Component {
                                     </div>
 
                                     <div className="mb-4"></div>
-
 
 
                                     <div className="row">
@@ -690,6 +734,8 @@ class Home extends Component {
                         </div>
 
                         <div className="mb-4"></div>
+                        
+                  
 
                     </main>
                 </div>
@@ -714,24 +760,24 @@ const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    arrows: true,
+    slidesToShow: 4,
+    arrows: false,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000
 }
 
 
-const settingsAdvert = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    arrows: true,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000
-}
+// const settingsAdvert = {
+//     dots: false,
+//     infinite: true,
+//     speed: 500,
+//     slidesToShow: 6,
+//     arrows: false,
+//     slidesToScroll: 1,
+//     autoplay: true,
+//     autoplaySpeed: 3000
+// }
 
 export default connect(mapStateToProps, actions)(Home);
 

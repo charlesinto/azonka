@@ -116,7 +116,7 @@ class index extends Component {
                         <Link to="/"><i className="icon-angle-double-left"></i>Back</Link>
 
                         <div className="form-footer-right">
-                            <button onClick={this.handleFormSubmit} type="submit" className="btn-cm btn-primary">Save</button>
+                            <button onClick={this.handleFormSubmit} type="submit" className="btn-cm btn-lg px-5 py-2 btn-primary">Save</button>
                         </div>
                     </div>
                 </form>

@@ -63,7 +63,7 @@ class ItemModal extends Component {
                     
                     this.handleSetLocalData()
                     // return swal.fire("Response", "Item added to cart", "success")
-                    return this.props.showSuccessALert("Item has already been added")
+                    return this.props.showSuccessALert("Item has been added to cart successfully")
                 }
 
             } else {
@@ -74,7 +74,7 @@ class ItemModal extends Component {
                 this.handleSetLocalData()
 
                 // return swal.fire("Response", "Item added to cart", "success")
-                return this.props.showSuccessALert("Item has already been added")
+                return this.props.showSuccessALert("Item has been added to cart successfully")
             }
         }
     }

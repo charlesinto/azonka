@@ -30,7 +30,7 @@ class index extends Component {
             height: '',
             length: '',
             unit: '',
-            deliveryType: '',
+            deliveryType: 'home-delivery',
             deliveryLocation: '',
             weightUnit:'',
             weight: '',
@@ -363,9 +363,9 @@ class index extends Component {
         if (parseInt(this.state.finalPrice) < parseInt(this.state.sellingPrice)) {
             discounts = true
         }
-        if (this.props.deliveryType.trim() === '') {
-            return this.props.renderError('Please select delivery type')
-        }
+        // if (this.props.deliveryType.trim() === '') {
+        //     return this.props.renderError('Please select delivery type')
+        // }
         if (this.props.deliveryLocation.trim() === '') {
             return this.props.renderError('Please select delivery location')
         }
@@ -373,7 +373,7 @@ class index extends Component {
             return this.props.renderError('Please choose a store')
         }
         this.props.initiateRegistration()
-        await this.props.createItem({ ...this.state, discounts })
+        await this.props.createItem({ ...this.state, discounts, deliveryType:'home-delivery' })
         await this.props._initUploadPage();
 
     }
@@ -463,7 +463,7 @@ class index extends Component {
             <StoreDashboard>
                 <h2>Create Item</h2>
                 <div style={{display:'flex', justifyContent:'flex-start', margin: '20px 10px'}}>
-                    <button onClick={this.goToManageItems} type="button" class="btn-cm btn-outline-success">
+                    <button onClick={this.goToManageItems} type="button" class="btn-cm btn-lg btn-success">
                         <span style={{marginRight: 10}}>
                         <i className="fas fa-window-restore"></i></span>Manage Items</button>
                 </div>
@@ -725,9 +725,9 @@ class index extends Component {
                                             </div>
                                         </div>
                                         <div className="row add-margin-item">
-                                            <div className="col-md-6 col-sm-12 add-margin-sm-device">
-                                                <div className="form-group">
-                                                    <label htmlFor="store" className="rl-label required">Select Store *</label>
+                                            <div className="col-md-6 col-sm-12">
+                                                <div className="form-group" style={{marginTop:'26px'}}>
+                                                    <label htmlFor="store" className="rl-label required">Select Store</label>
                                                     <select name="store"
                                                         className={`form-control ${this.props.inValidElments.includes('store') ? 'invalid' : ''}`}
                                                         value={this.props.store} onChange={this.handleInputChange}>
@@ -836,6 +836,9 @@ class index extends Component {
                                                         className={`form-control ${this.props.inValidElments.includes('description') ? 'invalid' : ''}`}
                                                         value={this.props.description} onChange={this.handleInputChange}
                                                     ></textarea>
+                                                    <div className="mt-1">
+                                                        <span style={{fontSize:'11px'}} >Maximum 1000 characters</span>
+                                                    </div>
                                                 </div>
 
                                                 {
@@ -904,6 +907,7 @@ class index extends Component {
                                                         <option value="100 - 200">100 - 200</option>
                                                         <option value="200 - 500">200 - 500</option>
                                                         <option value="500 - 1000">500 - 1000</option>
+                                                        <option value="Over 1000">500 - 1000</option>
                                                     </select>
                                            </div>
                                            <div className="col-md-4">
@@ -918,8 +922,8 @@ class index extends Component {
                                                     </select>
                                            </div>
                                            <div className="col-md-4">
-                                                <div className="rl-labelp">
-                                                    <label>Number of Days to Deliver</label>
+                                                <div className="">
+                                                    <label className="rl-label">Number of Days to Deliver</label>
                                                     <input 
                                                         value={this.props.deliveryDays}
                                                          name="deliveryDays" type="number" 
@@ -949,7 +953,7 @@ class index extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h4 className="add-margin-top">Delivery Type</h4>
+                                        {/* <h4 className="add-margin-top">Delivery Type</h4>
                                         <hr className="line-separator" />
                                         <div className="row add-margin-item">
                                             <div className="delivery-location-container">
@@ -970,19 +974,22 @@ class index extends Component {
                                                 </label>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
+                                        {/* <div>
+                                            <img id="image" src="https://azonka.nyc3.digitaloceanspaces.com/storeItems/1085745691.jpg" alt="no-provided"/>
+                                        </div> */}
                                         <div className="add-margin-top" style={{ width: '100%' }}>
                                             {
                                                 this.props.action === 'save' ?
                                                     (
                                                         <div style={{ textAlign: "center" }}>
-                                                            <button onClick={this.handleFormSubmit} className="btn-cm btn-lg btn-primary">Submit for Review</button>
+                                                            <button onClick={this.handleFormSubmit} className="btn-cm btn-lg py-4 px-4 btn-primary">Submit for Review</button>
                                                         </div>
 
                                                     ) :
                                                     (
                                                         <div style={{ textAlign: 'center' }}>
-                                                            <button onClick={this.hanldeFormUpdate} className="btn-cm btn-lg btn-success">Update Item</button>
+                                                            <button onClick={this.hanldeFormUpdate} className="btn-cm btn-lg py-4 px-4 btn-success">Update Item</button>
                                                         </div>
                                                     )
                                             }

@@ -88,8 +88,8 @@ class FlashSales extends Component {
         await this.props.itemDetailModalAction({itemDetails, products: this.props.featArray})
         this.setState({ itemDetails })
     }
-    handleItemDetails = (e) => {
-        this.props.history.push(`/shop-details/${e.target.id}`)
+    handleItemDetails = (e, id) => {
+        this.props.history.push(`/shop-details/${id}`)
     }
     handleMoveWishList = (id) => {
         this.props.handleMoveWishList(id)
@@ -100,9 +100,9 @@ class FlashSales extends Component {
         const { id, name, sellingPrice, mainImageUrl,finalPrice } = this.props
         return (
 
-            <div className="product col-md-4" key={id}>
+            <div className="product col-md-3" key={id}>
                 <figure className="product-image-container" >
-                    <span className="product-image" id={id} onClick={this.handleItemDetails}>
+                    <span className="product-image-special" id={id} onClick={(e) => this.handleItemDetails(e, id)}>
                         <img src={mainImageUrl} alt="product" className="image-view" loading="lazy" onLoad={() => this.setState({ imgLoaded: true })} />
                     </span>
                     <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span>

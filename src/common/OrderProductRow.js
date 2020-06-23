@@ -95,7 +95,7 @@ class OrderProductRow extends Component {
     handleReview = async (e) => {
         e.preventDefault()
         let id = e.target.id
-        const openModal = document.querySelector(".open-review-modal")
+        // const openModal = document.querySelector(".open-review-modal")
         this.setState({ isReviewLoading: true })
         await this.props.getProductById(id)
         if (this.props.productFound) {

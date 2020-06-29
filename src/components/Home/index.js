@@ -159,9 +159,9 @@ class Home extends Component {
     renderAdverts = () => {
         return this.props.adverts.map(item => (
             item.products.length >= 3 ? <div className="bg-white mb-4" key={item.id}>
-                <div className="d-flex justify-content-between px-4 py-3 header-row-special">
-                    <h3 className="text-light">{item.name}</h3>
-                    <Link to={`/specials/${item.id}`}><h3 className="text-light"> See all  </h3></Link>
+                <div className="d-flex justify-content-between align-items-center px-4 header-row-special">
+                    <h3 className="text-light py-3 m-0">{item.name}</h3>
+                    <Link className="py-3 m-0" to={`/specials/${item.id}`}><h3 className="text-light py-3 m-0"> See all  </h3></Link>
                 </div>
                 <hr />
                 <div className="container">

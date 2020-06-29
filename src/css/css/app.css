@@ -16,6 +16,9 @@ body {
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden
 }
+.container{
+    padding: 0 100px;
+}
 
 /* body:not(.loaded)>*:not(.loading-overlay) {
     visibility: hidden
@@ -416,7 +419,8 @@ a:focus {
 
 @media screen and (max-width: 991px) {
     .container {
-        max-width: 100%
+        max-width: 100%;
+        padding: 0 20px;
     }
 }
 
@@ -1364,6 +1368,9 @@ a:focus {
     }
     .header-middle .header-right {
         margin-left: .7rem
+    }
+    .container{
+        padding: 0 20px;
     }
 }
 
@@ -4648,6 +4655,25 @@ a:focus {
 .close {
     font-size: 2.2rem
 }
+.added-services{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    align-items: center;
+}
+.added-services i{
+        /* font-size: 24px; */
+        color: #4b4b4b;
+        font-size: 4.7rem;
+        margin-right: 1.9rem;
+        min-width: 3.5rem;
+        text-align: center;
+}
+.added-services .text{
+    font-size: 17px;
+    color: black;
+    font-weight: 500;
+}
 
 @media screen and (min-width: 576px) {
     .modal-content {
@@ -4678,7 +4704,6 @@ a:focus {
         padding-right: 3rem
     }
 }
-
 @media screen and (max-width: 479px) {
     .modal-open,
     .modal-open .modal {

@@ -23,26 +23,29 @@ import axios from "axios";
 import FlashSales from '../../common/FlashSales';
 
 class Home extends Component {
-    state = { showPopUp: true,
+    state = {
+        showPopUp: true,
         slidesToShow: 4,
         topBanner: [
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'}
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' }
         ],
-        lowerBanner:[
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'}
+        lowerBanner: [
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' }
         ],
-        leftBanner:[
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'},
-            {url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg'}
+        leftBanner: [
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
+            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' }
         ],
         categories: [],
-        
+        // services: [
+        //     {id: 1, name: }
+        // ]
     }
     closePopup = (event) => {
         event.preventDefault();
@@ -51,30 +54,30 @@ class Home extends Component {
         })
     }
     async componentDidMount() {
-        if(window.innerWidth < 768){
+        if (window.innerWidth < 768) {
             this.setState({
                 slidesToShow: 1
             })
         }
         const $this = this;
-        if(window.attachEvent) {
-            window.attachEvent('onresize', function(e) {
-                if(window.innerWidth > 768){
-                    
+        if (window.attachEvent) {
+            window.attachEvent('onresize', function (e) {
+                if (window.innerWidth > 768) {
+
                     return $this.setState({
                         slidesToShow: 4
                     })
-                }else{
+                } else {
                     return $this.setState({
                         slidesToShow: 1
                     })
                 }
-                
+
             });
         }
-        else if(window.addEventListener) {
-            window.addEventListener('resize', function() {
-                if(window.innerWidth > 768){
+        else if (window.addEventListener) {
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
                     // alert()
                     return $this.setState({
                         slidesToShow: 4
@@ -92,7 +95,7 @@ class Home extends Component {
         this.props.getAdvertCategory()
         const response = await axios.get('/api/v1/category/get-categories/0/12')
         // console.log(response)
-       
+
         this.setState({
             categories: response.data.categories,
             // topBanner,
@@ -100,21 +103,21 @@ class Home extends Component {
             // leftBanner
         }, () => this.getFeaturedCategoriesImages())
         //remove popup after 5secs
-       
+
     }
     getFeaturedCategoriesImages = async () => {
-         const responseAds = await axios.get('/api/v1/ad/get-ads/0/1000')
+        const responseAds = await axios.get('/api/v1/ad/get-ads/0/1000')
 
         const ads = responseAds.data.ads.filter(item => item.page === 'Home Page')
         const topBanner = ads.filter(item => item.position === 'Top Banner')
         const lowerBanner = ads.filter(item => item.position === 'Lower Banner')
         const leftBanner = ads.filter(item => item.position === 'Left Banner')
-        if(lowerBanner.length > 4){
+        if (lowerBanner.length > 4) {
             lowerBanner.splice(4, lowerBanner.length)
         }
-        else if(lowerBanner.length > 0 && lowerBanner.length < 4){
+        else if (lowerBanner.length > 0 && lowerBanner.length < 4) {
             const remainingItem = 4 - lowerBanner.length;
-            for(let i = 0; i < remainingItem; i++){
+            for (let i = 0; i < remainingItem; i++) {
                 lowerBanner.push(lowerBanner[0])
             }
         }
@@ -155,32 +158,32 @@ class Home extends Component {
     }
     renderAdverts = () => {
         return this.props.adverts.map(item => (
-            item.products.length >= 3 ? <div className="shadow rounded bg-white mb-4" key={item.id}>
-                <div className="d-flex justify-content-between px-4 py-3 header-row-special">
-                    <h3 className="text-light">{item.name}</h3>
-                    <Link to={`/specials/${item.id}`}><h3 className="text-light"> See all  </h3></Link>
+            item.products.length >= 3 ? <div className="bg-white mb-4" key={item.id}>
+                <div className="d-flex justify-content-between align-items-center px-4 header-row-special">
+                    <h3 className="text-light py-3 m-0">{item.name}</h3>
+                    <Link className="py-3 m-0" to={`/specials/${item.id}`}><h3 className="text-light py-3 m-0"> See all  </h3></Link>
                 </div>
                 <hr />
                 <div className="container">
                     <div className="row p-4">
                         {
-                                item.products.map((product, i) => {
-                                    let { id, name,finalPrice, brandName, model, sellingPrice, mainImageUrl } = product;
-                                    return (
+                            item.products.map((product, i) => {
+                                let { id, name, finalPrice, brandName, model, sellingPrice, mainImageUrl } = product;
+                                return (
 
-                                        <FlashSales key={i} id={id} name={name}
-                                            brandName={brandName}
-                                            sellingPrice={this.formatMoney(sellingPrice)}
-                                            model={model} mainImageUrl={mainImageUrl}
-                                            finalPrice={finalPrice}
-                                            featArray={this.state.products}
-                                            handleMoveWishList={this.handleMoveWishList}
-                                        />
+                                    <FlashSales key={i} id={id} name={name}
+                                        brandName={brandName}
+                                        sellingPrice={this.formatMoney(sellingPrice)}
+                                        model={model} mainImageUrl={mainImageUrl}
+                                        finalPrice={finalPrice}
+                                        featArray={this.state.products}
+                                        handleMoveWishList={this.handleMoveWishList}
+                                    />
 
-                                    )
+                                )
 
-                                })
-                            }
+                            })
+                        }
                     </div>
                 </div>
             </div>
@@ -290,27 +293,27 @@ class Home extends Component {
         return (
             <div>
                 {/* <Header /> */}
-                <div  style={{ minHeight: '100vh', paddingTop: '11.3rem', background:'#f4f4f4' }}>
+                <div style={{ minHeight: '100vh', paddingTop: '11.3rem', background: '#f4f4f4' }}>
                     <main className="main">
-                        
+
 
                         <div className="container">
                             <div className="row mt-4">
                                 <div className="col-md-4 col-lg-4">
-                                <aside className="sidebar-home">
-                                    <div className="row d-flex justify-content-center">
-                                        <div className="col-md-12 col-lg-12">
-                                        <div className="side-menu-container bg-white shadow p-3">
-                                        <h2 className="bg-white rounded">CATEGORIES</h2>
+                                    <aside className="sidebar-home">
+                                        <div className="row d-flex justify-content-center">
+                                            <div className="col-md-12 col-lg-12">
+                                                <div className="side-menu-container bg-white shadow p-3">
+                                                    <h2 className="bg-white rounded">CATEGORIES</h2>
 
-                                        <nav className="side-nav">
-                                            <ul className="menu menu-vertical sf-arrows">
-                                                {/* <li className="active"><Link to="/"><i className="icon-home"></i>Home</Link></li> */}
-                                                {
-                                                    this.renderCategories()
-                                                }
-                                                
-                                                {/* <li className="megamenu-container">
+                                                    <nav className="side-nav">
+                                                        <ul className="menu menu-vertical sf-arrows">
+                                                            {/* <li className="active"><Link to="/"><i className="icon-home"></i>Home</Link></li> */}
+                                                            {
+                                                                this.renderCategories()
+                                                            }
+
+                                                            {/* <li className="megamenu-container">
                                                 <a href="#n" className="sf-with-ul"><i className="icon-briefcase"></i>
                                                         Products</a>
                                                     <div className="megamenu">
@@ -362,7 +365,7 @@ class Home extends Component {
                                                         </div>
                                                     </div>
                                                 </li> */}
-                                                {/* <li>
+                                                            {/* <li>
                                                     <a href="#n" className="sf-with-ul"><i className="icon-docs-inv"></i>Pages</a>
 
                                                     <ul>
@@ -392,21 +395,21 @@ class Home extends Component {
                                                         <li><a href="forgot-password.html">Forgot Password</a></li>
                                                     </ul>
                                                 </li> */}
-                                                {/* <li><a href="#n" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
+                                                            {/* <li><a href="#n" className="sf-with-ul"><i className="icon-sliders"></i>Features</a>
                                                     <ul>
                                                         <li><a href="#n">Header Types</a></li>
                                                         <li><a href="#n">Footer Types</a></li>
                                                     </ul>
                                                 </li> */}
-                                                {/* <li><a href="#n"><i className="icon-cat-gift"></i>Special Offer!</a></li>
+                                                            {/* <li><a href="#n"><i className="icon-cat-gift"></i>Special Offer!</a></li>
                                                 <li><a href="#n"><i className="icon-star-empty"></i>Buy Porto!</a></li> */}
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                    
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    {/* <div className="row d-flex justify-content-center">
+                                        {/* <div className="row d-flex justify-content-center">
                                         <div className="">
                                                 <div className="widget widget-banners">
                                                 <div className="widget-banners-slider">
@@ -427,7 +430,7 @@ class Home extends Component {
 
                                     </div> */}
 
-                                    {/* <div className="widget widget-newsletters">
+                                        {/* <div className="widget widget-newsletters">
                                         <h3 className="widget-title">Newsletter</h3>
                                         <p>Get all the latest information on Events, Sales and Offers. </p>
                                         <form action="#">
@@ -439,7 +442,7 @@ class Home extends Component {
                                         </form>
                                     </div> */}
 
-                                    {/* <div className="widget widget-testimonials">
+                                        {/* <div className="widget widget-testimonials">
                                         <div className="widget-testimonials-slider">
                                             <Slider
                                                 {...{...settings, slidesToShow: 1, arrows:false}}
@@ -456,64 +459,64 @@ class Home extends Component {
                                         </div>
                                     </div> */}
 
-                                    <div className="widget">
-                                        <div className="widget-posts-slider owl-carousel owl-theme">
-                                            <div className="post">
-                                                <span className="post-date">01- Jun -2018</span>
-                                                <h4 className="post-title"><a href="#n">Fashion News</a></h4>
-                                                <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat mi. </p>
-                                            </div>
+                                        <div className="widget">
+                                            <div className="widget-posts-slider owl-carousel owl-theme">
+                                                <div className="post">
+                                                    <span className="post-date">01- Jun -2018</span>
+                                                    <h4 className="post-title"><a href="#n">Fashion News</a></h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat mi. </p>
+                                                </div>
 
-                                            <div className="post">
-                                                <span className="post-date">22- May -2018</span>
-                                                <h4 className="post-title"><a href="#n">Shopping News</a></h4>
-                                                <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non plasasyi. </p>
-                                            </div>
+                                                <div className="post">
+                                                    <span className="post-date">22- May -2018</span>
+                                                    <h4 className="post-title"><a href="#n">Shopping News</a></h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non plasasyi. </p>
+                                                </div>
 
-                                            <div className="post">
-                                                <span className="post-date">13- May -2018</span>
-                                                <h4 className="post-title"><a href="#n">Fashion News</a></h4>
-                                                <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat. </p>
+                                                <div className="post">
+                                                    <span className="post-date">13- May -2018</span>
+                                                    <h4 className="post-title"><a href="#n">Fashion News</a></h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur elitad adipiscing Cras non placerat. </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </aside>
+                                    </aside>
                                 </div>
                                 <div className="col-md-8 col-lg-8">
-                                <div className="row d-flex justify-content-center">
-                                                <div className="col-lg-10">
-                                                    <div className="bnk">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
-                                                        <div id="carouselExampleSlidesOnly" className="carousel slide shadow bg-white" data-ride="carousel">
-                                                            <ol className="carousel-indicators">
-                                                                {
-                                                                    this.state.topBanner.map((item, i) => {
-                                                                        return (
-                                                                            <li data-target="#carouselExampleIndicators" key={i} data-slide-to={i} className={`${i === 0 ? 'active': ''}`}></li>
-                                                                        )
-                                                                    })
-                                                                }
-                                                                
-                                                            </ol>
-                                                            <div className="carousel-inner">
-                                                                {/* <div class="carousel-item active">
+                                    <div className="row d-flex justify-content-center">
+                                        <div className="col-lg-10">
+                                            <div className="bnk">{/*owl-carousel owl-carousel-lazy owl-theme owl-theme-light* */}
+                                                <div id="carouselExampleSlidesOnly" className="carousel slide  bg-white" data-ride="carousel">
+                                                    <ol className="carousel-indicators">
+                                                        {
+                                                            this.state.topBanner.map((item, i) => {
+                                                                return (
+                                                                    <li data-target="#carouselExampleIndicators" key={i} data-slide-to={i} className={`${i === 0 ? 'active' : ''}`}></li>
+                                                                )
+                                                            })
+                                                        }
+
+                                                    </ol>
+                                                    <div className="carousel-inner">
+                                                        {/* <div class="carousel-item active">
                                                                 <img class="d-block w-100" src={this.state.topBanner[0]} alt="First slide" />
                                                                 </div> */}
-                                                                {
-                                                                    this.state.topBanner.map((item, i) => {
-                                                                        return (
-                                                                            <div key={i} className={`carousel-item banners-containers ${i === 0 ? 'active' : ''}`}>
-                                                                                <img className="d-block w-100" src={item.url} alt="Second slide" />
-                                                                            </div>
-                                                                        )
-                                                                    })
-                                                                }
-                                                                {/* <div class="carousel-item">
+                                                        {
+                                                            this.state.topBanner.map((item, i) => {
+                                                                return (
+                                                                    <div key={i} className={`carousel-item banners-containers ${i === 0 ? 'active' : ''}`}>
+                                                                        <img className="d-block w-100" src={item.url} alt="Second slide" />
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        }
+                                                        {/* <div class="carousel-item">
                                                                 <img class="d-block w-100" src={this.state.topBanner[0]} alt="Third slide" />
                                                                 </div> */}
-                                                            </div>
-                                                            </div>
-                                                            
-                                                            {/* <Slider
+                                                    </div>
+                                                </div>
+
+                                                {/* <Slider
                                                                 {...{ ...settings, slidesToShow: 1, arrows: true }}
                                                             >
                                                                 {
@@ -527,55 +530,81 @@ class Home extends Component {
                                                             </Slider> */}
 
 
-                                                        </div>
-                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            
+
                             <div className="row">
                                 <div className="col-md-12">
-                                    
+
                                     <div className="mb-3"></div>
                                     <div className="row d-flex justify-content-center">
                                         <div className="col-lg-12">
                                             <div className="row d-flex justify-content-center">
-                                            {
-                                                this.state.lowerBanner.map((item, i) => {
-                                                    return <Trending index={i} image={item.url} />
-                                                })
-                                            }
+                                                {
+                                                    this.state.lowerBanner.map((item, i) => {
+                                                        return <Trending index={i} image={item.url} />
+                                                    })
+                                                }
                                             </div>
                                         </div>
-
                                     </div>
+
+                                    {/* ADDED SERVICES */}
+
+                                    <div className="mb-3"></div>
+                                    <div className="row d-flex justify-content-center">
+                                        <div className="col-lg-12">
+                                            <div className="row d-flex justify-content-center">
+                                                {
+                                                    [1, 2, 3, 4].map(o => {
+                                                        return (
+                                                            <div className="col-lg-3  col-sm-3">
+                                                                <div className="banner bg-white banner-image added-services">
+                                                                    <span>
+                                                                        <i className="icon-us-dollar"></i>
+                                                                    </span>
+                                                                    <div className="text">
+                                                                        Azonka credits
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                     <div className="row my-4">
                                         <div className="col-md-12">
 
-                                        <div className="info-boxes-container bg-white shadow">
-                                            <div className="container justify-flex-start">
-                                                
+                                            <div className="info-boxes-container bg-white shadow">
+                                                <div className="container justify-flex-start">
 
-                                                <div className="info-box">
-                                                    <i className="icon-us-dollar"></i>
 
-                                                    <div className="info-box-content">
-                                                        <h4>MONEY BACK GUARANTEE</h4>
-                                                        <p>100% money back guarantee</p>
+                                                    <div className="info-box">
+                                                        <i className="icon-us-dollar"></i>
+
+                                                        <div className="info-box-content">
+                                                            <h4>MONEY BACK GUARANTEE</h4>
+                                                            <p>100% money back guarantee</p>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div className="info-box">
-                                                    <i className="icon-support"></i>
+                                                    <div className="info-box">
+                                                        <i className="icon-support"></i>
 
-                                                    <div className="info-box-content">
-                                                        <h4>ONLINE SUPPORT 24/7</h4>
-                                                        <p></p>
+                                                        <div className="info-box-content">
+                                                            <h4>ONLINE SUPPORT 24/7</h4>
+                                                            <p></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                    </div>
 
                                         </div>
                                     </div>
@@ -588,14 +617,14 @@ class Home extends Component {
                                     <hr className="my-4"></hr>
 
 
-                                    <div className="bg-white rounded shadow px-5 p-5">
+                                    <div className="bg-white  px-5 p-5">
                                         <Slider
-                                            {...{...settings, slidesToShow: this.state.slidesToShow}}
+                                            {...{ ...settings, slidesToShow: this.state.slidesToShow }}
                                         >
                                             {
                                                 this.state.products ? (
                                                     this.state.products.map(res => {
-                                                        let { id, name, brandName, model,finalPrice, sellingPrice, mainImageUrl } = res
+                                                        let { id, name, brandName, model, finalPrice, sellingPrice, mainImageUrl } = res
                                                         return <FeatureProductItem finalPrice={finalPrice} id={id} name={name} brandName={brandName}
                                                             sellingPrice={this.formatMoney(sellingPrice)} model={model}
                                                             mainImageUrl={mainImageUrl} featArray={this.state.products}
@@ -616,13 +645,13 @@ class Home extends Component {
 
                                     <hr className="my-4"></hr>
                                     {/* <h1 className="text-center font-weight-light">Flash sales</h1> */}
-                                    <div className="row rounded shadow p-5 bg-white" style={{ margin: "4vh 0px" }}>
+                                    <div className="row p-5 bg-white" style={{ margin: "4vh 0px" }}>
 
                                         <br />
                                         {
                                             this.state.products ? (
                                                 this.state.products.map((res, i) => {
-                                                    let { id, name,finalPrice, brandName, model, sellingPrice, mainImageUrl } = res
+                                                    let { id, name, finalPrice, brandName, model, sellingPrice, mainImageUrl } = res
                                                     return (
 
                                                         <FlashSales key={i} id={id} name={name}
@@ -734,8 +763,8 @@ class Home extends Component {
                         </div>
 
                         <div className="mb-4"></div>
-                        
-                  
+
+
 
                     </main>
                 </div>
@@ -785,7 +814,7 @@ export default connect(mapStateToProps, actions)(Home);
 
 <div className="info-boxes-container">
                             <div className="container justify-flex-start">
-                                
+
 
                                 <div className="info-box">
                                     <i className="icon-us-dollar"></i>

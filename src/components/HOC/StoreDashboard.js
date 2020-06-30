@@ -10,7 +10,7 @@ class StoreDashboard extends Component {
         return (
             <div>
                 <Header />
-                <div className="router-container">
+                <div className="router-container container">
                     <main className="main">
                         <nav aria-label="breadcrumb" className="breadcrumb-nav">
                             <div className="container-fluid list-breadcrumbs">

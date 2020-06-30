@@ -12515,9 +12515,9 @@ label.custom{
  background-color: #fff;
 }
 
-.container{
+/* .container{
     max-width: 100% !important;
-}
+} */
 
 .add-to-cart-mobile{
     display: none !important;
@@ -12774,5 +12774,5 @@ button[disabled]{
 }
 
 .rounded {
-    border-radius: 3.25rem!important;
+    border-radius: 2.25rem!important;
 }

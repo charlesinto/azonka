@@ -106,6 +106,7 @@ class OrderProductRow extends Component {
 
     }
     render() {
+        console.log(this.props.data.products)
         if (!this.props.data.products[0]) return <div>no products</div>;
         const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
         let randomId = uuidv4()

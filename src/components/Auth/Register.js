@@ -462,7 +462,7 @@ class Register extends Component {
                             </div>
                             <div className="row">
                                 <div className="form-group col-md-6 col-sm-12">
-                                    <label htmlFor="referredBy" className="rl-label">Referral Code</label>
+                                    <label htmlFor="referredBy" className="rl-label">Referral Code (optional)</label>
                                     <input type="text" id="referredBy" className={`form-control ${this.state.inValidElments.includes('referredBy') ? 'invalid' : ''}`} value={this.state.referredBy} name="referredBy" onChange={this.handleInputChange} placeholder="Enter your referral code..." />
                                     
                                 </div>

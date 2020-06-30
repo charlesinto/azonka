@@ -315,7 +315,7 @@ class Cart extends Component {
                             </ol>
                         </div>
                     </nav>
-                    <div className="container" style={{ background: "#cac2c233" }}>
+                    <div className="container" >
                         <div className="row">
 
                             <div className="col-lg-11 mx-auto  my-5">
@@ -384,6 +384,10 @@ class Cart extends Component {
         )
     }
 }
+
+/*
+style={{ background: "#cac2c233" }}
+*/
 
 const mapStateToProps = state => {
 

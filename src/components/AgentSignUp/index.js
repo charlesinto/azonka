@@ -3,17 +3,21 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 import { withToastManager } from 'react-toast-notifications';
 import CustomInput from "../../common/CustomInput";
-import Header from "../HeaderFooter/Header";
+// import Header from "../HeaderFooter/Header";
 import { Link } from "react-router-dom";
+import swal from "sweetalert2";
 
 class AgentSignUp extends Component {
     state = {
         error: null,
         file: null,
+        validId: null,
+        validPhoto: null,
         questions: [],
         inValidElments: [],
         validationMessage: {},
         pincode: '',
+        agreeToTerms: false,
         showSpinner: false
     }
     static getDerivedStateFromProps(nextProps, state){
@@ -30,43 +34,11 @@ class AgentSignUp extends Component {
     closeSnackBar = () => {
         this.props.closeSnackBar()
     }
-    handleInputChange = (event) => {
-        const {target: { name, value}} = event;
-
-        const index = this.state.inValidElments.indexOf(name)
-        let newInvalidElements = []
-        newInvalidElements = [...this.state.inValidElments]
-        if(index !== -1){
-            this.state.inValidElments.splice(index, 1)
-        }
-        newInvalidElements = [...this.state.inValidElments]
-        if(name === 'pincode' || name === 'companyName' 
-            || name === 'headOfficeAddress' || name === 'contactLine'){
-            return this.setState({
-                [name]: value
-            })
-        }
-        if(this.state.questions.length <= 0){
-            this.setState({
-                questions : [{question_id: name, answer: value}],
-                newInvalidElements
-            })
-        }else{
-            let newQuestion = []
-            const index = this.state.questions.findIndex(({question_id}) => question_id === name)
-            if(index !== -1){
-                newQuestion = this.state.questions;
-                newQuestion.splice(index, 1)
-                this.setState({
-                    questions: [...newQuestion, {[name]: value}],
-                    newInvalidElements
-                })
-            }
-            this.setState({
-                questions: [...this.state.questions, {question_id: name, answer: value}],
-                newInvalidElements
-            })
-        }
+    handleInputChange = (e) => {
+        const {target: { name}} = e;
+        this.setState({
+            [name]: e.target.files
+        })
     }
     displayQuestions = () => {
         const keys = Object.keys(this.props.questions)
@@ -141,10 +113,27 @@ class AgentSignUp extends Component {
         this.props.fileuploadHandler(this.state.file, 'agentsId', 'agent')
         
     }
+    handleFormSave = (e) => {
+        e.preventDefault();
+        const { validId, validPhoto, agreeToTerms } = this.state;
+        if(!agreeToTerms){
+            return swal.fire('You Must Agree to Terms and Conditions')
+            
+        }
+        if(!validId){
+            return swal.fire('Please upload valid identification')
+        }
+        if(!validPhoto){
+            return swal.fire('Please upload valid photo')
+        }
+        this.props.initiateRegistration()
+        return this.props.upgradeToAgent(validId, validPhoto)
+        
+    }
     render() {
         return (
-            <div>
-                <Header />
+            <div >
+                {/* <Header /> */}
                 <div className="router-container">
                 <nav aria-label="breadcrumb" className="breadcrumb-nav">
                         <div className="container">
@@ -155,44 +144,51 @@ class AgentSignUp extends Component {
                             </ol>
                         </div>
                     </nav>
-                    <div className="form-popup custom-input" style={{ width: '80%',paddingBottom:'20px',
-                maxWidth: '800px' }}>
-                    <div className="form-popup-headline secondary">
-                        <h2>Signup to be an Agent!</h2>
-                    </div>
-                    <form style={{ margin: '0 auto', width: '90%' }}>
-                    <div style={{ padding: '20px 10px 0 10px' }}>
-                            <h4 className="popup-title verify-email" style={{
-                                fontWeight: 'normal',
-                                fontFamily: 'Roboto, sans-serif'
-                            }}>Upload ID</h4>
-                            <hr className="line-separator" />
-                        </div>
-                        <div className="custom-file-input-button">
-                            <input type="file" ref={this.fileInput}  name="agentID" value={this.state.agentID} onChange={this.uploadId} />
-                        </div>
-                        <div className="terms-condition-container">
-                            <input type="checkbox" id="agreeToTerms"
-                            onChange={(event) => this.agreeTotermsChange(event)} name="i agree" value="sellers" checked={this.state.agreeToTerms} />
-                            <label className="label-check" onClick={(event) => this.agreeTotermsChange(event)}>
-                                <span className="checkbox primary primary"><span></span></span>
-                                I agree To
-                                    </label>
-                            <span className="terms">
-                                Privacy and Policy
-                                    </span>
-                        </div>
-                        <div className="form-footer">
-                                <Link to="/users/profile"><i className="icon-angle-double-left"></i>Back</Link>
+                    <div className="container mt-5 mb-5">
 
-                                <div className="form-footer-right">
-                                    <button onClick={this.handleFormSubmit} type="submit" className="btn btn-primary">Save</button>
+                        <div className="row justify-content-center">
+
+                            <div className="col-md-6 shadow bg-white" style={{padding: 0}}>
+                                <div className="container-fluid rounded">
+                                    <div className="row header-row-special px-3 py-2">
+                                        <h4 className="text-light">Upgrade your Account to Agent</h4>
+                                    </div>
+                                    <div className="row px-4 py-4">
+                                        <div className="col-md-12">
+                                            <form>
+                                                <fieldset>
+                                                    <div className="form-group">
+                                                        <label for="exampleFormControlFile1">Upload Valid ID (International passport, Vehicle Driver’s license, Permanent Voters card, National Identity number)</label>
+                                                        <input name="validId" onChange={this.handleInputChange} accept="image/png, image/jpeg" type="file" className="form-control-file" id="exampleFormControlFile1" />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label for="exampleFormControlFile2">Passport photograph</label>
+                                                        <input name="validPhoto" onChange={this.handleInputChange} accept="image/png, image/jpeg" type="file" className="form-control-file" id="exampleFormControlFile2" />
+                                                    </div>
+                                                    <div className="form-group d-flex">
+                                                        <input type="checkbox" id="agreeToTerms"
+                                                        onChange={(event) => {this.setState({agreeToTerms: !this.state.agreeToTerms})}} name="i agree" value="sellers" checked={this.state.agreeToTerms} />
+                                                        <label className="label-check" onClick={(event) => {this.setState({agreeToTerms: !this.state.agreeToTerms})}}>
+                                                            <span className="checkbox primary primary"><span></span></span>
+                                                            I agree To <span className="text-success">Privacy and Policy</span>
+                                                                </label>
+                                                       
+                                                    </div>
+                                                    <div className="form-group d-flex mt-4 justify-content-center">
+                                                        <input onClick={this.handleFormSave} type="submit" value="Submit" className="btn px-5 py-2 btn-lg btn-primary" />
+                                                    </div>
+                                                </fieldset>
+
+                                            </form>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                    </form>
-                    
-                    
-                </div>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
             
@@ -215,5 +211,21 @@ const mapStateToProps = state => {
         fileUrl
     }
 }
+
+/*
+
+<div className="terms-condition-container">
+                            <input type="checkbox" id="agreeToTerms"
+                            onChange={(event) => this.agreeTotermsChange(event)} name="i agree" value="sellers" checked={this.state.agreeToTerms} />
+                            <label className="label-check" onClick={(event) => this.agreeTotermsChange(event)}>
+                                <span className="checkbox primary primary"><span></span></span>
+                                I agree To
+                                    </label>
+                            <span className="terms">
+                                Privacy and Policy
+                                    </span>
+                        </div>
+
+*/
 
 export default connect(mapStateToProps, actions)(withToastManager(AgentSignUp))

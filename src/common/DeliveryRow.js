@@ -6,6 +6,10 @@ import '../assets/Order.css'
 import DeliveryMore from './DeliveryMoreOrder';
 import { Dropdown } from "react-bootstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
+import telephone from "../css/images/svg/telephone.svg";
+import location from '../css/images/svg/location.svg'
+import calendar from '../css/images/svg/calendar.svg'
+import list from '../css/images/svg/list.svg';
 
 class DeiveryRow extends Component {
     
@@ -188,39 +192,60 @@ class DeiveryRow extends Component {
                                 {
                                     this.props.data.products && this.props.data.products.length >= 1 ?
                                         (
-                                            <span className="pointer" data-toggle="modal"
+                                            
+                                            <div className="d-flex pointer" data-toggle="modal"
                                                 data-target={`#exampleModalCenter${this.props.data.id}`}
                                                 id={this.props.data.id}
-                                                style={{fontSize: '12px !important'}}
-                                            >
-                                                <i className="fas fa-shopping-bag px-2"></i>
-                                                View All <b>{this.props.data.products && this.props.data.products.length}</b>  Product
-                                             </span>
+                                                style={{fontSize: '12px !important'}}>
+                                                <div className="mx-3">
+                                                    <img src={list} style={{width:'32px', height:'32px'}} alt="list" />
+                                                </div>
+                                                <div>
+                                                    <h5 className="text-success">
+                                                        View All
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                            // <span className="pointer" data-toggle="modal"
+                                            //     data-target={`#exampleModalCenter${this.props.data.id}`}
+                                            //     id={this.props.data.id}
+                                            //     style={{fontSize: '12px !important'}}
+                                            // >
+                                            //     <i className="fas fa-shopping-bag px-2"></i>
+                                            //     View All <b>{this.props.data.products && this.props.data.products.length}</b>  Product
+                                            //  </span>
                                         ) : null
                                 }
 
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <div className=" d-flex py-2">
-                                        <span style={{fontSize: '12px'}}>
+                                    <div className="d-flex py-2">
+                                        <div className="mx-3">
+                                            <img src={calendar} alt="calendar" style={{width: '32px', height:'32px'}} />
+                                        </div>
+                                        <div className="" style={{fontSize: '14px'}}>
                                             {new Date(this.props.data.createdAt).toLocaleString()}
-                                        </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <div className="py-2">
-                                        <div className="">Deliver To: </div>
+                                    <div className="d-flex py-2">
+                                        <div className="mx-3">
+                                            <img style={{width: '32px', height: '32px'}} src={location} alt="location" />
+                                        </div>
                                         <div className=""> {this.renderAddress(this.props.data)} </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <div className="py-2">
-                                        <div className="">Buyer Contact Line: </div>
+                                    <div className="d-flex py-2">
+                                        <div className="mx-3">
+                                            <img style={{width: '32px', height: '32px'}} src={telephone} alt="telephone" />
+                                        </div>
                                         <div className="">
                                             <a href={`tel:+234${this.props.data.owner.phoneNumber}`}>+234 {this.props.data.owner.phoneNumber} </a>
                                         </div>
@@ -271,20 +296,29 @@ class DeiveryRow extends Component {
                     <div className="mobile-item-details-wrapper">
                         <div className="container-fluid py-3">
                             <div className="d-flex">
-                                <span>{new Date(this.props.data.createdAt).toLocaleString()}</span>
+                                <div className="mx-3">
+                                    <img src={calendar} alt="calendar" style={{width: '32px', height:'32px'}} />
+                                </div>
+                                <div className="" style={{fontSize: '14px'}}>
+                                    {new Date(this.props.data.createdAt).toLocaleString()}
+                                </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <div className="py-2">
-                                        <div className="">Deliver To: </div>
+                                    <div className="d-flex py-2">
+                                        <div className="mx-3">
+                                            <img style={{width: '32px', height: '32px'}} src={location} alt="location" />
+                                        </div>
                                         <div className=""> {this.renderAddress(this.props.data)} </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <div className="py-2">
-                                        <div className="">Buyer Contact Line: </div>
+                                    <div className="d-flex py-2">
+                                        <div className="mx-3">
+                                            <img style={{width: '32px', height: '32px'}} src={telephone} alt="telephone" />
+                                        </div>
                                         <div className="">
                                             <a href={`tel:+234${this.props.data.owner.phoneNumber}`}>+234 {this.props.data.owner.phoneNumber} </a>
                                         </div>

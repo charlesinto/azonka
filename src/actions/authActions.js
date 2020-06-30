@@ -338,6 +338,45 @@ export const fileuploadHandler = (file, foldername='', type = '') => {
     }
 }
 
+export const upgradeToAgent = (validId, validPhoto) => {
+    return async (dispatch) => {
+        
+        try{
+            const token = localStorage.getItem('x-access-token')
+            const data1 = await fileUpload(validId, 'agents')
+            // const data2 = await fileUpload(validPhoto, 'agents')
+            console.log('data', data1)
+            await axios.post('/api/v1/user/change-account-type', {
+                agentIdentification: data1.Location
+            }, {
+                headers: {
+                    'x-access-token': token
+                }
+            })
+            let newUserData = {}
+            const getUserResponse2 = await axios.get('/api/v1/user/get-user', {
+                headers: {
+                    'x-access-token': token
+                }
+            })
+            console.log('get response', getUserResponse2)
+            const user = getUserResponse2.data.user
+            const cart = newUserData.cart ? newUserData.cart : 0
+            const likes = newUserData.likes ?  newUserData.likes : 0
+            dispatch({type: STOP_LOADING, payload: ''})
+            dispatch( {type: FETCH_USER, payload: {userData: user, likes, cart}})
+
+            dispatch({type: SUCCESS_ALERT, payload: 'Action is successful, your request is been processed'})
+            dispatch({type: USER_ROLE_UPDATED_SUCCESSFUL, payload: ''})
+            // return dispatch({type: FILE_UPLOADED_SUCCESSFULL, payload: data.Location})
+        }catch(error) {
+            dispatch({type: STOP_LOADING, payload: ''})
+            console.log(error.response)
+            swal.fire('some errors were encountered, please try again')
+        }
+    }
+}
+
 export const setPin = userData => {
     return async (dispatch) => {
         try{

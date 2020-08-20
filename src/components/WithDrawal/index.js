@@ -82,8 +82,8 @@ class index extends Component {
     render() {
         return (
             <Dashboard>
-                <div className="container">
-                <div className="container">
+                <div className="container-fluid">
+                <div className="container-fluid">
                         <div className="row">
                             <div className="current-balance mt-card">
                                 <span>Current Balance</span>

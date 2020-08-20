@@ -315,7 +315,7 @@ class Cart extends Component {
                             </ol>
                         </div>
                     </nav>
-                    <div className="container" >
+                    <div className="container-fluid" >
                         <div className="row">
 
                             <div className="col-lg-11 mx-auto  my-5">
@@ -337,8 +337,11 @@ class Cart extends Component {
                                         <div className="header-item-subtotal col-md-2  text-center">
                                             SUBTOTAL
                                             </div>
-                                        <div className="header-item-subtotal col-md-2  text-center">
+                                        <div className="header-item-subtotal col-md-1  text-center">
                                             STATUS
+                                            </div>
+                                            <div className="header-item-subtotal col-md-1  text-center">
+                                            Action
                                             </div>
                                     </div>
 

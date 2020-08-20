@@ -3,6 +3,7 @@ import StoreDashboard from "../HOC/StoreDashboard";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import Swal from 'sweetalert2';
 
 class index extends Component {
     state = {
@@ -29,6 +30,18 @@ class index extends Component {
     }
     handleFormSubmit = e => {
         e.preventDefault()
+    }
+    getQrCode = (e) => {
+        e.preventDefault()
+        if(localStorage.getItem('azonta-user')){
+            const user = JSON.parse(localStorage.getItem('azonta-user'))
+            if(user.wallet){
+                const walletId = user.wallet[0].id;
+                // return console.log(walletId)
+                return this.props.history.push(`/store/qrcode-generate/${walletId}`)
+            }
+            return Swal.fire('Qr Code', 'You need to setup wallet to process')
+        }
     }
     render() {
         return (
@@ -77,7 +90,8 @@ class index extends Component {
                         <Link to="/"><i className="icon-angle-double-left"></i>Back</Link>
 
                         <div className="form-footer-right">
-                            <button onClick={this.handleFormSubmit} type="submit" disabled className="btn btn-primary">Save</button>
+                            <button className="btn btn-lg btn-secondary mx-2" onClick={this.getQrCode}> Get QR Code</button>
+                            <button onClick={this.handleFormSubmit} type="submit"  className="btn btn-primary btn-lg">Save</button>
                         </div>
                     </div>
                 </form>

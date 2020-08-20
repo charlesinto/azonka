@@ -55,6 +55,11 @@ import MyDelivery from "./components/MyDelivery";
 import WalletToWalletTransfer from "./components/WalletToWalletTransfer";
 // import ShopItems from './components/Shop/ShopItems';
 import ProductReview from "./components/ProductReview";
+import HelpPage from './components/Help';
+import Dispute from "./components/Disputes";
+import SellerDisputes from './components/SellerDisputes';
+import SelfService from './components/SelfService';
+import QrCode from './components/QrCode';
 
 class Root extends Component {
     componentDidMount() {
@@ -107,11 +112,13 @@ class Root extends Component {
                                 <AuthRoute  redirectIfUser exact path="/users/commissions" component={Commission} />
                                 <AuthRoute redirectIfUser exact path="/users/withdrawal" component={WithDrawal} />
                                 <AuthRoute redirectIfUser exact path="/users/items/upload" component={UploadItem} />
+                                <AuthRoute redirectIfUser exact path="/store/orders/disputes" component={SellerDisputes} />
                                 <AuthRoute redirectIfUser exact path="/users/store" component={StoreDetail} />
                                 <AuthRoute redirectIfUser exact path="/users/items/manage" component={ManageItems} />
                                 <AuthRoute redirectIfUser exact path="/users/referrals" component={Referral} />
                                 <AuthRoute exact path="/users/banks" component={Bank} />
                                 <Route exact path="/users/checkout" component={Checkout} />
+                                <AuthRoute exact path="/user/dasboard/help" component={HelpPage} />
                                 {/*---- <AuthRoute exact path="/users/azonkaPay" component={AzonkaPay} /> */}
                                 <AuthRoute exact path="/users/agent/signup" component={AgentSignUp} />
                                 <AuthRoute exact path="/users/seller/signup" component={SellerSignUp} />
@@ -119,7 +126,9 @@ class Root extends Component {
                                 <AuthRoute exact path="/users/reset-password" component={ChangePassword} />
                                 <AuthRoute  redirectIfUser exact path="/users/create/shop" component={Store} />
                                 
-                                
+                                <AuthRoute exact path="/user/order/disputes" component={Dispute}/>
+                                <Route exact path="/users/self-service" component={SelfService} />
+                                <AuthRoute exact path="/store/qrcode-generate/:id" component={QrCode} />
                                 <Route component={NotFound} />
                                 
                                 {/* <Route component={NotFound} /> */}

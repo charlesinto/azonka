@@ -148,7 +148,7 @@ class Wallet extends Component {
                         }}>Fund Your Wallet</h4>
                     <hr className="line-separator" />
                 </div> 
-                <div className="container" style={{margin: '16px 0'}}>
+                <div className="container-fluid" style={{margin: '16px 0'}}>
                     <div className="row">
                         <div className="col-sm-12 col-md-3">
                             <div className="pack-box mt-card">

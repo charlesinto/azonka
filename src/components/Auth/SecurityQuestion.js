@@ -90,10 +90,10 @@ class SecurityQuestion extends Component {
         }
         if(this.state.pincode.trim() === ''){
             
-           return  this.props.renderError('Please provide pincode')
+           return  this.props.renderError('Please provide a valid pin code')
         }
         if(this.state.pincode.length !== 4){
-            return this.props.renderError('Maximum and minimum legth of 4 characters required for Pincode')
+            return this.props.renderError('Please provide a valid pin code with four(4) numbers')
         }
         //call the api
         this.props.initiateRegistration()

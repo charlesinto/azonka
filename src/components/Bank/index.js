@@ -463,7 +463,7 @@ updatedAt: "2016-07-14T10:04:29.000Z"}
                         }}>Add Bank</h4>
                         <hr className="line-separator" />
                         <form>
-                            <div className="container">
+                            <div className="container-fluid">
                                 <div className="row">
                                     <div className="col-md-4 col-sm-12">
                                         <div className="form-group required-field">

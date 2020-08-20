@@ -156,11 +156,14 @@ export const fetchItems = () => {
             if (error.response) {
                 if (error && error.response && error.response.status === 401) {
                     console.log(error.response)
-                    swal.fire('Some errors encountered, refresh your browser')
+                    return swal.fire('Authentication failed')
                     
                 }
-                swal.fire(error.response.data.message.substr(0, 100))
-                // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message.substr(0, 100) })
+                if(error.response){
+                    return swal.fire(error.response.data.message.substr(0, 100))
+                }
+                
+                dispatch({ type: DISPLAY_ERROR, payload: 'some errors were encountered' })
             }
         }
     }
@@ -311,7 +314,6 @@ export const addToCart = (details) => {
 
     return async (dispatch) => {
         try {
-            console.log("zlat", details)
             const response = await axios.post('/api/v1/user/cart/add',
                 { productId: details.productId, quantity: details.quantity }, {
                 headers: {
@@ -701,7 +703,7 @@ export const registerPayment = (transactionNo, txRef, amount, paymentType, cartD
             useWallet: paymentType === 'pay with debit' ? false : true, addressString: userAddress, pin }
     return async (dispatch) => {
         try {
-            await axios.post('/api/v1/user/order/create',
+            await axios.post('/api/v1/user/git/create',
                 {
                     ...data
                 }, {

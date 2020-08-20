@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import notifCloseIcon from "../../images/dashboard/notif-close-icon.png";
 import Zoom from 'react-reveal/Zoom';
-import logoHeader from "../../images/logo_header.png";
+// import logoHeader from "../../images/logo_header.png";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -21,27 +21,36 @@ import axios from "axios";
 // import slide2 from "../../css/images/products/home-featured-3.jpg";
 // import HomeSlide from '../../common/HomeSlide';
 import FlashSales from '../../common/FlashSales';
+import Pages from '../../config/pages';
+import Positions from '../../config/position';
 
 class Home extends Component {
     state = {
+        altImage: [{url:"https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"},
+        {url: "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"}],
         showPopUp: true,
         slidesToShow: 4,
+        popUp: [
+            'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg',
+            'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg,'
+        ],
         topBanner: [
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' }
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' }
         ],
         lowerBanner: [
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' }
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' }
         ],
         leftBanner: [
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' },
-            { url: 'https://res.cloudinary.com/dnevwxinm/image/upload/v1591820922/present-1893642_1280.jpg' }
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' },
+            { url: 'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg' }
         ],
+        bottomBanner: null,
         categories: [],
         // services: [
         //     {id: 1, name: }
@@ -103,15 +112,20 @@ class Home extends Component {
             // leftBanner
         }, () => this.getFeaturedCategoriesImages())
         //remove popup after 5secs
+        setTimeout(() => this.setState({showPopUp: false}), 20000)
 
     }
     getFeaturedCategoriesImages = async () => {
         const responseAds = await axios.get('/api/v1/ad/get-ads/0/1000')
 
-        const ads = responseAds.data.ads.filter(item => item.page === 'Home Page')
-        const topBanner = ads.filter(item => item.position === 'Top Banner')
-        const lowerBanner = ads.filter(item => item.position === 'Lower Banner')
-        const leftBanner = ads.filter(item => item.position === 'Left Banner')
+        const ads = responseAds.data.ads.filter(item => item.page === Pages.HOME_PAGE )
+        console.log("ads", ads)
+        const topBanner = ads.filter(item => item.position === Positions.TOP)
+        const lowerBanner = ads.filter(item => item.position === Positions.LOWER)
+        console.log(lowerBanner)
+        const leftBanner = ads.filter(item => item.position === Positions.LEFT)
+        const bottomBanner = ads.filter(item => item.position === Positions.BOTTOM)[0]
+        const popUp = ads.filter(item => item.position === Positions.POP_UP);
         if (lowerBanner.length > 4) {
             lowerBanner.splice(4, lowerBanner.length)
         }
@@ -121,10 +135,14 @@ class Home extends Component {
                 lowerBanner.push(lowerBanner[0])
             }
         }
+
         this.setState({
             topBanner,
             lowerBanner,
-            leftBanner
+            leftBanner,
+            bottomBanner,
+            popUp: popUp.length > 0 ? popUp : this.state.popUp
+           
         })
     }
     loadFeaturedItems = async () => {
@@ -156,9 +174,12 @@ class Home extends Component {
     formatMoney(amount) {
         return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
+    
     renderAdverts = () => {
         return this.props.adverts.map(item => (
-            item.products.length >= 3 ? <div className="bg-white mb-4" key={item.id}>
+            item.products.length >= 3 ? 
+            <>
+            <div className="bg-white mb-4" key={item.id}>
                 <div className="d-flex justify-content-between align-items-center px-4 header-row-special">
                     <h3 className="text-light py-3 m-0">{item.name}</h3>
                     <Link className="py-3 m-0" to={`/specials/${item.id}`}><h3 className="text-light py-3 m-0"> See all  </h3></Link>
@@ -187,27 +208,41 @@ class Home extends Component {
                     </div>
                 </div>
             </div>
+            <div className="container-fluid mb-2 mt-0">
+                <div className="row">
+                    <div className=" bottom-banner mt-3">
+                        <img alt="bottom" src={`${this.state.bottomBanner ? this.state.bottomBanner.url : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"}`} />
+                    </div>
+                </div>
+            </div>
+            </>
                 : null
         ))
 
     }
     renderPopup() {
+        const index = Math.floor((Math.random() * this.state.popUp.length))
         return (
             <Zoom right>
                 <div className="survey xmalert alert-box" style={{
                     visibility: `${this.state.showPopUp ? 'visible' : 'hidden'}`, opacity: 1,
-                    position: "fixed", zIindex: 100000, transition: "all 0.3s ease-in-out 0s",
-                    top: "auto", bottom: "30px", left: "auto", right: "30px"
+                    position: "fixed", zIindex: 10000000000, transition: "all 0.3s ease-in-out 0s",
+                    top: "auto", bottom: "30px", left: "auto", right: "30px",
                 }} >
-                    <figure className="survey-img" >
-                        <img src={logoHeader} alt="survey-img" />
-                    </figure>
-                    <p className="text-header">Alerts &amp; Notifications</p>
+                    <div
+                        className="popup-alert"
+                        style={{backgroundImage: `${this.state.topBanner[index] ? `url(${this.state.topBanner[index].url})` : 'url( "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg")'}`}}
+                    >
+                        <div style={{position:'absolute', bottom: 0, width: '100%'}}>
+                            {/* <Link to="#" className="button mid secondary">Check it <span className="primary">out!</span></Link> */}
+                        </div>
+                        <img className="close-btn" src={notifCloseIcon} alt="close-icon" onClick={this.closePopup} />
+                    </div>
+                    {/* <p className="text-header">Alerts &amp; Notifications</p>
                     <p className="info">We added alerts &amp; notifications to the template!.<br />
                         Try our previewer and code generator and use them in your page!</p>
-                    <p className="timestamp"></p>
-                    <a href="alerts-notifications.html" className="button mid secondary">Check it <span className="primary">out!</span></a>
-                    <img className="close-btn" src={notifCloseIcon} alt="close-icon" onClick={this.closePopup} />
+                    <p className="timestamp"></p> */}
+                    
                 </div>
             </Zoom>
         )
@@ -501,15 +536,30 @@ class Home extends Component {
                                                         {/* <div class="carousel-item active">
                                                                 <img class="d-block w-100" src={this.state.topBanner[0]} alt="First slide" />
                                                                 </div> */}
-                                                        {
+                                                        {this.state.topBanner.length > 0 ?
                                                             this.state.topBanner.map((item, i) => {
                                                                 return (
                                                                     <div key={i} className={`carousel-item banners-containers ${i === 0 ? 'active' : ''}`}>
                                                                         <img className="d-block w-100" src={item.url} alt="Second slide" />
+                                                                        
+                                                                         {/* <img className="d-block w-100" src={'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg'} alt="Second slide" /> */}
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        
+                                                        :
+                                                        
+                                                            this.state.altImage.map((item, i) => {
+                                                                return (
+                                                                    <div key={i} className={`carousel-item banners-containers ${i === 0 ? 'active' : ''}`}>
+                                                                        <img className="d-block w-100" src={item.url} alt="Second slide" />
+                                                                        
+                                                                         {/* <img className="d-block w-100" src={'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg'} alt="Second slide" /> */}
                                                                     </div>
                                                                 )
                                                             })
                                                         }
+                                                        
                                                         {/* <div class="carousel-item">
                                                                 <img class="d-block w-100" src={this.state.topBanner[0]} alt="Third slide" />
                                                                 </div> */}
@@ -757,18 +807,20 @@ class Home extends Component {
                                             </div>
                                         </div> */}
                                     </div>
+                                    
                                 </div>
 
                             </div>
                         </div>
-
-                        <div className="mb-4"></div>
+                        <div className=" bottom-banner mt-3">
+                                        <img alt="bottom" src={`${this.state.bottomBanner ? this.state.bottomBanner.url : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"}`} />
+                            </div>
 
 
 
                     </main>
                 </div>
-
+                {this.renderPopup()}
 
                 <Footer />
             </div>

@@ -53,7 +53,7 @@ class Dashboard extends Component {
                                 ) : null
                             }
                         </div>
-                        <div className="container">
+                        <div className="container-fluid">
                             <div className="row">
                                 <div className="col-lg-9 order-lg-last dashboard-content">
                                     {this.props.children}
@@ -91,6 +91,7 @@ class Dashboard extends Component {
                                             {/* <li className={this.props.dashboardActiveLink === 'Azonka Pay' ? 'active' : ''}><Link to="#">Azonka Pay</Link></li> */}
                                             <li className={this.props.dashboardActiveLink === 'My Address Book' ? 'active' : ''}><Link to="/users/address">Address Book</Link></li>
                                             <li className={this.props.dashboardActiveLink === 'Referral' ? 'active' : ''}><Link to="/users/referrals">Referral</Link></li>
+                                            <li className={this.props.dashboardActiveLink === 'help' ? 'active' : ''}><Link to="/users/self-service">Help</Link></li>
                                             {
                                                 userData && userData.type !== 'user' ?
                                                     (
@@ -100,7 +101,7 @@ class Dashboard extends Component {
                                                         </li>
                                                     ) : null
                                             }
-
+                                             
                                         </ul>
                                     </div>
                                 </aside>

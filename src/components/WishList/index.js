@@ -12,15 +12,21 @@ import CartPrice from "../../common/CartPrice";
 import CartItem from "../../common/CartItem";
 import CartActions from "../../common/CartActions";
 import Drawer from '@material-ui/core/Drawer';
-import Footer from '../HeaderFooter/Footer';
+// import Footer from '../HeaderFooter/Footer';
 import WishListRow from './WishListRow';
 
 import nodataImg from '../../assets/nodatafound.png'
+import Pages from '../../config/pages';
+import Positions from '../../config/position';
+import axios from 'axios'
 
 class WishList extends Component {
     state = {
         data: [], sum: 0, cartData: [], cartLength: 0, quantity: {}, wishData: [],
-        deletedCartItems: [], changeItems: [], modal: false
+        deletedCartItems: [], changeItems: [], modal: false,topBanner: [],
+        lowerBanner: [],
+        leftBanner: [],
+        bottomBanner: [],
     }
     async componentDidMount() {
         this.props.switchActiveLink('My Orders')
@@ -29,6 +35,7 @@ class WishList extends Component {
         let wishData = await JSON.parse(localStorage.getItem("wishList"))
         console.log("wizzy", wishData)
         this.loadWishList()
+        this.getFeaturedCategoriesImages()
     }
     loadWishList = async () => {
         let wishData = await JSON.parse(localStorage.getItem("wishList"))
@@ -40,6 +47,34 @@ class WishList extends Component {
         console.log(id, localData, filt)
         localStorage.setItem("wishList", JSON.stringify(filt))
         this.loadWishList()
+    }
+    getFeaturedCategoriesImages = async () => {
+        const responseAds = await axios.get('/api/v1/ad/get-ads/0/1000')
+
+        const ads = responseAds.data.ads.filter(item => item.page === Pages.HOME_PAGE )
+        console.log("ads", ads)
+        const topBanner = ads.filter(item => item.position === Positions.TOP)
+        const lowerBanner = ads.filter(item => item.position === Positions.LOWER)
+        console.log(lowerBanner)
+        const leftBanner = ads.filter(item => item.position === Positions.LEFT)
+        const bottomBanner = ads.filter(item => item.position === Positions.BOTTOM)
+        if (lowerBanner.length > 4) {
+            lowerBanner.splice(4, lowerBanner.length)
+        }
+        else if (lowerBanner.length > 0 && lowerBanner.length < 4) {
+            const remainingItem = 4 - lowerBanner.length;
+            for (let i = 0; i < remainingItem; i++) {
+                lowerBanner.push(lowerBanner[0])
+            }
+        }
+
+        this.setState({
+            topBanner,
+            lowerBanner,
+            leftBanner,
+            bottomBanner,
+           
+        })
     }
 
     renderAuthDashboard = () => (
@@ -250,7 +285,7 @@ class WishList extends Component {
                         onKeyDown={this.toggleDrawer}
                         className="modal-bottom-padding"
                     >
-                        <main className="container">
+                        <main className="container-fluid">
                             <div className="row">
                                 <div className="col-12">
                                     <article className="default-font article-header">
@@ -305,7 +340,7 @@ class WishList extends Component {
                             </ol>
                         </div>
                     </nav>
-                    <div className="container" style={{ background: "#cac2c233" }}>
+                    <div className="container-fluid" style={{ background: "#cac2c233" }}>
                         <div className="row">
                             <div className="col-lg-10 mx-auto  my-5">
                                 <div className="cart-table-container container">
@@ -374,14 +409,23 @@ class WishList extends Component {
 
 
                         </div>
+                        <div className="widget widget-banner">
+                    <div className="banner banner-image" style={{height: 300}}>
+                        <Link to="#" className="h-100">
+                            <img style={{objectFit:'cover', height:'100%'}} src={`${this.state.bottomBanner.length > 0 ? this.state.leftBanner[0].url : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"}`} alt="Banner Desc" />
+                        </Link>
+                    </div>
+                    {/* <!-- End .banner --> */}
+                </div>
                     </div>
 
-                    <div className="mb-6"></div>
+                    {/* <div className="mb-6"></div> */}
                 </div>
+                
                 {
                     this.renderModal()
                 }
-                <Footer />
+                {/* <Footer /> */}
             </div>
         )
     }

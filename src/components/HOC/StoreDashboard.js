@@ -10,9 +10,9 @@ class StoreDashboard extends Component {
         return (
             <div>
                 <Header />
-                <div className="router-container container">
+                <div className="router-container container-fluid">
                     <main className="main">
-                        <nav aria-label="breadcrumb" className="breadcrumb-nav">
+                        <nav aria-label="breadcrumb" className="breadcrumb-nav container">
                             <div className="container-fluid list-breadcrumbs">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
@@ -24,7 +24,7 @@ class StoreDashboard extends Component {
                             </div>
 
                         </nav>
-                        <div className="container store-dashboard">
+                        <div className="container-fluid store-dashboard">
                             <div className="row">
                                 <div className="col-lg-9 order-lg-last dashboard-content">
                                     {this.props.children}
@@ -43,7 +43,9 @@ class StoreDashboard extends Component {
                                             <li className={this.props.dashboardActiveLink === 'My Deliveries' ? 'active' : ''}><Link to="/users/transactions/delivery">My Deliveries</Link></li>
                                             {/* <li className={this.props.dashboardActiveLink === 'Product Review' ? 'active' : ''}><Link to="#">Product Reviews</Link></li> */}
                                             {/* <li className={this.props.dashboardActiveLink === 'Sales Statement' ? 'active' : ''}><Link to="#">Statement</Link></li> */}
-
+                                            <li className={this.props.dashboardActiveLink === 'Manage Disputes' ? 'active' : ''}>
+                                                <Link to="/store/orders/disputes">Manage Disputes</Link>
+                                            </li>
 
                                         </ul>
                                     </div>

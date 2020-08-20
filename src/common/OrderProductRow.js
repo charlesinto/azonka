@@ -6,6 +6,8 @@ import '../assets/Order.css'
 import MoreOrder from './MoreOrder';
 import ReviewModal from './ReviewModal';
 import { v4 as uuidv4 } from 'uuid';
+import { Dropdown } from 'react-bootstrap'
+import Swal from 'sweetalert2';
 
 class OrderProductRow extends Component {
     state = { qty: 0, sum: 0, rating: 0, reviews: [], isReviewLoading: false }
@@ -105,9 +107,33 @@ class OrderProductRow extends Component {
 
 
     }
-    render() {
+    addProductToCart = async (e) => {
         console.log(this.props.data.products)
-        if (!this.props.data.products[0]) return <div>no products</div>;
+        e.preventDefault();
+        try{
+            this.props.initiateRegistration()
+            await this.addItems()
+            this.props.stopLoading()
+            Swal.fire('Buy Again', 'Items added to cart successfully', 'success')
+        }catch(error){
+            console.log(error)
+        }
+    }
+    addItems = async() => {
+        return new Promise(async (resolve, reject) => {
+            try{
+                this.props.data.products.forEach( async(product) => {
+                    await this.props.addToCart({productId: product.id, quantity: 1 })
+                })
+                
+            }catch(error){
+                reject(error)
+            }
+        })
+    }
+    render() {
+        
+        if (!this.props.data.products[0]) return <div></div>;
         const { name, id, mainImageUrl, finalPrice } = this.props.data.products[0];
         let randomId = uuidv4()
         return (
@@ -196,8 +222,20 @@ class OrderProductRow extends Component {
                     <div className="item-subtotal col-md-2 border-right text-center hide-mobile">
                         ₦ {this.numberWithCommas(finalPrice * this.props.data.quantity[id])}
                     </div>
-                    <div className="item-subtotal col-md-2 border-right text-center text-success hide-mobile">
+                    <div className="item-subtotal col-md-1 border-right text-center text-success hide-mobile">
                         {this.props.data.status.toUpperCase()}
+                    </div>
+                    <div className="item-subtotal col-md-1 border-right text-center text-success hide-mobile">
+                        <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                <b>Action</b>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={this.addProductToCart} >Buy Again</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+
                     </div>
 
                     <div className="mobile-item-details-wrapper">

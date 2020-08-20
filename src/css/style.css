@@ -51,7 +51,7 @@ figure>figcaption {
 }
 
 body {
-    background-color: #f5f5f5;
+    background-color: rgba(202, 194, 194, 0.2) !important;
     overflow-x: hidden;
 }
 
@@ -11550,7 +11550,7 @@ select {
 }
 
 label {
-    margin-top: 10px !important;
+    margin-top: 10px;
 }
 
 .custom-file-input-button{
@@ -12523,6 +12523,11 @@ label.custom{
     display: none !important;
 }
 
+.product-price, old-price{
+    font-size: 1.1rem !important;
+}
+
+
 @media screen and (max-width: 768px){
     .image-view{
         height: 200px !important;
@@ -12776,3 +12781,116 @@ button[disabled]{
 .rounded {
     border-radius: 2.25rem!important;
 }
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.big-font{
+    font-size: 1.7rem;
+    
+}
+
+.black-color{
+    color: #000;
+}
+
+.selectedBox {
+    border: 1px solid #39e639;
+}
+
+.custom-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+}
+
+.dispute-type{
+    font-size: 1.8rem;
+    font-family: Roboto, sans-serif;
+}
+
+.bottom-banner{
+    height: 300px;
+    width: 100%;
+}
+
+.bottom-banner img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border: 2px solid #f4f4f4;
+    border-radius: 4px;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.react-reveal.survey.xmalert.alert-box{
+    z-index: 100;
+}
+
+.popup-alert{
+    width: 100%;
+    height: 250px;
+    background-size: cover;
+    background-position: left;
+    position: relative;
+}
+
+.alert-box.survey{
+    padding-top: 0 !important;
+  }
+  
+  .alert-box{
+    padding: 0 !important;
+  }
+
+
+  .text_underline-hover:hover{
+    cursor: pointer !important;
+    text-decoration: underline !important;
+    color: #fff !important;
+  }
+
+  .app-wrapper-container{
+    min-height: 100vh;
+    padding-top: 11.3rem;
+    background: rgb(244, 244, 244);
+  }
+
+  .no-underline{
+      text-decoration: none !important;
+      /* color: #fff; */
+      cursor: pointer;
+  }
+
+  .no-underline:hover{
+      text-decoration: none;
+      /* color: #fff; */
+  }
+
+  .custom-list-item{
+      border: none;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(0,0,0,.125) !important;
+  }
+
+  .custom-list-item:last-child{
+      border-bottom: none !important;
+  }
+
+  .greetings-text{
+    font-family: Roboto, sans-serif;
+    font-size: 1.89rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    color: #504f4f;
+  }
+
+  .border{
+      border: 1px solid #d3d3d3;
+  }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter, } from "react-router-dom";
-import englishFlag from "../../css/images/flags/en.png";
-import nigeriaFlag from "../../css/images/flags/nigeria.png";
-import frenchFlag from "../../css/images/flags/fr.png";
+// import englishFlag from "../../css/images/flags/en.png";
+// import nigeriaFlag from "../../css/images/flags/nigeria.png";
+// import frenchFlag from "../../css/images/flags/fr.png";
 import azonkaLogo from "../../images/logo_header.png";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
@@ -135,7 +135,7 @@ class Header extends Component {
                             <div className="container-fluid">
                                 <div className="header-left header-dropdowns">
                                     <div className="header-dropdown">
-                                        <a href="#N">NGN</a>
+                                        <a href="#N"><b>NGN</b></a>
                                         <div className="header-menu">
                                             <ul>
                                                 <li><a href="#M">NGN</a></li>
@@ -143,7 +143,7 @@ class Header extends Component {
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="header-dropdown">
+                                    {/* <div className="header-dropdown">
                                         <a href="#N"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a>
                                         <div className="header-menu">
                                             <ul>
@@ -152,7 +152,7 @@ class Header extends Component {
                                                 <li><a href="#N"><img src={frenchFlag} alt="France flag" />FRENCH</a></li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* <div className="dropdown compare-dropdown" style={{ border: 'none', zIndex: '900', backgroundColor: 'transparent', position: 'relative' }}>
                                         <a href="#N" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                             <i className="icon-retweet"></i> Compare (2)
@@ -182,22 +182,22 @@ class Header extends Component {
                                 <div className="header-right">
                                     <p className="welcome-msg" style={{ color: '#bce1f4', fontSize: '1.1rem' }}>{
                                         currentUser ?
-                                            `${currentUser.firstName} ${currentUser.lastName}`
-                                            : `Welcome to Azonka`
+                                    <b>{`${currentUser.firstName} ${currentUser.lastName}`}</b>
+                                            : <b>`Welcome to Azonka, Login`</b>
 
                                     }</p>
 
                                     <div className="header-dropdown dropdown-expanded">
-                                        <a href="#N">Links</a>
+                                        <a href="#N"><b>Links</b></a>
                                         <div className="header-menu">
                                             <ul>
-                                                <li><Link to="/users/profile">MY ACCOUNT </Link></li>
-                                                <li><Link to="/wishlist">MY WISHLIST </Link></li>
-                                                <li><Link to="#">Contact</Link></li>
+                                                <li><Link to="/users/profile"><b>MY Account</b> </Link></li>
+                                                <li><Link to="/users/placed-orders"><b>My Orders</b> </Link></li>
+                                                <li><a href="/users/self-service" rel="noopener noreferrer" target="_blank"><b>Help</b></a></li>
                                                 {
                                                     currentUser ?
-                                                        <li onClick={() => this.handleSideMenuClick('logout')}><Link to="#" className="login-link">Log Out</Link></li>
-                                                        : <li><Link to="/users/login" className="login-link">Log In</Link></li>
+                                                        <li onClick={() => this.handleSideMenuClick('logout')}><Link to="#" className="login-link"><b>Log Out</b></Link></li>
+                                                        : <li><Link to="/users/login" className="login-link"><b>Log In</b></Link></li>
                                                 }
                                                 {/* <li><a href="#" className="login-link">LOG IN</a></li> */}
                                             </ul>
@@ -251,8 +251,7 @@ class Header extends Component {
                                         <i className="icon-menu"></i>
                                     </button>
                                     <div className="header-contact">
-                                        <span>Call us now</span>
-                                        <a href="tel:#+234"><strong>+234</strong></a>
+                                        <a href="tel:#+234" className="text_underline-hover" target="_blank" rel="noopener noreferrer">Today Deals</a>
                                     </div>
                                     <CartDropdown />
                                 </div>

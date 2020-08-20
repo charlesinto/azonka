@@ -375,7 +375,7 @@ class LoginSignup extends Component {
                                     </div>
 
                                     <div className="col-md-6" style={{borderLeft:'1px solid #f3f3f3'}}>
-                                        <h2 className="title mb-2">New To Azonka? Create Account..</h2>
+                                        <h2 className="title mb-2">New To Azonka?</h2>
 
                                         <div className="form-footer" style={{marginBottom:'0.5rem', marginTop: '5rem'}}>
                                             <Link to="/users/register" className="btn btn-primary">CREATE ACCOUNT</Link>

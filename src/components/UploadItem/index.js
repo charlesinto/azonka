@@ -486,14 +486,14 @@ class index extends Component {
                                                 (
                                                     <button onClick={this.uploadButton} type="button" style={{fontSize: '0.78em'}} className="btn-cm btn-primary">Upload Main Photo</button>
                                                 ) :
-                                                <div className="container" >
+                                                <div className="" >
                                                     <div className="row">
                                                             <div className="col-md-12 col-sm-12">
-                                                                <button onClick={this.uploadButton} style={{marginBottom: 10, fontSize: '0.78em'}} type="button" className="btn-cm btn-sm btn-block btn-outline-success">Change Photo</button>
+                                                                <button onClick={this.uploadButton} style={{marginBottom: 10, fontSize: '0.78em'}} type="button" className=" btn-lg btn-block btn-secondary">Change Photo</button>
                                                     
                                                             </div>
                                                             <div className="col-md-12 col-sm-12">
-                                                                <button type="button" className="btn-cm btn-sm btn-block btn-danger">Remove</button>
+                                                                <button type="button" className="btn-lg btn-block btn-danger">Remove</button>
                                                             </div>
                                                     </div>
                                                 </div>

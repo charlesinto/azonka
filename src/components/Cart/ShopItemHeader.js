@@ -1,16 +1,17 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 
-export const ShopItemHeader = ({categoryName, productName}) => {
+export const ShopItemHeader = ({categoryName, productName, ads}) => {
+    
     return (
         <>
-            <div className="banner banner-cat" >
-                <div className="banner-content container">
+            <div className="banner banner-cat" style={{backgroundImage: `url(${ads})`}}>
+                <div className="banner-content container" >
                     <h2 className="banner-subtitle">check out over <span>200+</span></h2>
                     <h1 className="banner-title">
                         INCREDIBLE deals
 </h1>
-                    <a href="#n" className="btn btn-dark">Shop Now</a>
+                    {/* <a href="#n" className="btn btn-dark">Shop Now</a> */}
                 </div>
                 {/* <!-- End .banner-content --> */}
             </div>

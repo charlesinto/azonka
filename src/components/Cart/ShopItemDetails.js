@@ -6,15 +6,23 @@ import dayjs from "dayjs";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import relativeTime from 'dayjs/plugin/relativeTime'
+import Axios from 'axios';
+import Pages from '../../config/pages';
+import Positions from '../../config/position';
 
 class ShopItemDetails extends Component {
-    state = { id: "", qty: 1, products: [], detailsData: {}, arr: [], imgLoaded: false, activeSubLink:'Description' }
+    state = { id: "", qty: 1, products: [], detailsData: {}, arr: [], 
+    imgLoaded: false, activeSubLink:'Description',topBanner: [],
+    lowerBanner: [],
+    leftBanner: [],
+    bottomBanner: [], }
     async componentDidMount() {
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
         await this.setState({ id })
         // await this.loadShopData()
         this.getDetails()
+        this.getFeaturedCategoriesImages();
 
     }
     static getDerivedStateFromProps(nextProps, state){
@@ -131,6 +139,34 @@ class ShopItemDetails extends Component {
     setActiveSubLink = link => {
         this.setState({
             activeSubLink:link
+        })
+    }
+    getFeaturedCategoriesImages = async () => {
+        const responseAds = await Axios.get('/api/v1/ad/get-ads/0/1000')
+
+        const ads = responseAds.data.ads.filter(item => item.page === Pages.PRODUCT_DETAIL_PAGE )
+        console.log("ads", ads)
+        const topBanner = ads.filter(item => item.position === Positions.TOP)
+        const lowerBanner = ads.filter(item => item.position === Positions.LOWER)
+        console.log(lowerBanner)
+        const leftBanner = ads.filter(item => item.position === Positions.LEFT)
+        const bottomBanner = ads.filter(item => item.position === Positions.BOTTOM)[0]
+        if (lowerBanner.length > 4) {
+            lowerBanner.splice(4, lowerBanner.length)
+        }
+        else if (lowerBanner.length > 0 && lowerBanner.length < 4) {
+            const remainingItem = 4 - lowerBanner.length;
+            for (let i = 0; i < remainingItem; i++) {
+                lowerBanner.push(lowerBanner[0])
+            }
+        }
+
+        this.setState({
+            topBanner,
+            lowerBanner,
+            leftBanner,
+            bottomBanner,
+           
         })
     }
     renderRating = (data) => {
@@ -480,11 +516,11 @@ class ShopItemDetails extends Component {
                                     {/* <!-- End .widget --> */}
 
                                     <div className="widget widget-banner">
-                                        {/* <div className="banner banner-image">
-                                            <Link to="#">
-                                                <img src="assets\images\banners\banner-sidebar.jpg" alt="Banner Desc" />
+                                        <div className="banner banner-image" style={{height: 300}}>
+                                            <Link to="#" className="h-100">
+                                                <img style={{objectFit:'cover', height:'100%'}} src={`${this.state.leftBanner.length > 0 ? this.state.leftBanner[0].url : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"}`} alt="Banner Desc" />
                                             </Link>
-                                        </div> */}
+                                        </div>
                                         {/* <!-- End .banner --> */}
                                     </div>
                                     {/* <!-- End .widget --> */}

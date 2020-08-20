@@ -272,7 +272,7 @@ class Register extends Component {
                 <div className="form-popup custom-input register-form">
                     <div className="form-popup-content">
                         <h4 className="popup-title">Register Account</h4>
-                        <hr className="line-separator"/>
+                        {/* <hr className="line-separator"/> */}
                         <form id="register-form" noValidate>
                         <div className="container-fluid">
                             <div className="row">
@@ -481,17 +481,16 @@ class Register extends Component {
                                 <input type="checkbox" id="agreeToTerms"
                                     name="i agree" value="sellers" checked={this.state.agreeToTerms} />
                                 <label className="label-check" onClick={(event) => this.agreeTotermsChange(event)}>
-                                    <span className="checkbox primary primary"><span></span></span>
-                                    I agree to
+                                    <span className="checkbox primary primary terms"><span></span></span>
+                                    I agree to Azonka’s Terms &amp; Conditions of Use and Privacy Notice
                                 </label>
-                                <span className="terms">
-                                    terms, condition and privacy policy
-                                </span>
+                                {/* <span className="terms">
+                                </span> */}
                             </div>
                             <p style={{margin:'0px 0px', textAlign:'center'}}>Have an account? 
                                 <Link style={{color:'#00d7b3', cursor:'pointer'}} to="/users/login"> Login</Link></p>
                             <div style={{textAlign:'center'}}>
-                                <button className="btn btn-primary" style={{margin: '20px auto', width:'50%', maxWidth: 400}} onClick={this.handleFormSubmit}>Register <span className="primary">Now!</span></button>
+                                <button className="btn btn-primary btn-lg" style={{ width:'30%', maxWidth: 400}} onClick={this.handleFormSubmit}>Register <span className="primary">Now!</span></button>
                             </div>
                             
                         </form>

@@ -10,6 +10,9 @@ import * as actions from "../../actions";
 // import ShopItemAside from './ShopItemAside'
 import queryString from 'query-string';
 import swal from 'sweetalert2'
+import Pages from '../../config/pages'
+import Positions from '../../config/position'
+import axios from 'axios'
 
 
 class ShopItems extends Component {
@@ -17,7 +20,8 @@ class ShopItems extends Component {
         products: [], sortState: "", cartData: [],
         name: "", category: "", finalPrice: 0,
         categoryName: '',
-        cartLength: 0
+        cartLength: 0,
+        topBanner: null
     }
     // componentWillMount() {
     //     this.unlisten = this.props.history.listen((location, action) => {
@@ -47,6 +51,33 @@ class ShopItems extends Component {
 
             // const { name, category, price } = params;
             // console.log(params)
+        })
+    }
+    getFeaturedCategoriesImages = async () => {
+        const responseAds = await axios.get('/api/v1/ad/get-ads/0/1000')
+
+        const ads = responseAds.data.ads.filter(item => item.page === Pages.SHOP_PAGE )
+        
+        const topBanner = ads.filter(item => item.position === Positions.TOP)
+        const lowerBanner = ads.filter(item => item.position === Positions.LOWER)
+        console.log(lowerBanner)
+        const leftBanner = ads.filter(item => item.position === Positions.LEFT)
+        const bottomBanner = ads.filter(item => item.position === Positions.BOTTOM)[0]
+        if (lowerBanner.length > 4) {
+            lowerBanner.splice(4, lowerBanner.length)
+        }
+        else if (lowerBanner.length > 0 && lowerBanner.length < 4) {
+            const remainingItem = 4 - lowerBanner.length;
+            for (let i = 0; i < remainingItem; i++) {
+                lowerBanner.push(lowerBanner[0])
+            }
+        }
+
+        this.setState({
+            topBanner,
+            lowerBanner,
+            leftBanner,
+            bottomBanner
         })
     }
     static getDerivedStateFromProps(props, state) {
@@ -200,7 +231,7 @@ class ShopItems extends Component {
         return (
             <div>
                 <main className="main">
-                    <ShopItemHeader categoryName={this.state.categoryName} productName={this.state.name} />
+                    <ShopItemHeader ads="https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg" categoryName={this.state.categoryName} productName={this.state.name} />
                     <div className="container">
                         <div className="row d-flex justify-content-center">
                             <div className="col-lg-9">
@@ -324,6 +355,9 @@ class ShopItems extends Component {
                         </div>
                         {/* <!-- End .row --> */}
                     </div>
+                    <div className=" bottom-banner mt-3">
+                                        <img alt="bottom" src="https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg" />
+                                    </div>
                     {/* <!-- End .container --> */}
 
                     <div className="mb-5"></div>

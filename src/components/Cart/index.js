@@ -7,7 +7,6 @@ import CartItem from "../../common/CartItem";
 import CartActions from "../../common/CartActions";
 import ProductRow from '../../common/ProductRow';
 import Drawer from '@material-ui/core/Drawer';
-import Footer from '../HeaderFooter/Footer';
 
 class Cart extends Component {
     state = {
@@ -56,7 +55,7 @@ class Cart extends Component {
     )
     noAuthDashboard = () => {
         return (
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-push-12 col-md-4 col-sm-12">
                         <div className="sidebar-item">
@@ -316,19 +315,19 @@ class Cart extends Component {
                 {/* <Header /> */}
                 <div className="router-container">
                     <nav aria-label="breadcrumb" className="breadcrumb-nav">
-                        <div className="container">
+                        <div className="container-fluid">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="/"><i className="icon-home"></i></Link></li>
                                 <li className="breadcrumb-item active" aria-current="page">Shopping Cart</li>
                             </ol>
                         </div>
                     </nav>
-                    <div className="container">
+                    <div className="container-fluid">
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="cart-table-container">
                                     <div className="col-lg-12 mx-auto  my-5">
-                                        <div className="cart-table-container container">
+                                        <div className="cart-table-container container-fluid">
                                             <div className="row item-header">
                                                 <div className="header-item-name col-md-6 ">
                                                     ITEM
@@ -363,7 +362,7 @@ class Cart extends Component {
                                                     )
                                                 }) : (
                                                         <div className="row">
-                                                            No data to load
+                                                            
                                                     </div>
                                                     )
                                             }
@@ -475,7 +474,6 @@ class Cart extends Component {
                 {
                     this.renderModal()
                 }
-                <Footer />
             </div>
         )
     }

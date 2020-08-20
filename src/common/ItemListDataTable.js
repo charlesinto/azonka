@@ -75,13 +75,24 @@ class ItemListDataTable extends Component {
                     title:' Action',
                     render: (data, type, row, meta) => {
                         return `
-                        <div class="d-flex justify-content-space-between">
-                        <a class="btn btn-success" title="Preview" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer" target="_blank"><span><i class="ion ion-eye"></i><span></a>
-                        <button type="button" data-id=${row.id} class="btn btn-outline-primary action-btn btn-xs dt-edit">
-                        <i class="fas fa-pen"></i></button>
-                        <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>
+                        
+                        <div class="input-group-prepend">
+                        <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer" target="_blank">View</a>
+                          <a class="dropdown-item dt-edit cursor-pointer" data-id=${row.id}>Edit</a>
+                          <a class="dropdown-item dt-delete cursor-pointer" data-id=${row.id}>Delete</a>
                         </div>
+                      </div>
                         `
+                        // return `
+                        // <div class="d-flex justify-content-space-between">
+                        // <a class="btn btn-success" title="Preview" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer" target="_blank"><span><i class="ion ion-eye"></i><span></a>
+                        // <button type="button" data-id=${row.id} class="btn btn-outline-primary action-btn btn-xs dt-edit">
+                        // <i class="fas fa-pen"></i></button>
+                        // <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>
+                        // </div>
+                        // `
                     },
                     responsivePriority: 2
                 }
@@ -97,7 +108,7 @@ class ItemListDataTable extends Component {
         })
 
         const $this = this;
-        $(this.el).on('click', 'button', function(){
+        $(this.el).on('click', '.dropdown-item', function(){
             //console.log('clicked', this.classList)
             if(this.classList.contains('dt-edit')){
                 const selectedId = this.dataset.id

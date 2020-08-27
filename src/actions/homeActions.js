@@ -6,6 +6,7 @@ import { FETCH_USER, SWITCH_ACTIVE_LINK,TOGGLE_VIEW_TYPE,INITIAL_REGISTRATION,CL
 import axios from "axios";
 import swal from 'sweetalert2';
 import async from "async";
+import { disputeFileUploader } from "../components/util/FileUploader";
 
 export const fetchUser = () => {
     const user =  JSON.parse(localStorage.getItem('azonta-user'))
@@ -172,4 +173,130 @@ export const completeOrder = ({orderId, deliveryCode}) => {
             
         }
     }
+}
+
+export const createDispute = (delivery = [], message = '',files, damaged = false, different = false) => {
+    return async (dispatch) => {
+        try{
+            delivery.forEach(async (item) => {
+                // const mainImageResponse = await fileUpload(data.files[data.mainImageIndex].file, 'storeItems')
+                // const mainImageUrl = mainImageResponse.Location;
+                let img1 = '', img2 = '', img3 = '', img4 = '', img5= '';
+               
+                uploadImages(files).then(images => {
+                    console.log('images: ', images)
+                    img1 = images[0] ? images[0] : '';
+                    img2 = images[1] ? images[1] : '';
+                    img3 = images[2] ? images[2] : '';
+                    img4 = images[3] ? images[3] : '';
+                    img5 = images[4] ? images[4] : '';
+                    const token = localStorage.getItem('x-access-token');
+                axios.post('/api/v1/user/dispute/create', {
+                        delivery: `${item.id}`,
+                        damaged: damaged,
+                        seller: `${item.seller}`,
+                        different: different,
+                        message: message,
+                        img1, img2, img3, img4, img5
+                    }, {headers: {'x-access-token': token}})
+                    .then((response ) => {
+                        dispatch({type: STOP_LOADING, payload: ''})
+                        swal.fire('Action Successful', 'Dispute logged successfully, we will be in touch with you', 'success')
+                    })
+                    .catch((error) => {
+                        console.log(error.response)
+                        dispatch({type: STOP_LOADING, payload: ''})
+                        return swal.fire(error.response.data.message)
+                    })
+                }).catch((error) => {
+                    console.log(error.response)
+                        dispatch({type: STOP_LOADING, payload: ''})
+                        return swal.fire(error.response.data.message)
+                })
+                
+                // swal.fire('Action Successful', 'Dispute logged successfully, we will be in touch with you', 'success')
+                // return dispatch({type: STOP_LOADING, payload: '' })
+            })
+        }catch(error){
+            dispatch({type: STOP_LOADING, payload: ''})
+            console.log("called here: ", error.response.data)
+            
+            if(error.response && error.response.data.message){
+                return swal.fire(error.response.data.message)
+            }else{
+                return dispatch({type: DISPLAY_ERROR, payload: 'Could not fulfill request, please try again later'})
+            }
+        }
+    }
+
+}
+
+const uploadImages = (files) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            let images = [];
+            for(let i = 0; i < files.length; i++){
+                console.log('file: ', files[i])
+                let fileResponse = await disputeFileUploader(files[i], 'disputes');
+                if(images.length < files.length){
+                    i = images.length;
+                }
+                images.push(fileResponse.Location);
+            }
+            resolve(images)
+        }catch(error){
+            reject(error)
+        }
+    })
+}
+
+export const rejectDispute = (id, message = '',files) => {
+    return async (dispatch) => {
+        try{
+            let img1 = '', img2 = '', img3 = '', img4 = '', img5= '';
+               
+                uploadImages(files).then(images => {
+                    img1 = images[0] ? images[0] : '';
+                    img2 = images[1] ? images[1] : '';
+                    img3 = images[2] ? images[2] : '';
+                    img4 = images[3] ? images[3] : '';
+                    img5 = images[4] ? images[4] : '';
+                    const token = localStorage.getItem('x-access-token');
+                    axios.put('/api/v1/seller/dispute/reject/' + id, {
+                            
+                            message: message,
+                            simg1: img1, simg2: img2, simg3: img3, simg4:img4, simg5: img5
+                        }, {headers: {'x-access-token': token}})
+                        .then((response ) => {
+                            dispatch({type: STOP_LOADING, payload: ''})
+                            swal.fire('Action Successful', 'Operation Successful, we will be in touch with you', 'success')
+                        })
+                        .catch((error) => {
+                            console.log(error.response)
+                            dispatch({type: STOP_LOADING, payload: ''})
+                            if(error.response){
+                             return swal.fire(error.response.data.message)
+                            }
+                            return swal.fire('Some errors were encountered')
+                        })
+                    }).catch((error) => {
+                            dispatch({type: STOP_LOADING, payload: ''})
+                            console.log(error)
+                            if(error.response){
+                              return swal.fire(error.response.data.message)
+                            }
+                            return swal.fire('Could not fulfill request, please try again')
+                })
+        }catch(error){
+            dispatch({type: STOP_LOADING, payload: ''})
+            console.log("called here: ", error.response.data)
+            
+            if(error.response && error.response.data.message){
+                return swal.fire(error.response.data.message)
+            }else{
+                return dispatch({type: DISPLAY_ERROR, payload: 'Could not fulfill request, please try again later'})
+            }
+        }
+    }
+
 }

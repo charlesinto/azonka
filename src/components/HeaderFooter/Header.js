@@ -129,7 +129,7 @@ class Header extends Component {
         let { category } = this.state;
         return (
             <div>
-                <div className={`page-wrapper ${this.state.mobileMenu ? 'mmenu-active' : ''}`} style={{ position: 'fixed', zIndex: '1000', width: '100%' }}>
+                <div className={`page-wrapper ${this.state.mobileMenu ? 'mmenu-active' : ''}`} style={{ position: 'fixed', zIndex: '900', width: '100%' }}>
                     <header className="header" style={{ marginLeft: 0, marginRight: 0, width: '100%', maxWidth: '100%' }}>
                         <div className="header-top">
                             <div className="container-fluid">
@@ -183,7 +183,7 @@ class Header extends Component {
                                     <p className="welcome-msg" style={{ color: '#bce1f4', fontSize: '1.1rem' }}>{
                                         currentUser ?
                                     <b>{`${currentUser.firstName} ${currentUser.lastName}`}</b>
-                                            : <b>`Welcome to Azonka, Login`</b>
+                                            : <b>Welcome to Azonka, Login</b>
 
                                     }</p>
 
@@ -251,7 +251,7 @@ class Header extends Component {
                                         <i className="icon-menu"></i>
                                     </button>
                                     <div className="header-contact">
-                                        <a href="tel:#+234" className="text_underline-hover" target="_blank" rel="noopener noreferrer">Today Deals</a>
+                                        <a href="#!" className="text_underline-hover" target="_blank" rel="noopener noreferrer">Today Deals</a>
                                     </div>
                                     <CartDropdown />
                                 </div>

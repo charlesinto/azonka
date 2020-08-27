@@ -91,6 +91,7 @@ class FeatureProductItem extends Component {
     }
     handleItemDetails = (e) => {
         this.props.history.push(`/shop-details/${e.target.id}`)
+        window.location.reload()
     }
     handleMoveWishList = (id) => {
         this.props.handleMoveWishList(id)

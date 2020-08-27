@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import notifCloseIcon from "../../images/dashboard/notif-close-icon.png";
+// import notifCloseIcon from "../../images/dashboard/notif-close-icon.png";
 import Zoom from 'react-reveal/Zoom';
 // import logoHeader from "../../images/logo_header.png";
 import Slider from "react-slick";
@@ -112,7 +112,7 @@ class Home extends Component {
             // leftBanner
         }, () => this.getFeaturedCategoriesImages())
         //remove popup after 5secs
-        setTimeout(() => this.setState({showPopUp: false}), 20000)
+        setTimeout(() => this.setState({showPopUp: false}), 10000)
 
     }
     getFeaturedCategoriesImages = async () => {
@@ -236,7 +236,7 @@ class Home extends Component {
                         <div style={{position:'absolute', bottom: 0, width: '100%'}}>
                             {/* <Link to="#" className="button mid secondary">Check it <span className="primary">out!</span></Link> */}
                         </div>
-                        <img className="close-btn" src={notifCloseIcon} alt="close-icon" onClick={this.closePopup} />
+                        {/* <img className="close-btn" src={notifCloseIcon} alt="close-icon" onClick={this.closePopup} /> */}
                     </div>
                     {/* <p className="text-header">Alerts &amp; Notifications</p>
                     <p className="info">We added alerts &amp; notifications to the template!.<br />

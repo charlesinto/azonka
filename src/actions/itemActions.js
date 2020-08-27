@@ -16,6 +16,7 @@ import { fileUpload } from "../components/util/FileUploader";
 import async from 'async';
 import axios from 'axios';
 import swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 export const _initUploadPage = () => {
     return (dispatch) => {
@@ -235,7 +236,10 @@ export const fetchCart = () => {
         } catch (error) {
             console.log('er', error)
             if (error && error.response && error.response.status === 498) {
-                return swal.fire('Login session timed out, please login to continue')
+                localStorage.removeItem('x-access-token')
+                localStorage.removeItem('azonta-user');
+                return window.location.reload()
+                // return swal.fire('Login session timed out, please login to continue')
             }
             if (error.response && error.response.data.message) {
                 dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
@@ -1031,14 +1035,20 @@ export const getProductById = (id = '') => {
             const response = await axios.get(`/api/v1/seller/product/get/${id}`)
             const { product } = response.data;
             console.log(product)
+            const response2 = await axios.get(`/api/v1/user/product/get-products-by-category/${product.category.id}/price/ASC/0/16`)
+            product.categoryProducts = response2.data.category.products
             dispatch({ type: STOP_LOADING, payload: '' })
             dispatch({ type: PRODUCT_FOUND, payload: product })
         } catch (error) {
-            if (error.response.status === 404) {
+            dispatch({ type: STOP_LOADING, payload: '' })
+            if (error && error.response && error.response.status === 404) {
                 return dispatch({ type: PRODUCT_NOT_FOUND, payload: '' })
             }
-            dispatch({ type: STOP_LOADING, payload: '' })
-            dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+            else if (error.response){
+                dispatch({ type: DISPLAY_ERROR, payload:  error.response.data.message})
+            }
+            Swal.fire('some errors were enocuntered')
+            
 
         }
     }

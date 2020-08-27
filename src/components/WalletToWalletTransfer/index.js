@@ -3,9 +3,13 @@ import { connect } from "react-redux";
 import SweetAlert from "react-bootstrap-sweetalert";
 import * as actions from "../../actions";
 import Dashboard from '../HOC/Dashboard';
+import Axios from 'axios';
+import Swal from 'sweetalert2';
 
 class WalletToWalletTransfer extends Component{
-    INITIAL_STATE = {walletId: '', amount: '', pin: '', showConfirmDialog: false }
+    INITIAL_STATE = {walletId: '', amount: '', pin: '',
+    recipientFirstName: '', recipientLastName: '',
+     showConfirmDialog: false }
     constructor(props){
         super(props);
         this.state = {...this.INITIAL_STATE}
@@ -43,7 +47,29 @@ class WalletToWalletTransfer extends Component{
         if(this.state.walletId.trim() === ''){
             return this.props.renderError('Please provide receiver wallet Id')
         }
-        await this.setState({showConfirmDialog: true})
+        this.getRecipientDetails()
+        // await this.setState({showConfirmDialog: true})
+    }
+    getRecipientDetails = async () => {
+        try{
+            this.props.initiateRegistration();
+            const token = localStorage.getItem('x-access-token');
+            const response = await Axios.get(`/api/v1/user/wallet/get-user-from-wallet-id/${this.state.walletId}`, {headers: {'x-access-token': token}});
+            this.props.stopLoading()
+            const user = response.data.user;
+            await this.setState({
+                showConfirmDialog: true,
+                recipientFirstName: user.firstName,
+                recipientLastName: user.lastName
+            })
+        }catch(error){
+            this.props.stopLoading()
+            if(error.response){
+                return Swal.fire('Error fetching user', error.response.data.message, 'info')
+            }
+            Swal.fire('some errors were encountered')
+            
+        }
     }
     handlePinCodeInputChange = e => {
         // console.log(e.key)
@@ -137,12 +163,12 @@ class WalletToWalletTransfer extends Component{
                     showCancel
                     confirmBtnText="Transfer"
                     confirmBtnBsStyle="primary"
-                    title="Are you sure?"
+                    title={`Confirm Transfer`}
                     onConfirm={this.onConfirm}
                     onCancel={this.onCancel}
                     focusCancelBtn
                   >
-                    Transfer 	&#8358; {this.state.amount} ?
+                    Transfer <b>NGN {this.state.amount} </b>to <b>{this.state.recipientFirstName} {this.state.recipientLastName}</b>. Are you sure?
                   </SweetAlert> : null
                 }
             </div>  

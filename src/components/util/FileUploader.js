@@ -5,7 +5,8 @@ import Jimp from 'jimp';
 export const fileUpload = (file, folderName = '') => {
     return new Promise((resolve, reject) => {
         console.log(file[0])
-        const extension = file[0].name.split('.')[1]
+        // const extension = file[0].name.split('.')[1]
+        const extension = file[0].type.split('/')[1]
         var path = (window.URL || window.webkitURL).createObjectURL(file[0]);
     console.log('path', path);
         Jimp.read(path, (err, lenna) => {
@@ -55,3 +56,39 @@ function dataURLtoFile(dataurl, filename) {
 //Usage example:
 // var file = dataURLtoFile('data:text/plain;base64,aGVsbG8gd29ybGQ=','hello.txt');
 // console.log(file);
+
+
+export const disputeFileUploader = (file, folderName = '') => {
+    return new Promise((resolve, reject) => {
+        console.log(file)
+        const extension = file.type.split('/')[1]
+        var path = (window.URL || window.webkitURL).createObjectURL(file);
+    console.log('path', path);
+        Jimp.read(path, (err, lenna) => {
+            if (err) throw err;
+            // console.log(lenna)
+            lenna
+              .resize(300, 300) // resize
+              .quality(60) // set greyscale
+              .getBase64(Jimp.AUTO, function(err, data) {
+                // console.log(data);
+                const fileConverted = dataURLtoFile(data, `${file.name}`)
+                // console.log(fileConverted)
+                // document.getElementById("image").setAttribute("src", data);
+                    const key = `${folderName}/${Math.floor((10 + Math.random()) * 100000000)}.${extension}`
+                    const params = { Bucket: bucket, Key: key, Body: fileConverted, ACL: 'public-read' };
+                    const options = { partSize: 10 * 1024 * 1024, queueSize: 1 };
+                    return db.upload(params, options, function (err, data) {
+                        if (err) {
+                            console.log('uploading >>', err)
+                            return reject(err)
+                        }
+                        console.log('data uploaded >> ', data)
+                        // console.log('here')
+                        resolve(data)
+                    })
+              }); // save
+          });
+        
+    })
+}

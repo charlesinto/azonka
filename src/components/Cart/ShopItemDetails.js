@@ -10,13 +10,54 @@ import Axios from 'axios';
 import Pages from '../../config/pages';
 import Positions from '../../config/position';
 
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import FeatureProductItem from "../../common/FeatureProductItem";
+
 class ShopItemDetails extends Component {
     state = { id: "", qty: 1, products: [], detailsData: {}, arr: [], 
     imgLoaded: false, activeSubLink:'Description',topBanner: [],
     lowerBanner: [],
-    leftBanner: [],
-    bottomBanner: [], }
+    leftBanner: [],slidesToShow: 4,
+    bottomBanner: null, }
     async componentDidMount() {
+        if (window.innerWidth < 768) {
+            this.setState({
+                slidesToShow: 1
+            })
+        }
+        const $this = this;
+        if (window.attachEvent) {
+            window.attachEvent('onresize', function (e) {
+                if (window.innerWidth > 768) {
+
+                    return $this.setState({
+                        slidesToShow: 4
+                    })
+                } else {
+                    return $this.setState({
+                        slidesToShow: 1
+                    })
+                }
+
+            });
+        }
+        else if (window.addEventListener) {
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    // alert()
+                    return $this.setState({
+                        slidesToShow: 4
+                    })
+                }
+                return $this.setState({
+                    slidesToShow: 1
+                })
+            }, true);
+        }
         console.log(this.props.match.params.id)
         let id = this.props.match.params.id;
         await this.setState({ id })
@@ -29,6 +70,7 @@ class ShopItemDetails extends Component {
         return {...state, detailsData: nextProps.productFound}
         
     }
+    
     getDetails = async () => {
         let {  id } = this.state;
         // console.log("showst", this.state)
@@ -211,10 +253,12 @@ class ShopItemDetails extends Component {
             return <span className="float-right">{star}</span>
             })
     }
-
+    formatMoney(amount) {
+        return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
     render() {
         let { detailsData, imgLoaded } = this.state;
-        // console.log(detailsData)
+        console.log(detailsData)
         let productImage = detailsData != null ? detailsData.mainImageUrl : imgLoader
         const { id, finalPrice, deliveryDays } = detailsData ? detailsData : {}
         return (
@@ -481,6 +525,49 @@ class ShopItemDetails extends Component {
                                     </div>
                                     {/* <!-- End .tab-content --> */}
                                 </div>
+                                <div className="row mt-3">
+                                    <div className="col-lg-12">
+                                        <div className="row">
+                                            <div className="col-md-12">
+                                                <div className="d-flex justify-content-between">
+                                                    <h4>Products in {this.state.detailsData.category && this.state.detailsData.category.name} Category</h4>
+                                                    <a rel="noopener noreferrer"  target="_blank" className="text-primary" href={`/shop?name=&category=${this.state.detailsData.category && this.state.detailsData.category.id}&categoryName=${this.state.detailsData && this.state.detailsData.category && this.state.detailsData.category.name}`}>View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <hr />
+                                        
+                                    </div>
+                          
+                                </div>
+                                <div  className="mt-3 mb-5">
+                                        <div className="">
+                                            <div className="bg-white  px-5 p-5">
+                                                    <Slider
+                                                        {...{ ...settings, slidesToShow: this.state.slidesToShow }}
+                                                    >
+                                                        {
+                                                            this.state.products ? (
+                                                              this.state.detailsData &&  this.state.detailsData.categoryProducts &&  this.state.detailsData.categoryProducts.map(res => {
+                                                                    let { id, name, brandName, model, finalPrice, sellingPrice, mainImageUrl } = res
+                                                                    return <FeatureProductItem finalPrice={finalPrice} id={id} name={name} brandName={brandName}
+                                                                        sellingPrice={this.formatMoney(sellingPrice)} model={model}
+                                                                        mainImageUrl={mainImageUrl} featArray={this.state.products}
+                                                                        handleMoveWishList={this.handleMoveWishList}
+                                                                    />
+                                                                })
+                                                            ) : null
+                                                        }
+                                                    </Slider>
+
+
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div className=" bottom-banner mt-3">
+                                        <img alt="bottom" src={`${this.state.bottomBanner ? this.state.bottomBanner.url : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"}`} />
+                                    </div>
                                 {/* <!-- End .product-single-tabs --> */}
                             </div>
                             {/* <!-- End .col-lg-9 --> */}
@@ -547,6 +634,17 @@ class ShopItemDetails extends Component {
             </>
         )
     }
+}
+
+const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    arrows: false,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000
 }
 
 

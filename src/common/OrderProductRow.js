@@ -131,6 +131,10 @@ class OrderProductRow extends Component {
             }
         })
     }
+    viewDetails = () => {
+        // console.log(this.props)
+        this.props.onView(this.props.data)
+    }
     render() {
         
         if (!this.props.data.products[0]) return <div></div>;
@@ -230,9 +234,10 @@ class OrderProductRow extends Component {
                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                 <b>Action</b>
                             </Dropdown.Toggle>
-
+                            
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={this.addProductToCart} >Buy Again</Dropdown.Item>
+                                <Dropdown.Item onClick={this.viewDetails} >View Details</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 

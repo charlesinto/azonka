@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import suppport from '../../assets/technical-support.svg';
 
 class SelfService extends Component{
@@ -17,9 +17,10 @@ class SelfService extends Component{
         }
     }
     viewOrderDispute = () => {
-        Swal.fire('Order Disputes', '','info').then(() => {
-            this.props.history.push('/user/order/disputes')
-        })
+        this.props.history.push('/user/order/disputes')
+        // Swal.fire('Order Disputes', '','info').then(() => {
+        //     this.props.history.push('/user/order/disputes')
+        // })
     }
     renderStage = () => {
          switch(this.state.stage){

@@ -12894,3 +12894,141 @@ button[disabled]{
   .border{
       border: 1px solid #d3d3d3;
   }
+
+  .modal-body.orders p{
+    display: flex;
+  }
+
+  .modal-body .payment-type-wrapper{
+    background-color: #3ed2ff;
+    border-radius: 2px;
+    height: FIT-CONTENT;
+  }
+
+  .modal-body .payment-type{
+    color: #5F7DF7;
+    padding: 4px 5px;
+    text-transform: capitalize;
+
+  }
+  .modal-body .money{
+    color: #069206;
+    font-size: 14px;
+  }
+
+  .text-transform-upper{
+      text-transform: capitalize;
+  }
+
+  .order-table button:disabled, button[disabled]{
+      border: none !important;
+      background-color: transparent !important;
+  }
+
+  .order-table .MuiIconButton-root{
+      border-radius: 100% !important;
+  }
+
+  .dropdown-item{
+      padding: 10px 16px !important;
+      font-size: 16px !important;
+  }
+
+  textarea.form-control{
+      min-height: 70px !important;
+  }
+
+  .tag{
+    background: #fff;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .activeTag {
+    background: #034AD8;
+    color: #fff;
+}
+
+.badge-soft{
+    font-size: 14px;
+    color: #1169b2;
+    background-color: rgba(19, 119, 201, 0.1);
+}
+
+.msg-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    background: #ddd;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+    background-image: url('https://image.flaticon.com/icons/svg/145/145867.svg');
+}
+
+
+
+.msg-bubble {
+    max-width: 450px;
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: #579ffb;
+    color: #fff;
+    border-bottom-left-radius: 0;
+}
+
+.msg-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.msg-info-name {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+
+.msg-info-time {
+    font-size: 0.85em;
+}
+
+.checkmark-delivery{
+    width: 24px;
+    height: 24px;
+}
+
+.delivery-status{
+    line-height: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.attachment{
+    color: #51B052;
+}
+.modal{
+    z-index: 970 !important;
+}
+.modal-backdrop{
+    z-index: 960 !important;
+}
+
+.page-wrapper {
+    z-index: 900!important;
+}
+
+.dropdown button {
+    position: relative;
+    z-index: 90 !important;
+}
+
+.dropdown-menu.show{
+    transform: translate3d(-49px, -122px, 0px) !important;
+}

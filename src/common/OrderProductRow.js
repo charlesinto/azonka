@@ -6,7 +6,7 @@ import '../assets/Order.css'
 import MoreOrder from './MoreOrder';
 import ReviewModal from './ReviewModal';
 import { v4 as uuidv4 } from 'uuid';
-import { Dropdown } from 'react-bootstrap'
+// import { Dropdown } from 'react-bootstrap'
 import Swal from 'sweetalert2';
 
 class OrderProductRow extends Component {
@@ -230,7 +230,7 @@ class OrderProductRow extends Component {
                         {this.props.data.status.toUpperCase()}
                     </div>
                     <div className="item-subtotal col-md-1 border-right text-center text-success hide-mobile">
-                        <Dropdown>
+                        {/* <Dropdown>
                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                 <b>Action</b>
                             </Dropdown.Toggle>
@@ -239,8 +239,21 @@ class OrderProductRow extends Component {
                                 <Dropdown.Item onClick={this.addProductToCart} >Buy Again</Dropdown.Item>
                                 <Dropdown.Item onClick={this.viewDetails} >View Details</Dropdown.Item>
                             </Dropdown.Menu>
-                        </Dropdown>
-
+                        </Dropdown> */}
+                        {/* <div className="drp-wrapper"> */}
+                        <div class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <Link title="View" onClick={this.addProductToCart} className="dropdown-item" >Buy Again</Link>
+                                {/* <Link title="Accept" className="dropdown-item" onClick={() => this.acceptDispute(props.data)} >Accept</Link> */}
+                                <Link title="Reject" className="dropdown-item" onClick={this.viewDetails} >View Details</Link>
+                                {/* <Link title="Resolve" className="dropdown-item" onClick={() => this.rejectResolve('resolve', props.data)} >Resolve</Link> */}
+                            </div>
+                            </div>
+                        {/* </div> */}
+                        
                     </div>
 
                     <div className="mobile-item-details-wrapper">

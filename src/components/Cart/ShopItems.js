@@ -234,7 +234,7 @@ class ShopItems extends Component {
                     <ShopItemHeader ads="https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg" categoryName={this.state.categoryName} productName={this.state.name} />
                     <div className="container">
                         <div className="row d-flex justify-content-center">
-                            <div className="col-lg-9">
+                            <div className="col-lg-12">
                                 <nav className="toolbox">
                                     <div className="toolbox-left">
                                         <div className="toolbox-item toolbox-sort">

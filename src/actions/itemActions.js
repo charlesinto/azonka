@@ -901,7 +901,7 @@ export const createAddress = (data, id = 0, numberOfPage = 100) => {
     }
 }
 
-export const fetchOrders = (id = 0, numberOfPage = 100) => {
+export const fetchOrders = (id = 0, numberOfPage = 1000) => {
     return async (dispatch) => {
         try {
             const response = await axios.get(`/api/v1/user/order/get-orders/${id}/${numberOfPage}`, {

@@ -47,9 +47,12 @@ class Cart extends Component {
     async componentDidMount() {
         this.props.switchActiveLink('My Orders')
         await this.loadCart()
+        this.props.initiateRegistration();
+        await this.props.fetchOrders();
+        this.props.stopLoading()
         this.calSum()
         await this.getFeaturedCategoriesImages()
-        setTimeout(() => this.setState({showPopUp: false}), 20000)
+        setTimeout(() => this.setState({showPopUp: false}), 5000)
         
 
     }
@@ -369,7 +372,7 @@ class Cart extends Component {
     }
 
     onView = data => {
-        console.log(data)
+        console.log("data: ", data)
         this.setState({
             order: data
         }, () => window.$('#order-detail').modal('show'))
@@ -511,7 +514,7 @@ class Cart extends Component {
                                     Action: (props) => {
                                         console.log(props)
                                         if(props.action.icon === 'save'){
-                                            return <a target="_blank" rel="noopener noreferrer"  href={`/store/qrcode-generate/${props.data.deliveryCode}`}  className="btn btn-lg btn-primary">Generate Qr Code</a>
+                                            return <a target="_blank" rel="noopener noreferrer"  href={`/store/qrcode-generate/${props.data.id}-${props.data.deliveryCode}`}  className="btn btn-lg btn-primary">Generate Qr Code</a>
                                         }
                                         return <button>Hello</button>
                                     }
@@ -527,8 +530,9 @@ class Cart extends Component {
                                 title=""
                                 options={{
                                     headerStyle: {
-                                        background: '#FA6400',
+                                        background: '#00AAFF',
                                         color: '#FFF',
+                                        fontSize:16,
                                         fontFamily: '"Open Sans", sans-serif',
                                         fontWeight: 'bold',
                                         zIndex:1,

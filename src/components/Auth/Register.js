@@ -254,6 +254,9 @@ class Register extends Component {
             .catch((err) => console.log('error encountered', err) )
         console.log('country code', countryCode)
     }
+    openWhatIsThisModal = () => {
+        window.$('#whatIsThisModal').modal('show')
+    }
     render() {
         const { classes } = this.props;
         return (
@@ -462,7 +465,7 @@ class Register extends Component {
                             </div>
                             <div className="row">
                                 <div className="form-group col-md-6 col-sm-12">
-                                    <label htmlFor="referredBy" className="rl-label">Referral Code (optional)</label>
+                                    <label htmlFor="referredBy" className="rl-label">Referral Code (optional) <span onClick={this.openWhatIsThisModal} className="cursor-pointer ml-2 text-underline text-primary">What is this?</span></label>
                                     <input type="text" id="referredBy" className={`form-control ${this.state.inValidElments.includes('referredBy') ? 'invalid' : ''}`} value={this.state.referredBy} name="referredBy" onChange={this.handleInputChange} placeholder="Enter your referral code..." />
                                     
                                 </div>
@@ -522,6 +525,26 @@ class Register extends Component {
                     </Snackbar>
                 </div>
                 </div>
+
+                    <div class="modal fade" id="whatIsThisModal" tabindex="-1" aria-labelledby="whatIsThisModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            {/* <h5 class="modal-title"></h5> */}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {/* <p>Modal body text goes here.</p> */}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            {/* <button type="button" class="btn btn-primary">Save changes</button> */}
+                        </div>
+                        </div>
+                    </div>
+                    </div>
                 <Footer />
                 </div>
         );

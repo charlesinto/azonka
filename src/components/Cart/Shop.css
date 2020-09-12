@@ -18,7 +18,10 @@
 
 
 .shop-product-image img{
-    height: 30vh !important;
+    /* height: 30vh !important; */
+    height: 140px;
+    object-fit: contain;
+    object-position: center;
 }
 .drp-shop-product-image{
     height: 12vh;

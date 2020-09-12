@@ -143,16 +143,17 @@ class Header extends Component {
                                             </ul>
                                         </div>
                                     </div>
-                                    {/* <div className="header-dropdown">
-                                        <a href="#N"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a>
-                                        <div className="header-menu">
+                                    <div className="">
+                                        <Link className="ml-2" to="/wishlist"><b>MY WISHLIST</b></Link>
+                                        {/* <li><Link to=""> </Link></li> */}
+                                        {/* <div className="header-menu">
                                             <ul>
                                                 <li><a href="#N"><img src={nigeriaFlag} alt="England flag" />NIGERIA</a></li>
                                                 <li><a href="#N"><img src={englishFlag} alt="England flag" />ENGLISH</a></li>
                                                 <li><a href="#N"><img src={frenchFlag} alt="France flag" />FRENCH</a></li>
                                             </ul>
-                                        </div>
-                                    </div> */}
+                                        </div> */}
+                                    </div>
                                     {/* <div className="dropdown compare-dropdown" style={{ border: 'none', zIndex: '900', backgroundColor: 'transparent', position: 'relative' }}>
                                         <a href="#N" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                             <i className="icon-retweet"></i> Compare (2)
@@ -183,7 +184,7 @@ class Header extends Component {
                                     <p className="welcome-msg" style={{ color: '#bce1f4', fontSize: '1.1rem' }}>{
                                         currentUser ?
                                     <b>{`${currentUser.firstName} ${currentUser.lastName}`}</b>
-                                            : <b>Welcome to Azonka, Login</b>
+                                            : <b>Welcome to Azonka</b>
 
                                     }</p>
 

@@ -243,7 +243,7 @@ class Disputes extends Component {
       title: "<strong>Accept Dispute</strong>",
       icon: "info",
       html:
-        'You agree that the buyer should be refunded and you take full responsiblities according to <a href="#!">Azonka terms and condition</a> ? ',
+        'You agree that the buyer should be refunded and  you accept full responsibility as prescribed by <a href="#!"><strong>Azonka Terms and Condition</strong></a> ? ',
 
       showCloseButton: true,
 

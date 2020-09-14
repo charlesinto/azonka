@@ -13231,7 +13231,7 @@ textarea.form-control {
 footer {
   background-color: #2c2c2c;
   color: #fff;
-  padding: 70px 0;
+  padding: 0 0 10px 0;
 }
 
 .footer-icon a {
@@ -13243,7 +13243,8 @@ footer {
   padding: 0 !important;
 }
 
-.footer-icon a .fab {
+.footer-icon a .fab,
+.footer-icon a .fas {
   line-height: 40px;
 }
 

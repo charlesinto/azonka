@@ -245,7 +245,9 @@ class ShopProducts extends Component {
     await this.props.itemDetailModalAction(itemDetails);
     return this.setState({ itemDetails });
   };
-
+  numberWithCommas = (number = "") => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   render() {
     const { products } = this.state;
     return (
@@ -373,11 +375,11 @@ class ShopProducts extends Component {
                               <div className="price-box">
                                 <span className="product-price mx-2">
                                   {" "}
-                                  ₦ {finalPrice}
+                                  ₦ {this.numberWithCommas(finalPrice)}
                                 </span>
                                 <span className="old-price product-price">
                                   {" "}
-                                  ₦ {sellingPrice}
+                                  ₦ {this.numberWithCommas(sellingPrice)}
                                 </span>
                                 <h2 className="product-title">
                                   <Link to="#">

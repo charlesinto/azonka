@@ -39,10 +39,11 @@ class ShopProducts extends Component {
   async componentDidMount() {
     this.loadShopData();
     let params = queryString.parse(this.props.location.search);
-    const { shopId } = params;
 
+    const { shopId } = params;
+    // console.log("Shop Id", shopId);
     await this.setState({ shopId });
-    console.log("called here o");
+    // console.log("called here o");
     this.searchItem();
     this.listen();
   }
@@ -113,18 +114,11 @@ class ShopProducts extends Component {
   async componentDidUpdate(prevProps, prevState) {
     // console.log("happened", prevState)
     let params = queryString.parse(this.props.location.search);
-    const { name, category, price, categoryName } = params;
+    const { shopId } = params;
     // console.log(params, prevState)
-    if (
-      name !== prevState.name ||
-      category !== prevState.category ||
-      price !== prevState.finalPrice ||
-      categoryName !== prevState.categoryName
-    ) {
-      console.log("calle here twice");
-      await this.setState({ name, category, finalPrice: price }, () =>
-        console.log(this.state)
-      );
+    if (shopId !== prevState.shopId) {
+      // console.log("calle here twice");
+      await this.setState({ shopId }, () => console.log(this.state));
       return this.searchItem();
     }
   }
@@ -147,8 +141,8 @@ class ShopProducts extends Component {
     //   finalPrice: finalPrice == null ? "0" : finalPrice,
     // };
     const { shopId, noOfRecords, productId, sortBy, sortOrder } = this.state;
-
-    await this.props.SearchItem({
+    // console.log("Lets look for: ", shopId);
+    await this.props.getProductsInStore({
       shopId,
       noOfRecords,
       productId,
@@ -261,8 +255,12 @@ class ShopProducts extends Component {
             ads="https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
             categoryName={this.state.categoryName}
             productName={this.state.name}
+            shopPage={true}
           />
-          <div className="container">
+          <div
+            className="container"
+            style={{ minHeight: "calc(100vh + 50px)" }}
+          >
             <div className="row d-flex justify-content-center">
               <div className="col-lg-12">
                 <nav className="toolbox">
@@ -429,15 +427,17 @@ class ShopProducts extends Component {
             </div>
             {/* <!-- End .row --> */}
           </div>
-          <div className=" bottom-banner mt-3">
-            <img
-              alt="bottom"
-              src="https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
-            />
+          <div className="container">
+            <div className=" bottom-banner mt-3">
+              <img
+                alt="bottom"
+                src="https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+              />
+            </div>
           </div>
           {/* <!-- End .container --> */}
 
-          <div className="mb-5"></div>
+          {/* <div className="mb-5"></div> */}
           {/* <!-- margin --> */}
         </main>
         <Footer />

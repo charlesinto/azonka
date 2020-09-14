@@ -1,33 +1,51 @@
-import React from 'react'
+import React from "react";
 import { Link } from "react-router-dom";
 
-export const ShopItemHeader = ({categoryName, productName, ads}) => {
-    
-    return (
-        <>
-            <div className="banner banner-cat" style={{backgroundImage: `url(${ads})`}}>
-                <div className="banner-content container" >
-                    <h2 className="banner-subtitle">check out over <span>200+</span></h2>
-                    <h1 className="banner-title">
-                        INCREDIBLE deals
-</h1>
-                    {/* <a href="#n" className="btn btn-dark">Shop Now</a> */}
-                </div>
-                {/* <!-- End .banner-content --> */}
-            </div>
-            {/* <!-- End .banner --> */}
-
-            <nav aria-label="breadcrumb" className="breadcrumb-nav">
-                <div className="container">
-                    <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/"><i className="icon-home"></i></Link></li>
-                        <li className="breadcrumb-item"><Link to="#n">{categoryName}</Link></li>
-                        <li className="breadcrumb-item active" aria-current="page">{productName}</li>
-                    </ol>
-                </div>
-                {/* <!-- End .container --> */}
-            </nav>
-
-        </>
-    )
-}
+export const ShopItemHeader = ({
+  categoryName,
+  productName,
+  ads,
+  shopPage,
+}) => {
+  //   console.log(shopPage);
+  return (
+    <>
+      <div
+        className="banner banner-cat"
+        style={{ backgroundImage: `url(${ads})` }}
+      >
+        <div className="banner-content container">
+          <h2 className="banner-subtitle">
+            check out over <span>200+</span>
+          </h2>
+          <h1 className="banner-title">INCREDIBLE deals</h1>
+          {/* <a href="#n" className="btn btn-dark">Shop Now</a> */}
+        </div>
+        {/* <!-- End .banner-content --> */}
+      </div>
+      {/* <!-- End .banner --> */}
+      {shopPage ? (
+        <div className="mb-2"></div>
+      ) : (
+        <nav aria-label="breadcrumb" className="breadcrumb-nav">
+          <div className="container">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/">
+                  <i className="icon-home"></i>
+                </Link>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to="#n">{categoryName}</Link>
+              </li>
+              <li className="breadcrumb-item active" aria-current="page">
+                {productName}
+              </li>
+            </ol>
+          </div>
+          {/* <!-- End .container --> */}
+        </nav>
+      )}
+    </>
+  );
+};

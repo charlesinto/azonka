@@ -20,7 +20,7 @@ export const getStores = (id = 0, pageNumber = 20) => {
           },
         }
       );
-      console.log(response.data.stores);
+      //   console.log(response.data.stores);
       dispatch({
         type: STORES_OBTAINED_SUCCESSFULLY,
         payload: response.data.stores,

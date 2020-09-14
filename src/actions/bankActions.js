@@ -16,19 +16,20 @@ export const getBanks = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get("https://api.paystack.co/bank");
-      const banks = response.data.data.filter(
-        (element) =>
-          element.longcode &&
-          element.longcode.trim() !== "" &&
-          element.gateway &&
-          element.gateway.trim() !== "" &&
-          element.code &&
-          element.code.trim() !== "" &&
-          element.slug &&
-          element.slug.trim() !== ""
-      );
+      const banks = response.data.data;
+      // response.data.data.filter(
+      //   (element) =>
+      //     element.longcode &&
+      //     element.longcode.trim() !== "" &&
+      //     element.gateway &&
+      //     element.gateway.trim() !== "" &&
+      //     element.code &&
+      //     element.code.trim() !== "" &&
+      //     element.slug &&
+      //     element.slug.trim() !== ""
+      // );
       // console.log(banks);
-      console.log(banks);
+      // console.log("BANK HERE: ", banks);
       dispatch({ type: GET_BANKS, payload: banks });
     } catch (error) {
       console.log("error in: => ", error);

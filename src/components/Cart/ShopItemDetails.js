@@ -380,13 +380,17 @@ class ShopItemDetails extends Component {
                             className="old-price mr-1"
                             style={{ fontSize: "1rem" }}
                           >
-                            &#8358; {detailsData && detailsData.sellingPrice}
+                            &#8358;{" "}
+                            {detailsData &&
+                              this.formatMoney(detailsData.sellingPrice / 100)}
                           </span>
                           <span
                             className="product-price "
                             style={{ fontSize: "1.2rem !important" }}
                           >
-                            &#8358; {detailsData && detailsData.finalPrice}
+                            &#8358;{" "}
+                            {detailsData &&
+                              this.formatMoney(detailsData.finalPrice / 100)}
                           </span>
                         </div>
                         {deliveryDays ? (
@@ -545,7 +549,7 @@ class ShopItemDetails extends Component {
                           {detailsData &&
                             detailsData.rating &&
                             Math.ceil(detailsData.rating)}
-                        </span>{" "}
+                        </span>
                         <span className="">
                           <i className="fas fa-star"></i>
                         </span>

@@ -286,7 +286,7 @@ class Cart extends Component {
     if (this.state.quantity) {
       let amountOrdered = cartData
         ? cartData.reduce((a, b) => {
-            return a + b.finalPrice * (this.state.quantity[b.id] || 1);
+            return a + (b.finalPrice / 100) * (this.state.quantity[b.id] || 1);
           }, 0)
         : 0;
       this.setState({ sum: amountOrdered });
@@ -330,7 +330,7 @@ class Cart extends Component {
             element.amountOrdered = sum;
           } else {
             element.amountOrdered =
-              element.finalPrice * this.state.quantity[element.id];
+              (element.finalPrice / 100) * this.state.quantity[element.id];
           }
         });
         let amountOrdered = cartData
@@ -629,7 +629,9 @@ class Cart extends Component {
                     <span>
                       &#8358;{" "}
                       {this.state.order &&
-                        this.numberWithCommas(this.state.order.totalAmount)}
+                        this.numberWithCommas(
+                          this.state.order.totalAmount / 100
+                        )}
                     </span>
                   </span>
                 </p>
@@ -670,7 +672,11 @@ class Cart extends Component {
                       { title: "Payment Mode", field: "paymentType" },
                       { title: "Delivery Code", field: "deliveryCode" },
                       { title: "Delivery Days", field: "deliveryDays" },
-                      { title: "Total Amount(NGN)", field: "totalAmount" },
+                      {
+                        title: "Total Amount(NGN)",
+                        field: "totalAmount",
+                        render: (data) => data.totalAmount / 100,
+                      },
                     ]}
                     data={this.state.order ? this.state.order.delivery : []}
                     title=""

@@ -150,13 +150,13 @@ class FlashSales extends Component {
                   <span className="product-price  p-price  d-flex justify-content-end">
                     &#8358;{" "}
                     {finalPrice && finalPrice > 0
-                      ? this.numberWithCommas(finalPrice)
-                      : this.numberWithCommas(sellingPrice)}
+                      ? this.numberWithCommas(finalPrice / 100)
+                      : this.numberWithCommas(sellingPrice / 100)}
                   </span>
                 </div>
                 <div className="col-sm-6 price-box ">
                   <span className="old-price p-price product-price d-flex justify-content-start">
-                    &#8358; {this.numberWithCommas(sellingPrice)}
+                    &#8358; {this.numberWithCommas(sellingPrice / 100)}
                   </span>
                 </div>
               </div>

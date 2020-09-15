@@ -56,11 +56,11 @@ class ItemListDataTable extends Component {
           render: (data, type, row, meta) => {
             if (type === "display") {
               return `<span class="dt-item">&#8358; ${this.numberWithCommas(
-                row.sellingPrice
+                row.sellingPrice / 100
               )}</span>`;
             }
             return `<span class="dt-item">&#8358; ${this.numberWithCommas(
-              row.sellingPrice
+              row.sellingPrice / 100
             )}</span>`;
           },
         },

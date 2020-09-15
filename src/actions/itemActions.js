@@ -138,6 +138,8 @@ export const createItem = (data) => {
         subImages,
         validationMessage,
         inValidElments,
+        sellingPrice,
+        finalPrice,
         ...rest
       } = data;
       console.log({
@@ -157,6 +159,8 @@ export const createItem = (data) => {
           otherImageUrl2,
           otherImageUrl3,
           otherImageUrl4,
+          finalPrice: `${parseInt(finalPrice) * 100}`,
+          sellingPrice: `${parseInt(sellingPrice) * 100}`,
         },
         {
           headers: {
@@ -863,10 +867,10 @@ export const updateItem = (id, data) => {
           category: "" + data.category,
           subCategory: "" + data.subCategory,
           store: "" + data.store,
-          sellingPrice: "" + data.sellingPrice,
-          costPrice: "" + data.finalPrice,
+          sellingPrice: "" + parseInt(data.sellingPrice) * 100,
+          costPrice: "" + parseInt(data.finalPrice) * 100,
           discounts: data.discounts,
-          finalPrice: "" + data.finalPrice,
+          finalPrice: "" + parseInt(data.finalPrice) * 100,
           deliveryType: data.deliveryType,
           deliveryLocation: data.deliveryLocation,
           width: data.width,

@@ -561,7 +561,13 @@ class Disputes extends Component {
                         { title: "Payment Mode", field: "paymentType" },
                         { title: "Delivery Code", field: "deliveryCode" },
                         { title: "Delivery Days", field: "deliveryDays" },
-                        { title: "Total Amount(NGN)", field: "totalAmount" },
+                        {
+                          title: "Total Amount(NGN)",
+                          field: "totalAmount",
+                          render: (data) => {
+                            return data.totalAmount / 100;
+                          },
+                        },
                       ]}
                       data={this.state.delivery}
                       title="Choose Delivery"

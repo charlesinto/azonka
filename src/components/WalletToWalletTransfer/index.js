@@ -109,7 +109,7 @@ class WalletToWalletTransfer extends Component {
 
     const amount = this.state.amount.split(",").join("");
     await this.props.transferToWallet({
-      amount,
+      amount: `${parseInt(amount) * 100}`,
       receiver: this.state.walletId,
       pin: this.state.pin,
       currency: "naira",

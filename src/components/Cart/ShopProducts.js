@@ -375,11 +375,11 @@ class ShopProducts extends Component {
                               <div className="price-box">
                                 <span className="product-price mx-2">
                                   {" "}
-                                  ₦ {this.numberWithCommas(finalPrice)}
+                                  ₦ {this.numberWithCommas(finalPrice / 100)}
                                 </span>
                                 <span className="old-price product-price">
                                   {" "}
-                                  ₦ {this.numberWithCommas(sellingPrice)}
+                                  ₦ {this.numberWithCommas(sellingPrice / 100)}
                                 </span>
                                 <h2 className="product-title">
                                   <Link to="#">
@@ -412,7 +412,7 @@ class ShopProducts extends Component {
                     })
                   ) : (
                     <div className="empty-products">
-                      <h3>No search result</h3>
+                      <h3>No Product(s)</h3>
                     </div>
                   )}
 

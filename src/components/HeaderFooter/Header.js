@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 // import englishFlag from "../../css/images/flags/en.png";
 // import nigeriaFlag from "../../css/images/flags/nigeria.png";
 // import frenchFlag from "../../css/images/flags/fr.png";
-import azonkaLogo from "../../css/images/logoGold.png";
+// import azonkaLogo from "../../css/images/logoGold.png";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import CartDropdown from "../Cart/CartDropdown";
@@ -261,12 +261,16 @@ class Header extends Component {
                 </div>
               </div>
             </div>
-            <div className="header-middle">
+            <div className="header-middle py-2">
               <div className="container">
                 <div className="header-left">
-                  <Link to="/" style={{ display: "block" }} className="logo">
+                  <Link
+                    to="/"
+                    style={{ display: "block" }}
+                    className="logo py-1"
+                  >
                     <img
-                      src={azonkaLogo}
+                      src="http://167.99.154.149/assets/media/logos/logo.png"
                       style={{ objectFit: "contain" }}
                       alt="Porto Logo"
                     />

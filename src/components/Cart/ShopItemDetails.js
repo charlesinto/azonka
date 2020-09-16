@@ -714,9 +714,7 @@ class ShopItemDetails extends Component {
                                       id={id}
                                       name={name}
                                       brandName={brandName}
-                                      sellingPrice={this.formatMoney(
-                                        sellingPrice
-                                      )}
+                                      sellingPrice={sellingPrice}
                                       model={model}
                                       mainImageUrl={mainImageUrl}
                                       featArray={this.state.products}

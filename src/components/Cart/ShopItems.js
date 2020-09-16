@@ -337,6 +337,7 @@ class ShopItems extends Component {
                         name,
                         finalPrice,
                         sellingPrice,
+                        rating,
                         createdAt,
                         mainImageUrl,
                       } = data;
@@ -362,7 +363,7 @@ class ShopItems extends Component {
                                 <div className="product-ratings">
                                   <span
                                     className="ratings"
-                                    style={{ width: "50%" }}
+                                    style={{ width: `${(rating / 5) * 100}%` }}
                                   ></span>
                                 </div>
                               </div>

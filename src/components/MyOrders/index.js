@@ -692,15 +692,15 @@ class Cart extends Component {
                       searchFieldStyle: {},
                       actionsColumnIndex: -1,
                     }}
-                    actions={[
-                      {
-                        icon: "save",
-                        tooltip: "Save User",
-                        onClick: (event, rowData) => {
-                          // Do save operation
-                        },
-                      },
-                    ]}
+                    // actions={[
+                    //   {
+                    //     icon: "savetwo",
+                    //     tooltip: "Save User",
+                    //     onClick: (event, rowData) => {
+                    //       // Do save operation
+                    //     },
+                    //   },
+                    // ]}
                   />
                 </div>
               </div>

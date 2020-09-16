@@ -155,9 +155,9 @@ class WalletToWalletTransfer extends Component {
               <div className="row">
                 <div className="col-md-6 col-sm-12">
                   <div className="form-group">
-                    <label htmlFor="walletId">Reciever Wallet Id</label>
+                    <label htmlFor="walletId">Reciever Wallet ID</label>
                     <input
-                      type="text"
+                      type="number"
                       name="walletId"
                       value={this.state.walletId}
                       className="form-control"

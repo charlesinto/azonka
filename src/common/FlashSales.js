@@ -105,7 +105,14 @@ class FlashSales extends Component {
 
   render() {
     // console.log("nonso", this.state.imgLoaded)
-    const { id, name, sellingPrice, mainImageUrl, finalPrice } = this.props;
+    const {
+      id,
+      name,
+      sellingPrice,
+      mainImageUrl,
+      rating,
+      finalPrice,
+    } = this.props;
     return (
       <div className="product col-md-3" key={id}>
         <figure className="product-image-container">
@@ -134,11 +141,14 @@ class FlashSales extends Component {
           </span>
         </figure>
         <div className="product-details">
-          {/* <div className="ratings-container">
+          <div className="ratings-container">
             <div className="product-ratings">
-              <span className="ratings" style={{ width: "80%" }}></span>
+              <span
+                className="ratings"
+                style={{ width: `${(rating / 5) * 100}%` }}
+              ></span>
             </div>
-          </div> */}
+          </div>
 
           <h2 className="product-title">
             <Link to="#">{name} </Link>

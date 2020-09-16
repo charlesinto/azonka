@@ -24,6 +24,7 @@
     "react-bootstrap-sweetalert": "^5.1.7",
     "react-dom": "^16.10.2",
     "react-flags-select": "^1.1.10",
+    "react-idle-timer": "^4.3.6",
     "react-image-lightbox": "^5.1.1",
     "react-owl-carousel": "^2.3.1",
     "react-paginate": "^6.3.2",

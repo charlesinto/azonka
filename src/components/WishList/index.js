@@ -459,25 +459,27 @@ class WishList extends Component {
                 
                 </div> */}
           </div>
-          <div className=" bottom-banner-product-detail mt-3">
-            <img
-              alt="bottom"
-              src={`${
-                this.state.bottomBanner1
-                  ? this.state.bottomBanner1.url
-                  : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
-              }`}
-            />
-          </div>
-          <div className=" bottom-banner-product-detail mt-2 mb-2">
-            <img
-              alt="bottom"
-              src={`${
-                this.state.bottomBanner2
-                  ? this.state.bottomBanner2.url
-                  : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
-              }`}
-            />
+          <div className="container">
+            <div className=" bottom-banner-product-detail mt-3">
+              <img
+                alt="bottom"
+                src={`${
+                  this.state.bottomBanner1
+                    ? this.state.bottomBanner1.url
+                    : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                }`}
+              />
+            </div>
+            <div className=" bottom-banner-product-detail mt-2">
+              <img
+                alt="bottom"
+                src={`${
+                  this.state.bottomBanner2
+                    ? this.state.bottomBanner2.url
+                    : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                }`}
+              />
+            </div>
           </div>
           {/* <div className="mb-6"></div> */}
         </div>

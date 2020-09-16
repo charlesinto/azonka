@@ -93,6 +93,7 @@ class index extends Component {
       );
     }
     this.props.initiateRegistration();
+    console.log("amount to widthdraw: ", amountToWithdraw);
     await this.props.withdrawlFromWallet(
       parseInt(amountToWithdraw) * 100,
       bank,
@@ -136,7 +137,7 @@ class index extends Component {
                         htmlFor="ccnum"
                         className="rl-label required rm-margin-top"
                       >
-                        Amount to withdraw
+                        Amount to withdraw (NGN)
                       </label>
                       <input
                         onKeyDown={this.handlePinCodeInputChange}

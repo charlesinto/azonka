@@ -16,24 +16,7 @@ class WalletDataTable extends Component {
         {
           title: "Type",
           render: (data, type, row, meta) => {
-            if (type === "display") {
-              if (row.type === "deposit") {
-                return `<span class="wallet-text text-success">${
-                  row.type === "deposit" ? "Credit" : "Debit"
-                }</span>`;
-              }
-              return `<span class="wallet-text text-danger">${
-                row.type === "deposit" ? "Credit" : "Debit"
-              }</span>`;
-            }
-            if (row.type === "deposit") {
-              return `<span class="wallet-text text-success">${
-                row.type === "deposit" ? "Credit" : "Debit"
-              }</span>`;
-            }
-            return `<span class="wallet-text text-danger">${
-              row.type === "deposit" ? "Credit" : "Debit"
-            }</span>`;
+            return `<span class="wallet-text">${row.type.toUpperCase()}</span>`;
           },
           // responsivePriority: 3
         },

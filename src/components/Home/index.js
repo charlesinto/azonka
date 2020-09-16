@@ -89,6 +89,7 @@ class Home extends Component {
       },
     ],
     bottomBanner: null,
+    homeProducts: [],
     categories: [],
     // services: [
     //     {id: 1, name: }
@@ -139,6 +140,7 @@ class Home extends Component {
     this.props.initiateRegistration();
     this.props.getProductCategorySubcategory();
     this.loadFeaturedItems();
+    this.loadHomeItems();
     console.log("called ");
     this.props.getAdvertCategory();
     const response = await axios.get("/api/v1/category/get-categories/0/12");
@@ -201,11 +203,11 @@ class Home extends Component {
   loadHomeItems = async () => {
     let token = localStorage.getItem("x-access-token");
     if (token) {
-      await this.props.fetchFeaturedItems();
-      this.setState({ products: this.props.products });
+      await this.props.fetchHomeItems();
+      this.setState({ homeProducts: this.props.homeProducts });
     } else {
-      await this.props.fetchFeaturedItems();
-      this.setState({ products: this.props.products });
+      await this.props.fetchHomeItems();
+      this.setState({ homeProducts: this.props.homeProducts });
     }
   };
   handleAddToCart = async (id) => {
@@ -241,14 +243,16 @@ class Home extends Component {
                     model,
                     sellingPrice,
                     mainImageUrl,
+                    rating,
                   } = product;
                   return (
                     <FlashSales
                       key={i}
                       id={id}
+                      rating={rating}
                       name={name}
                       brandName={brandName}
-                      sellingPrice={this.formatMoney(sellingPrice)}
+                      sellingPrice={sellingPrice}
                       model={model}
                       mainImageUrl={mainImageUrl}
                       finalPrice={finalPrice}
@@ -426,10 +430,7 @@ class Home extends Component {
                         <div className="side-menu-container bg-white shadow p-3">
                           <h2 className="bg-white rounded">CATEGORIES</h2>
 
-                          <nav
-                            className="side-nav"
-                            style={{ maxHeight: "400px", overflowY: "scroll" }}
-                          >
+                          <nav className="side-nav">
                             <ul className="menu menu-vertical sf-arrows">
                               {/* <li className="active"><Link to="/"><i className="icon-home"></i>Home</Link></li> */}
                               {this.renderCategories()}
@@ -789,14 +790,16 @@ class Home extends Component {
                               finalPrice,
                               sellingPrice,
                               mainImageUrl,
+                              rating,
                             } = res;
                             return (
                               <FeatureProductItem
                                 finalPrice={finalPrice}
                                 id={id}
                                 name={name}
+                                rating={rating}
                                 brandName={brandName}
-                                sellingPrice={this.formatMoney(sellingPrice)}
+                                sellingPrice={sellingPrice}
                                 model={model}
                                 mainImageUrl={mainImageUrl}
                                 featArray={this.state.products}
@@ -819,8 +822,8 @@ class Home extends Component {
                     style={{ margin: "4vh 0px" }}
                   >
                     <br />
-                    {this.state.products
-                      ? this.state.products.map((res, i) => {
+                    {this.state.homeProducts
+                      ? this.state.homeProducts.map((res, i) => {
                           let {
                             id,
                             name,
@@ -829,14 +832,16 @@ class Home extends Component {
                             model,
                             sellingPrice,
                             mainImageUrl,
+                            rating,
                           } = res;
                           return (
                             <FlashSales
                               key={i}
                               id={id}
                               name={name}
+                              rating={rating}
                               brandName={brandName}
-                              sellingPrice={this.formatMoney(sellingPrice)}
+                              sellingPrice={sellingPrice}
                               model={model}
                               mainImageUrl={mainImageUrl}
                               finalPrice={finalPrice}
@@ -959,7 +964,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { products, localProducts } = state.inventory;
+  const { products, localProducts, homeProducts } = state.inventory;
   const {
     home: { categories, subCategories, adverts },
   } = state;
@@ -967,6 +972,7 @@ const mapStateToProps = (state) => {
     categories,
     subCategories,
     products,
+    homeProducts,
     localProducts,
     adverts,
   };

@@ -42,6 +42,7 @@ import {
   PRODUCT_FOUND,
   HEADER_SEARCH_SUCCESS_ADVERT,
   CREDITS_OBTAINED_SUCCESSFULLY,
+  FETCH_HOME_ITEMS_SUCCESSFUL,
 } from "./types";
 import { fileUpload } from "../components/util/FileUploader";
 import async from "async";
@@ -237,7 +238,10 @@ export const fetchItems = () => {
       if (error.response) {
         if (error && error.response && error.response.status === 401) {
           console.log(error.response);
-          return swal.fire("Authentication failed");
+          swal.fire("Authentication failed");
+          const host = window.location.origin;
+          window.location = `${host}/users/login`;
+          return;
         }
         if (error.response) {
           return swal.fire(error.response.data.message.substr(0, 100));
@@ -264,6 +268,26 @@ export const fetchFeaturedItems = () => {
       } = response;
       localStorage.setItem("shop", JSON.stringify(products));
       dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products });
+      dispatch({ type: STOP_LOADING, payload: "" });
+    } catch (error) {
+      // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
+      dispatch({ type: STOP_LOADING, payload: "" });
+    }
+  };
+};
+
+export const fetchHomeItems = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `/api/v1/user/product/get-homepage-products/${0}/${100}`
+      );
+      console.log("response FOR HOME: ", response);
+      const {
+        data: { products },
+      } = response;
+      localStorage.setItem("shop", JSON.stringify(products));
+      dispatch({ type: FETCH_HOME_ITEMS_SUCCESSFUL, payload: products });
       dispatch({ type: STOP_LOADING, payload: "" });
     } catch (error) {
       // dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message })
@@ -958,7 +982,7 @@ export const registerPayment = (
   return async (dispatch) => {
     try {
       await axios.post(
-        "/api/v1/user/git/create",
+        "/api/v1/user/order/create",
         {
           ...data,
         },

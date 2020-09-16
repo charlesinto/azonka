@@ -1337,7 +1337,7 @@ header,
 
 .logo {
   width: 120px;
-  height: 56px;
+  /* height: 56px; */
 }
 
 .logo.small {
@@ -13260,4 +13260,9 @@ footer {
 }
 .footer-icon a .fa-youtube {
   color: #e62117;
+}
+
+.side-menu-container {
+  max-height: 450px !important;
+  overflow-x: hidden;
 }

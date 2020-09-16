@@ -109,7 +109,14 @@ class FeatureProductItem extends Component {
   };
   render() {
     // console.log("joro", this.props)
-    const { id, name, sellingPrice, finalPrice, mainImageUrl } = this.props;
+    const {
+      id,
+      name,
+      sellingPrice,
+      finalPrice,
+      rating,
+      mainImageUrl,
+    } = this.props;
     return (
       <div className="product" key={id} style={{ marginRight: 8 }}>
         {/* <ItemModal /> */}
@@ -143,6 +150,14 @@ class FeatureProductItem extends Component {
               <span className="ratings" style={{ width: "80%" }}></span>
             </div>
           </div> */}
+          <div className="ratings-container">
+            <div className="product-ratings">
+              <span
+                className="ratings"
+                style={{ width: `${(rating / 5) * 100}%` }}
+              ></span>
+            </div>
+          </div>
 
           <h2 className="product-title">
             <Link to="#" className="wordbreak">

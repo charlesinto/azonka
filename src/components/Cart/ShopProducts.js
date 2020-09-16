@@ -342,6 +342,7 @@ class ShopProducts extends Component {
                         sellingPrice,
                         createdAt,
                         mainImageUrl,
+                        rating,
                       } = data;
                       return (
                         <div className="col-6 col-md-4 col-xl-3" key={id}>
@@ -365,7 +366,7 @@ class ShopProducts extends Component {
                                 <div className="product-ratings">
                                   <span
                                     className="ratings"
-                                    style={{ width: "50%" }}
+                                    style={{ width: `${(rating / 5) * 100}%` }}
                                   ></span>
                                 </div>
                               </div>

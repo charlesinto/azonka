@@ -5,10 +5,15 @@ import { ToastProvider } from "react-toast-notifications";
 import * as actions from "../../actions";
 import Spinner from "../../assets/spinner.svg";
 import SweetAlert from "react-bootstrap-sweetalert";
+import IdleTimer from "react-idle-timer";
 // import Footer from "../HeaderFooter/Footer";
 // import Header from '../HeaderFooter/Header';
 
 class Layout extends Component {
+  constructor(props) {
+    super(props);
+    this.idleTimer = null;
+  }
   logout = () => {
     this.props.logout();
     return <Redirect to="/users/login" />;
@@ -34,10 +39,25 @@ class Layout extends Component {
   hideAlert = () => {
     this.props.closeSnackBar();
   };
+  handleOnIdle = () => {
+    if (localStorage.getItem("x-access-token")) {
+      this.logout();
+    }
+  };
   render() {
     console.log(this.props.redirectToVerify);
     return (
       <ToastProvider>
+        <IdleTimer
+          ref={(ref) => {
+            this.idleTimer = ref;
+          }}
+          timeout={1000 * 60 * 15}
+          onActive={() => {}}
+          onIdle={this.handleOnIdle}
+          onAction={() => {}}
+          debounce={250}
+        />
         {/* <Header /> */}
         {this.props.children}
         {/* <Footer /> */}

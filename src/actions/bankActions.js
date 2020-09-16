@@ -340,7 +340,7 @@ export const getUserWalletDetals = (lastCount = 0, numOfRecords = 100) => {
         },
       });
       const { transactions, balance, id } = response2.data.wallet;
-      // console.log(response2.data.wallet);
+      console.log(transactions);
       dispatch({
         type: USER_WALLET_OBTAINED_SUCCESSFULLY,
         payload: { transactions, balance, walletId: id },
@@ -371,7 +371,7 @@ export const withdrawlFromWallet = (amount, bank, pin, currency = "") => {
   console.log(amount, bank, currency, pin);
   return async (dispatch) => {
     try {
-      await axios.post(
+      const responseWithdraw = await axios.post(
         "/api/v1/user/wallet/request-withdrawal",
         {
           amount: `${amount}`,
@@ -391,12 +391,13 @@ export const withdrawlFromWallet = (amount, bank, pin, currency = "") => {
         },
       });
       const { transactions, balance } = response2.data.wallet;
+      // console.log(responseWithdraw);
       dispatch({
         type: USER_WALLET_OBTAINED_SUCCESSFULLY,
         payload: { transactions, balance },
       });
       dispatch({ type: STOP_LOADING, payload: "" });
-      dispatch({ type: SUCCESS_ALERT, payload: "Fund withdrawal successful" });
+      dispatch({ type: SUCCESS_ALERT, payload: responseWithdraw.data.message });
     } catch (error) {
       console.log("er", error.response);
       if (error.response.status === 498) {

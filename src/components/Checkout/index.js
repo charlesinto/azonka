@@ -8,7 +8,7 @@ import * as actions from "../../actions";
 import Validator from "validator";
 import { PAY_STACK_PUBLIC_KEY } from "../../config/config";
 import Swal from "sweetalert2";
-// import Axios from "axios";
+import Axios from "axios";
 import locationState from "../../helper/locationState";
 
 class Checkout extends Component {
@@ -776,11 +776,9 @@ class Checkout extends Component {
               .$("#orderDetails")
               .modal({ backdrop: "static", keyboard: false, show: true })
         );
-
-        console.log("Details: ", deliveryFeeDetails);
       } catch (error) {
         this.props.stopLoading();
-        console.log(error);
+        console.log("here called in here: ", error);
       }
     }
   };
@@ -850,7 +848,7 @@ class Checkout extends Component {
         const locations = await this.getDeliveryDetailsonOrder(
           productGroupedBySeller
         );
-        console.log("locations: ", locations);
+
         const orderLocation = {};
         locations.forEach((point) => {
           if (orderLocation[point.seller]) {
@@ -903,7 +901,7 @@ class Checkout extends Component {
           total += productGroupedBySeller[seller].delivery.deliveryAmount;
         });
         productGroupedBySeller.totalDeliveryFee = total;
-        console.log("Details: ", productGroupedBySeller);
+
         return resolve(productGroupedBySeller);
       } catch (error) {
         this.props.stopLoading();
@@ -914,6 +912,7 @@ class Checkout extends Component {
   };
   getDeliveryDetailsonOrder = (productGroupedBySeller, cb) => {
     // let total = 0;
+
     let promises = [];
     Object.keys(productGroupedBySeller).forEach((seller) => {
       // let distance;
@@ -962,69 +961,98 @@ class Checkout extends Component {
   };
   geoCodeAddress = (address = "", seller, type) => {
     return new Promise(async (resolve, reject) => {
-      const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
-      const response = await fetch(
-        // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`,
-        // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url='https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}'`,
-        `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
-        // {
-        //   // headers: {
-        //   //   // "Access-Control-Allow-Headers": {
-        //   //   //   "Content-Type": "application/json",
-        //   //   // },
-        //   //   "Content-Type": "application/json",
-        //   // },
-        // }
-      );
-      const result = await response.json();
+      // const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
+      // const response = await fetch(
+      //   // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`,
+      //   // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url='https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}'`,
+      //   `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
+      //   // {
+      //   //   // headers: {
+      //   //   //   // "Access-Control-Allow-Headers": {
+      //   //   //   //   "Content-Type": "application/json",
+      //   //   //   // },
+      //   //   //   "Content-Type": "application/json",
+      //   //   // },
+      //   // }
+      // );
+      // const result = await response.json();
 
-      if (result.status === "OK") {
-        const { geometry } = result.results[0];
-        const { location } = geometry;
-        const { lat, lng } = location;
-        return resolve({ lat, lng, seller, type });
-      }
-      console.log(result);
+      // if (result.status === "OK") {
+      //   const { geometry } = result.results[0];
+      //   const { location } = geometry;
+      //   const { lat, lng } = location;
+      //   return resolve({ lat, lng, seller, type });
+      // }
+      // console.log(result);
 
-      resolve(null);
+      // resolve(null);
 
       // const duration = result.rows[0].elements[0].duration;
 
       // const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
+      try {
+        const response = await Axios.post(
+          "https://azonka.herokuapp.com/api/v1/delivery/geo-code-address",
+          {
+            address,
+            seller,
+            type,
+          }
+        );
+        const dt = response.data;
+        // resolve({ totalDrviningDistance, seller });
+        resolve(dt);
+      } catch (error) {
+        console.log("error in geocode: ", error);
+        this.props.stopLoading();
+        reject(error);
+      }
     });
   };
   getDrivingDistance = (lat1, lon1, lat2, lon2, seller) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
-        const response = await fetch(
-          // `https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`,
-          // {
-          //   // headers: {
-          //   //   // "Access-Control-Allow-Headers": {
-          //   //   //   "Content-Type": "application/json",
-          //   //   // },
-          //   //   // "Access-Control-Allow-Origin": "*",
-          //   //   "content-type": "application/json",
-          //   // },
-          // }
-          // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url=https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
-          `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
+        // const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
+        // const response = await fetch(
+        //   // `https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`,
+        //   // {
+        //   //   // headers: {
+        //   //   //   // "Access-Control-Allow-Headers": {
+        //   //   //   //   "Content-Type": "application/json",
+        //   //   //   // },
+        //   //   //   // "Access-Control-Allow-Origin": "*",
+        //   //   //   "content-type": "application/json",
+        //   //   // },
+        //   // }
+        //   // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url=https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
+        //   `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
+        // );
+
+        // const result = await response.json();
+
+        // const distance = result.rows[0].elements[0].distance;
+        // if (!result.rows[0]) {
+        //   return resolve({ totalDrviningDistance: 1000, seller });
+        // }
+        // // const duration = result.rows[0].elements[0].duration;
+
+        // const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
+        const response = await Axios.post(
+          "https://azonka.herokuapp.com/api/v1/delivery/get-driving-distance",
+          {
+            lat1,
+            lon1,
+            lat2,
+            lon2,
+            seller,
+          }
         );
-
-        const result = await response.json();
-
-        const distance = result.rows[0].elements[0].distance;
-        if (!result.rows[0]) {
-          return resolve({ totalDrviningDistance: 1000, seller });
-        }
-        // const duration = result.rows[0].elements[0].duration;
-
-        const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
-
-        resolve({ totalDrviningDistance, seller });
+        const dt = response.data;
+        // resolve({ totalDrviningDistance, seller });
+        resolve(dt);
       } catch (error) {
         console.log(error);
+        this.props.stopLoading();
         reject(error);
       }
     });

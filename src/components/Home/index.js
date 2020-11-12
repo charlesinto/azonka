@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import notifCloseIcon from "../../images/dashboard/notif-close-icon.png";
 import Zoom from "react-reveal/Zoom";
 // import logoHeader from "../../images/logo_header.png";
-import Slider from "react-slick";
+// import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // import Header from "../HeaderFooter/Header";
@@ -143,9 +143,12 @@ class Home extends Component {
     this.loadHomeItems();
     console.log("called ");
     this.props.getAdvertCategory();
-    const response = await axios.get("/api/v1/category/get-categories/0/12");
-    // console.log(response)
+    const response = await axios.get(
+      "/api/v1/category/get-categories/0/100000"
+    );
+    // console.log(response);
 
+    this.props.setCategories();
     this.setState(
       {
         categories: response.data.categories,
@@ -158,6 +161,7 @@ class Home extends Component {
     //remove popup after 5secs
     setTimeout(() => this.setState({ showPopUp: false }), 10000);
   }
+  componentWillUnmount() {}
   getFeaturedCategoriesImages = async () => {
     const responseAds = await axios.get("/api/v1/ad/get-ads/0/1000");
 
@@ -221,10 +225,10 @@ class Home extends Component {
   }
 
   renderAdverts = () => {
-    return this.props.adverts.map((item) =>
+    return this.props.adverts.map((item, index) =>
       item.products.length >= 3 ? (
         <>
-          <div className="bg-white mb-4" key={item.id}>
+          <div className="bg-white mb-2" key={item.id}>
             <div className="d-flex justify-content-between align-items-center px-4 header-row-special">
               <h3 className="text-light py-3 m-0">{item.name}</h3>
               <Link className="py-3 m-0" to={`/specials/${item.id}`}>
@@ -265,21 +269,136 @@ class Home extends Component {
             </div>
           </div>
           <div className="container-fluid mb-2 mt-0">
-            <div className="row">
-              <div className=" bottom-banner mt-3">
-                <img
-                  alt="bottom"
-                  src={`${
-                    this.state.bottomBanner
-                      ? this.state.bottomBanner.url
-                      : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
-                  }`}
-                />
+            {index % 2 !== 0 ? (
+              <div className="row">
+                <div className=" bottom-banner mt-3">
+                  <img
+                    alt="bottom"
+                    src={`${
+                      this.state.bottomBanner
+                        ? this.state.bottomBanner.url
+                        : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                    }`}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="row">
+                <div className="col-md-6">
+                  <div className=" bottom-banner mt-3">
+                    <img
+                      alt="bottom"
+                      src={`${
+                        this.state.bottomBanner
+                          ? this.state.bottomBanner.url
+                          : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                      }`}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className=" bottom-banner mt-3">
+                    <img
+                      alt="bottom"
+                      src={`${
+                        this.state.bottomBanner
+                          ? this.state.bottomBanner.url
+                          : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="bg-white mb-2" key={item.id}>
+            <div className="d-flex justify-content-between align-items-center px-4 header-row-special">
+              <h3 className="text-light py-3 m-0">{item.name}</h3>
+              <Link className="py-3 m-0" to={`/specials/${item.id}`}>
+                <h3 className="text-light py-3 m-0"> See all </h3>
+              </Link>
+            </div>
+            <hr />
+            <div className="container">
+              <div className="row p-4">
+                {item.products.map((product, i) => {
+                  let {
+                    id,
+                    name,
+                    finalPrice,
+                    brandName,
+                    model,
+                    sellingPrice,
+                    mainImageUrl,
+                    rating,
+                  } = product;
+                  return (
+                    <FlashSales
+                      key={i}
+                      id={id}
+                      rating={rating}
+                      name={name}
+                      brandName={brandName}
+                      sellingPrice={sellingPrice}
+                      model={model}
+                      mainImageUrl={mainImageUrl}
+                      finalPrice={finalPrice}
+                      featArray={this.state.products}
+                      handleMoveWishList={this.handleMoveWishList}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
+          <div className="container-fluid mb-2 mt-0">
+            {index % 2 !== 0 ? (
+              <div className="row">
+                <div className=" bottom-banner mt-3">
+                  <img
+                    alt="bottom"
+                    src={`${
+                      this.state.bottomBanner
+                        ? this.state.bottomBanner.url
+                        : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                    }`}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="row">
+                <div className="col-md-6">
+                  <div className=" bottom-banner mt-3">
+                    <img
+                      alt="bottom"
+                      src={`${
+                        this.state.bottomBanner
+                          ? this.state.bottomBanner.url
+                          : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                      }`}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className=" bottom-banner mt-3">
+                    <img
+                      alt="bottom"
+                      src={`${
+                        this.state.bottomBanner
+                          ? this.state.bottomBanner.url
+                          : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </>
-      ) : null
+      )
     );
   };
   renderPopup() {
@@ -354,8 +473,6 @@ class Home extends Component {
         <li>
           <a
             href={`${window.origin}/shop?name=&category=${item.id}&categoryName=${item.name}`}
-            rel="noopener noreferrer"
-            target="_blank"
             className="sf-with-ul"
           >
             <i className="icon-briefcase"></i>
@@ -421,7 +538,7 @@ class Home extends Component {
           }}
         >
           <main className="main">
-            <div className="container">
+            <div className="container-fluid">
               <div className="row mt-4">
                 <div className="col-md-4 col-lg-4">
                   <aside className="sidebar-home">
@@ -773,8 +890,37 @@ class Home extends Component {
 
                   <hr className="my-4"></hr>
 
-                  <div className="bg-white  px-5 p-5">
-                    <Slider
+                  <div className="bg-white row px-5">
+                    {this.state.products
+                      ? this.state.products.map((res) => {
+                          let {
+                            id,
+                            name,
+                            brandName,
+                            model,
+                            finalPrice,
+                            sellingPrice,
+                            mainImageUrl,
+                            rating,
+                          } = res;
+                          return (
+                            <FeatureProductItem
+                              finalPrice={finalPrice}
+                              id={id}
+                              name={name}
+                              rating={rating}
+                              brandName={brandName}
+                              sellingPrice={sellingPrice}
+                              model={model}
+                              mainImageUrl={mainImageUrl}
+                              featArray={this.state.products}
+                              handleMoveWishList={this.handleMoveWishList}
+                            />
+                          );
+                        })
+                      : null}
+
+                    {/* <Slider
                       {...{
                         ...settings,
                         slidesToShow: this.state.slidesToShow,
@@ -808,7 +954,7 @@ class Home extends Component {
                             );
                           })
                         : null}
-                    </Slider>
+                    </Slider> */}
                   </div>
 
                   <div className="mb-6"></div>
@@ -978,16 +1124,16 @@ const mapStateToProps = (state) => {
   };
 };
 
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 4,
-  arrows: false,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 3000,
-};
+// const settings = {
+//   dots: false,
+//   infinite: true,
+//   speed: 500,
+//   slidesToShow: 4,
+//   arrows: false,
+//   slidesToScroll: 1,
+//   autoplay: true,
+//   autoplaySpeed: 3000,
+// };
 
 // const settingsAdvert = {
 //     dots: false,

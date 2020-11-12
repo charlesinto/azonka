@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import * as actions from "../actions";
+import { connect } from "react-redux";
 export class DeliveryMore extends Component {
   state = { checkedItems: [] };
   handleItemDelete = (id) => {
@@ -262,4 +263,4 @@ export class DeliveryMore extends Component {
   }
 }
 
-export default DeliveryMore;
+export default connect(null, actions)(DeliveryMore);

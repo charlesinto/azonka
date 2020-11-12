@@ -14,6 +14,15 @@ class StoreDataTable extends Component {
       data: this.props.data, //country, state, address,name, createdAt
       columns: [
         {
+          title: "Store ID",
+          render: (data, type, row, meta) => {
+            if (type === "display") {
+              return row.id;
+            }
+            return row.id;
+          },
+        },
+        {
           title: "Store Name",
           render: (data, type, row, meta) => {
             if (type === "display") {

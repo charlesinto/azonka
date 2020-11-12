@@ -129,7 +129,7 @@ class Dashboard extends Component {
                             : ""
                         }
                       >
-                        <Link to="/users/change-pincode">Change Pincode</Link>
+                        <Link to="/users/change-pincode">Change PIN</Link>
                       </li>
                       <li
                         className={
@@ -175,18 +175,7 @@ class Dashboard extends Component {
                           >
                             <Link to="/users/wallet/fund">Fund Wallet</Link>
                           </li>
-                          <li
-                            className={
-                              this.props.dashboardActiveLink ===
-                              "Wallet Withdrawal"
-                                ? "active"
-                                : ""
-                            }
-                          >
-                            <Link to="/users/wallet/withdraw">
-                              Wallet Withdrawal
-                            </Link>
-                          </li>
+
                           <li
                             className={
                               this.props.dashboardActiveLink ===
@@ -197,6 +186,18 @@ class Dashboard extends Component {
                           >
                             <Link to="/users/wallet/wallet-transfer">
                               Wallet To Wallet Transfer
+                            </Link>
+                          </li>
+                          <li
+                            className={
+                              this.props.dashboardActiveLink ===
+                              "Wallet Withdrawal"
+                                ? "active"
+                                : ""
+                            }
+                          >
+                            <Link to="/users/wallet/withdraw">
+                              Wallet Withdrawal
                             </Link>
                           </li>
                         </ul>

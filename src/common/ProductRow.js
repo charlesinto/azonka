@@ -39,12 +39,12 @@ class ProductRow extends Component {
   };
   handleIncreaseQty = (e, finalPrice, id) => {
     let { qty } = this.state;
-    this.props.calSums((finalPrice / 100) * (qty + 1), id, qty + 1);
+    this.props.calSums(finalPrice * (qty + 1), id, qty + 1);
   };
   handleDecreaseQty = (e, finalPrice, id) => {
     let { qty } = this.state;
     let newQuantity = qty > 1 ? qty - 1 : 1;
-    this.props.calSums((finalPrice / 100) * newQuantity, id, newQuantity);
+    this.props.calSums(finalPrice * newQuantity, id, newQuantity);
   };
   handleCheckout = () => {};
   handleItemDelete = (id) => {

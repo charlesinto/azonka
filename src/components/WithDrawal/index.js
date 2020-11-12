@@ -4,6 +4,7 @@ import validator from "validator";
 import WalletDataTable from "../../common/WalletDataTable";
 import Dashboard from "../HOC/Dashboard";
 import * as actions from "../../actions";
+// import MaterialTable from "material-table";
 
 class index extends Component {
   INITIAL_STATE = {
@@ -28,6 +29,13 @@ class index extends Component {
   }
   numberWithCommas = (number = "") => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  converToDate = (timestamp) => {
+    // const MONTHS = ['January','February', 'March', 'April', 'May', 'June', 'July'
+    //     ,'August','September', 'October', 'November', 'Decemeber']
+    const date = new Date(timestamp);
+    // return `${date.getDate()} ${MONTHS[date.getMonth()]}, ${date.getFullYear()}`
+    return date.toLocaleString();
   };
   handlePinCodeInputChange = (e) => {
     // console.log(e.key)
@@ -109,8 +117,8 @@ class index extends Component {
       <Dashboard>
         <div className="container-fluid">
           <div className="container-fluid">
-            <div className="row">
-              <div className="current-balance mt-card">
+            <div className="row ">
+              <div className="current-balance bg-white">
                 <div>
                   <span className="mr-2">Current Balance</span>
                   <span className="text-success">
@@ -124,12 +132,18 @@ class index extends Component {
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-lg-12 col-md-12 col-sm-12 mt-card-shadow">
-              <div className="form-box-item rm-border">
-                <h4>Wallet Withdrawal</h4>
+          <div className="row pt-3">
+            <div className="col-md-12">
+              <div className=" rm-border">
+                {/* <h4>Wallet Withdrawal</h4> */}
                 <hr className="line-separator" />
-                <form>
+                <form autoComplete="off">
+                  <input
+                    autocomplete="false"
+                    name="hidden"
+                    type="text"
+                    className="hidden-input"
+                  />
                   <hr className="line-separator top" />
                   <div className="row" style={{ marginTop: "1rem" }}>
                     <div className="form-group col-md-12 col-sm-12">
@@ -150,6 +164,7 @@ class index extends Component {
                         id="ccnum"
                         name="amountToWithdraw"
                         placeholder="Enter amount to withdraw"
+                        autoComplete="off"
                       />
                     </div>
                   </div>
@@ -185,7 +200,7 @@ class index extends Component {
                         htmlFor="secode"
                         className="rl-label required rm-margin-top"
                       >
-                        Security Pin
+                        Security PIN
                       </label>
                       <input
                         onChange={this.handleInputChange}
@@ -211,12 +226,17 @@ class index extends Component {
             </div>
           </div>
           <div className="row" style={{ marginTop: 10 }}>
-            <div className="col-lg-12 col-md-12 col-sm-12 mt-card-shadow">
-              <div className="form-box-item rm-border">
-                <h4>Wallet Transactions</h4>
+            <div className=" col-md-12">
+              <div className="">
+                {/* <h4>Wallet Transactions</h4> */}
                 <hr className="line-separator" />
-                <div className="conatiner-fluid">
-                  <WalletDataTable data={this.props.transactions} />
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <WalletDataTable data={this.props.transactions} />
+                    </div>
+                  </div>
+                  {/* > */}
                 </div>
               </div>
             </div>
@@ -264,3 +284,92 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, actions)(index);
+
+/*
+<div className="order-table mb-3">
+                    <MaterialTable
+                      components={{
+                        Action: (props) => {
+                          // console.log(props)
+                          if (props.action.icon === "save") {
+                            return (
+                              <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`/store/qrcode-generate/${props.data.deliveryCode}`}
+                                className="btn btn-lg btn-primary"
+                              >
+                                Generate Qr Code
+                              </a>
+                            );
+                          }
+                          if (props.action.icon === "check") {
+                            const isChecked =
+                              this.state.selectedDelivery.findIndex(
+                                (item) => item.id === props.data.id
+                              ) !== -1;
+                            return (
+                              <>
+                                <input
+                                  onClick={() =>
+                                    this.onDeliverySelect(props.data)
+                                  }
+                                  type="checkbox"
+                                  className=" mx-3"
+                                  style={{ display: "block", marginTop: 5 }}
+                                  checked={isChecked}
+                                />{" "}
+                                <button className="btn btn-primary mx-2">
+                                  View Products
+                                </button>
+                              </>
+                            );
+                          }
+                        },
+                      }}
+                      columns={[
+                        {
+                          title: "Type",
+                          field: "type",
+                          render: (data) => {
+                            return data.type.toUpperCase();
+                          },
+                        },
+                        { title: "Amount", field: "amount" },
+                        { title: "Description", field: "desc" },
+                        {
+                          title: "Status",
+                          field: "status",
+                          render: (data) => {
+                            return data.status.toUpperCase();
+                          },
+                        },
+                        {
+                          title: "Date",
+                          field: "createdAt",
+                          render: (data) => {
+                            return this.converToDate(data.createdAt);
+                          },
+                        },
+                      ]}
+                      data={this.props.transactions}
+                      title=""
+                      options={{
+                        headerStyle: {
+                          // background: "#00AAFF",
+                          color: "#000",
+                          fontFamily: '"Titillium Web", sans-serif',
+                          fontWeight: "bold",
+                          zIndex: 1,
+                        },
+                        rowStyle: {
+                          fontSize: "18px !important",
+                          fontFamily: '"Titillium Web", sans-serif',
+                        },
+                        searchFieldStyle: {},
+                        actionsColumnIndex: -1,
+                      }}
+                    />
+                  </div>
+
+*/

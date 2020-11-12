@@ -1,21 +1,30 @@
-import React from 'react';
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
-const AuthRoute = ({component: Component, noAuthRequired,redirectIfUser, redirectIfAuth, ...rest}) => {
-    const user = localStorage.getItem('azonta-user')
-    
-    if(user){
-        if(redirectIfUser && user.type === 'user'){
-            return <Redirect {...rest} to="/"/>
-        }
-        // if(redirectIfAuth){
-        //     return <Redirect {...rest} to="/users/profile"/>
-        // }
-        return <Route {...rest} exact component={Component} />
+const AuthRoute = ({
+  component: Component,
+  noAuthRequired,
+  redirectIfUser,
+  redirectIfAuth,
+  ...rest
+}) => {
+  const user = localStorage.getItem("azonta-user");
+
+  if (user) {
+    if (redirectIfUser && user.type === "user") {
+      return <Redirect {...rest} to="/" />;
     }
-    // console.log('excaped here now')
-    return noAuthRequired ? <Route exact {...rest} component={Component} /> : 
+    // if(redirectIfAuth){
+    //     return <Redirect {...rest} to="/users/profile"/>
+    // }
+    return <Route {...rest} exact component={Component} />;
+  }
+  // console.log('excaped here now')
+  return noAuthRequired ? (
+    <Route exact {...rest} component={Component} />
+  ) : (
     <Redirect to="/users/login" {...rest} />
+  );
 };
 
 // const isEmpty = (obj) => {

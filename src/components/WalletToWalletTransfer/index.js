@@ -123,9 +123,9 @@ class WalletToWalletTransfer extends Component {
     return (
       <Dashboard>
         <div className="container-fluid">
-          <div className="container-fluid">
+          <div className="container-fluid mb-3">
             <div className="row">
-              <div className="current-balance mt-card">
+              <div className="current-balance bg-white">
                 <div>
                   <span className="mr-2">Current Balance</span>
                   <span className="text-success">
@@ -139,7 +139,7 @@ class WalletToWalletTransfer extends Component {
               </div>
             </div>
           </div>
-          <h4
+          {/* <h4
             className="popup-title verify-email"
             style={{
               fontWeight: "normal",
@@ -148,7 +148,7 @@ class WalletToWalletTransfer extends Component {
             }}
           >
             Wallet Transfers
-          </h4>
+          </h4> */}
           <hr className="line-separator" />
           <form autoComplete={false} onSubmit={this.onFormSubmit}>
             <fieldset>
@@ -182,7 +182,7 @@ class WalletToWalletTransfer extends Component {
               <div className="row">
                 <div className="col-md-6 col-sm-12">
                   <div className="form-group">
-                    <label htmlFor="amount">Enter Pin</label>
+                    <label htmlFor="amount">Enter PIN</label>
                     <input
                       type="password"
                       name="pin"

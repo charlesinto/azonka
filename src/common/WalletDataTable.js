@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import "../css/dataTable.css";
+// import MaterialTable from "material-table";
 const $ = require("jquery");
 
 $.DataTable = require("datatables.net");
@@ -9,10 +10,25 @@ class WalletDataTable extends Component {
   componentDidMount() {
     this.$el = $(this.el);
     console.log("this props", this.props.data);
-    this.$el.DataTable({
+    const table = this.$el.DataTable({
+      order: [[0, "desc"]],
       responsive: true,
-      data: this.props.data, //country, state, address,name, createdAt
+      data: this.props.data,
+      columnDefs: [
+        {
+          targets: 0,
+          visible: false,
+        },
+      ],
+      //country, state, address,name, createdAt
       columns: [
+        {
+          title: "CreatedAt",
+          render: (data, type, row, meta) => {
+            return row.createdAt;
+          },
+          // responsivePriority: 3
+        },
         {
           title: "Type",
           render: (data, type, row, meta) => {
@@ -55,6 +71,7 @@ class WalletDataTable extends Component {
         },
       ],
     });
+    console.log(table);
   }
   componentWillUnmount() {
     this.$el = $(this.el);
@@ -98,3 +115,62 @@ class WalletDataTable extends Component {
 }
 
 export default WalletDataTable;
+
+/*
+const table = this.$el.DataTable({
+      order: [[4, "desc"]],
+      responsive: true,
+      data: this.props.data,
+      columnDefs: [
+        {
+          type: "datetime-moment",
+          targets: 4,
+        },
+      ],
+      //country, state, address,name, createdAt
+      columns: [
+        {
+          title: "Type",
+          render: (data, type, row, meta) => {
+            return `<span class="wallet-text">${row.type.toUpperCase()}</span>`;
+          },
+          // responsivePriority: 3
+        },
+        {
+          title: "Amount",
+          render: (data, type, row, meta) => {
+            return `<span class="wallet-text wallet-amount text-primary">&#8358; ${this.numberWithCommas(
+              row.amount / 100
+            )}</span>`;
+          },
+          // responsivePriority: 1
+        },
+        {
+          title: "Description",
+          render: (data, type, row, meta) => {
+            return `<span class="wallet-tex">${row.desc}</span>`;
+          },
+        },
+        {
+          title: "Status",
+          render: (data, type, row, meta) => {
+            if (row.status === "completed") {
+              return `<span class="wallet-text text-success">${row.status}</span>`;
+            }
+            return `<span class="wallet-text text-warning">${row.status}</span>`;
+          },
+          // responsivePriority: 2
+        },
+        {
+          title: "Date",
+          render: (data, type, row, meta) => {
+            return `<span class="wallet-text">${this.converToDate(
+              row.createdAt
+            )}</span>`;
+          },
+        },
+      ],
+    });
+    console.log(table);
+
+*/

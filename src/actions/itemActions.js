@@ -191,6 +191,10 @@ export const createItem = (data) => {
   };
 };
 
+export const resetFormItems = () => {
+  return { type: CLEAR_ITEM_FORM_INPUTS, payload: "" };
+};
+
 export const _itemClick = (id) => {
   return async (dispatch) => {
     try {
@@ -956,9 +960,12 @@ export const registerPayment = (
   cartData,
   addressId,
   userAddress,
-  pin
+  pin,
+  state,
+  city,
+  deliveryFee,
+  deliveryFeePerSeller
 ) => {
-  console.log("called here", userAddress);
   const data =
     userAddress.trim() === ""
       ? {
@@ -968,7 +975,8 @@ export const registerPayment = (
           transactionReference: txRef,
           useWallet: paymentType === "pay with debit" ? false : true,
           addressId: `${addressId}`,
-          pin,
+          deliveryFee,
+          deliveryFeePerSeller,
         }
       : {
           transactionNo,
@@ -976,15 +984,23 @@ export const registerPayment = (
           paymentType,
           transactionReference: txRef,
           useWallet: paymentType === "pay with debit" ? false : true,
-          addressString: userAddress,
-          pin,
+          addressString: `${userAddress}, ${city}, ${state}`,
+          deliveryFee,
+          deliveryFeePerSeller,
         };
+  const newData = data.useWallet
+    ? {
+        ...data,
+        pin: parseInt(pin),
+      }
+    : { ...data };
+  console.log("Payload: ", newData);
   return async (dispatch) => {
     try {
       await axios.post(
         "/api/v1/user/order/create",
         {
-          ...data,
+          ...newData,
         },
         {
           headers: {

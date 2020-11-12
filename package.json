@@ -26,6 +26,7 @@
     "react-flags-select": "^1.1.10",
     "react-idle-timer": "^4.3.6",
     "react-image-lightbox": "^5.1.1",
+    "react-lazyload": "^3.0.0",
     "react-owl-carousel": "^2.3.1",
     "react-paginate": "^6.3.2",
     "react-paystack": "^2.0.2",

@@ -153,9 +153,9 @@ class Wallet extends Component {
     return (
       <Dashboard>
         <div>
-          <div className="container">
+          <div className="container mb-3">
             <div className="row ">
-              <div className="current-balance mt-card">
+              <div className="current-balance bg-white">
                 <div>
                   <span className="mr-2">Current Balance</span>
                   <span className="text-success">

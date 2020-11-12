@@ -8,6 +8,8 @@ import * as actions from "../../actions";
 import Validator from "validator";
 import { PAY_STACK_PUBLIC_KEY } from "../../config/config";
 import Swal from "sweetalert2";
+// import Axios from "axios";
+import locationState from "../../helper/locationState";
 
 class Checkout extends Component {
   INITIAL_STATE = {
@@ -25,6 +27,11 @@ class Checkout extends Component {
     auth: false,
     transactionNumber: "",
     addressId: "",
+
+    states: [],
+    city: "",
+    cities: [],
+    delivery: {},
   };
   constructor(props) {
     super(props);
@@ -37,12 +44,20 @@ class Checkout extends Component {
       return this.props.history.push("/users/cart");
     } else {
       if (this.props.amount > 0) {
+        const states = locationState.getStates();
+        console.log("states: ", states);
         this.props.initiateRegistration();
         this.loadCart();
         const { firstName, lastName, emailAddress } = JSON.parse(
           localStorage.getItem("azonta-user")
         );
-        return this.setState({ auth: true, firstName, lastName, emailAddress });
+        return this.setState({
+          auth: true,
+          firstName,
+          lastName,
+          emailAddress,
+          states,
+        });
       } else {
         return this.props.history.push("/users/cart");
       }
@@ -53,6 +68,7 @@ class Checkout extends Component {
     // setInterval(async () => {
     let token = localStorage.getItem("x-access-token");
     if (token) {
+      await this.props.setCategories();
       await this.props.fetchCheckoutCart();
       this.setState(
         {
@@ -93,17 +109,37 @@ class Checkout extends Component {
   callback = (response) => {
     console.log("Response from Paystack: ", response);
     if (response.status === "success" && response.message === "Approved") {
-      this.props.initiateRegistration();
-      // console.log(this.props.cartData);
-      this.props.registerPayment(
-        response.transaction,
-        response.trxref,
-        this.state.sum,
-        this.state.payType,
-        this.props.cartData,
-        this.state.addressId,
-        this.state.userAddress
-      );
+      try {
+        this.props.initiateRegistration();
+        // console.log(this.props.cartData);
+        const deliveryFeePerSeller = {};
+        Object.keys(this.state.delivery).forEach((key) => {
+          if (key !== "totalDeliveryFee") {
+            deliveryFeePerSeller[key] = `${
+              this.state.delivery[key].delivery.deliveryAmount * 100
+            }`;
+          }
+        });
+
+        console.log(deliveryFeePerSeller);
+
+        this.props.registerPayment(
+          response.transaction,
+          response.trxref,
+          this.state.sum,
+          this.state.payType,
+          this.props.cartData,
+          this.state.addressId,
+          this.state.userAddress,
+          "",
+          this.state.state,
+          this.state.city,
+          `${this.state.delivery.totalDeliveryFee * 100}`,
+          deliveryFeePerSeller
+        );
+      } catch (error) {
+        console.log("error is: ", error);
+      }
     } // card charged successfully, get reference here
     //this.props.initiateRegistration()
   };
@@ -198,14 +234,33 @@ class Checkout extends Component {
         () => console.log(this.state)
       );
     }
-    this.setState({
-      [name]: value,
-    });
+    this.setState(
+      {
+        [name]: value,
+      },
+      async () => {
+        try {
+          if (name === "state") {
+            const locals = locationState.getLocalgovernments(this.state.state);
+
+            this.setState({
+              cities: locals,
+            });
+          }
+        } catch (error) {}
+      }
+    );
   };
   handleAddressSelect = (id) => {
-    this.setState({
-      addressId: id,
-    });
+    if (this.state.addressId === id) {
+      this.setState({
+        addressId: "",
+      });
+    } else {
+      this.setState({
+        addressId: id,
+      });
+    }
   };
   renderShippingLocation = () => {
     if (this.state.auth) {
@@ -270,12 +325,13 @@ class Checkout extends Component {
                           <span className="checkbox primary primary">
                             <span></span>
                           </span>
-                          <h3
+                          <p
                             className="address-htag"
                             style={{
                               padding: "0 8px",
                               fontFamily: "open sans, sans-serif",
                               fontSize: "2.1rem",
+                              color: "#000",
                             }}
                           >
                             <span
@@ -302,7 +358,7 @@ class Checkout extends Component {
                             >
                               {item.country}
                             </span>
-                          </h3>
+                          </p>
                         </label>
                       </li>
                     ))}
@@ -339,6 +395,48 @@ class Checkout extends Component {
                             />
                           </div>
                         </div>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <label htmlFor="state">
+                              State
+                              <span className="required">*</span>
+                            </label>
+                            <select
+                              name="state"
+                              value={this.state.state}
+                              onChange={(e) =>
+                                this.handleInputChange(e, "login")
+                              }
+                            >
+                              <option value="">Select State</option>
+                              {this.state.states.map((e, i) => (
+                                <option value={e.name} key={i}>
+                                  {e.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-md-6">
+                            <label htmlFor="city">
+                              City
+                              <span className="required">*</span>
+                            </label>
+                            <select
+                              name="city"
+                              value={this.state.city}
+                              onChange={(e) =>
+                                this.handleInputChange(e, "login")
+                              }
+                            >
+                              <option value="">Select City</option>
+                              {this.state.cities.map((e, i) => (
+                                <option value={e.name} key={i}>
+                                  {e.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
                       </form>
                     </li>
                   </ul>
@@ -359,6 +457,44 @@ class Checkout extends Component {
                           className="form-input form-wide mb-2"
                           required=""
                         />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <label htmlFor="state">
+                          State
+                          <span className="required">*</span>
+                        </label>
+                        <select
+                          name="state"
+                          value={this.state.state}
+                          onChange={(e) => this.handleInputChange(e, "login")}
+                        >
+                          <option value="">Select State</option>
+                          {this.state.states.map((e, i) => (
+                            <option value={e.name} key={i}>
+                              {e.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-6">
+                        <label htmlFor="city">
+                          City
+                          <span className="required">*</span>
+                        </label>
+                        <select
+                          name="city"
+                          value={this.state.city}
+                          onChange={(e) => this.handleInputChange(e, "login")}
+                        >
+                          <option value="">Select City</option>
+                          {this.state.cities.map((e, i) => (
+                            <option value={e.name} key={i}>
+                              {e.name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </form>
@@ -587,9 +723,9 @@ class Checkout extends Component {
         lastName,
         emailAddress,
         userAddress,
-        state,
         country,
         payType,
+        state,
       } = this.state;
       if (!this.state.auth) {
         return this.setState({
@@ -615,43 +751,330 @@ class Checkout extends Component {
       //    return  this.payWithPayStack()
       // }
     } else {
-      const { userAddress, addressId, payType } = this.state;
+      const { userAddress, addressId } = this.state;
       if (Validator.isEmpty(`${addressId}`) && Validator.isEmpty(userAddress)) {
         return this.props.renderError("Please provide a delivery location");
       } else if (Validator.isEmpty(this.state.payType)) {
         return this.props.renderError("Please choose a payment type");
       }
-      if (payType === "pay with debit") {
-        //this.props.successAlert('hello')
-        return this.payWithPayStack();
-      } else {
-        const { value: pin } = await Swal.fire({
-          title: "Enter Your Wallet Pin",
-          input: "text",
-          showCancelButton: true,
-          inputValidator: (value) => {
-            if (!(value && value.trim() !== "")) {
-              return "Wallet Pin Requred!";
-            }
+      if (Validator.isEmpty(`${addressId}`)) {
+        if (this.state.city.trim() === "" || this.state.state.trim() === "") {
+          return Swal.fire("Error", "Please select State and City", "error");
+        }
+      }
+      // process payment
+      try {
+        this.props.initiateRegistration();
+        const deliveryFeeDetails = await this.getDeliveryFeeDetails();
+        this.props.stopLoading();
+        this.setState(
+          {
+            delivery: { ...deliveryFeeDetails },
           },
+          () =>
+            window
+              .$("#orderDetails")
+              .modal({ backdrop: "static", keyboard: false, show: true })
+        );
+
+        console.log("Details: ", deliveryFeeDetails);
+      } catch (error) {
+        this.props.stopLoading();
+        console.log(error);
+      }
+    }
+  };
+  getDeliveryFeeDetails = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log(this.props.cartItems, this.props.home_categories);
+        //group the products into seller
+        const productGroupedBySeller = {};
+
+        this.props.cartItems.products.forEach((prod) => {
+          //if it is a new seller, we initiailize the seller and add his product
+          if (!productGroupedBySeller[prod.owner]) {
+            // get the deliveryFee model for the product
+            let found = false;
+            this.props.home_categories.forEach((cat) => {
+              if (cat.id === prod.category) {
+                found = true;
+                prod.delivery = cat.deliveryFee[0];
+              }
+            });
+            // check if category modeil is not found
+            if (!found) {
+              // do online check calling the category id
+            }
+            productGroupedBySeller[prod.owner] = {
+              products: [prod],
+            };
+          } else {
+            let found = false;
+            this.props.home_categories.forEach((cat) => {
+              if (cat.id === prod.category) {
+                found = true;
+                prod.delivery = cat.deliveryFee[0];
+              }
+            });
+            // check if category modeil is not found
+            if (!found) {
+              // do online check calling the category id
+            }
+            productGroupedBySeller[
+              prod.owner
+            ].products = [].concat(
+              productGroupedBySeller[prod.owner].products,
+              [prod]
+            );
+          }
         });
 
-        // if (parseInt(this.props.amount) > parseInt(this.props.balance / 100)) {
-        //     return this.props.renderError('Insufficient funds, please fund your wallet')
+        // get the maximum deliveryFee for each seller
+
+        Object.keys(productGroupedBySeller).forEach((seller) => {
+          let maxDeliveryPrice = { flatFee: 0 };
+          productGroupedBySeller[seller].products.forEach((prod) => {
+            if (prod.delivery.flatFee > maxDeliveryPrice.flatFee) {
+              maxDeliveryPrice = { ...prod.delivery };
+              maxDeliveryPrice.product = prod;
+            }
+          });
+
+          productGroupedBySeller[seller].delivery = maxDeliveryPrice;
+        });
+
+        //check the quantity ordered for the product with the maximum delivery fee
+
+        // get the total delivery Fee
+        const locations = await this.getDeliveryDetailsonOrder(
+          productGroupedBySeller
+        );
+        console.log("locations: ", locations);
+        const orderLocation = {};
+        locations.forEach((point) => {
+          if (orderLocation[point.seller]) {
+            orderLocation[point.seller][point.type] = {
+              lat: point.lat,
+              lng: point.lng,
+            };
+          } else {
+            orderLocation[point.seller] = {};
+            orderLocation[point.seller][point.type] = {
+              lat: point.lat,
+              lng: point.lng,
+            };
+          }
+        });
+
+        const distances = await this.getDistances(orderLocation);
+        distances.forEach((dist) => {
+          productGroupedBySeller[dist.seller].delivery.distance =
+            dist.totalDrviningDistance;
+          productGroupedBySeller[dist.seller].delivery.location =
+            orderLocation[dist.seller];
+        });
+        let total = 0;
+        Object.keys(productGroupedBySeller).forEach((seller) => {
+          productGroupedBySeller[
+            seller
+          ].delivery.quantiyOrdered = this.props.cartItems.quantity[
+            productGroupedBySeller[seller].delivery.product.id
+          ];
+          if (
+            productGroupedBySeller[seller].delivery.quantiyOrdered >
+            productGroupedBySeller[seller].delivery.maxQuantity
+          ) {
+            productGroupedBySeller[seller].delivery.deliveryAmount = Math.round(
+              productGroupedBySeller[seller].delivery.flatFee / 100 +
+                (productGroupedBySeller[seller].delivery.incrementalPercentage /
+                  100) *
+                  (productGroupedBySeller[seller].delivery.distanceFee / 100) +
+                productGroupedBySeller[seller].delivery.distance *
+                  (productGroupedBySeller[seller].delivery.distanceFee / 100)
+            );
+          } else {
+            productGroupedBySeller[seller].delivery.deliveryAmount = Math.round(
+              productGroupedBySeller[seller].delivery.flatFee / 100 +
+                productGroupedBySeller[seller].delivery.distance *
+                  (productGroupedBySeller[seller].delivery.distanceFee / 100)
+            );
+          }
+          total += productGroupedBySeller[seller].delivery.deliveryAmount;
+        });
+        productGroupedBySeller.totalDeliveryFee = total;
+        console.log("Details: ", productGroupedBySeller);
+        return resolve(productGroupedBySeller);
+      } catch (error) {
+        this.props.stopLoading();
+        console.log("errors: ", error);
+        reject(error);
+      }
+    });
+  };
+  getDeliveryDetailsonOrder = (productGroupedBySeller, cb) => {
+    // let total = 0;
+    let promises = [];
+    Object.keys(productGroupedBySeller).forEach((seller) => {
+      // let distance;
+      if (this.state.userAddress.trim() !== "") {
+        promises.push(
+          this.geoCodeAddress(this.state.userAddress, seller, "destination")
+        );
+      } else {
+        const index = this.props.address.findIndex(
+          (ele) => parseInt(ele.id) === parseInt(this.state.addressId)
+        );
+        promises.push(
+          this.geoCodeAddress(
+            this.props.address[index].address1,
+            seller,
+            "destination"
+          )
+        );
+      }
+
+      promises.push(
+        this.geoCodeAddress(
+          productGroupedBySeller[seller].delivery.product.store.address,
+          seller,
+          "pickup"
+        )
+      );
+    });
+    return Promise.all(promises);
+  };
+  getDistances = (locations = {}) => {
+    let promises = [];
+    Object.keys(locations).forEach((point) => {
+      const { destination, pickup } = locations[point];
+      promises.push(
+        this.getDrivingDistance(
+          destination.lat,
+          destination.lng,
+          pickup.lat,
+          pickup.lng,
+          point
+        )
+      );
+    });
+    return Promise.all(promises);
+  };
+  geoCodeAddress = (address = "", seller, type) => {
+    return new Promise(async (resolve, reject) => {
+      const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
+      const response = await fetch(
+        // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`,
+        // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url='https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}'`,
+        `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
+        // {
+        //   // headers: {
+        //   //   // "Access-Control-Allow-Headers": {
+        //   //   //   "Content-Type": "application/json",
+        //   //   // },
+        //   //   "Content-Type": "application/json",
+        //   // },
         // }
-        if (pin && pin.trim() !== "") {
-          this.props.initiateRegistration();
-          this.props.registerPayment(
-            "",
-            "",
-            this.props.amount,
-            this.state.payType,
-            this.state.cartData,
-            this.state.addressId,
-            this.state.userAddress,
-            pin
-          );
+      );
+      const result = await response.json();
+
+      if (result.status === "OK") {
+        const { geometry } = result.results[0];
+        const { location } = geometry;
+        const { lat, lng } = location;
+        return resolve({ lat, lng, seller, type });
+      }
+      console.log(result);
+
+      resolve(null);
+
+      // const duration = result.rows[0].elements[0].duration;
+
+      // const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
+    });
+  };
+  getDrivingDistance = (lat1, lon1, lat2, lon2, seller) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
+        const response = await fetch(
+          // `https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`,
+          // {
+          //   // headers: {
+          //   //   // "Access-Control-Allow-Headers": {
+          //   //   //   "Content-Type": "application/json",
+          //   //   // },
+          //   //   // "Access-Control-Allow-Origin": "*",
+          //   //   "content-type": "application/json",
+          //   // },
+          // }
+          // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url=https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
+          `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
+        );
+
+        const result = await response.json();
+
+        const distance = result.rows[0].elements[0].distance;
+        if (!result.rows[0]) {
+          return resolve({ totalDrviningDistance: 1000, seller });
         }
+        // const duration = result.rows[0].elements[0].duration;
+
+        const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
+
+        resolve({ totalDrviningDistance, seller });
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  };
+  processPayment = async () => {
+    window.$("#orderDetails").modal("hide");
+    const { payType } = this.state;
+    if (payType === "pay with debit") {
+      //this.props.successAlert('hello')
+      return this.payWithPayStack();
+    } else {
+      const { value: pin } = await Swal.fire({
+        title: "Enter Your Wallet Pin",
+        input: "text",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!(value && value.trim() !== "")) {
+            return "Wallet Pin Requred!";
+          }
+        },
+      });
+
+      // if (parseInt(this.props.amount) > parseInt(this.props.balance / 100)) {
+      //     return this.props.renderError('Insufficient funds, please fund your wallet')
+      // }
+
+      if (pin && pin.trim() !== "") {
+        const deliveryFeePerSeller = {};
+        Object.keys(this.state.delivery).forEach((key) => {
+          if (key !== "totalDeliveryFee") {
+            deliveryFeePerSeller[key] = `${
+              this.state.delivery[key].delivery.deliveryAmount * 100
+            }`;
+          }
+        });
+        this.props.initiateRegistration();
+        this.props.registerPayment(
+          "",
+          "",
+          this.props.amount,
+          this.state.payType,
+          this.state.cartData,
+          this.state.addressId,
+          this.state.userAddress,
+          pin,
+          this.state.state,
+          this.state.city,
+          `${this.state.delivery.totalDeliveryFee * 100}`,
+          deliveryFeePerSeller
+        );
       }
     }
   };
@@ -661,7 +1084,7 @@ class Checkout extends Component {
     var handler = window.PaystackPop.setup({
       key: PAY_STACK_PUBLIC_KEY,
       email: this.state.emailAddress,
-      amount: this.state.sum,
+      amount: this.state.sum + this.state.delivery.totalDeliveryFee * 100,
       currency: "NGN",
       ref: this.getReference, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
       metadata: {
@@ -772,8 +1195,111 @@ class Checkout extends Component {
                       onClick={this.payNow}
                       className="btn  btn-lg w-100 btn-primary"
                     >
-                      Make Payment
+                      Continue
                     </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="orderDetails"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+            data-keyboard="false"
+            data-backdrop="static"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-body py-5">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <div className="bg-white order-header shadow py-4 w-100">
+                          <span className="text-success">Order Summary</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-5">
+                      <div className="row">
+                        <div className="col-md-8 order-summary-icon order-amount-pay">
+                          <span className="mr-2">
+                            <i class="fas fa-money-bill-wave"></i>
+                          </span>
+                          <span>Order Total</span>
+                        </div>
+                        <div className="col-md-4 order-shipping-fee">
+                          <div className="d-flex w-100 justify-content-end">
+                            <span>
+                              &#8358;{" "}
+                              {this.numberWithCommas(this.state.sum / 100)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-8 order-summary-icon order-amount-pay">
+                          <span className="mr-2">
+                            <i class="fas fa-luggage-cart"></i>
+                          </span>
+                          <span>Shipping Fee</span>
+                        </div>
+                        <div className="col-md-4 order-shipping-fee">
+                          <div className="d-flex w-100 justify-content-end">
+                            <span>
+                              &#8358;{" "}
+                              {this.numberWithCommas(
+                                this.state.delivery.totalDeliveryFee
+                                  ? this.state.delivery.totalDeliveryFee
+                                  : 0
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row pb-2 pt-2">
+                        <hr className="w-100" />
+                      </div>
+                      <div className="row">
+                        <div className="col-md-8 order-summary-icon order-amount-pay">
+                          <span>Total</span>
+                        </div>
+                        <div className="col-md-4 order-shipping-fee">
+                          <div className="d-flex w-100 justify-content-end">
+                            <span>
+                              &#8358;{" "}
+                              {this.numberWithCommas(
+                                (this.state.delivery.totalDeliveryFee
+                                  ? this.state.delivery.totalDeliveryFee
+                                  : 0) +
+                                  this.state.sum / 100
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row py-3">
+                        <div className="col-md-12">
+                          <div className="d-flex w-100 justify-content-center">
+                            <button
+                              onClick={this.processPayment}
+                              className="btn btn-lg btn-primary mr-3"
+                            >
+                              Pay
+                            </button>
+                            <button
+                              data-dismiss="modal"
+                              className="btn btn-lg btn-danger"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -790,7 +1316,7 @@ class Checkout extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    home: { amount },
+    home: { amount, home_categories },
     bank: { balance },
     inventory: { categories, cartItems, cartData, address },
   } = state;
@@ -802,6 +1328,7 @@ const mapStateToProps = (state) => {
     cartData,
     address,
     balance,
+    home_categories,
   };
 };
 

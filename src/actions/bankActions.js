@@ -323,7 +323,7 @@ export const topUpUserWalllet = (
   };
 };
 
-export const getUserWalletDetals = (lastCount = 0, numOfRecords = 100) => {
+export const getUserWalletDetals = (lastCount = 0, numOfRecords = 1000) => {
   return async (dispatch) => {
     try {
       const response1 = await axios.get(
@@ -340,7 +340,15 @@ export const getUserWalletDetals = (lastCount = 0, numOfRecords = 100) => {
         },
       });
       const { transactions, balance, id } = response2.data.wallet;
-      console.log(transactions);
+      // console.log(transactions[0]);
+      // transactions.sort(function (a, b) {
+      //   // Turn your strings into dates, and then subtract them
+      //   // to get a value that is either negative, positive, or zero.
+      //   // console.log("b: ", b);
+      //   // console.log("a: ", a, new Date(b.updatedAt) - new Date(a.updatedAt));
+      //   return new Date(b.createdAt) - new Date(a.createdAt);
+      // });
+      // console.log("new transactions: ", transactions[0]);
       dispatch({
         type: USER_WALLET_OBTAINED_SUCCESSFULLY,
         payload: { transactions, balance, walletId: id },

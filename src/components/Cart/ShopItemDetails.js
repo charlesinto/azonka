@@ -16,6 +16,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import FeatureProductItem from "../../common/FeatureProductItem";
 import Footer from "../HeaderFooter/Footer";
+import LazyLoad from "react-lazyload";
 
 class ShopItemDetails extends Component {
   state = {
@@ -283,7 +284,7 @@ class ShopItemDetails extends Component {
     return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
   }
   render() {
-    let { detailsData, imgLoaded } = this.state;
+    let { detailsData } = this.state;
     console.log(detailsData);
     let productImage =
       detailsData != null ? detailsData.mainImageUrl : imgLoader;
@@ -292,7 +293,7 @@ class ShopItemDetails extends Component {
       <>
         <Header />
 
-        <main className="main" style={{ paddingTop: "12rem" }}>
+        <main className="main" style={{ paddingTop: "14rem" }}>
           <nav aria-label="breadcrumb" className="breadcrumb-nav">
             <div className="container">
               <ol className="breadcrumb">
@@ -331,12 +332,24 @@ class ShopItemDetails extends Component {
                   <div className="row" style={{ marginTop: "2rem" }}>
                     <div className="col-lg-7 col-md-6 product-single-gallery">
                       <div className="product-slider-container product-item">
-                        <img
-                          src={imgLoaded ? productImage : imgLoader}
-                          alt=".."
-                          loading="lazy"
-                          onLoad={() => this.setState({ imgLoaded: true })}
-                        />
+                        <LazyLoad
+                          once={true}
+                          placeholder={
+                            <img
+                              src="https://cdn.pixabay.com/photo/2016/05/25/20/17/icon-1415760_960_720.png"
+                              alt="..."
+                            />
+                          }
+                        >
+                          <img
+                            // src={imgLoaded ? productImage : imgLoader}
+                            src={productImage}
+                            alt=".."
+                            // loading="lazy"
+                            // onLoad={() => this.setState({ imgLoaded: true })}
+                          />
+                        </LazyLoad>
+
                         <span className="prod-full-screen">
                           <i className="icon-plus"></i>
                         </span>
@@ -731,26 +744,33 @@ class ShopItemDetails extends Component {
                     ) : null}
                   </div>
                 </div>
-                <div className=" bottom-banner-product-detail mt-3">
-                  <img
-                    alt="bottom"
-                    src={`${
-                      this.state.bottomBanner1
-                        ? this.state.bottomBanner1.url
-                        : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
-                    }`}
-                  />
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className=" bottom-banner mt-3">
+                      <img
+                        alt="bottom"
+                        src={`${
+                          this.state.bottomBanner1
+                            ? this.state.bottomBanner1.url
+                            : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                        }`}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className=" bottom-banner mt-3">
+                      <img
+                        alt="bottom"
+                        src={`${
+                          this.state.bottomBanner2
+                            ? this.state.bottomBanner2.url
+                            : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
+                        }`}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className=" bottom-banner-product-detail mt-2 mb-2">
-                  <img
-                    alt="bottom"
-                    src={`${
-                      this.state.bottomBanner2
-                        ? this.state.bottomBanner2.url
-                        : "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg"
-                    }`}
-                  />
-                </div>
+
                 {/* <!-- End .product-single-tabs --> */}
               </div>
               {/* <!-- End .col-lg-9 --> */}

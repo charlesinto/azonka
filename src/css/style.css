@@ -11590,7 +11590,7 @@ pre {
     font-size: 1em;
   }
   .router-container {
-    padding-top: 11.2rem !important;
+    padding-top: 14.3rem !important;
   }
   .rerral-block {
     flex-direction: column !important;
@@ -11757,7 +11757,7 @@ label {
   /* box-shadow:0px 1px 5px 0px rgba(0,0,0,0.2), 
         0px 2px 2px 0px rgba(0,0,0,0.14), 
         0px 3px 1px -2px rgba(0,0,0,0.12); */
-  background: #fff;
+  /* background: #fff; */
   border-radius: 4px;
   padding: 20px 0 40px;
 }
@@ -11863,7 +11863,7 @@ label {
 
 .router-container {
   min-height: 100vh;
-  padding-top: 11.2rem;
+  padding-top: 14.3rem;
 }
 
 .spinner-container {
@@ -13001,7 +13001,7 @@ button[disabled] {
 }
 
 .bottom-banner {
-  height: 200px;
+  height: 100px;
 }
 
 .bottom-banner-product-detail {
@@ -13265,4 +13265,45 @@ footer {
 .side-menu-container {
   max-height: 450px !important;
   overflow-x: hidden;
+}
+
+.mt-font-16 {
+  font-size: 18px;
+}
+
+.MuiTableCell-root {
+  font-size: 1.25rem !important;
+}
+
+.hidden-input {
+  display: none;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+.order-header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.order-shipping-fee {
+}
+
+.order-shipping-fee,
+.order-amount-pay {
+  font-size: 2.1rem;
+}
+
+.order-summary-icon i {
+  color: green;
+}
+
+.order-shipping-fee {
+  /* font-weight: bold; */
 }

@@ -190,6 +190,7 @@ class ShopProducts extends Component {
   };
   handleAddCart = async (e) => {
     let id = e.target.id;
+
     // return console.log(id)
     let token = localStorage.getItem("x-access-token");
     if (token) {
@@ -209,7 +210,7 @@ class ShopProducts extends Component {
       let cartData = JSON.parse(localStorage.getItem("cart"));
       this.setState({ cartData });
       let { products } = this.state;
-      let obj = products.filter((data) => id === data.id)[0];
+      let obj = products.filter((data) => parseInt(id) === data.id)[0];
 
       //check if item is in cart
 

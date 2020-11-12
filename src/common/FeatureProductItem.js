@@ -118,7 +118,7 @@ class FeatureProductItem extends Component {
       mainImageUrl,
     } = this.props;
     return (
-      <div className="product" key={id} style={{ marginRight: 8 }}>
+      <div className="product col-md-3" key={id} style={{ marginRight: 8 }}>
         {/* <ItemModal /> */}
         <figure className="product-image-container">
           <span

@@ -11,8 +11,33 @@ class ItemListDataTable extends Component {
       responsive: true,
       data: this.props.data, // name, brandname, mainImageUrl,model, sellingPrice, finalPrice
       autoWidth: true,
-
+      order: [[0, "desc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          visible: false,
+        },
+      ],
       columns: [
+        {
+          title: "createdAt",
+          render: (data, type, row, meta) => {
+            // console.log(row);return `<span class="item-uploadedname dt-item">${row.id}</span>`;
+            return row.createdAt;
+          },
+          responsivePriority: 10,
+        },
+        {
+          title: "Item Number",
+          render: (data, type, row, meta) => {
+            // console.log(row);
+            if (type === "display") {
+              return `<span class="item-uploadedname dt-item">${row.id}</span>`;
+            }
+            return `<span class="item-uploadedname dt-item">${row.id}</span>`;
+          },
+          responsivePriority: 10,
+        },
         {
           title: "Item Image",
           render: (data, type, row, meta) => {
@@ -86,12 +111,8 @@ class ItemListDataTable extends Component {
                         <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                         <div class="dropdown-menu">
                           <a class="dropdown-item" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer" target="_blank">View</a>
-                          <a class="dropdown-item dt-edit cursor-pointer" data-id=${
-                            row.id
-                          }>Edit</a>
-                          <a class="dropdown-item dt-delete cursor-pointer" data-id=${
-                            row.id
-                          }>Delete</a>
+                        
+                          
                         </div>
                       </div>
                         `;
@@ -102,6 +123,7 @@ class ItemListDataTable extends Component {
             // <i class="fas fa-pen"></i></button>
             // <button type="button" data-id=${row.id} class="btn btn-outline-danger action-btn btn-xs dt-delete"><i class="fas fa-trash"></i></button>
             // </div>
+            // s
             // `
           },
           responsivePriority: 2,

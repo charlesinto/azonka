@@ -4,6 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 // import nigeriaFlag from "../../css/images/flags/nigeria.png";
 // import frenchFlag from "../../css/images/flags/fr.png";
 // import azonkaLogo from "../../css/images/logoGold.png";
+import azonkaLogo from "../../assets/logo.png";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import CartDropdown from "../Cart/CartDropdown";
@@ -270,7 +271,8 @@ class Header extends Component {
                     className="logo py-1"
                   >
                     <img
-                      src="http://167.99.154.149/assets/media/logos/logo.png"
+                      // src="http://167.99.154.149/assets/media/logos/logo.png"
+                      src={azonkaLogo}
                       style={{ objectFit: "contain" }}
                       alt="Porto Logo"
                     />
@@ -353,12 +355,7 @@ class Header extends Component {
                     <i className="icon-menu"></i>
                   </button>
                   <div className="header-contact">
-                    <a
-                      href="#!"
-                      className="text_underline-hover"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href="#!" className="text_underline-hover">
                       Today Deals
                     </a>
                   </div>

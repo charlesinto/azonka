@@ -10,13 +10,14 @@ import Axios from "axios";
 import Pages from "../../config/pages";
 import Positions from "../../config/position";
 
-import Slider from "react-slick";
+// import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import FeatureProductItem from "../../common/FeatureProductItem";
 import Footer from "../HeaderFooter/Footer";
 import LazyLoad from "react-lazyload";
+import imagePlaceHolder from "../../css/images/image_loader.png";
 
 class ShopItemDetails extends Component {
   state = {
@@ -230,8 +231,36 @@ class ShopItemDetails extends Component {
       bottomBanner2,
     });
   };
+  handleMoveWishList = async (id) => {
+    let localData = JSON.parse(localStorage.getItem("wishList"));
+    if (localStorage.getItem("x-access-token")) {
+      const filt = this.props.cartData.filter((o) => o.id === id)[0];
+      if (!localData) {
+        localData = [filt];
+        localStorage.setItem("wishList", JSON.stringify(localData));
+        await this.props.removeCartItem(id);
+        this.calSum();
+        return this.props.successAlert("Item added successfully");
+      } else {
+        let _id = localData.some((o) => o.id === id);
+        if (_id) {
+          this.props.successAlert("Item added successfully");
+          await this.props.removeCartItem(id);
+          // this.calSum();
+          return this.props.successAlert(
+            "Item has already been moved to WishList"
+          );
+        } else {
+          localData.push(filt);
+          localStorage.setItem("wishList", JSON.stringify(localData));
+          await this.props.removeCartItem(id);
+          // this.calSum();
+          return this.props.successAlert("Item added successfully");
+        }
+      }
+    }
+  };
   renderRating = (data) => {
-    console.log(data);
     return data && data.reviews
       ? data.reviews.map((review) => {
           return (
@@ -285,7 +314,6 @@ class ShopItemDetails extends Component {
   }
   render() {
     let { detailsData } = this.state;
-    console.log(detailsData);
     let productImage =
       detailsData != null ? detailsData.mainImageUrl : imgLoader;
     const { id, finalPrice, deliveryDays } = detailsData ? detailsData : {};
@@ -333,21 +361,28 @@ class ShopItemDetails extends Component {
                     <div className="col-lg-7 col-md-6 product-single-gallery">
                       <div className="product-slider-container product-item">
                         <LazyLoad
+                          height={200}
                           once={true}
                           placeholder={
                             <img
-                              src="https://cdn.pixabay.com/photo/2016/05/25/20/17/icon-1415760_960_720.png"
+                              src={imagePlaceHolder}
                               alt="..."
+                              style={{ width: "200px", height: "200px" }}
                             />
                           }
                         >
                           <img
+                            src={productImage ? productImage : imagePlaceHolder}
+                            alt="..."
+                            // style={{ width: "200px", height: "200px" }}
+                          />
+                          {/* <img
                             // src={imgLoaded ? productImage : imgLoader}
                             src={productImage}
                             alt=".."
                             // loading="lazy"
                             // onLoad={() => this.setState({ imgLoaded: true })}
-                          />
+                          /> */}
                         </LazyLoad>
 
                         <span className="prod-full-screen">
@@ -369,9 +404,6 @@ class ShopItemDetails extends Component {
                                                 </div>
                                             </div> */}
                     </div>
-                    {/* <!-- End .col-lg-7 --> */}
-
-                    {}
 
                     <div className="col-lg-5 col-md-6">
                       <div className="product-single-details">
@@ -379,14 +411,6 @@ class ShopItemDetails extends Component {
                           {detailsData && detailsData.name} (
                           {detailsData && detailsData.model})
                         </h1>
-
-                        {/* <div className="ratings-container">
-                                                    <div className="product-ratings">
-                                                        <span className="ratings" style={{ width: "60%" }}></span>
-                                                     
-                                                    </div>
-                                                </div> */}
-                        {/* <!-- End .product-container --> */}
 
                         <div className="price-box">
                           <span
@@ -499,9 +523,13 @@ class ShopItemDetails extends Component {
                           >
                             <span>Add to Cart</span>
                           </span>
-                          {/* <span className="paction add-wishlist" title="Add to Wishlist">
-                                                        <span>Add to Wishlist</span>
-                                                    </span> */}
+                          <span
+                            className="paction add-wishlist"
+                            title="Add to Wishlist"
+                            onClick={() => this.handleMoveWishList(id)}
+                          >
+                            <span>Add to Wishlist</span>
+                          </span>
                           {/* <span className="paction add-compare" title="Add to Compare">
                                                         <span>Add to Compare</span>
                                                     </span> */}
@@ -670,6 +698,7 @@ class ShopItemDetails extends Component {
                           <h4>
                             Products in{" "}
                             {this.state.detailsData.category &&
+                              this.state.detailsData.category &&
                               this.state.detailsData.category.name}{" "}
                             Category
                           </h4>
@@ -679,9 +708,11 @@ class ShopItemDetails extends Component {
                             className="text-primary"
                             href={`/shop?name=&category=${
                               this.state.detailsData.category &&
+                              this.state.detailsData.category &&
                               this.state.detailsData.category.id
                             }&categoryName=${
                               this.state.detailsData &&
+                              this.state.detailsData.category &&
                               this.state.detailsData.category &&
                               this.state.detailsData.category.name
                             }`}
@@ -696,17 +727,12 @@ class ShopItemDetails extends Component {
                   </div>
                 </div>
                 <div className="mt-3 mb-5">
-                  <div className="">
-                    {this.state.detailsData &&
-                    this.state.detailsData.categoryProducts &&
-                    this.state.detailsData.categoryProducts.length > 0 ? (
-                      <div className="bg-white  px-5 p-5">
-                        <Slider
-                          {...{
-                            ...settings,
-                            slidesToShow: this.state.slidesToShow,
-                          }}
-                        >
+                  <div className="row">
+                    <div className="row">
+                      {this.state.detailsData &&
+                      this.state.detailsData.categoryProducts &&
+                      this.state.detailsData.categoryProducts.length > 0 ? (
+                        <>
                           {this.state.products
                             ? this.state.detailsData &&
                               this.state.detailsData.categoryProducts &&
@@ -739,9 +765,50 @@ class ShopItemDetails extends Component {
                                 }
                               )
                             : null}
-                        </Slider>
-                      </div>
-                    ) : null}
+                        </>
+                      ) : // <div className="bg-white  px-5 p-5">
+                      //   <Slider
+                      //     {...{
+                      //       ...settings,
+                      //       slidesToShow: this.state.slidesToShow,
+                      //     }}
+                      //   >
+                      //     {this.state.products
+                      //       ? this.state.detailsData &&
+                      //         this.state.detailsData.categoryProducts &&
+                      //         this.state.detailsData.categoryProducts.map(
+                      //           (res) => {
+                      //             let {
+                      //               id,
+                      //               name,
+                      //               brandName,
+                      //               model,
+                      //               finalPrice,
+                      //               sellingPrice,
+                      //               mainImageUrl,
+                      //             } = res;
+                      //             return (
+                      //               <FeatureProductItem
+                      //                 finalPrice={finalPrice}
+                      //                 id={id}
+                      //                 name={name}
+                      //                 brandName={brandName}
+                      //                 sellingPrice={sellingPrice}
+                      //                 model={model}
+                      //                 mainImageUrl={mainImageUrl}
+                      //                 featArray={this.state.products}
+                      //                 handleMoveWishList={
+                      //                   this.handleMoveWishList
+                      //                 }
+                      //               />
+                      //             );
+                      //           }
+                      //         )
+                      //       : null}
+                      //   </Slider>
+                      // </div>
+                      null}
+                    </div>
                   </div>
                 </div>
                 <div className="row">
@@ -861,16 +928,16 @@ class ShopItemDetails extends Component {
   }
 }
 
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 4,
-  arrows: false,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 3000,
-};
+// const settings = {
+//   dots: false,
+//   infinite: true,
+//   speed: 500,
+//   slidesToShow: 4,
+//   arrows: false,
+//   slidesToScroll: 1,
+//   autoplay: true,
+//   autoplaySpeed: 3000,
+// };
 
 const mapStateToProps = (state) => {
   const { cartItems, cartData, products, productFound } = state.inventory;

@@ -1,62 +1,85 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import * as actions from "../../actions";
 import { connect } from "react-redux";
-import Dashboard from '../HOC/StoreDashboard';
+import Dashboard from "../HOC/StoreDashboard";
 import ItemListDataTable from "../../common/ItemListDataTable";
 
 class index extends Component {
-    componentDidMount(){
-        this.props.initiateRegistration()
-        this.props.fetchItems()
-        this.props.setActiveLink('Manage Items')
-	}
-    uploadNewItem = (e) => {
-        e.preventDefault()
-        return this.props.history.push('/users/items/upload')
+  componentDidMount() {
+    this.props.initiateRegistration();
+    this.props.getStores();
+    this.props.fetchItems();
+    this.props.setActiveLink("Manage Items");
+  }
+  uploadNewItem = (e) => {
+    e.preventDefault();
+    return this.props.history.push("/users/items/upload");
+  };
+  componentWillUnmount() {
+    this.props.resetManageItemsState();
+  }
+  _handleRowClick = (selectedItemId, action) => {
+    if (action === "edit") {
+      console.log("seleced", selectedItemId);
+      const index = this.props.products.findIndex(
+        (element) => element.id === parseInt(selectedItemId)
+      );
+      if (index !== -1) {
+        const product = this.props.products.find(
+          (element) => element.id === parseInt(selectedItemId)
+        );
+        console.log(product);
+        this.props.previewItem(product);
+        setTimeout(() => {
+          this.props.history.push("/users/items/upload");
+        }, 500);
+      }
+    } else if (action === "delete") {
     }
-    componentWillUnmount(){
-        this.props.resetManageItemsState()
-    }
-    _handleRowClick = (selectedItemId, action) => {
-        if(action === 'edit'){
-            console.log('seleced', selectedItemId)
-            const index = this.props.products.findIndex(element => element.id === parseInt(selectedItemId))
-            if(index !== -1){
-                const product = this.props.products.find(element => element.id === parseInt(selectedItemId))
-                console.log(product)
-                this.props.previewItem(product)
-                setTimeout(() => {
-                    this.props.history.push('/users/items/upload')
-                }, 500)
-            }
-        }   
-        else if(action === 'delete'){
-
-        }
-    }
-    goToCreateItems = () => {
-       return  this.props.history.push('/users/items/upload')
-    }
-    render() {
-        return (
-            <Dashboard>
-                <h4 className="popup-title verify-email" style={{
-                            fontWeight: 'bold',
-                            fontFamily: 'Titillium web, sans-serif',
-                            marginLeft: 20
-                        }}>Your Store Items</h4>
-                        <hr className="line-separator"/>
-                <div style={{display:'flex', justifyContent:'flex-end', margin: '20px 10px'}}>
-                    <button onClick={this.goToCreateItems} type="button" class="btn px-4 py-2 btn-success">
-                        <span style={{marginRight: 10}}>
-                            <i className="fas fa-plus"></i></span> Add Item</button>
-                </div>
-                <div style={{marginTop: 20}}>
-                    <ItemListDataTable data={this.props.products}
-                        handleRowClick={(id, action) => this._handleRowClick(id, action)}
-                    />
-                </div>
-            {/* <div className="dashboard-content" style={{marginTop: -30}}>
+  };
+  goToCreateItems = () => {
+    return this.props.history.push("/users/items/upload");
+  };
+  render() {
+    return (
+      <Dashboard>
+        <h4
+          className="popup-title verify-email"
+          style={{
+            fontWeight: "bold",
+            fontFamily: "Titillium web, sans-serif",
+            marginLeft: 20,
+          }}
+        >
+          Your Store Items
+        </h4>
+        <hr className="line-separator" />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            margin: "20px 10px",
+          }}
+        >
+          <button
+            onClick={this.goToCreateItems}
+            type="button"
+            class="btn px-4 py-2 btn-success"
+          >
+            <span style={{ marginRight: 10 }}>
+              <i className="fas fa-plus"></i>
+            </span>{" "}
+            Add Item
+          </button>
+        </div>
+        <div style={{ marginTop: 20 }}>
+          <ItemListDataTable
+            data={this.props.products}
+            stores={this.props.stores}
+            handleRowClick={(id, action) => this._handleRowClick(id, action)}
+          />
+        </div>
+        {/* <div className="dashboard-content" style={{marginTop: -30}}>
                 <div className="headline filter primary">
                     <h4>Manage Items</h4>
                     <form>
@@ -136,16 +159,20 @@ class index extends Component {
                     <div className="clearfix"></div>
                 </div>
             </div> */}
-            </Dashboard>
-        );
-    }
+      </Dashboard>
+    );
+  }
 }
 
-const mapStateToProps = state => {
-    const {inventory: {products}} = state;
-    return {
-        products
-    }
-}
+const mapStateToProps = (state) => {
+  const {
+    inventory: { products },
+    store: { stores },
+  } = state;
+  return {
+    products,
+    stores,
+  };
+};
 
 export default connect(mapStateToProps, actions)(index);

@@ -182,7 +182,7 @@ class OrderProductRow extends Component {
                   </span>
                 ) : null}
               </div>
-              <div className="wishlist-wrap">
+              {/* <div className="wishlist-wrap">
                 <span
                   className="pointer"
                   id={id}
@@ -190,7 +190,7 @@ class OrderProductRow extends Component {
                 >
                   <i className="fas fa-shopping-bag px-2"></i> Move to wishlist
                 </span>
-              </div>
+              </div> */}
               <div>
                 <Link
                   to="#"
@@ -226,7 +226,7 @@ class OrderProductRow extends Component {
                     <i className=" far fa-flag"></i>
                   </span>
 
-                  <span
+                  {/* <span
                     className="text-danger font-15"
                     onClick={(e) => {
                       this.handleItemDelete(id);
@@ -234,7 +234,7 @@ class OrderProductRow extends Component {
                   >
                     {" "}
                     <i className="fas fa-trash px-2 text-danger"></i>
-                  </span>
+                  </span> */}
                 </Link>
               </div>
             </div>

@@ -6,6 +6,7 @@ require("datatables.net-responsive");
 
 class ItemListDataTable extends Component {
   componentDidMount() {
+    console.log(this.props);
     this.$el = $(this.el);
     this.$el.DataTable({
       responsive: true,
@@ -35,6 +36,25 @@ class ItemListDataTable extends Component {
               return `<span class="item-uploadedname dt-item">${row.id}</span>`;
             }
             return `<span class="item-uploadedname dt-item">${row.id}</span>`;
+          },
+          responsivePriority: 10,
+        },
+        {
+          title: "Store Name",
+          render: (data, type, row, meta) => {
+            // console.log(row);
+            if (type === "display") {
+              const index = this.props.stores.findIndex(
+                (item) => item.id === row.store
+              );
+              if (index !== -1) return this.props.stores[index].name;
+              return "---";
+            }
+            const index = this.props.stores.findIndex(
+              (item) => item.id === row.store
+            );
+            if (index !== -1) return this.props.stores[index].name;
+            return "---";
           },
           responsivePriority: 10,
         },
@@ -103,6 +123,15 @@ class ItemListDataTable extends Component {
           },
         },
         {
+          title: "Date Listed",
+          render: (data, type, row, meta) => {
+            if (type === "display") {
+              return new Date(row.createdAt).toLocaleDateString();
+            }
+            return new Date(row.createdAt).toLocaleDateString();
+          },
+        },
+        {
           title: " Action",
           render: (data, type, row, meta) => {
             return `
@@ -110,7 +139,7 @@ class ItemListDataTable extends Component {
                         <div class="input-group-prepend">
                         <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer" target="_blank">View</a>
+                          <a class="dropdown-item" href=${`${window.origin}/shop-details/${row.id}`} rel="noopener noreferrer">View</a>
                         
                           
                         </div>
@@ -153,7 +182,8 @@ class ItemListDataTable extends Component {
   }
   componentWillUnmount() {
     this.$el = $(this.el);
-    this.$el.DataTable().destroy(true);
+    this.$el.DataTable().clear();
+    // this.$el.DataTable().destroy(true);
   }
   reloadTableData(data, $el) {
     $el.DataTable().clear();
@@ -161,8 +191,13 @@ class ItemListDataTable extends Component {
     $el.DataTable().draw();
   }
   shouldComponentUpdate(nextProps) {
-    if (nextProps.data.length !== this.props.data.length) {
+    if (
+      nextProps.stores.length !== this.props.stores.length ||
+      nextProps.data.length !== this.props.data.length
+    ) {
       this.reloadTableData(nextProps.data, $(this.el));
+      console.log("reloaded");
+      return true;
     }
     return false;
   }

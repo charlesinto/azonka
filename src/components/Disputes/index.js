@@ -515,6 +515,77 @@ class Disputes extends Component {
               </div>
               <div className="modal-body">
                 <form onSubmit={this.handleSubmit}>
+                  <div class="form-group">
+                    <label for="exampleFormControlTextarea1">
+                      Enter your Complaint
+                    </label>
+                    <textarea
+                      value={this.state.message}
+                      onChange={this.handleChange}
+                      name="message"
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
+                      maxLength="1000"
+                      rows="1"
+                    ></textarea>
+                    <small id="emailHelp" class="form-text text-muted">
+                      Maximum of 1000 characters
+                    </small>
+                  </div>
+                  <div className="form-group">
+                    <label for="exampleFormControlFile1">Upload Images</label>
+                    <input
+                      min="1"
+                      max="5"
+                      name="files"
+                      onClick={this.handleChange}
+                      accept="image/*"
+                      type="file"
+                      multiple
+                      class="form-control-file"
+                      id="exampleFormControlFile1"
+                    />
+                    <small id="emailHelp" class="form-text text-muted">
+                      maximum of 5 Images
+                    </small>
+                  </div>
+                  <div className="form-check" style={{ display: "flex" }}>
+                    <input
+                      onChange={this.handleChange}
+                      type="checkbox"
+                      name="damaged"
+                      class="mx-3"
+                      style={{ display: "block", marginTop: 5 }}
+                      id="exampleCheck1"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="damaged"
+                      style={{ marginTop: "0px !important" }}
+                    >
+                      Damaged and Defective Item
+                    </label>
+                  </div>
+                  <div className="form-check" style={{ display: "flex" }}>
+                    <input
+                      onChange={this.handleChange}
+                      type="checkbox"
+                      name="different"
+                      class=" mx-3"
+                      style={{ display: "block", marginTop: 5 }}
+                      id="exampleCheck2"
+                    />
+                    <label
+                      class=""
+                      for="different"
+                      style={{ marginTop: "0px !important" }}
+                    >
+                      Entirely Different Item
+                    </label>
+                  </div>
+
+                  <br />
+                  <br />
                   <div className="order-table mb-3">
                     <MaterialTable
                       components={{
@@ -548,9 +619,9 @@ class Disputes extends Component {
                                   style={{ display: "block", marginTop: 5 }}
                                   checked={isChecked}
                                 />{" "}
-                                <button className="btn btn-primary mx-2">
+                                {/* <button className="btn btn-primary mx-2">
                                   View Products
-                                </button>
+                                </button> */}
                               </>
                             );
                           }
@@ -602,76 +673,6 @@ class Disputes extends Component {
                       ]}
                     />
                   </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlTextarea1">
-                      Enter your Complaint
-                    </label>
-                    <textarea
-                      value={this.state.message}
-                      onChange={this.handleChange}
-                      name="message"
-                      className="form-control"
-                      id="exampleFormControlTextarea1"
-                      maxLength="1000"
-                      rows="1"
-                    ></textarea>
-                    <small id="emailHelp" class="form-text text-muted">
-                      Maximum of 1000 characters
-                    </small>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlFile1">Upload Images</label>
-                    <input
-                      min="1"
-                      max="5"
-                      name="files"
-                      onClick={this.handleChange}
-                      accept="image/*"
-                      type="file"
-                      multiple
-                      class="form-control-file"
-                      id="exampleFormControlFile1"
-                    />
-                    <small id="emailHelp" class="form-text text-muted">
-                      maximum of 5 Images
-                    </small>
-                  </div>
-                  <div class="form-check" style={{ display: "flex" }}>
-                    <input
-                      onChange={this.handleChange}
-                      type="checkbox"
-                      name="damaged"
-                      class="mx-3"
-                      style={{ display: "block", marginTop: 5 }}
-                      id="exampleCheck1"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="damaged"
-                      style={{ marginTop: "0px !important" }}
-                    >
-                      Damaged and Defective Item
-                    </label>
-                  </div>
-                  <div class="form-check" style={{ display: "flex" }}>
-                    <input
-                      onChange={this.handleChange}
-                      type="checkbox"
-                      name="different"
-                      class=" mx-3"
-                      style={{ display: "block", marginTop: 5 }}
-                      id="exampleCheck2"
-                    />
-                    <label
-                      class=""
-                      for="different"
-                      style={{ marginTop: "0px !important" }}
-                    >
-                      Entirely Different Item
-                    </label>
-                  </div>
-                  <br />
-                  <br />
                 </form>
               </div>
               <div className="modal-footer">

@@ -60,6 +60,12 @@ import SellerDisputes from "./components/SellerDisputes";
 import SelfService from "./components/SelfService";
 import QrCode from "./components/QrCode";
 import ShopProducts from "./components/Cart/ShopProducts";
+import TodayDeal from "./components/TodayDeal";
+import Career from "./components/Career";
+import RefundPolicy from "./components/SelfService/RefundPolicy";
+import CashBonusReward from "./components/CashBonus";
+import YourAccount from "./components/Help/YourAcount";
+import YourOrder from "./components/Help/YourOrder";
 
 class Root extends Component {
   componentDidMount() {
@@ -93,6 +99,15 @@ class Root extends Component {
                   path="/password/new"
                   component={ResetPassword}
                 />
+                <Route exact path="/help/order" component={YourOrder} />
+                <Route exact path="/help/account" component={YourAccount} />
+                <Route
+                  exact
+                  path="/cashbonus-reward"
+                  component={CashBonusReward}
+                />
+                <Route exact path="/refund-policy" component={RefundPolicy} />
+                <Route exact path="/careers" component={Career} />
                 <Route
                   exact
                   path="/specials/:id"
@@ -283,6 +298,7 @@ class Root extends Component {
                   path="/users/reset-password"
                   component={ChangePassword}
                 />
+                <Route exact path="/today-deals" component={TodayDeal} />
                 <AuthRoute
                   redirectIfUser
                   exact

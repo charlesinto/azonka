@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "../HeaderFooter/Header";
-import Footer from "../HeaderFooter/Footer";
+// import Footer from "../HeaderFooter/Footer";
 import queryString from "query-string";
 import * as actions from "../../actions";
 import { connect } from "react-redux";
@@ -248,7 +248,7 @@ class confirmAccount extends Component {
             <div style={{ textAlign: "right", margin: "15px 20px 0 0" }}>
               <button
                 onClick={this.handleOnclick}
-                className="btn btn-sm btn-primary"
+                className="btn btn-lg btn-primary"
               >
                 verify
               </button>
@@ -397,7 +397,7 @@ class confirmAccount extends Component {
             </div>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }

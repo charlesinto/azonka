@@ -225,7 +225,12 @@ export const fetchItems = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `/api/v1/seller/product/get-products/${0}/${100}`
+        `/api/v1/seller/product/get-products/${0}/${10000}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token"),
+          },
+        }
       );
       //     headers: {
       //         'x-access-token': localStorage.getItem('x-access-token')
@@ -234,6 +239,7 @@ export const fetchItems = () => {
       const {
         data: { products },
       } = response;
+      console.log("products: ", products);
       dispatch({ type: PRODUCTS_FETCED_SUCCESSFULLY, payload: products });
       dispatch({ type: STOP_LOADING, payload: "" });
     } catch (error) {
@@ -1390,21 +1396,25 @@ export const getProductById = (id = "") => {
     try {
       const response = await axios.get(`/api/v1/seller/product/get/${id}`);
       const { product } = response.data;
-      console.log(product);
-      const response2 = await axios.get(
-        `/api/v1/user/product/get-products-by-category/${product.category.id}/price/ASC/0/16`
-      );
-      product.categoryProducts = response2.data.category.products;
+      let response2 = [];
+      if (product.category) {
+        response2 = await axios.get(
+          `/api/v1/user/product/get-products-by-category/${product.category.id}/price/DESC/0/16`
+        );
+        product.categoryProducts = response2.data.category.products;
+      }
+
       dispatch({ type: STOP_LOADING, payload: "" });
       dispatch({ type: PRODUCT_FOUND, payload: product });
     } catch (error) {
+      console.log(error.message);
       dispatch({ type: STOP_LOADING, payload: "" });
       if (error && error.response && error.response.status === 404) {
         return dispatch({ type: PRODUCT_NOT_FOUND, payload: "" });
       } else if (error.response) {
         dispatch({ type: DISPLAY_ERROR, payload: error.response.data.message });
       }
-      Swal.fire("some errors were enocuntered");
+      Swal.fire(error ? error.message : "some errors were encountered");
     }
   };
 };

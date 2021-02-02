@@ -93,7 +93,7 @@ class ProductRow extends Component {
                 >
                   <span className="text-danger">
                     {" "}
-                    <i className="fas fa-pencil-alt px-2 text-primary"></i>{" "}
+                    {/* <i className="fas fa-pencil-alt px-2 text-primary"></i>{" "} */}
                   </span>
                   <span
                     className="text-danger"

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import * as actions from "./../actions";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
+import LazyLoad from "react-lazyload";
+import imagePlaceHolder from "../css/images/image_loader.png";
 // import swal from 'sweetalert2'
 
 class FeatureProductItem extends Component {
@@ -51,7 +53,7 @@ class FeatureProductItem extends Component {
         // return console.log("data", cartData)
         let isAdded = cartData.some((data) => data.id === id); //check if clicked item exist in cart
         if (isAdded) {
-          return this.props.successAlert("Item has already been added");
+          return this.props.successAlert("Item added to cart");
         } else {
           if (obj) {
             localStorage.setItem("cart", JSON.stringify([...cartData, obj]));
@@ -59,7 +61,7 @@ class FeatureProductItem extends Component {
 
           this.handleSetLocalData();
           // return swal.fire("Response", "Item added to cart", "success")
-          return this.props.showSuccessALert("Item has already been added");
+          return this.props.showSuccessALert("Item added to cart");
         }
       } else {
         //if cart is empty
@@ -67,7 +69,7 @@ class FeatureProductItem extends Component {
         this.handleSetLocalData();
 
         // return swal.fire("Response", "Item added to cart", "success")
-        return this.props.showSuccessALert("Item has already been added");
+        return this.props.showSuccessALert("Item added to cart");
       }
     }
   };
@@ -75,7 +77,7 @@ class FeatureProductItem extends Component {
     await this.props.fetchLocalCart();
     let { cartData } = this.props;
     this.setState({ cartData }, () =>
-      this.props.successAlert("Item added to cart successfully")
+      this.props.successAlert("Item added to cart")
     );
   };
   handleSetOnlineData = async () => {
@@ -118,7 +120,11 @@ class FeatureProductItem extends Component {
       mainImageUrl,
     } = this.props;
     return (
-      <div className="product col-md-3" key={id} style={{ marginRight: 8 }}>
+      <div
+        className="product col-sm-6 col-md-3 col-lg-2"
+        key={id}
+        // style={{ marginRight: 8 }}
+      >
         {/* <ItemModal /> */}
         <figure className="product-image-container">
           <span
@@ -126,12 +132,29 @@ class FeatureProductItem extends Component {
             id={id}
             onClick={this.handleItemDetails}
           >
-            <img
+            <LazyLoad
+              // height={200}
+              once={true}
+              placeholder={
+                <img
+                  src={imagePlaceHolder}
+                  alt="..."
+                  // style={{ width: "200px", height: "200px" }}
+                />
+              }
+            >
+              <img
+                src={mainImageUrl ? mainImageUrl : imagePlaceHolder}
+                alt="..."
+                // style={{ width: "200px", height: "200px" }}
+              />
+            </LazyLoad>
+            {/* <img
               src={mainImageUrl}
               alt="product"
               className="image-view"
               loading="lazy"
-            />
+            /> */}
           </span>
           <span
             className="btn-quickview"

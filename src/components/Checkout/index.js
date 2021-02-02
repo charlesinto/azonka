@@ -37,7 +37,7 @@ class Checkout extends Component {
     super(props);
     this.state = { ...this.INITIAL_STATE };
   }
-  componentDidMount() {
+  async componentDidMount() {
     let token = localStorage.getItem("x-access-token");
 
     if (!token) {
@@ -46,18 +46,20 @@ class Checkout extends Component {
       if (this.props.amount > 0) {
         const states = locationState.getStates();
         console.log("states: ", states);
-        this.props.initiateRegistration();
-        this.loadCart();
         const { firstName, lastName, emailAddress } = JSON.parse(
           localStorage.getItem("azonta-user")
         );
-        return this.setState({
+        this.setState({
           auth: true,
           firstName,
           lastName,
           emailAddress,
           states,
         });
+        this.props.initiateRegistration();
+        await this.loadCart();
+
+        this.props.stopLoading();
       } else {
         return this.props.history.push("/users/cart");
       }
@@ -66,26 +68,39 @@ class Checkout extends Component {
 
   loadCart = async () => {
     // setInterval(async () => {
-    let token = localStorage.getItem("x-access-token");
-    if (token) {
-      await this.props.setCategories();
-      await this.props.fetchCheckoutCart();
-      this.setState(
-        {
-          cartData: this.props.cartItems.products,
-          quantity: this.props.cartItems.quantity,
-        },
-        () => {
-          console.log(this.state);
-          this.calculateSum();
+    return new Promise(async (resolve, reject) => {
+      try {
+        let token = localStorage.getItem("x-access-token");
+        if (token) {
+          // this.props.initiateRegistration();
+          this.setState(
+            {
+              cartData: this.props.cartItems.products,
+              quantity: this.props.cartItems.quantity,
+            },
+            async () => {
+              console.log(this.state);
+              this.calculateSum();
+              this.props.initiateRegistration();
+              await this.props.setCategories();
+              await this.props.fetchCheckoutCart();
+              this.props.stopLoading();
+            }
+          );
+
+          resolve(null);
+          // console.log("aza", this.state.cartData)
+        } else {
+          await this.props.fetchLocalCart();
+          console.log("load drp", this.props.cartData);
+          this.setState({ cartData: this.props.cartData });
+          resolve(null);
         }
-      );
-      // console.log("aza", this.state.cartData)
-    } else {
-      await this.props.fetchLocalCart();
-      console.log("load drp", this.props.cartData);
-      this.setState({ cartData: this.props.cartData });
-    }
+      } catch (error) {
+        reject(error);
+        console.log(error);
+      }
+    });
   };
 
   calculateSum = () => {

@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 import CartDropdown from "../Cart/CartDropdown";
 import queryString from "query-string";
+import axios from "axios";
 
 class Header extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class Header extends Component {
       selectedValue: "",
       categoryValue: "",
       categoryName: "",
+      categories: [],
     };
   }
   async componentDidMount() {
@@ -42,6 +44,13 @@ class Header extends Component {
     this.setState({
       currentUser: user,
       cartData,
+    });
+    const response = await axios.get("/api/v1/category/get-categories/0/20");
+    // console.log(response);
+
+    this.props.setCategories();
+    this.setState({
+      categories: response.data.categories,
     });
     this.loadSearchCategory();
     this.loadCart();
@@ -150,9 +159,9 @@ class Header extends Component {
               <div className="container-fluid">
                 <div className="header-left header-dropdowns">
                   <div className="header-dropdown">
-                    <a href="#N">
+                    <Link href="#">
                       <b>NGN</b>
-                    </a>
+                    </Link>
                     <div className="header-menu">
                       <ul>
                         <li>
@@ -216,11 +225,11 @@ class Header extends Component {
                   </p>
 
                   <div className="header-dropdown dropdown-expanded">
-                    <a href="#N">
+                    <Link href="#">
                       <b>Links</b>
-                    </a>
+                    </Link>
                     <div className="header-menu">
-                      <ul>
+                      <ul className="sub-links">
                         <li>
                           <Link to="/users/profile">
                             <b>MY Account</b>{" "}
@@ -280,14 +289,14 @@ class Header extends Component {
                 </div>
                 <div className="header-center">
                   <div className="header-search">
-                    <a
-                      href="#N"
+                    <Link
+                      to="#!"
                       className="search-toggle"
                       onClick={() => this._showSearchBar()}
                       role="button"
                     >
                       <i className="icon-magnifier"></i>
-                    </a>
+                    </Link>
                     <form action="#" method="get">
                       <div
                         className={`header-search-wrapper ${
@@ -355,9 +364,9 @@ class Header extends Component {
                     <i className="icon-menu"></i>
                   </button>
                   <div className="header-contact">
-                    <a href="#!" className="text_underline-hover">
+                    <Link to="/today-deals" className="text_underline-hover">
                       Today Deals
-                    </a>
+                    </Link>
                   </div>
                   <CartDropdown />
                 </div>
@@ -382,6 +391,20 @@ class Header extends Component {
                 <ul className="mobile-menu">
                   <li onClick={() => this._toggleMenu()}>
                     <Link to="/">Home</Link>
+                  </li>
+                  <li>
+                    <Link to="#">Categories For You</Link>
+                    <ul>
+                      {this.state.categories.map((item) => (
+                        <li>
+                          <a
+                            href={`${window.origin}/shop?name=&category=${item.id}&categoryName=${item.name}`}
+                          >
+                            {item.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
 
                   <li onClick={() => this._toggleMenu()}>
@@ -429,17 +452,30 @@ class Header extends Component {
                   <li onClick={() => this._toggleMenu()} className="">
                     <Link to="/users/banks">My Bank</Link>
                   </li>
-                  <li onClick={() => this._toggleMenu()} className="">
+
+                  {/* <li onClick={() => this._toggleMenu()} className="">
                     <Link to="/users/azonkaPay">Azonka Pay</Link>
-                  </li>
-                  <li onClick={() => this._toggleMenu()} className="">
+                  </li> */}
+                  {/* <li onClick={() => this._toggleMenu()} className="">
                     <Link to="/">Azonka Credit</Link>
-                  </li>
+                  </li> */}
                   <li onClick={() => this._toggleMenu()} className="">
-                    <Link to="/users/referals">Referrals</Link>
+                    <Link to="/users/referrals">Referrals</Link>
                   </li>
                   <li onClick={() => this._toggleMenu()} className="">
                     <Link to="/users/create/shop">Store</Link>
+                  </li>
+                  <li>
+                    <Link to="/users/placed-orders">My Orders</Link>
+                  </li>
+                  <li>
+                    <a
+                      href="/users/self-service"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Help
+                    </a>
                   </li>
 
                   {currentUser ? (
@@ -453,7 +489,7 @@ class Header extends Component {
                     </li>
                   ) : (
                     <li className="">
-                      <Link to="#">Log In</Link>
+                      <Link to="/users/login">Log In</Link>
                     </li>
                   )}
                 </ul>

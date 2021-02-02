@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import StoreDashboard from "../HOC/StoreDashboard";
+import imagePlaceHolder from "../../css/images/image_loader.png";
 
 class index extends Component {
   constructor(props) {
@@ -192,7 +193,7 @@ class index extends Component {
       return (
         <img
           className="col-md-12 col-sm-12 "
-          src="https://via.placeholder.com/400?text=Upload+Photo"
+          src={imagePlaceHolder}
           alt="upload item"
         />
       );
@@ -681,7 +682,7 @@ class index extends Component {
                             src={
                               this.props.subImage1.trim() !== ""
                                 ? this.props.subImage1
-                                : "https://via.placeholder.com/40?text=Upload+Photo"
+                                : imagePlaceHolder
                             }
                             alt="upload item"
                           />
@@ -736,7 +737,7 @@ class index extends Component {
                             src={
                               this.props.subImage2.trim() !== ""
                                 ? this.props.subImage2
-                                : "https://via.placeholder.com/40?text=Upload+Photo"
+                                : imagePlaceHolder
                             }
                             alt="upload item"
                           />
@@ -790,7 +791,7 @@ class index extends Component {
                             src={
                               this.props.subImage3.trim() !== ""
                                 ? this.props.subImage3
-                                : "https://via.placeholder.com/40?text=Upload+Photo"
+                                : imagePlaceHolder
                             }
                             alt="upload item"
                           />
@@ -845,7 +846,7 @@ class index extends Component {
                             src={
                               this.props.subImage4.trim() !== ""
                                 ? this.props.subImage4
-                                : "https://via.placeholder.com/40?text=Upload+Photo"
+                                : imagePlaceHolder
                             }
                             alt="upload item"
                           />

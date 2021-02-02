@@ -225,7 +225,7 @@ export const login = (user) => {
       console.log(error);
       return dispatch({
         type: DISPLAY_ERROR,
-        payload: error.response.data.substr(0, 100),
+        payload: "Could not fulfill request",
       });
     }
   };

@@ -347,7 +347,7 @@ input,
 textarea {
   color: #000;
   font-family: "Titillium Web", sans-serif;
-  font-size: 1.1125em;
+  font-size: 20px;
   border-radius: 4px;
 }
 
@@ -13306,4 +13306,78 @@ input:-webkit-autofill {
 
 .order-shipping-fee {
   /* font-weight: bold; */
+}
+
+ul.sub-links li {
+}
+
+@media (max-width: 992px) {
+  .sider-wrapper {
+    display: none !important;
+  }
+  .home-slider-wrapper {
+    max-width: 100% !important;
+  }
+}
+
+article ul {
+  list-style: disc !important;
+  margin-left: 20px !important;
+}
+
+article ul a {
+  color: #0091ea;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+p h4 {
+  margin-top: 10px;
+}
+
+@media (max-width: 992px) {
+  .hide-on-small-device {
+    display: none !important;
+  }
+  .header-dropdown:hover > .header-menu ul {
+    font-size: 20px;
+  }
+}
+
+ul.ordered-list {
+  list-style-type: none !important;
+  padding-left: 10px;
+}
+article b {
+  color: #000;
+  font-size: 1.6rem;
+}
+
+article h4 {
+  font-size: 2.53rem;
+}
+
+article a {
+  color: #007bff;
+}
+
+article a:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+article code {
+  font-family: Consolas, "courier new";
+  color: crimson;
+  background-color: #fff;
+  padding: 2px;
+  /* font-size: 105%; */
+}
+
+@media (max-width: 768px) {
+  .col-sm-6 {
+    -ms-flex: 0 0 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
 }

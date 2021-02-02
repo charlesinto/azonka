@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import Pages from "../../config/pages";
 import Positions from "../../config/position";
+import { fileUpload } from "../util/FileUploader";
 
 class SellerSignUp extends Component {
   state = {
@@ -23,6 +24,7 @@ class SellerSignUp extends Component {
     showSpinner: false,
     agreeToTerms: false,
     referredBy: "",
+    validId: null,
   };
   componentDidMount() {
     this.props.getSecurityQuestions();
@@ -84,6 +86,10 @@ class SellerSignUp extends Component {
       return this.setState({
         [name]: value,
       });
+    } else {
+      this.setState({
+        [name]: event.target.files,
+      });
     }
     if (this.state.questions.length <= 0) {
       this.setState({
@@ -138,7 +144,7 @@ class SellerSignUp extends Component {
     });
     return null;
   };
-  handleFormSubmit = (event) => {
+  handleFormSubmit = async (event) => {
     event.preventDefault();
     const isValid = this.validateFormData(this.state);
     if (isValid) {
@@ -150,21 +156,39 @@ class SellerSignUp extends Component {
       const companyName = this.state.companyName;
       const headOfficeAddress = this.state.headOfficeAddress;
       const contactLine = this.state.contactLine;
-      const sellerIdentification = "";
+      let sellerIdentification = "";
       if (!this.state.agreeToTerms) {
         return Swal.fire("You Must Agree to terms and Conditions");
       } else {
-        this.props.initiateRegistration();
-        this.props.updateUserType(
-          {
-            referredBy,
-            companyName,
-            headOfficeAddress,
-            contactLine,
-            sellerIdentification,
-          },
-          "seller"
-        );
+        try {
+          this.props.initiateRegistration();
+          if (this.state.validId !== null) {
+            const uploadResponse = await fileUpload(
+              this.state.validId,
+              "sellers-credentials"
+            );
+            sellerIdentification = uploadResponse.Location;
+          }
+          // console.log(sellerIdentification);
+          this.props.updateUserType(
+            {
+              referredBy,
+              companyName,
+              headOfficeAddress,
+              contactLine,
+              sellerIdentification,
+            },
+            "seller"
+          );
+        } catch (error) {
+          this.props.stopLoading();
+          console.log(error);
+          Swal.fire(
+            error && error.message
+              ? error.message
+              : "Some errors were encountered"
+          );
+        }
       }
 
       //naviagate the user to profile page
@@ -293,6 +317,30 @@ class SellerSignUp extends Component {
                       </div>
                     </div>
                   </div>
+                  <div className="row my-2">
+                    <div className="col-md-12">
+                      <hr />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <label for="exampleFormControlFile1">
+                          Upload Valid ID (International passport, Vehicle
+                          Driver’s license, Permanent Voters card, National
+                          Identity number)
+                        </label>
+                        <input
+                          name="validId"
+                          onChange={this.handleInputChange}
+                          accept="image/png, image/jpeg"
+                          type="file"
+                          className="form-control-file"
+                          id="exampleFormControlFile1"
+                        />
+                      </div>
+                    </div>
+                  </div>
                   <div className="row">
                     <div className="col-md-12">
                       <div className="terms-condition-container d-flex">
@@ -369,9 +417,9 @@ class SellerSignUp extends Component {
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                {/* <h5 class="modal-title" id="exampleModalLabel">
                   Welcome!, we are delighted to have you
-                </h5>
+                </h5> */}
                 <button
                   type="button"
                   class="close"
@@ -382,7 +430,7 @@ class SellerSignUp extends Component {
                 </button>
               </div>
               <div class="modal-body"></div>
-              <div class="modal-footer">
+              {/* <div class="modal-footer">
                 <button
                   type="button"
                   class="btn btn-secondary btn-lg"
@@ -390,7 +438,7 @@ class SellerSignUp extends Component {
                 >
                   Close
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

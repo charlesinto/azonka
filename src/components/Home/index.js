@@ -23,6 +23,8 @@ import axios from "axios";
 import FlashSales from "../../common/FlashSales";
 import Pages from "../../config/pages";
 import Positions from "../../config/position";
+import LazyLoad from "react-lazyload";
+import imagePlaceHolder from "../../css/images/image_loader.png";
 
 class Home extends Component {
   state = {
@@ -74,6 +76,10 @@ class Home extends Component {
           "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg",
       },
     ],
+    lowerBanner1: null,
+    lowerBanner2: null,
+    lowerBanner3: null,
+    lowerBanner4: null,
     leftBanner: [
       {
         url:
@@ -170,25 +176,31 @@ class Home extends Component {
     );
     console.log("ads", ads);
     const topBanner = ads.filter((item) => item.position === Positions.TOP);
-    const lowerBanner = ads.filter((item) => item.position === Positions.LOWER);
-    console.log(lowerBanner);
+    const lowerBanner1 = ads.filter(
+      (item) => item.position === Positions.LOWER_BANNER1
+    )[0];
+
+    const lowerBanner2 = ads.filter(
+      (item) => item.position === Positions.LOWER_BANNER2
+    )[0];
+    const lowerBanner3 = ads.filter(
+      (item) => item.position === Positions.LOWER_BANNER3
+    )[0];
+    const lowerBanner4 = ads.filter(
+      (item) => item.position === Positions.LOWER_BANNER4
+    )[0];
     const leftBanner = ads.filter((item) => item.position === Positions.LEFT);
     const bottomBanner = ads.filter(
       (item) => item.position === Positions.BOTTOM
     )[0];
     const popUp = ads.filter((item) => item.position === Positions.POP_UP);
-    if (lowerBanner.length > 4) {
-      lowerBanner.splice(4, lowerBanner.length);
-    } else if (lowerBanner.length > 0 && lowerBanner.length < 4) {
-      const remainingItem = 4 - lowerBanner.length;
-      for (let i = 0; i < remainingItem; i++) {
-        lowerBanner.push(lowerBanner[0]);
-      }
-    }
 
     this.setState({
       topBanner,
-      lowerBanner,
+      lowerBanner1,
+      lowerBanner2,
+      lowerBanner3,
+      lowerBanner4,
       leftBanner,
       bottomBanner,
       popUp: popUp.length > 0 ? popUp : this.state.popUp,
@@ -419,21 +431,53 @@ class Home extends Component {
             right: "30px",
           }}
         >
-          <div
-            className="popup-alert"
-            style={{
-              backgroundImage: `${
-                this.state.topBanner[index]
-                  ? `url(${this.state.topBanner[index].url})`
-                  : 'url( "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg")'
-              }`,
-            }}
+          <LazyLoad
+            // height={200}
+            once={true}
+            placeholder={
+              <img
+                src={imagePlaceHolder}
+                alt="..."
+                // style={{ width: "200px", height: "200px" }}
+              />
+            }
           >
-            <div style={{ position: "absolute", bottom: 0, width: "100%" }}>
-              {/* <Link to="#" className="button mid secondary">Check it <span className="primary">out!</span></Link> */}
+            <div
+              className="popup-alert"
+              style={{
+                backgroundImage: `${
+                  this.state.topBanner[index]
+                    ? `url(${this.state.topBanner[index].url})`
+                    : 'url( "https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg")'
+                }`,
+              }}
+            >
+              <div style={{ position: "absolute", top: 10, right: 10 }}>
+                <div
+                  onClick={() => this.setState({ showPopUp: false })}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    background: "#fff",
+                    opacity: 0.8,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span
+                    style={{ fontSize: 30, color: "#000", fontWeight: "bold" }}
+                  >
+                    &times;
+                  </span>
+                </div>
+              </div>
+              {/* <img className="close-btn" src={notifCloseIcon} alt="close-icon" onClick={this.closePopup} /> */}
             </div>
-            {/* <img className="close-btn" src={notifCloseIcon} alt="close-icon" onClick={this.closePopup} /> */}
-          </div>
+          </LazyLoad>
+
           {/* <p className="text-header">Alerts &amp; Notifications</p>
                     <p className="info">We added alerts &amp; notifications to the template!.<br />
                         Try our previewer and code generator and use them in your page!</p>
@@ -479,48 +523,42 @@ class Home extends Component {
             {item.name}
           </a>
           {/* <div className="megamenu megamenu-fixed-width">
-                        <div className="row">
-                            <div className="col-lg-8">
-                                <div className="row">
-                                    <div className="col-lg-6">
-                                        <div className="menu-title">
-                                            
-                                        </div>
-                                        <ul>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                        </ul>
-                                    </div>
-                                    <div className="col-lg-6">
-                                        <div className="menu-title">
-                                            
-                                        </div>
-                                        <ul>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                            <li></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4">
-                                <div className="banner">
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
+            <div className="row">
+              <div className="col-lg-8">
+                <div className="row">
+                  <div className="col-lg-6">
+                    <div className="menu-title"></div>
+                    <ul>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="menu-title"></div>
+                    <ul>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4">
+                <div className="banner"></div>
+              </div>
+            </div>
+          </div> */}
         </li>
       );
     });
@@ -540,7 +578,7 @@ class Home extends Component {
           <main className="main">
             <div className="container-fluid">
               <div className="row mt-4">
-                <div className="col-md-4 col-lg-4">
+                <div className="col-md-4 col-lg-4 sider-wrapper">
                   <aside className="sidebar-home">
                     <div className="row d-flex justify-content-center">
                       <div className="col-md-12 col-lg-12">
@@ -735,7 +773,7 @@ class Home extends Component {
                     </div>
                   </aside>
                 </div>
-                <div className="col-md-8 col-lg-8">
+                <div className="col-md-8 col-lg-8 home-slider-wrapper">
                   <div className="row d-flex justify-content-center">
                     <div className="col-lg-10">
                       <div className="bnk">
@@ -770,11 +808,26 @@ class Home extends Component {
                                         i === 0 ? "active" : ""
                                       }`}
                                     >
-                                      <img
-                                        className="d-block w-100"
-                                        src={item.url}
-                                        alt="Second slide"
-                                      />
+                                      <LazyLoad
+                                        once={true}
+                                        placeholder={
+                                          <img
+                                            src={imagePlaceHolder}
+                                            alt="..."
+                                            // style={{ width: "200px", height: "200px" }}
+                                          />
+                                        }
+                                      >
+                                        <img
+                                          className="d-block w-100"
+                                          src={
+                                            item.url
+                                              ? item.url
+                                              : imagePlaceHolder
+                                          }
+                                          alt="Second slide"
+                                        />
+                                      </LazyLoad>
 
                                       {/* <img className="d-block w-100" src={'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg'} alt="Second slide" /> */}
                                     </div>
@@ -788,11 +841,26 @@ class Home extends Component {
                                         i === 0 ? "active" : ""
                                       }`}
                                     >
-                                      <img
-                                        className="d-block w-100"
-                                        src={item.url}
-                                        alt="Second slide"
-                                      />
+                                      <LazyLoad
+                                        once={true}
+                                        placeholder={
+                                          <img
+                                            src={imagePlaceHolder}
+                                            alt="..."
+                                            // style={{ width: "200px", height: "200px" }}
+                                          />
+                                        }
+                                      >
+                                        <img
+                                          className="d-block w-100"
+                                          src={
+                                            item.url
+                                              ? item.url
+                                              : imagePlaceHolder
+                                          }
+                                          alt="Second slide"
+                                        />
+                                      </LazyLoad>
 
                                       {/* <img className="d-block w-100" src={'https://ng.jumia.is/cms/Homepage/2020/W34/DontMissTheAction_1424x768_Slider-min.jpg'} alt="Second slide" /> */}
                                     </div>
@@ -825,13 +893,14 @@ class Home extends Component {
 
               <div className="row">
                 <div className="col-md-12">
-                  <div className="mb-3"></div>
-                  <div className="row d-flex justify-content-center">
+                  <div className="mb-3 hide-on-small-device"></div>
+                  <div className="row d-flex justify-content-center hide-on-small-device">
                     <div className="col-lg-12">
                       <div className="row d-flex justify-content-center">
-                        {this.state.lowerBanner.map((item, i) => {
-                          return <Trending index={i} image={item.url} />;
-                        })}
+                        <Trending image={this.state.lowerBanner1} />
+                        <Trending image={this.state.lowerBanner2} />
+                        <Trending image={this.state.lowerBanner3} />
+                        <Trending image={this.state.lowerBanner4} />
                       </div>
                     </div>
                   </div>
@@ -890,7 +959,7 @@ class Home extends Component {
 
                   <hr className="my-4"></hr>
 
-                  <div className="bg-white row px-5">
+                  <div className="bg-white row px-5 py-3">
                     {this.state.products
                       ? this.state.products.map((res) => {
                           let {
@@ -964,7 +1033,7 @@ class Home extends Component {
                   <hr className="my-4"></hr>
                   {/* <h1 className="text-center font-weight-light">Flash sales</h1> */}
                   <div
-                    className="row p-5 bg-white"
+                    className="row px-5 py-3 bg-white"
                     style={{ margin: "4vh 0px" }}
                   >
                     <br />

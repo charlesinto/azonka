@@ -58,7 +58,10 @@ class SelfService extends Component {
   render() {
     return (
       <div>
-        <div className="app-wrapper-container container-fluid">
+        <div
+          className="app-wrapper-container container-fluid"
+          style={{ paddingTop: "14rem" }}
+        >
           <div className="row">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
@@ -127,7 +130,7 @@ class SelfService extends Component {
                             Azonka Referral Bonus System
                           </li>
                           <li className=" custom-list-item cursor-pointer">
-                            Refunds
+                            <Link to="/refund-policy">Refund Policy</Link>
                           </li>
                           <li className=" custom-list-item cursor-pointer">
                             Payment, Pricing and Promotions

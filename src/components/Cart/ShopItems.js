@@ -13,6 +13,8 @@ import swal from "sweetalert2";
 import Pages from "../../config/pages";
 import Positions from "../../config/position";
 import axios from "axios";
+import LazyLoad from "react-lazyload";
+import imagePlaceHolder from "../../css/images/image_loader.png";
 
 class ShopItems extends Component {
   state = {
@@ -342,7 +344,7 @@ class ShopItems extends Component {
                         mainImageUrl,
                       } = data;
                       return (
-                        <div className="col-6 col-md-4 col-xl-3" key={id}>
+                        <div className="col-sm-6 col-md-3 col-lg-2" key={id}>
                           <div className="product">
                             <figure className="product-image-container">
                               <span
@@ -350,11 +352,36 @@ class ShopItems extends Component {
                                 className="product-image shop-product-image"
                                 onClick={(e) => this.handleItemDetails(e, id)}
                               >
-                                <img
-                                  src={mainImageUrl}
-                                  loading="lazy"
-                                  alt="product"
-                                />
+                                <LazyLoad
+                                  once={true}
+                                  placeholder={
+                                    <img
+                                      src={imagePlaceHolder}
+                                      alt="..."
+                                      style={{
+                                        width: "200px",
+                                        height: "200px",
+                                      }}
+                                    />
+                                  }
+                                >
+                                  <img
+                                    src={
+                                      mainImageUrl
+                                        ? mainImageUrl
+                                        : imagePlaceHolder
+                                    }
+                                    alt="..."
+                                    // style={{ width: "200px", height: "200px" }}
+                                  />
+                                  {/* <img
+                            // src={imgLoaded ? productImage : imgLoader}
+                            src={productImage}
+                            alt=".."
+                            // loading="lazy"
+                            // onLoad={() => this.setState({ imgLoaded: true })}
+                          /> */}
+                                </LazyLoad>
                               </span>
                               {/* <span className="btn-quickview" id={id} data-toggle="modal" data-target="#exampleModal" onClick={this.handleDetailModal} style={{ cursor: "pointer" }} >Quick View</span> */}
                             </figure>

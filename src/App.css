@@ -21,12 +21,15 @@
   color: #09d3ac;
 }
 
-.alert-box.survey{
+.alert-box.survey {
   padding-top: 0 !important;
 }
 
-.alert-box{
+.alert-box {
   padding: 0 !important;
 }
 
-
+article a {
+  color: blue;
+  text-decoration: underline;
+}

@@ -3,6 +3,8 @@ import * as actions from "./../actions";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import ItemModal from "../components/Cart/ItemModal";
+import LazyLoad from "react-lazyload";
+import imagePlaceHolder from "../css/images/image_loader.png";
 
 class FlashSales extends Component {
   state = { products: [], itemDetails: {}, imgLoaded: false };
@@ -36,7 +38,7 @@ class FlashSales extends Component {
         this.setState({ cartData: data.cart.products });
         this.handleSetOnlineData();
         // return swal.fire("Response", "Item added to cart", "success")
-        return this.props.showSuccessALert("Item has already been added");
+        return this.props.showSuccessALert("Item added to cart");
       }
     } else {
       let cartData = JSON.parse(localStorage.getItem("cart"));
@@ -51,14 +53,14 @@ class FlashSales extends Component {
         // return console.log("data", cartData)
         let isAdded = cartData.some((data) => data.id === id); //check if clicked item exist in cart
         if (isAdded) {
-          return this.props.successAlert("Item has already been added");
+          return this.props.successAlert("Item added to cart");
         } else {
           if (obj) {
             localStorage.setItem("cart", JSON.stringify([...cartData, obj]));
           }
 
           this.handleSetLocalData();
-          return this.props.showSuccessALert("Item has already been added");
+          return this.props.showSuccessALert("Item added to cart");
           // return swal.fire("Response", "Item added to cart", "success")
         }
       } else {
@@ -66,7 +68,7 @@ class FlashSales extends Component {
         localStorage.setItem("cart", JSON.stringify([obj]));
         this.handleSetLocalData();
         // return swal.fire("Response", "Item added to cart", "success")
-        return this.props.showSuccessALert("Item has already been added");
+        return this.props.showSuccessALert("Item added to cart");
       }
     }
   };
@@ -74,7 +76,7 @@ class FlashSales extends Component {
     await this.props.fetchLocalCart();
     let { cartData } = this.props;
     this.setState({ cartData }, () =>
-      this.props.successAlert("Item added to cart successfully")
+      this.props.successAlert("Item added to cart")
     );
   };
   numberWithCommas = (number = "") => {
@@ -114,20 +116,37 @@ class FlashSales extends Component {
       finalPrice,
     } = this.props;
     return (
-      <div className="product col-md-3" key={id}>
+      <div className="product col-sm-6 col-md-3 col-lg-2" key={id}>
         <figure className="product-image-container">
           <span
             className="product-image-special"
             id={id}
             onClick={(e) => this.handleItemDetails(e, id)}
           >
-            <img
+            <LazyLoad
+              // height={200}
+              once={true}
+              placeholder={
+                <img
+                  src={imagePlaceHolder}
+                  alt="..."
+                  // style={{ width: "200px", height: "200px" }}
+                />
+              }
+            >
+              <img
+                src={mainImageUrl ? mainImageUrl : imagePlaceHolder}
+                alt="..."
+                // style={{ width: "200px", height: "200px" }}
+              />
+            </LazyLoad>
+            {/* <img
               src={mainImageUrl}
               alt="product"
               className="image-view"
               loading="lazy"
               onLoad={() => this.setState({ imgLoaded: true })}
-            />
+            /> */}
           </span>
           <span
             className="btn-quickview"

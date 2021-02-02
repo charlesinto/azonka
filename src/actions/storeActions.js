@@ -9,7 +9,7 @@ import {
 } from "./types";
 import axios from "axios";
 
-export const getStores = (id = 0, pageNumber = 20) => {
+export const getStores = (id = 0, pageNumber = 10000) => {
   return async (dispatch) => {
     try {
       const response = await axios.get(

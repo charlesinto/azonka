@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import Axios from "axios";
 import locationState from "../../helper/locationState";
 
+
 class Checkout extends Component {
   INITIAL_STATE = {
     sum: 0,
@@ -32,12 +33,20 @@ class Checkout extends Component {
     city: "",
     cities: [],
     delivery: {},
+    query:""
   };
-  constructor(props) {
-    super(props);
+  autoComplete = null;
+  autoCompleteRef;
+  
+  constructor() {
+    super()
     this.state = { ...this.INITIAL_STATE };
+    this.autoCompleteRef = React.createRef()
   }
   async componentDidMount() {
+
+    
+    
     let token = localStorage.getItem("x-access-token");
 
     if (!token) {
@@ -60,11 +69,52 @@ class Checkout extends Component {
         await this.loadCart();
 
         this.props.stopLoading();
+        this.handleScriptLoad(this.autoCompleteRef)
       } else {
         return this.props.history.push("/users/cart");
       }
     }
   }
+
+  
+
+ loadScript = (url, callback) => {
+  let script = document.createElement("script");
+  script.type = "text/javascript";
+
+  if (script.readyState) {
+    script.onreadystatechange = function() {
+      if (script.readyState === "loaded" || script.readyState === "complete") {
+        script.onreadystatechange = null;
+        callback();
+      }
+    };
+  } else {
+    script.onload = () => callback();
+  }
+
+  script.src = url;
+  document.getElementsByTagName("head")[0].appendChild(script);
+};
+
+ handleScriptLoad = (autoCompleteRef) => {
+  this.autoComplete = new window.google.maps.places.Autocomplete(
+    autoCompleteRef.current,
+    {  componentRestrictions: { country: "NG" } }
+  );
+  this.autoComplete.setFields(["address_components", "formatted_address"]);
+  this.autoComplete.addListener("place_changed", () =>
+    this.handlePlaceSelect()
+  );
+}
+
+  handlePlaceSelect= async () => {
+  const addressObject = this.autoComplete.getPlace();
+  const query = addressObject.formatted_address;
+  console.log('query: ',query)
+  this.setState({query, userAddress: query})
+  console.log(addressObject);
+}
 
   loadCart = async () => {
     // setInterval(async () => {
@@ -398,6 +448,19 @@ class Checkout extends Component {
                               <span className="required">*</span>
                             </label>
                             <input
+                          name="userAddress"
+                          placeholder="Enter delivery address"
+                          
+                          type="text"
+                          className="form-input form-wide mb-2"
+                          required=""
+                          ref={this.autoCompleteRef}
+                        onChange={event => this.setState({query: event.target.value})}
+                        
+                        value={this.state.query}
+                        />
+                            
+                            {/* <input
                               name="userAddress"
                               placeholder="Enter delivery address"
                               value={this.state.userAddress}
@@ -407,7 +470,8 @@ class Checkout extends Component {
                               type="text"
                               className="form-input form-wide mb-2"
                               required=""
-                            />
+                            /> */}
+                            {/* <GooglePlacesAutocomplete apiKey="AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic" /> */}
                           </div>
                         </div>
                         <div className="row">
@@ -466,12 +530,23 @@ class Checkout extends Component {
                         <input
                           name="userAddress"
                           placeholder="Enter delivery address"
-                          value={this.state.userAddress}
-                          onChange={(e) => this.handleInputChange(e, "login")}
+                          
                           type="text"
                           className="form-input form-wide mb-2"
                           required=""
+                          ref={this.autoCompleteRef}
+                        onChange={event => this.setState({query: event.target.value})}
+                        
+                        value={this.state.query}
                         />
+                         {/* <input
+                        ref={this.autoCompleteRef}
+                        className="form-input form-wide mb-2"
+                        onChange={event => this.setState({query: event.target.value})}
+                        placeholder="Enter a City"
+                        value={this.state.query}
+                      /> */}
+                        {/* <GooglePlacesAutocomplete apiKey="AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic" /> */}
                       </div>
                     </div>
                     <div className="row">
@@ -793,6 +868,7 @@ class Checkout extends Component {
         );
       } catch (error) {
         this.props.stopLoading();
+        Swal.fire("Action could not be completed", error, "error");
         console.log("here called in here: ", error);
       }
     }
@@ -810,7 +886,8 @@ class Checkout extends Component {
             // get the deliveryFee model for the product
             let found = false;
             this.props.home_categories.forEach((cat) => {
-              if (cat.id === prod.category) {
+              // this is where I need to change to subcategory
+              if (cat.id === prod.subCategory) {
                 found = true;
                 prod.delivery = cat.deliveryFee[0];
               }
@@ -825,7 +902,7 @@ class Checkout extends Component {
           } else {
             let found = false;
             this.props.home_categories.forEach((cat) => {
-              if (cat.id === prod.category) {
+              if (cat.id === prod.subCategory) {
                 found = true;
                 prod.delivery = cat.deliveryFee[0];
               }
@@ -864,8 +941,13 @@ class Checkout extends Component {
           productGroupedBySeller
         );
 
+        console.log(locations);
+
         const orderLocation = {};
         locations.forEach((point) => {
+          if (point === "") {
+            return reject("Address coordinates could not be determined");
+          }
           if (orderLocation[point.seller]) {
             orderLocation[point.seller][point.type] = {
               lat: point.lat,
@@ -882,6 +964,9 @@ class Checkout extends Component {
 
         const distances = await this.getDistances(orderLocation);
         distances.forEach((dist) => {
+          if (dist.totalDrviningDistance === -1) {
+            return reject("Delivery distance could not be determined");
+          }
           productGroupedBySeller[dist.seller].delivery.distance =
             dist.totalDrviningDistance;
           productGroupedBySeller[dist.seller].delivery.location =
@@ -976,35 +1061,6 @@ class Checkout extends Component {
   };
   geoCodeAddress = (address = "", seller, type) => {
     return new Promise(async (resolve, reject) => {
-      // const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
-      // const response = await fetch(
-      //   // `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`,
-      //   // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url='https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}'`,
-      //   `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
-      //   // {
-      //   //   // headers: {
-      //   //   //   // "Access-Control-Allow-Headers": {
-      //   //   //   //   "Content-Type": "application/json",
-      //   //   //   // },
-      //   //   //   "Content-Type": "application/json",
-      //   //   // },
-      //   // }
-      // );
-      // const result = await response.json();
-
-      // if (result.status === "OK") {
-      //   const { geometry } = result.results[0];
-      //   const { location } = geometry;
-      //   const { lat, lng } = location;
-      //   return resolve({ lat, lng, seller, type });
-      // }
-      // console.log(result);
-
-      // resolve(null);
-
-      // const duration = result.rows[0].elements[0].duration;
-
-      // const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
       try {
         const response = await Axios.post(
           "https://azonka.herokuapp.com/api/v1/delivery/geo-code-address",
@@ -1015,6 +1071,7 @@ class Checkout extends Component {
           }
         );
         const dt = response.data;
+        console.log("dt: ".dt);
         // resolve({ totalDrviningDistance, seller });
         resolve(dt);
       } catch (error) {
@@ -1027,31 +1084,6 @@ class Checkout extends Component {
   getDrivingDistance = (lat1, lon1, lat2, lon2, seller) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // const apiKey = "AIzaSyBla_4kdbuaPErMj-s-VQHHs_hKGcKakic";
-        // const response = await fetch(
-        //   // `https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`,
-        //   // {
-        //   //   // headers: {
-        //   //   //   // "Access-Control-Allow-Headers": {
-        //   //   //   //   "Content-Type": "application/json",
-        //   //   //   // },
-        //   //   //   // "Access-Control-Allow-Origin": "*",
-        //   //   //   "content-type": "application/json",
-        //   //   // },
-        //   // }
-        //   // `https://us-central1-azonka-api.cloudfunctions.net/api/v1/proxy?url=https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
-        //   `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?origins="${lat1},${lon1}"&destinations="${lat2},${lon2}"&mode=driving&key=${apiKey}`
-        // );
-
-        // const result = await response.json();
-
-        // const distance = result.rows[0].elements[0].distance;
-        // if (!result.rows[0]) {
-        //   return resolve({ totalDrviningDistance: 1000, seller });
-        // }
-        // // const duration = result.rows[0].elements[0].duration;
-
-        // const totalDrviningDistance = Math.ceil(distance["value"] / 1000);
         const response = await Axios.post(
           "https://azonka.herokuapp.com/api/v1/delivery/get-driving-distance",
           {
@@ -1080,12 +1112,12 @@ class Checkout extends Component {
       return this.payWithPayStack();
     } else {
       const { value: pin } = await Swal.fire({
-        title: "Enter Your Wallet Pin",
-        input: "text",
+        title: "Enter Your Wallet PIN",
+        input: "password",
         showCancelButton: true,
         inputValidator: (value) => {
           if (!(value && value.trim() !== "")) {
-            return "Wallet Pin Requred!";
+            return "Wallet PIN Requred!";
           }
         },
       });
@@ -1197,7 +1229,8 @@ class Checkout extends Component {
                   </div>
                   <div className="row">
                     <div className="col-12">
-                      {this.state.auth ? this.renderShippingLocation() : null}
+                      {/* {this.state.auth ? this.renderShippingLocation() : null} */}
+                                    {this.renderShippingLocation()}
                     </div>
                   </div>
                   <div className="row">

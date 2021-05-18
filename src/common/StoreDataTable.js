@@ -111,13 +111,15 @@ class StoreDataTable extends Component {
   }
   shouldComponentUpdate(nextProps) {
     // console.log("called o", nextProps, this.props);
-    if (nextProps.data.length !== this.props.data.length) {
-      // console.log("called o");
-      this.reloadTableData(nextProps.data, $(this.el));
+    // if (nextProps.data.length !== this.props.data.length) {
+    //   // console.log("called o");
+    //   this.reloadTableData(nextProps.data, $(this.el));
+    //   return true;
+    // }
+    this.reloadTableData(nextProps.data, $(this.el));
       return true;
-    }
     // this.reloadTableData(nextProps.data, $(this.el));
-    return false;
+    // return false;
   }
   render() {
     return (

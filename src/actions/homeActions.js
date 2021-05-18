@@ -207,7 +207,10 @@ export const createDispute = (
   message = "",
   files,
   damaged = false,
-  different = false
+  different = false,
+  missingParts = false,
+  used = false,
+  incomplete = false
 ) => {
   return async (dispatch) => {
     try {
@@ -238,6 +241,11 @@ export const createDispute = (
                   seller: `${item.seller}`,
                   different: different,
                   message: message,
+                  status: "In-View",
+                  missingParts,
+                  used,
+                  incomplete,
+
                   img1,
                   img2,
                   img3,
@@ -378,11 +386,11 @@ export const rejectDispute = (id, message = "", files) => {
 export const setCategories = (data = []) => {
   return async (dispatch) => {
     const response = await axios.get(
-      "/api/v1/category/get-categories/0/100000"
+      "/api/v1/sub-category/get-sub-categories/0/10000"
     );
     return dispatch({
       type: SET_CATEGORIES,
-      payload: response.data.categories,
+      payload: response.data.subCategories,
     });
   };
 };

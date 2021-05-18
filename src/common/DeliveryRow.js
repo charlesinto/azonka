@@ -473,7 +473,7 @@ class DeiveryRow extends Component {
                 </button>
               </div>
               <div class="modal-body">
-                <label>Delivery Code</label>
+                <label>Payment confirmation code (PCC)</label>
                 <input
                   name="deliveryCode"
                   className="form-control"

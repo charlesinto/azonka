@@ -66,6 +66,8 @@ import RefundPolicy from "./components/SelfService/RefundPolicy";
 import CashBonusReward from "./components/CashBonus";
 import YourAccount from "./components/Help/YourAcount";
 import YourOrder from "./components/Help/YourOrder";
+import DisputeResolution from "./components/Help/DisputeResolution";
+import CategoryPage from "./components/Category";
 
 class Root extends Component {
   componentDidMount() {
@@ -90,6 +92,11 @@ class Root extends Component {
                   path="/shop-details/:id"
                   component={ShopItemDetails}
                 />
+                <Route
+                  exact
+                  path="/categories/listing"
+                  component={CategoryPage}
+                />
                 <Route exact path="/view-products" component={ShopProducts} />
                 <Route exact path="/wishlist" component={WishList} />
                 <Route exact path="/modal" component={ItemModal} />
@@ -98,6 +105,11 @@ class Root extends Component {
                   redirectIfUsernoAuthRequired
                   path="/password/new"
                   component={ResetPassword}
+                />
+                <Route
+                  exact
+                  path="/help/dispute-resolution-guideline"
+                  component={DisputeResolution}
                 />
                 <Route exact path="/help/order" component={YourOrder} />
                 <Route exact path="/help/account" component={YourAccount} />

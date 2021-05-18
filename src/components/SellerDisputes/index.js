@@ -61,8 +61,11 @@ class Disputes extends Component {
       const response = await Axios.get("/api/v1/seller/dispute/get", {
         headers: { "x-access-token": token },
       });
+      const disputesSorted = response.data.disputes.sort(
+        (item1, item2) => new Date(item2.createdAt) - new Date(item1.createdAt)
+      );
       this.setState({
-        openDisputes: response.data.disputes,
+        openDisputes: disputesSorted,
       });
     } catch (error) {
       console.log(error);

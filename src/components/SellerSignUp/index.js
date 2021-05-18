@@ -146,6 +146,8 @@ class SellerSignUp extends Component {
   };
   handleFormSubmit = async (event) => {
     event.preventDefault();
+    if (!this.state.validId)
+      return Swal.fire("Incomplete Data", "Please Upload a valid ID", "error");
     const isValid = this.validateFormData(this.state);
     if (isValid) {
       console.log("form is valid");

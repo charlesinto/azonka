@@ -27,6 +27,7 @@ class ShopItems extends Component {
     categoryName: "",
     cartLength: 0,
     topBanner: null,
+    subCategory: "",
   };
   // componentWillMount() {
   //     this.unlisten = this.props.history.listen((location, action) => {
@@ -36,9 +37,15 @@ class ShopItems extends Component {
   async componentDidMount() {
     this.loadShopData();
     let params = queryString.parse(this.props.location.search);
-    const { name, category, price, categoryName } = params;
+    const { name, category, price, categoryName, subCategory } = params;
 
-    await this.setState({ name, category, finalPrice: price, categoryName });
+    await this.setState({
+      name,
+      category,
+      finalPrice: price,
+      categoryName,
+      subCategory,
+    });
     console.log("called here o");
     this.searchItem();
     this.listen();
@@ -130,7 +137,7 @@ class ShopItems extends Component {
 
   searchItem = async () => {
     this.props.initiateRegistration();
-    let { name, category, finalPrice } = this.state;
+    let { name, category, finalPrice, subCategory } = this.state;
 
     let postObj = {
       name,
@@ -138,7 +145,7 @@ class ShopItems extends Component {
         category === "Select category" || category === "" ? "0" : category,
       brandName: "",
       year: "0",
-      subCategory: "0",
+      subCategory: subCategory && subCategory.trim() !== "" ? subCategory : "0",
       store: "0",
       sellingPrice: "",
       costPrice: "",

@@ -30,13 +30,25 @@ class confirmAccount extends Component {
 
   verifyEmail = () => {
     const query = queryString.parse(this.props.location.search);
+    console.log("query: ", query);
     if (query["passcode"]) {
-      this.props.initiateRegistration();
-      this.props.verifyEmail({
-        emailAddress: this.state.emailAddress,
-        emailProofToken: query["passcode"],
-        password: this.state.password,
+      const passcodeArray = query["passcode"].split("");
+      console.log(passcodeArray);
+      this.setState({
+        input1: passcodeArray[0],
+        input2: passcodeArray[1],
+        input3: passcodeArray[2],
+        input4: passcodeArray[3],
+        input5: passcodeArray[4],
+        input6: passcodeArray[5],
+        showForm: false,
       });
+      // this.props.initiateRegistration();
+      // this.props.verifyEmail({
+      //   emailAddress: this.state.emailAddress,
+      //   emailProofToken: query["passcode"],
+      //   password: this.state.password,
+      // });
     } else {
       this.setState({
         showForm: true,
@@ -49,7 +61,8 @@ class confirmAccount extends Component {
     });
     //this.props.resetVerifyForm()
     // const userRegDetails = JSON.parse(localStorage.getItem('userRegDetails'))
-
+    // let params = queryString.parse(this.props.location.search)
+    this.verifyEmail();
     this.setState(
       {
         emailAddress: JSON.parse(localStorage.getItem("userRegDetails"))
@@ -129,6 +142,7 @@ class confirmAccount extends Component {
   };
   handleOnclick = (e) => {
     e.preventDefault();
+    console.log("called here");
     const { input1, input2, input3, input4, input5, input6 } = this.state;
     if (
       input1.trim() === "" ||
@@ -186,73 +200,76 @@ class confirmAccount extends Component {
           </div>
           <div>
             <h3 style={{ margin: "10px 0 10px 0" }}>Enter Passcode</h3>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <span style={{ marginRight: 8, marginTop: "0.8rem" }}>
-                <i className="fas fa-key"></i>
-              </span>
-              <input
-                onKeyDown={this.handleKeyPress}
-                value={this.state.input1}
-                name="input1"
-                onChange={this.handleChange}
-                className="otp-input"
-                ref={(input) => (this.input1 = input)}
-                type="text"
-              />
-              <input
-                onKeyDown={this.handleKeyPress}
-                value={this.state.input2}
-                onChange={this.handleChange}
-                name="input2"
-                className="otp-input"
-                ref={(input) => (this.input2 = input)}
-                type="text"
-              />
-              <input
-                onKeyDown={this.handleKeyPress}
-                value={this.state.input3}
-                name="input3"
-                onChange={this.handleChange}
-                className="otp-input"
-                ref={(input) => (this.input3 = input)}
-                type="text"
-              />
-              <input
-                onKeyDown={this.handleKeyPress}
-                value={this.state.input4}
-                name="input4"
-                onChange={this.handleChange}
-                className="otp-input"
-                ref={(input) => (this.input4 = input)}
-                type="text"
-              />
-              <input
-                onKeyDown={this.handleKeyPress}
-                value={this.state.input5}
-                name="input5"
-                onChange={this.handleChange}
-                className="otp-input"
-                ref={(input) => (this.input5 = input)}
-                type="text"
-              />
-              <input
-                onKeyDown={this.handleKeyPress}
-                value={this.state.input6}
-                name="input6"
-                onChange={this.handleChange}
-                className="otp-input"
-                ref={(input) => (this.input6 = input)}
-                type="text"
-              />
-            </div>
-            <div style={{ textAlign: "right", margin: "15px 20px 0 0" }}>
-              <button
-                onClick={this.handleOnclick}
-                className="btn btn-lg btn-primary"
-              >
-                verify
-              </button>
-            </div>
+            <form>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <span style={{ marginRight: 8, marginTop: "0.8rem" }}>
+                  <i className="fas fa-key"></i>
+                </span>
+                <input
+                  onKeyDown={this.handleKeyPress}
+                  value={this.state.input1}
+                  name="input1"
+                  onChange={this.handleChange}
+                  className="otp-input"
+                  ref={(input) => (this.input1 = input)}
+                  type="text"
+                />
+                <input
+                  onKeyDown={this.handleKeyPress}
+                  value={this.state.input2}
+                  onChange={this.handleChange}
+                  name="input2"
+                  className="otp-input"
+                  ref={(input) => (this.input2 = input)}
+                  type="text"
+                />
+                <input
+                  onKeyDown={this.handleKeyPress}
+                  value={this.state.input3}
+                  name="input3"
+                  onChange={this.handleChange}
+                  className="otp-input"
+                  ref={(input) => (this.input3 = input)}
+                  type="text"
+                />
+                <input
+                  onKeyDown={this.handleKeyPress}
+                  value={this.state.input4}
+                  name="input4"
+                  onChange={this.handleChange}
+                  className="otp-input"
+                  ref={(input) => (this.input4 = input)}
+                  type="text"
+                />
+                <input
+                  onKeyDown={this.handleKeyPress}
+                  value={this.state.input5}
+                  name="input5"
+                  onChange={this.handleChange}
+                  className="otp-input"
+                  ref={(input) => (this.input5 = input)}
+                  type="text"
+                />
+                <input
+                  onKeyDown={this.handleKeyPress}
+                  value={this.state.input6}
+                  name="input6"
+                  onChange={this.handleChange}
+                  className="otp-input"
+                  ref={(input) => (this.input6 = input)}
+                  type="text"
+                />
+              </div>
+              <div style={{ textAlign: "right", margin: "15px 20px 0 0" }}>
+                <button
+                  type="submit"
+                  onClick={this.handleOnclick}
+                  className="btn btn-lg btn-primary"
+                >
+                  verify
+                </button>
+              </div>
+            </form>
           </div>
           <div
             onClick={this.resendEmailPasscode}
@@ -319,7 +336,7 @@ class confirmAccount extends Component {
             <Link
               to="/users/profile"
               style={{ color: "#fff" }}
-              className="web-font btn-sm btn btn-warning"
+              className="web-font btn-lg btn btn-primary"
             >
               CONTINUE TO PROFILE
             </Link>

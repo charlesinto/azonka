@@ -66,6 +66,19 @@ export const createStore = (data, id = 0, pageNumber = 10) => {
         type: STORE_CREATED_SUCCESSFULLY,
         payload: response.data.store,
       });
+      const response2 = await axios.get(
+        `/api/v1/seller/store/get-stores/${0}/${100000}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token"),
+          },
+        }
+      );
+      //   console.log(response.data.stores);
+      dispatch({
+        type: STORES_OBTAINED_SUCCESSFULLY,
+        payload: response2.data.stores,
+      });
       return dispatch({ type: STOP_LOADING, payload: "" });
     } catch (error) {
       if (error.response.status === 401) {

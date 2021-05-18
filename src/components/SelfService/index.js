@@ -96,10 +96,12 @@ class SelfService extends Component {
                             Create an Order
                           </li>
                           <li
-                            onClick={this.viewOrderDispute}
+                            // onClick={this.viewOrderDispute}
                             className=" custom-list-item cursor-pointer"
                           >
-                            Order Dispute
+                            <Link to="/help/dispute-resolution-guideline">
+                              Order Dispute
+                            </Link>
                           </li>
                         </ul>
                       </div>

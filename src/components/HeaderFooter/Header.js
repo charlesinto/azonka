@@ -38,6 +38,12 @@ class Header extends Component {
         });
     }
 
+    window.document
+      .querySelector(".mobile-menu li")
+      .addEventListener("click", function () {
+        console.log("list itme clicked");
+      });
+
     const user = JSON.parse(localStorage.getItem("azonta-user"));
     let cartData = JSON.parse(localStorage.getItem("cart"));
     this.$select = React.createRef();
@@ -45,12 +51,12 @@ class Header extends Component {
       currentUser: user,
       cartData,
     });
-    const response = await axios.get("/api/v1/category/get-categories/0/20");
+    const response = await axios.get("/api/v1/category/get-categories/0/5");
     // console.log(response);
-
+    const majorCategories = response.data.categories.splice(0, 5);
     this.props.setCategories();
     this.setState({
-      categories: response.data.categories,
+      categories: majorCategories,
     });
     this.loadSearchCategory();
     this.loadCart();
@@ -390,10 +396,32 @@ class Header extends Component {
               <nav className="mobile-nav">
                 <ul className="mobile-menu">
                   <li onClick={() => this._toggleMenu()}>
-                    <Link to="/">Home</Link>
+                    <Link
+                      onClick={() => this._toggleMenu()}
+                      to="/"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      Home
+                    </Link>
                   </li>
                   <li>
-                    <Link to="#">Categories For You</Link>
+                    <Link
+                      to="#"
+                      className="d-flex justify-content-between"
+                      style={{
+                        marginRight: "12px !important",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <span>Categories For You</span>
+                      <Link
+                        className="p-0 text-primary"
+                        to="/categories/listing"
+                        onClick={() => this._toggleMenu()}
+                      >
+                        See All &gt;
+                      </Link>
+                    </Link>
                     <ul>
                       {this.state.categories.map((item) => (
                         <li>
@@ -408,10 +436,21 @@ class Header extends Component {
                   </li>
 
                   <li onClick={() => this._toggleMenu()}>
-                    <Link to="/users/profile">Profile</Link>
+                    <Link
+                      onClick={() => this._toggleMenu()}
+                      to="/users/profile"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      Profile
+                    </Link>
                     <ul>
                       <li>
-                        <Link to="/users/cart">Cart</Link>
+                        <Link
+                          onClick={() => this._toggleMenu()}
+                          to="/users/cart"
+                        >
+                          Cart
+                        </Link>
                         {/* <ul>
                                                     <li><a href="product.html">Horizontal Thumbnails</a></li>
                                                     <li><a href="product-full-width.html">Vertical Thumbnails<span className="tip tip-hot">Hot!</span></a></li>
@@ -421,7 +460,12 @@ class Header extends Component {
                                                 </ul> */}
                       </li>
                       <li onClick={() => this._toggleMenu()}>
-                        <Link to="/users/wishlist">WishList</Link>
+                        <Link
+                          onClick={() => this._toggleMenu()}
+                          to="/users/wishlist"
+                        >
+                          WishList
+                        </Link>
                         {/* <ul>
                                                     <li><a href="product-sticky-tab.html">Sticky Tabs</a></li>
                                                     <li><a href="product-simple.html">Simple Product</a></li>
@@ -429,7 +473,12 @@ class Header extends Component {
                                                 </ul> */}
                       </li>
                       <li onClick={() => this._toggleMenu()}>
-                        <Link to="/users/placed-orders">Your Orders</Link>
+                        <Link
+                          onClick={() => this._toggleMenu()}
+                          to="/users/placed-orders"
+                        >
+                          My Orders
+                        </Link>
                         {/* <ul>
                                                     <li><a href="product.html">Default Layout</a></li>
                                                     <li><a href="product-extended-layout.html">Extended Layout</a></li>
@@ -444,13 +493,23 @@ class Header extends Component {
                   {this.props.currentUser &&
                   this.props.currentUser.pinSet ? null : (
                     <li>
-                      <Link to="/users/securityquestions">
+                      <Link
+                        onClick={() => this._toggleMenu()}
+                        to="/users/securityquestions"
+                        style={{ fontWeight: "bold" }}
+                      >
                         Set up wallet <span className="tip tip-hot"> Hot!</span>
                       </Link>
                     </li>
                   )}
-                  <li onClick={() => this._toggleMenu()} className="">
-                    <Link to="/users/banks">My Bank</Link>
+                  <li
+                    onClick={() => this._toggleMenu()}
+                    style={{ fontWeight: "bold" }}
+                    className=""
+                  >
+                    <Link onClick={() => this._toggleMenu()} to="/users/banks">
+                      My Bank
+                    </Link>
                   </li>
 
                   {/* <li onClick={() => this._toggleMenu()} className="">
@@ -460,22 +519,31 @@ class Header extends Component {
                     <Link to="/">Azonka Credit</Link>
                   </li> */}
                   <li onClick={() => this._toggleMenu()} className="">
-                    <Link to="/users/referrals">Referrals</Link>
+                    <Link
+                      onClick={() => this._toggleMenu()}
+                      to="/users/referrals"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      Referrals
+                    </Link>
                   </li>
                   <li onClick={() => this._toggleMenu()} className="">
-                    <Link to="/users/create/shop">Store</Link>
+                    <Link
+                      onClick={() => this._toggleMenu()}
+                      to="/users/create/shop"
+                      style={{ fontWeight: "bold" }}
+                    >
+                      Store
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/users/placed-orders">My Orders</Link>
-                  </li>
-                  <li>
-                    <a
-                      href="/users/self-service"
-                      rel="noopener noreferrer"
-                      target="_blank"
+                    <Link
+                      onClick={() => this._toggleMenu()}
+                      to="/users/self-service"
+                      style={{ fontWeight: "bold" }}
                     >
                       Help
-                    </a>
+                    </Link>
                   </li>
 
                   {currentUser ? (
@@ -485,14 +553,74 @@ class Header extends Component {
                         this.handleSideMenuClick("logout");
                       }}
                     >
-                      <Link to="#">Log Out</Link>
+                      <Link
+                        onClick={() => this._toggleMenu()}
+                        to="#"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Log Out
+                      </Link>
                     </li>
                   ) : (
                     <li className="">
-                      <Link to="/users/login">Log In</Link>
+                      <Link
+                        onClick={() => this._toggleMenu()}
+                        to="/users/login"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Log In
+                      </Link>
                     </li>
                   )}
                 </ul>
+                <div className="row py-5">
+                  <div className="text-center footer-icon col-md-12 col-lg-12">
+                    <a
+                      href="https://twitter.com/azonkanigeria"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-neutral btn-icon btn-round btn-lg"
+                    >
+                      <i
+                        style={{ fontSize: 20 }}
+                        className="fab fa-twitter"
+                      ></i>
+                    </a>
+                    <a
+                      href="https://www.facebook.com/Azonka-Nigeria-104680851334025"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className="btn btn-neutral btn-icon btn-round btn-lg"
+                    >
+                      <i
+                        style={{ fontSize: 20 }}
+                        className="fab fa-facebook"
+                      ></i>
+                    </a>
+                    <a
+                      href="https://www.instagram.com/azonkanigeria/"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className="btn btn-neutral btn-icon btn-round btn-lg"
+                    >
+                      <i
+                        style={{ fontSize: 20 }}
+                        className="fab fa-instagram"
+                      ></i>
+                    </a>
+                    <a
+                      href="https://www.youtube.com/channel/UC_dY-8IGqIwNobj_qrpJmPQ"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-neutral btn-icon btn-round btn-lg"
+                    >
+                      <i
+                        style={{ fontSize: 20 }}
+                        className="fab fa-youtube"
+                      ></i>
+                    </a>
+                  </div>
+                </div>
               </nav>
 
               <div className="social-icons">

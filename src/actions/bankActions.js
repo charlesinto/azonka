@@ -61,6 +61,7 @@ export const saveBank = (details) => {
         dispatch({ type: ACCOUNT_ADDED_SUCCESSFULLY, payload: accounts });
       }
     } catch (error) {
+      console.error(error.response.data.message);
       if (error.response.data.message)
         return dispatch({
           type: DISPLAY_ERROR,

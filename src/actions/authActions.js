@@ -461,13 +461,14 @@ export const upgradeToAgent = (validId, validPhoto) => {
     try {
       const token = localStorage.getItem("x-access-token");
       const data1 = await fileUpload(validId, "agents");
-      // const data2 = await fileUpload(validPhoto, 'agents')
+      const data2 = await fileUpload(validPhoto, "agents");
 
       await axios.put(
         "/api/v1/user/change-account-type",
         {
           agentIdentification: data1.Location,
           type: "agent",
+          profileImage: data2.Location,
         },
         {
           headers: {

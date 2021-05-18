@@ -355,6 +355,9 @@ class Cart extends Component {
                     <i className="icon-home"></i>
                   </Link>
                 </li>
+                <li className="breadcrumb-item">
+                  <Link to="/users/profile">Dashboard</Link>
+                </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   Shopping Cart
                 </li>

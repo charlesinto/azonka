@@ -24,6 +24,7 @@
     "react-bootstrap-sweetalert": "^5.1.7",
     "react-dom": "^16.10.2",
     "react-flags-select": "^1.1.10",
+    "react-google-places-autocomplete": "^3.1.1",
     "react-idle-timer": "^4.3.6",
     "react-image-lightbox": "^5.1.1",
     "react-lazyload": "^3.0.0",

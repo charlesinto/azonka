@@ -31,6 +31,9 @@ class Disputes extends Component {
     exampleCheck1: false,
     notDelivered: false,
     orderDelivered: false,
+    missingParts: false,
+    incomplete: false,
+    used: false,
   };
   async componentDidMount() {
     this.props.setActiveLink("");
@@ -52,7 +55,10 @@ class Disputes extends Component {
   static getDerivedStateFromProps(nextProps, state) {
     if (nextProps.orders && nextProps.orders.length > 0) {
       // const closedOrders = nextProps.orders.filter(order => order.status.toLowerCase() !== 'created' && order.status.toLowerCase() !== 'rejected')
-      return { ...state, closedOrders: nextProps.orders };
+      const orderSorted = nextProps.orders.sort(
+        (item1, item2) => new Date(item2.createdAt) - new Date(item1.createdAt)
+      );
+      return { ...state, closedOrders: orderSorted };
     }
     return { ...state };
   }
@@ -62,9 +68,11 @@ class Disputes extends Component {
       const response = await Axios.get("/api/v1/user/dispute/get", {
         headers: { "x-access-token": token },
       });
-      console.log(response.data);
+      const disputesSorted = response.data.diputes.sort(
+        (item1, item2) => new Date(item2.createdAt) - new Date(item1.createdAt)
+      );
       this.setState({
-        openDisputes: response.data.diputes,
+        openDisputes: disputesSorted,
       });
     } catch (error) {
       console.log(error);
@@ -99,6 +107,15 @@ class Disputes extends Component {
         [name]: !this.state.different,
       });
     }
+    if (name === "missingParts") {
+      return this.setState({
+        [name]: !this.state.missingParts,
+      });
+    }
+
+    return this.setState({
+      [name]: !this.state[name],
+    });
   };
   renderAlert = () => {
     if (this.state.selectedBox === "box1") {
@@ -183,8 +200,12 @@ class Disputes extends Component {
       this.state.message,
       $fileUpload.get(0).files,
       this.state.damaged,
-      this.state.different
+      this.state.different,
+      this.state.missingParts,
+      this.state.used,
+      this.state.incomplete
     );
+
     await this.setState({
       damaged: false,
       different: false,
@@ -583,6 +604,58 @@ class Disputes extends Component {
                       Entirely Different Item
                     </label>
                   </div>
+                  <div className="form-check" style={{ display: "flex" }}>
+                    <input
+                      onChange={this.handleChange}
+                      type="checkbox"
+                      name="missingParts"
+                      class=" mx-3"
+                      style={{ display: "block", marginTop: 5 }}
+                      id="exampleCheck2"
+                    />
+                    <label
+                      class=""
+                      for="missingParts"
+                      style={{ marginTop: "0px !important" }}
+                    >
+                      Item is missing major parts or features which were not
+                      disclosed by the seller
+                    </label>
+                  </div>
+                  <div className="form-check" style={{ display: "flex" }}>
+                    <input
+                      onChange={this.handleChange}
+                      type="checkbox"
+                      name="incomplete"
+                      class=" mx-3"
+                      style={{ display: "block", marginTop: 5 }}
+                      id="exampleCheck2"
+                    />
+                    <label
+                      class=""
+                      for="incomplete"
+                      style={{ marginTop: "0px !important" }}
+                    >
+                      Incomplete order i.e some item(s) were not delivered
+                    </label>
+                  </div>
+                  <div className="form-check" style={{ display: "flex" }}>
+                    <input
+                      onChange={this.handleChange}
+                      type="checkbox"
+                      name="used"
+                      class=" mx-3"
+                      style={{ display: "block", marginTop: 5 }}
+                      id="exampleCheck2"
+                    />
+                    <label
+                      class=""
+                      for="used"
+                      style={{ marginTop: "0px !important" }}
+                    >
+                      Item is “used” but was described as “new”
+                    </label>
+                  </div>
 
                   <br />
                   <br />
@@ -619,9 +692,6 @@ class Disputes extends Component {
                                   style={{ display: "block", marginTop: 5 }}
                                   checked={isChecked}
                                 />{" "}
-                                {/* <button className="btn btn-primary mx-2">
-                                  View Products
-                                </button> */}
                               </>
                             );
                           }

@@ -51,19 +51,21 @@ class Dashboard extends Component {
                 <div className="breadcrumb-item">
                   <Link
                     to="/users/seller/signup"
-                    className="upgrade-btn btn btn-warning btn-sm"
+                    style={{ color: "#000 !important", fontSize: "1.2rem" }}
+                    className="btn bg-white btn-sm"
                   >
-                    Become a seller
+                    <span className="text-primary">Become a seller</span>
                   </Link>
                 </div>
               ) : null}
               {userData && userData.type === "user" ? (
                 <div className="breadcrumb-item">
                   <Link
+                    style={{ color: "#000 !important", fontSize: "1.2rem" }}
                     to="/users/agent/signup"
-                    className="upgrade-btn btn btn-warning btn-sm"
+                    className=" btn bg-white btn-sm"
                   >
-                    Become an agent
+                    <span className="text-primary">Become an agent</span>
                   </Link>
                 </div>
               ) : null}

@@ -13381,3 +13381,38 @@ article code {
     max-width: 50% !important;
   }
 }
+
+ul.mobile-submenu {
+  position: static !important;
+  display: block !important;
+  box-shadow: none !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+ul.mobile-submenu li a {
+  font-weight: 400 !important;
+}
+
+ul.mobile-submenu li {
+  border-bottom: 1px solid #f3f3f3;
+  padding-left: 3rem;
+  /* padding: 0.8rem 0.5rem; */
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  padding-right: 0.5rem;
+  font-size: 1rem;
+}
+
+ul.mobile-submenu li:last-child {
+  border-bottom: none !important;
+}
+
+.menu.menu-vertical > li:hover {
+  background-color: #fff !important;
+}
+
+.menu.menu-vertical > li:hover > a {
+  color: #08c !important;
+  background-color: #fff !important;
+}

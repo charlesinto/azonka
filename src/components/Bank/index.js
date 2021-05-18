@@ -8,6 +8,7 @@ import BankListItem from "../../common/BankListItem";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Dashboard from "../HOC/Dashboard";
 import BankDataTable from "../../common/BankDataTable";
+import App from "../../services";
 // import axios from "axios";
 
 class Bank extends Component {
@@ -15,6 +16,9 @@ class Bank extends Component {
     inValidElments: [],
     validationMessage: [],
     // banks: [],
+    slug: "",
+    accountName: "",
+    accountNumber: "",
     showAlert: false,
     actionMode: "save",
     pin: "",
@@ -710,212 +714,19 @@ class Bank extends Component {
         updatedAt: "2016-07-14T10:04:29.000Z",
       },
     ],
-    // banks: [
-    //   {
-    //     active: true,
-    //     code: "044",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 1,
-    //     is_deleted: null,
-    //     longcode: "044150149",
-    //     name: "Access Bank",
-    //     pay_with_bank: false,
-    //     slug: "access-bank",
-    //     type: "nuban",
-    //     updatedAt: "2020-02-18T08:06:44.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "063",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 3,
-    //     is_deleted: null,
-    //     longcode: "063150162",
-    //     name: "Access Bank (Diamond)",
-    //     pay_with_bank: false,
-    //     slug: "access-bank-diamond",
-    //     type: "nuban",
-    //     updatedAt: "2020-02-18T08:06:48.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "035A",
-    //     country: "Nigeria",
-    //     createdAt: "2017-11-15T12:21:31.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 27,
-    //     is_deleted: null,
-    //     longcode: "035150103",
-    //     name: "ALAT by WEMA",
-    //     pay_with_bank: true,
-    //     slug: "alat-by-wema",
-    //     type: "nuban",
-    //     updatedAt: "2020-02-18T06:46:46.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "070",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 6,
-    //     is_deleted: null,
-    //     longcode: "070150003",
-    //     name: "Fidelity Bank",
-    //     pay_with_bank: false,
-    //     slug: "fidelity-bank",
-    //     type: "nuban",
-    //     updatedAt: "2020-02-18T07:25:19.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "011",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "ibank",
-    //     id: 7,
-    //     is_deleted: null,
-    //     longcode: "011151003",
-    //     name: "First Bank of Nigeria",
-    //     pay_with_bank: true,
-    //     slug: "first-bank-of-nigeria",
-    //     type: "nuban",
-    //     updatedAt: "2019-11-21T05:09:47.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "214",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 8,
-    //     is_deleted: null,
-    //     longcode: "214150018",
-    //     name: "First City Monument Bank",
-    //     pay_with_bank: false,
-    //     slug: "first-city-monument-bank",
-    //     type: "nuban",
-    //     updatedAt: "2020-02-18T08:06:46.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "058",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "ibank",
-    //     id: 9,
-    //     is_deleted: null,
-    //     longcode: "058152036",
-    //     name: "Guaranty Trust Bank",
-    //     pay_with_bank: true,
-    //     slug: "guaranty-trust-bank",
-    //     type: "nuban",
-    //     updatedAt: "2020-06-04T14:14:06.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "232",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 16,
-    //     is_deleted: null,
-    //     longcode: "232150016",
-    //     name: "Sterling Bank",
-    //     pay_with_bank: false,
-    //     slug: "sterling-bank",
-    //     type: "nuban",
-    //     updatedAt: "2020-05-27T08:38:56.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "032",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 17,
-    //     is_deleted: null,
-    //     longcode: "032080474",
-    //     name: "Union Bank of Nigeria",
-    //     pay_with_bank: false,
-    //     slug: "union-bank-of-nigeria",
-    //     type: "nuban",
-    //     updatedAt: "2020-02-18T20:22:54.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "033",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 18,
-    //     is_deleted: null,
-    //     longcode: "033153513",
-    //     name: "United Bank For Africa",
-    //     pay_with_bank: true,
-    //     slug: "united-bank-for-africa",
-    //     type: "nuban",
-    //     updatedAt: "2019-05-20T21:23:20.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "215",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 19,
-    //     is_deleted: null,
-    //     longcode: "215154097",
-    //     name: "Unity Bank",
-    //     pay_with_bank: false,
-    //     slug: "unity-bank",
-    //     type: "nuban",
-    //     updatedAt: "2019-07-22T12:44:02.000Z",
-    //   },
-    //   {
-    //     active: true,
-    //     code: "057",
-    //     country: "Nigeria",
-    //     createdAt: "2016-07-14T10:04:29.000Z",
-    //     currency: "NGN",
-    //     gateway: "emandate",
-    //     id: 21,
-    //     is_deleted: null,
-    //     longcode: "057150013",
-    //     name: "Zenith Bank",
-    //     pay_with_bank: true,
-    //     slug: "zenith-bank",
-    //     type: "nuban",
-    //     updatedAt: "2016-07-14T10:04:29.000Z",
-    //   },
-    // ],
   };
 
   validateFormData = (formdata) => {
-    const { accountNumber, accountName, longcode } = formdata;
+    const { accountNumber, accountName, slug } = formdata;
+    console.log(formdata);
     let isValid = true;
     const inValidElments = [];
     const validationMessage = {};
-    if (!(longcode && longcode.trim() !== "")) {
+    if (!(slug && slug.trim() !== "")) {
       isValid = false;
-      inValidElments.push("longcode");
+      inValidElments.push("slug");
 
-      validationMessage["longcode"] = "Please select Bank";
+      validationMessage["slug"] = "Please select Bank";
     }
     if (!(accountName && accountName.trim() !== "")) {
       isValid = false;
@@ -938,6 +749,7 @@ class Bank extends Component {
     const {
       target: { name, value },
     } = e;
+    console.log(name, value);
     const index = this.state.inValidElments.indexOf(name);
     let newInvalidElements = [];
     if (index !== -1) {
@@ -950,12 +762,8 @@ class Bank extends Component {
         newInvalidElements,
       },
       () => {
-        const { longcode, accountName, accountNumber } = this.state;
-        if (
-          longcode.trim() === "" &&
-          accountName.trim() === "" &&
-          accountNumber.trim() === ""
-        ) {
+        const { accountName, accountNumber } = this.state;
+        if (accountName.trim() === "" && accountNumber.trim() === "") {
           return this.setState({
             actionMode: "save",
           });
@@ -966,7 +774,7 @@ class Bank extends Component {
   renderLookUp = () => {
     const lookupdata = {};
     this.props.banks.forEach((element) => {
-      lookupdata[element.longcode] = element.name;
+      lookupdata[element.slug] = element.name;
     });
     return lookupdata;
   };
@@ -994,20 +802,6 @@ class Bank extends Component {
     // );
   }
   static getDerivedStateFromProps(nextProps, state) {
-    if (nextProps.banks.length > 0) {
-      if (nextProps.resetForm) {
-        return {
-          ...state,
-          pin: "",
-          actionMode: "save",
-          longcode: "",
-          accountNumber: "",
-          accountName: "",
-          banks: nextProps.banks,
-        };
-      }
-      return { ...state, banks: nextProps.banks };
-    }
     if (nextProps.resetForm) {
       return {
         ...state,
@@ -1015,6 +809,7 @@ class Bank extends Component {
         longcode: "",
         accountNumber: "",
         accountName: "",
+        slug: "",
       };
     }
     return null;
@@ -1047,20 +842,21 @@ class Bank extends Component {
       });
     }
     const selectedBank = this.state.banks.filter(
-      (element) => element.longcode === this.state.longcode
+      (element) => element.slug === this.state.slug
     );
     const { accountNumber, accountName } = this.state;
     console.log(selectedBank, accountName, accountNumber);
     this.props.initiateRegistration();
     if (selectedBank.length > 0) {
       const bankDetails = selectedBank[0];
-      return this.props.saveBank({
+      const payload = {
         ...bankDetails,
         accountName,
         accountNumber,
-      });
+      };
+      const sanitizedPayload = App.santizePayload(payload);
+      return this.props.saveBank(sanitizedPayload);
     }
-    console.log("some errror were encounteered");
   };
   closeSnackBar = () => {
     this.props.closeSnackBar();
@@ -1101,6 +897,7 @@ class Bank extends Component {
         );
         this.setState({
           longcode: bank.longcode,
+          slug: bank.slug,
           accountNumber: bank.accountNumber,
           accountName: bank.accountName,
           actionMode: "update",
@@ -1231,26 +1028,26 @@ class Bank extends Component {
                         Bank Name
                       </label>
                       <select
-                        name="longcode"
+                        name="slug"
                         className={`form-control ${
-                          this.state.inValidElments.includes("longcode")
+                          this.state.inValidElments.includes("slug")
                             ? "invalid"
                             : ""
                         }`}
-                        value={this.state.longcode}
+                        value={this.state.slug}
                         onChange={this.handleInputChange}
                       >
                         <option value="">Select Bank</option>
-                        {this.state.banks.map(({ name, longcode }, i) => (
-                          <option key={i} value={longcode}>
+                        {this.state.banks.map(({ name, slug }, i) => (
+                          <option key={i} value={slug}>
                             {name}
                           </option>
                         ))}
                       </select>
                     </div>
-                    {this.state.inValidElments.includes("longcode") ? (
+                    {this.state.inValidElments.includes("slug") ? (
                       <div className="error-message required">
-                        {this.state.validationMessage["longcode"]}
+                        {this.state.validationMessage["slug"]}
                       </div>
                     ) : null}
                   </div>
@@ -1427,18 +1224,17 @@ const mapStateToProps = (state) => {
       errorMessage,
       successMessage,
       showSuccessBar,
-      banks,
+      // banks,
       savedBanks,
       resetForm,
     },
     reg: { unAuthorized },
   } = state;
-  const sortedBanks = banks.sort(
-    (item1, item2) => item1.name.toLowerCase() > item2.name.toLowerCase()
-  );
+  // const sortedBanks = banks.sort(
+  //   (item1, item2) => item1.name.toLowerCase() > item2.name.toLowerCase()
+  // );
   console.log("unathourized", unAuthorized);
   return {
-    banks: sortedBanks,
     loading,
     error,
     errorMessage,

@@ -627,10 +627,35 @@ class Store extends Component {
             }
           }]
     }
+    autoComplete = null;
+    constructor(props){
+      super(props)
+      this.autoCompleteRef = React.createRef()
+    }
     componentDidMount(){
         this.props.setActiveLink('Manage Store')
         this.props.initiateRegistration()
         this.props.getStores()
+        
+        this.handleScriptLoad()
+    }
+    handleScriptLoad = () => {
+      this.autoComplete = new window.google.maps.places.Autocomplete(
+        this.autoCompleteRef.current,
+        {  componentRestrictions: { country: "NG" } }
+      );
+      this.autoComplete.setFields(["address_components", "formatted_address"]);
+      this.autoComplete.addListener("place_changed", () =>
+        this.handlePlaceSelect()
+      );
+    }
+    
+      handlePlaceSelect= async () => {
+      const addressObject = this.autoComplete.getPlace();
+      const query = addressObject.formatted_address;
+      console.log('query: ',query)
+      this.setState({address: query })
+      console.log(addressObject);
     }
     static getDerivedStateFromProps(nextProps, state){
         if(nextProps.resetForm){
@@ -696,7 +721,7 @@ class Store extends Component {
             newInvalidElements
         })
     }
-    processForm = (actionType = 'save') => {
+    processForm = async (actionType = 'save') => {
         const {isValid, inValidElments, validationMessage} = this.validateFormData(this.state)
         if(!isValid){
             this.props.renderError('Action cannot be performed,one or more fields required', { appearance: 'error' })
@@ -710,14 +735,21 @@ class Store extends Component {
         this.props.initiateRegistration()
         switch(actionType){
             case 'save':
-                return this.props.createStore(this.state, 0, 10)
+                await this.props.createStore(this.state, 0, 100)
+                break;
             case 'update':
-                return this.props.updateStore(this.state);
+                await this.props.updateStore(this.state);
+                break
             case 'delete':
-                return this.props.deleteStore(this.state.id)
-            default: 
-                return ;
+                await this.props.deleteStore(this.state.id)
+                break;
+              default:
+              break;
+            
         }
+
+        // this.props.initiateRegistration()
+        // this.props.getStores()
         
     }
     handleFormSubmit = e => {
@@ -764,7 +796,11 @@ class Store extends Component {
                                         <label htmlFor="address" className="rl-label">Store Address</label>
                                         <input type="text" id="password5" 
                                             className={`${this.state.inValidElments.includes('address') ? 'invalid' : '' }`} 
-                                            value={this.state.address} onChange={this.handleInputChange} 
+                                            
+                                            ref={this.autoCompleteRef}
+                                            onChange={event => this.setState({address: event.target.value})}
+                                            
+                                            value={this.state.address}
                                             name="address" placeholder="Store Address" />
                                         {
                                                 this.state.inValidElments.includes('address') ?
@@ -776,28 +812,6 @@ class Store extends Component {
                                         }
                                     </div>
                                     <div className="col-md-4 col-sm-12">
-                                        <label htmlFor="country" className="rl-label">Country</label>
-                                        <select name="country" 
-                                                className={`${this.state.inValidElments.includes('country') ? 'invalid' : '' }`}
-                                                value={this.state.country} onChange={this.handleInputChange}>
-                                                <option value="">Select Country</option>
-                                                <option value="Nigeria">Nigeria</option>
-                                                
-                                            </select>
-                                        {
-                                                this.state.inValidElments.includes('country') ?
-                                                (
-                                                    <div className="error-message required">
-                                                        {this.state.validationMessage['country']}
-                                                    </div>
-                                                ): null 
-                                        }
-                                        
-                                    </div>
-                                   
-                                </div>
-                                <div className="row mt-3">
-                                   <div className="col-md-4 col-sm-12">
                                         <label htmlFor="state" className="rl-label">State</label>
                                          <select name="state" 
                                                 className={`${this.state.inValidElments.includes('state') ? 'invalid' : '' }`}
@@ -817,6 +831,29 @@ class Store extends Component {
                                                 ): null 
                                         }
                                     </div>
+                                   
+                                </div>
+                                <div className="row mt-1">
+                                <div className="col-md-4 col-sm-12">
+                                        <label htmlFor="country" className="rl-label">Country</label>
+                                        <select name="country" 
+                                                className={`${this.state.inValidElments.includes('country') ? 'invalid' : '' }`}
+                                                value={this.state.country} onChange={this.handleInputChange}>
+                                                <option value="">Select Country</option>
+                                                <option value="Nigeria">Nigeria</option>
+                                                
+                                            </select>
+                                        {
+                                                this.state.inValidElments.includes('country') ?
+                                                (
+                                                    <div className="error-message required">
+                                                        {this.state.validationMessage['country']}
+                                                    </div>
+                                                ): null 
+                                        }
+                                        
+                                    </div>
+                                   
                                    </div>
                                 <div style={{padding: '20px 0 10px'}}>
                                     {

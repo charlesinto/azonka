@@ -10,6 +10,7 @@ import {
   ACCOUNT_UPDATED,
   STOP_LOADING,
   ADDRESSES_FETCHED,
+  WALLET_BALANCE_UPDATE,
 } from "./types";
 
 export const getBanks = () => {
@@ -401,6 +402,7 @@ export const withdrawlFromWallet = (amount, bank, pin, currency = "") => {
       });
       const { transactions, balance } = response2.data.wallet;
       // console.log(responseWithdraw);
+
       dispatch({
         type: USER_WALLET_OBTAINED_SUCCESSFULLY,
         payload: { transactions, balance },
@@ -427,11 +429,21 @@ export const withdrawlFromWallet = (amount, bank, pin, currency = "") => {
 export const transferToWallet = (data) => {
   return async (dispatch) => {
     try {
-      await axios.post("/api/v1/user/wallet/wallet-transfer", data, {
-        headers: {
-          "x-access-token": localStorage.getItem("x-access-token"),
-        },
-      });
+      const response = await axios.post(
+        "/api/v1/user/wallet/wallet-transfer",
+        data,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token"),
+          },
+        }
+      );
+      // dispatch({ type: STOP_LOADING, payload: "" });
+      const {
+        transaction: { currentWalletBalance },
+      } = response.data;
+
+      dispatch({ type: WALLET_BALANCE_UPDATE, payload: currentWalletBalance });
       dispatch({ type: STOP_LOADING, payload: "" });
       return dispatch({
         type: SUCCESS_ALERT,

@@ -114,6 +114,7 @@ class WalletToWalletTransfer extends Component {
       pin: this.state.pin,
       currency: "naira",
     });
+    // await this.props.getUserWalletDetals(0, 100000);
     this.setState({ ...this.INITIAL_STATE });
   };
   onCancel = (e) => {

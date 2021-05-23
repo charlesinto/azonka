@@ -6,6 +6,7 @@ import {
   ACCOUNT_UPDATED,
   USER_WALLET_OBTAINED_SUCCESSFULLY,
   CREDITS_OBTAINED_SUCCESSFULLY,
+  WALLET_BALANCE_UPDATE,
 } from "../actions/types";
 
 const INITIATL_STATE = {
@@ -27,6 +28,8 @@ const INITIATL_STATE = {
 };
 export default (state = INITIATL_STATE, actions) => {
   switch (actions.type) {
+    case WALLET_BALANCE_UPDATE:
+      return { ...state, balance: actions.payload };
     case GET_BANKS:
       return { ...state, resetForm: false, banks: actions.payload };
     case GET_SAVED_ACCOUNTS:

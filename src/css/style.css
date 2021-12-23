@@ -63,7 +63,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 h1,
@@ -76,7 +76,7 @@ h6 {
 h1 {
   color: #fff;
   font-size: 3em;
-  text-align: center;
+ 
 }
 
 h1 span {
@@ -93,7 +93,7 @@ h3 {
   color: #2b373a;
   font-size: 1.5em;
   font-weight: 700;
-  text-align: center;
+
 }
 
 h4 {
@@ -105,7 +105,7 @@ h4 {
 h5 {
   color: #fff;
   font-size: 1.125em;
-  text-align: center;
+
 }
 
 h6 {
@@ -278,7 +278,7 @@ p span.tertiary {
 .datepicker.datepicker-inline th,
 .datepicker.dropdown-menu td,
 .datepicker.dropdown-menu th {
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .datepicker table tr td.active.active.focus,
@@ -346,7 +346,7 @@ p span.tertiary {
 input,
 textarea {
   color: #000;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 20px;
   border-radius: 4px;
 }
@@ -401,7 +401,7 @@ select {
   border: 1px solid #ebebeb;
   border-radius: 4px;
   color: #b2b2b2;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 40px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -419,7 +419,7 @@ label {
   margin-bottom: 12px;
   color: #888;
   font-size: 0.8125em;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 600;
   cursor: pointer;
 }
@@ -553,7 +553,7 @@ input[type="checkbox"]:checked + label > span > span {
 ::-moz-placeholder,
 :-ms-input-placeholder {
   color: #b2b2b2;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 13px;
   font-weight: 600;
 }
@@ -564,7 +564,7 @@ input[type="checkbox"]:checked + label > span > span {
   height: 30px;
   border-radius: 4px;
   color: #fff;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 0.75em;
   font-weight: 700;
   line-height: 30px;
@@ -1175,7 +1175,7 @@ input[type="checkbox"]:checked + label > span > span {
 
 .pin-tag {
   display: inline-block;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 0.75em;
   font-weight: 700;
 }
@@ -1198,7 +1198,7 @@ input[type="checkbox"]:checked + label > span > span {
   border-radius: 2px;
   background-color: #535d5f;
   color: #fff;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 0.5625em;
   font-weight: 700;
   line-height: 15px;
@@ -2211,7 +2211,7 @@ header,
 
 .bid-countdown .colon {
   color: #2b373a;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1.125em;
   font-weight: 700;
   position: absolute;
@@ -2491,7 +2491,7 @@ header,
   padding-left: 0 !important;
   font-size: 0.875em;
   font-weight: bold;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .selected--flag--option .country-label {
@@ -12336,7 +12336,7 @@ hr {
 }
 
 .web-font {
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .upgrade-btn {
@@ -12392,7 +12392,7 @@ input[type="number"] {
 .dt-item {
   margin-top: 1.6rem;
   display: block;
-  font-family: "Titillium web", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 13px;
   font-weight: 600;
   text-transform: capitalize;
@@ -12425,7 +12425,7 @@ input[type="number"] {
 .country-label {
   font-size: 1.6em;
   /* line-height: 4.3em; */
-  font-family: "Titillium web", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 .flag-select .country-flag {
   display: flex;
@@ -12488,7 +12488,7 @@ input[type="number"] {
 }
 
 .default-font {
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .article-body {

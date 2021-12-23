@@ -358,13 +358,13 @@ export default connect(mapStateToProps, actions)(index);
                         headerStyle: {
                           // background: "#00AAFF",
                           color: "#000",
-                          fontFamily: '"Titillium Web", sans-serif',
+                          fontFamily: ' 'Roboto', sans-serif',
                           fontWeight: "bold",
                           zIndex: 1,
                         },
                         rowStyle: {
                           fontSize: "18px !important",
-                          fontFamily: '"Titillium Web", sans-serif',
+                          fontFamily: ' 'Roboto', sans-serif',
                         },
                         searchFieldStyle: {},
                         actionsColumnIndex: -1,

@@ -1,0 +1,282 @@
+.body {
+  background-color: #f3fbff;
+  min-height: 100vh;
+  padding-top: 13.5rem;
+  padding-bottom: 30px;
+}
+
+.heavy-title {
+  font-weight: 900;
+  font-size: 4rem;
+}
+
+.sub-heavy-title {
+  font-size: 3rem;
+}
+
+.box-shadow {
+  box-shadow: 4px 4px 4px rgb(0 0 0 / 10%);
+}
+.white-box {
+  background-color: #fff;
+}
+.h-300 {
+  height: 300px;
+}
+
+.rounded-box {
+  border-radius: 10px;
+}
+
+.border-left-blue {
+  border-left: 10px solid #0088cc;
+}
+
+.article {
+  color: #707070;
+  text-align: justify;
+  letter-spacing: 1px;
+  line-height: 2.2rem;
+}
+
+.black-higlight {
+  font-weight: bolder;
+  color: #000;
+  cursor: pointer;
+}
+
+.spacing {
+  margin-top: 6em;
+}
+
+.sub-article {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.customer-suppport-section {
+  padding: 10rem 2rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  background-image: url("../assets/support.png");
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+
+  border-bottom: 20px solid #63aeff;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+
+  border-top: 20px solid #63aeff;
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+
+  border-left: 20px solid #63aeff;
+}
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+
+  border-right: 20px solid #63aeff;
+}
+
+.yellow-bg-arrow-up {
+  border-bottom: 20px solid #ffc944 !important;
+}
+
+.yellow-bg {
+  background-color: #ffc944 !important;
+}
+
+.floated-container {
+  width: 40%;
+  max-width: 200px;
+  position: absolute;
+  bottom: 35;
+  bottom: -30px;
+  height: 60px;
+  border-radius: 30px;
+  left: calc(50% - 100px);
+}
+
+.blue-bg {
+  background-color: #007bff;
+}
+
+.bannerContainer-responseive {
+  background: rgba(3, 152, 50, 0.2);
+  opacity: 0.2;
+}
+.scrolling-wrapper {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  background-color: #fff;
+  width: 100%;
+}
+
+.scrolling-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.scrolling-wrapper .card-scroll {
+  display: inline-block;
+
+  width: 50%;
+  max-width: 200px;
+  height: 50px;
+  /* margin-right: 10px; */
+}
+
+.active {
+  color: #007bff !important;
+}
+
+.bannerContainer {
+  min-height: 400px;
+  background: rgba(3, 152, 50, 0.2);
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  .bannerContainer {
+    min-height: 120px !important;
+  }
+}
+
+.border-left {
+  border-right: 1px solid #c4c4c4;
+}
+
+.direction {
+  color: #518185;
+  text-decoration: underline;
+}
+.info {
+  color: #1d1d1d;
+  font-size: 16px;
+}
+
+.info span {
+  color: #518185;
+  font-weight: bold;
+}
+.section {
+  padding: 2.32rem 10px;
+}
+.article {
+  color: #1d1d1d;
+  line-height: 29px;
+  letter-spacing: 0.2px;
+  font-size: 16px;
+  text-align: left;
+  font-weight: 200;
+}
+.btn-contain {
+  font-size: 14px;
+  font-weight: normal;
+  padding: 0.9rem 0.75rem;
+}
+.black-title {
+  color: #2a3737;
+}
+
+.text-title,
+.article-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.text-title {
+  color: #000;
+}
+
+.text-title-quote {
+  font-weight: 200;
+  font-size: 2.2rem;
+  text-align: left;
+}
+
+.text-sub-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.h-line {
+  border: 1px solid #dddddd;
+}
+
+.text-bold {
+  font-weight: 900;
+}
+
+.article-quote {
+  font-weight: 200;
+  color: #1d1d1db2;
+}
+
+.article-title {
+  color: #1d1d1db2 !important;
+}
+
+.text-blue {
+  color: #518185;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .bannerContainer {
+    min-height: 120px !important;
+  }
+  .col-md-6,
+  .col-md-4,
+  .col-md-3 {
+    margin-bottom: 40px !important;
+  }
+}
+
+.text-underline {
+  border-bottom: 1px solid #198fcd;
+  padding-bottom: 16px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-red {
+  color: #d24504;
+}
+
+.bg-grey {
+  background: #0000000d;
+}
+
+.bg-white {
+  background-color: #fff;
+}

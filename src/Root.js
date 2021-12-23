@@ -68,6 +68,7 @@ import YourAccount from "./components/Help/YourAcount";
 import YourOrder from "./components/Help/YourOrder";
 import DisputeResolution from "./components/Help/DisputeResolution";
 import CategoryPage from "./components/Category";
+import Advertize from "./components/Advertise";
 
 class Root extends Component {
   componentDidMount() {
@@ -101,6 +102,7 @@ class Root extends Component {
                 <Route exact path="/wishlist" component={WishList} />
                 <Route exact path="/modal" component={ItemModal} />
                 <Route exact path="/cartest" component={CartTest} />
+                <Route exact path="/advertise-product" component={Advertize} />
                 <AuthRoute
                   redirectIfUsernoAuthRequired
                   path="/password/new"
